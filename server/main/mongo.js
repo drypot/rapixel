@@ -61,10 +61,6 @@ init.add(function (next) {
 			users.insert(user, next);
 		};
 
-		exports.updateUser = function (user, next) {
-			users.save(user, next);
-		};
-
 		exports.findUser = function (id, next) {
 			users.findOne({ _id: id }, next);
 		};
@@ -75,6 +71,13 @@ init.add(function (next) {
 
 		exports.findUserByEmail = function (email, next) {
 			users.findOne({ email: email }, next);
+		};
+
+		exports.updateUserAdate = function (id, next) {
+			var now = new Date();
+			users.update({ _id: id }, { $set: { adate: now }}, function (err) {
+				next(err, now);
+			});
 		};
 
 		users = exports.users = db.collection("users");

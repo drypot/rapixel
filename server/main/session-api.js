@@ -39,10 +39,15 @@ init.add(function () {
 			}
 			req.session.regenerate(function (err) {
 				if (err) return res.jsonErr(err);
-				auth.cacheUser(user);
-				req.session.userId = user._id;
-				res.json({
-					name: user.name
+				mongo.updateUserAdate(user._id, function (err, now) {
+					if (err) return res.jsonErr(err);
+					user.adate = now;
+					auth.cacheUser(user);
+					req.session.userId = user._id;
+					res.json({
+						name: user.name
+					});
+
 				});
 			});
 		})
