@@ -25,6 +25,7 @@ var express = require('../main/express');
 
 //require('../main/upload-api');
 require('../main/session-api');
+require('../main/users-api');
 require('../main/hello-api');
 require('../main/statics-html');
 

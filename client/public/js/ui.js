@@ -4,17 +4,17 @@ init.add(function() {
 	var $title = $modal.find('.modal-title');
 	var $body = $modal.find('.modal-body');
 
-	window.msgBox = function (header, text) {
+	window.showError = function (header, text) {
 		$title.empty();
-		$title.append('<h3>' + header + '</h3>');
+		$title.append(header);
 		$body.empty();
 		$body.append('<p>' + text + '</p>');
 		$modal.modal('show');
 	};
 
-	window.msgBox.error = function (err) {
+	window.showError.system = function (err) {
 		$title.empty();
-		$title.append('<h3>시스템 오류</h3>');
+		$title.append('시스템 오류');
 		$body.empty();
 		$body.append('<h3>Message</h3>');
 		$body.append('<pre>' + err.message + '</pre>');

@@ -5,10 +5,67 @@ block title
 
 block content
 	script
-		//init.add(function () {
-		//	session.initLoginPage();
-		//});
+		init.add(function () {
+			auth.initLogin();
+		});
 
-	#content
+	.container(style="margin-bottom: 30px;")
 		.page-header
-			h2 Under Construction
+			h2 Rapixel
+
+		//p Rapixel 은 와이드 사진 전문 갤러리입니다.
+		p 2013.05.01 개발을 시작했습니다. 틈틈히 기능을 추가하겠습니다.
+
+	#login-panel.container(style"margin-bottom: 30px;")
+		.row
+			.col-span-4.well
+				form#login-form
+					fieldset
+						legend Login
+						label Email
+						input(name="email", type="text")
+						label Password
+						input(name="password", type="password")
+						.checkbox
+							label Remember
+								input(name="remember", type="checkbox")
+						.submit-group
+							button.btn.btn-primary(name="submit", type="submit") Sign in
+			.col-span-4.col-offset-1.well
+				form#reg-form
+					fieldset
+						legend Register
+						label Name
+						input(name="name", type="text", maxlength=32)
+						label Email
+						input(name="email", type="text", maxlength=64)
+						label Password
+						input(name="password", type="password", maxlength=64)
+						.submit-group
+							button.btn.btn-primary(name="submit", type="submit") Register
+
+	#user-panel.container(style"margin-bottom: 30px;").hide
+		hr
+		h3 로그인하셨습니다.
+		h5 그런데, 죄송합니다.
+		h5 아직 하실 수 있는 것이 없습니다. ^^;
+
+	.container
+		hr
+		h3 History
+		table
+			tr
+				td(style="width:80px")
+					strong 2013.05.01
+				td 개발 시작
+
+	#reg-modal.modal
+		.modal-dialog
+			.modal-content
+				.modal-header
+					button.close(type="button", data-dismiss="modal", aria-hidden="true") ×
+					h3.modal-title 감사합니다
+				.modal-body
+					p 회원가입이 완료되었습니다.
+				.modal-footer
+					a.btn.btn-primary(data-dismiss="modal") Close

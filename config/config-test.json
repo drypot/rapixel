@@ -8,6 +8,12 @@
 	"uploadDir": "tmp/upload",
 	"uploadMax": 10,
 
-	"mongoDbName": "rapixel-test"
+	"mongoDbName": "rapixel-test",
+
+	"roles": [
+		{ "name": "user" },
+		{ "name": "admin" }
+	]
+
 }
 

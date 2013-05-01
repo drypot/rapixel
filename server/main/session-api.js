@@ -1,6 +1,9 @@
+var bcrypt = require('bcrypt');
+
 var init = require('../main/init');
 var config = require('../main/config');
 var auth = require('../main/auth');
+var mongo = require('../main/mongo');
 var express = require('../main/express');
 var error = require('../main/error');
 
@@ -10,42 +13,38 @@ init.add(function () {
 
 	console.log('session-api:');
 
-	app.get('/api/sessions', function (req, res) {
-		req.role(function (err, role) {
-			if (err) {
-				return res.jsonErr(err);
-			}
-			res.json({
-				role: {
-					name: role.name,
-					categoriesForMenu: role.categoriesForMenu
-				},
-				uploadUrl: config.data.uploadUrl
-			});
-		});
-	});
+//	app.get('/api/sessions', function (req, res) {
+//		req.role(function (err, role) {
+//			if (err) {
+//				return res.jsonErr(err);
+//			}
+//			res.json({
+//				role: {
+//					name: role.name,
+//					categoriesForMenu: role.categoriesForMenu
+//				},
+//				uploadUrl: config.data.uploadUrl
+//			});
+//		});
+//	});
 
 	app.post('/api/sessions', function (req, res) {
-		var role = auth.roleByPassword(req.body.password || '');
-		if (!role) {
-			return res.jsonErr(error(error.INVALID_PASSWORD));
-		}
-		req.session.regenerate(function (err) {
+		var email = String(body.email || '').trim();
+		var password = String(body.password || '').trim();
+		mongo.findUserByEmail(email, function (err, user) {
 			if (err) return res.jsonErr(err);
-			if (req.cookies && req.cookies.lv3) {
-				res.clearCookie('lv3');
-				res.clearCookie('lv');
-				res.clearCookie('ph');
-				res.clearCookie('uname');
+			if (!user || !bcrypt.compareSync(password, user.hash)) {
+				return res.jsonErr(error(error.INVALID_PASSWORD));
 			}
-			req.session.roleName = role.name;
-			req.session.posts = [];
-			res.json({
-				role: {
-					name: role.name
-				}
+			req.session.regenerate(function (err) {
+				if (err) return res.jsonErr(err);
+				auth.cacheUser(user);
+				req.session.userId = user._id;
+				res.json({
+					name: user.name
+				});
 			});
-		});
+		})
 	});
 
 	app.del('/api/sessions', function (req, res) {

@@ -21,11 +21,12 @@ init.add(function (next) {
 		if (err) return next(err);
 		dropDatabase(db, function (err) {
 			if (err) return next(err);
-			initThread(db, function (err) {
+			initUsers(db, function (err) {
 				if (err) return next(err);
-				initPost(db, function (err) {
+				initPhotos(db, function (err) {
+					if (err) return next(err);
 					console.log(log);
-					next(err);
+					next();
 				});
 			});
 		});
@@ -51,35 +52,71 @@ init.add(function (next) {
 		}
 	}
 
-	function initThread(db, next) {
-		var threads;
-		var threadIdSeed;
+	function initUsers(db, next) {
+		var users;
+		var userIdSeed;
 
-		exports.getNewThreadId = function () {
-			return ++threadIdSeed;
+		exports.insertUser = function (user, next) {
+			user._id = ++userIdSeed;
+			users.insert(user, next);
 		};
 
-		exports.insertThread = function (thread, next) {
-			threads.insert(thread, next);
+		exports.updateUser = function (user, next) {
+			users.save(user, next);
 		};
 
-		exports.updateThread = function (thread, next) {
-			threads.save(thread, next);
+		exports.findUser = function (id, next) {
+			users.findOne({ _id: id }, next);
 		};
 
-		exports.updateThreadHit = function (threadId, next) {
-			threads.update({ _id: threadId }, { $inc: { hit: 1 }}, next);
+		exports.findUserByName = function (name, next) {
+			users.findOne({ name: name }, next);
 		};
 
-		exports.updateThreadLength = function (threadId, now, next) {
-			threads.update({ _id: threadId }, { $inc: { length: 1 }, $set: { updated: now }}, next);
+		exports.findUserByEmail = function (email, next) {
+			users.findOne({ email: email }, next);
 		};
 
-		exports.findThread = function (id, next) {
-			threads.findOne({ _id: id }, next);
+		users = exports.users = db.collection("users");
+		users.ensureIndex({ email: 1 }, function (err) {
+			if (err) return next(err);
+			users.ensureIndex({ name: 1 }, function (err) {
+				if (err) return next(err);
+				users.find({}, { _id: 1 }).sort({ _id: -1 }).limit(1).nextObject(function (err, obj) {
+					if (err) return next(err);
+					userIdSeed = obj ? obj._id : 0;
+					console.log('user id seed: ' + userIdSeed);
+					next();
+				});
+			});
+		});
+	}
+
+	function initPhotos(db, next) {
+		var photos;
+		var photoIdSeed;
+
+		exports.getNewPhotoId = function () {
+			return ++photoIdSeed;
 		};
 
-		exports.findThreadsByCategory = function (categoryId, page, pageSize, next) {
+		exports.insertPhoto = function (photo, next) {
+			photos.insert(photo, next);
+		};
+
+		exports.updatePhoto = function (photo, next) {
+			photos.save(photo, next);
+		};
+
+		exports.updatePhotoHit = function (photoId, next) {
+			photos.update({ _id: photoId }, { $inc: { hit: 1 }}, next);
+		};
+
+		exports.findPhoto = function (id, next) {
+			photos.findOne({ _id: id }, next);
+		};
+
+		exports.findPhotosByUser = function (userId, page, pageSize, next) {
 			var findOp = {};
 			var dir = -1;
 			var skip = (Math.abs(page) - 1) * pageSize;
@@ -87,55 +124,16 @@ init.add(function (next) {
 			if (categoryId) {
 				findOp.categoryId = categoryId;
 			}
-			threads.find(findOp).sort({ updated: dir }).skip(skip).limit(pageSize).each(next);
+			photos.find(findOp).sort({ updated: dir }).skip(skip).limit(pageSize).each(next);
 		};
 
-		threads = exports.threads = db.collection("threads");
-		threads.ensureIndex({ categoryId: 1, updated: -1 }, function (err) {
+		photos = exports.photos = db.collection("photos");
+		photos.ensureIndex({ userId: 1 }, function (err) {
 			if (err) return next(err);
-			threads.ensureIndex({ updated: -1 }, function (err) {
+			photos.find({}, { _id: 1 }).sort({ _id: -1 }).limit(1).nextObject(function (err, obj) {
 				if (err) return next(err);
-				threads.find({}, { _id: 1 }).sort({ _id: -1 }).limit(1).nextObject(function (err, obj) {
-					if (err) return next(err);
-					threadIdSeed = obj ? obj._id : 0;
-					console.log('thread id seed: ' + threadIdSeed);
-					next();
-				});
-			});
-		});
-	}
-
-	function initPost(db, next) {
-		var posts;
-		var postIdSeed;
-
-		exports.getNewPostId = function () {
-			return ++postIdSeed;
-		};
-
-		exports.insertPost = function (post, next) {
-			posts.insert(post, next);
-		};
-
-		exports.updatePost = function (post, next) {
-			posts.save(post, next);
-		};
-
-		exports.findPost = function (id, next) {
-			posts.findOne({ _id: id }, next);
-		};
-
-		exports.findPostsByThread = function (threadId, next) {
-			posts.find({ threadId: threadId }).sort({ created: 1 }).each(next);
-		};
-
-		posts = exports.posts = db.collection("posts");
-		posts.ensureIndex({ threadId: 1, created: 1 }, function (err) {
-			if (err) return next(err);
-			posts.find({}, { _id: 1 }).sort({ _id: -1 }).limit(1).nextObject(function (err, obj) {
-				if (err) return next(err);
-				postIdSeed = obj ? obj._id : 0;
-				console.log('post id seed: ' + postIdSeed);
+				photoIdSeed = obj ? obj._id : 0;
+				console.log('photo id seed: ' + photoIdSeed);
 				next();
 			});
 		});

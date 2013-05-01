@@ -6,6 +6,7 @@ var config = require('../main/config');
 init.add(function () {
 
 	var roles = {};
+	var users = [];
 
 	config.data.roles.forEach(function (_role) {
 		var role = {
@@ -19,4 +20,11 @@ init.add(function () {
 		return roles[roleName];
 	};
 
+	exports.cacheUser = function (user) {
+		users[user._id] = user;
+	};
+
+	exports.user = function (id) {
+		return users[id];
+	};
 });
