@@ -45,7 +45,14 @@ init.add(function () {
 	app.use(express.bodyParser({ uploadDir: config.data.uploadDir + '/tmp' }));
 
 	app.use(function (req, res, next) {
-		res.locals.role = auth.roleByName(req.session.roleName);
+		if (req.session.userId) {
+			auth.user(req.session.userId, function (err, user) {
+				if (err) return next(err);
+				res.locals.user = user;
+				next();
+			});
+			return;
+		}
 		next();
 	});
 
@@ -55,10 +62,6 @@ init.add(function () {
 	app.all('/api/*', function (req, res, next) {
 		res.set('Cache-Control', 'no-cache');
 		next();
-	});
-
-	app.get('/', function (req, res) {
-		res.render('index');
 	});
 
 	app.use(express.errorHandler());

@@ -2,6 +2,7 @@ var bcrypt = require('bcrypt');
 
 var init = require('../main/init');
 var config = require('../main/config');
+var mongo = require('../main/mongo');
 
 init.add(function () {
 
@@ -24,7 +25,13 @@ init.add(function () {
 		users[user._id] = user;
 	};
 
-	exports.user = function (id) {
-		return users[id];
+	exports.user = function (id, next) {
+		var user = users[id];
+		if (user) return next(null, user);
+		mongo.findUser(id, function (err, user) {
+			if (err) return next(err);
+			users[id] = user;
+			next(null, user);
+		});
 	};
 });

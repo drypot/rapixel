@@ -7,11 +7,7 @@ init.add(function () {
 	var $regForm;
 
 	auth.initLogin = function () {
-		if (window.user) {
-			$('#login-panel').hide();
-			$('#user-panel').show();
-			return;
-		}
+		if (window.user) return;
 		trySaved(function (err, success) {
 			if (err) return showError.system(err);
 			if (success) {
@@ -46,15 +42,20 @@ init.add(function () {
 			err = err || res.error;
 			if (err) return showError.system(err);
 			if (res.body.err) {
-				alerts.add($password, res.body.err.message);
-				return;
+				var rc = res.body.err.rc;
+				if (rc && rc == error.INVALID_PASSWORD) {
+					return showError('Retry Please', res.body.err.message);
+				}
+				return showError.system(res.body.err);
 			}
 			if ($remember.prop('checked')) {
-				localStorage.setItem('password', $password.val());
+				localStorage.setItem('email', form.email);
+				localStorage.setItem('password', form.password);
 			} else {
+				localStorage.removeItem('email');
 				localStorage.removeItem('password');
 			}
-			location = '/threads';
+			location = '/';
 		});
 		return false;
 	}
@@ -63,6 +64,7 @@ init.add(function () {
 		request.del('/api/sessions').end(function (err, res) {
 			err = err || res.error || res.body.err;
 			if (err) return showError.system(err);
+			localStorage.removeItem('email');
 			localStorage.removeItem('password');
 			console.log('logged out');
 			location = '/';

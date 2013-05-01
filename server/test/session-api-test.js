@@ -29,8 +29,29 @@ describe("login", function () {
 	});
 	it("should fail with invalid email", function (next) {
 		var form = { email: 'snowboy@def.com', password: '1234' };
-		request.post(test.url + '/api/session').send(form).end(function (err, res) {
+		request.post(test.url + '/api/sessions').send(form).end(function (err, res) {
+			should(!res.error);
 			should(res.body.err);
+			res.body.err.rc.should.equal(error.INVALID_PASSWORD);
+			next();
+		})
+	});
+	it("should fail with invalid password", function (next) {
+		var form = { email: 'snowman@def.com', password: '4444' };
+		request.post(test.url + '/api/sessions').send(form).end(function (err, res) {
+			should(!res.error);
+			should(res.body.err);
+			res.body.err.rc.should.equal(error.INVALID_PASSWORD);
+			next();
+		})
+	});
+	it("should success", function (next) {
+		var form = { email: 'snowman@def.com', password: '1234' };
+		request.post(test.url + '/api/sessions').send(form).end(function (err, res) {
+			should(!res.error);
+			should(!res.body.err);
+			res.body.name.should.equal('snowman');
+			next();
 		})
 	});
 });

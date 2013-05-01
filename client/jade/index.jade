@@ -13,45 +13,45 @@ block content
 		.page-header
 			h2 Rapixel
 
-		//p Rapixel 은 와이드 사진 전문 갤러리입니다.
-		p 2013.05.01 개발을 시작했습니다. 틈틈히 기능을 추가하겠습니다.
+	if !locals.user
+		#login-panel.container(style"margin-bottom: 30px;")
+			.row
+				.col-span-4.well
+					form#login-form
+						fieldset
+							legend Login
+							label Email
+							input(name="email", type="text")
+							label Password
+							input(name="password", type="password")
+							.checkbox
+								label Remember
+									input(name="remember", type="checkbox")
+							.submit-group
+								button.btn.btn-primary(name="submit", type="submit") Sign in
+				.col-span-4.col-offset-1.well
+					form#reg-form
+						fieldset
+							legend Register
+							label Name
+							input(name="name", type="text", maxlength=32)
+							label Email
+							input(name="email", type="text", maxlength=64)
+							label Password
+							input(name="password", type="password", maxlength=64)
+							.submit-group
+								button.btn.btn-primary(name="submit", type="submit") Register
 
-	#login-panel.container(style"margin-bottom: 30px;")
-		.row
-			.col-span-4.well
-				form#login-form
-					fieldset
-						legend Login
-						label Email
-						input(name="email", type="text")
-						label Password
-						input(name="password", type="password")
-						.checkbox
-							label Remember
-								input(name="remember", type="checkbox")
-						.submit-group
-							button.btn.btn-primary(name="submit", type="submit") Sign in
-			.col-span-4.col-offset-1.well
-				form#reg-form
-					fieldset
-						legend Register
-						label Name
-						input(name="name", type="text", maxlength=32)
-						label Email
-						input(name="email", type="text", maxlength=64)
-						label Password
-						input(name="password", type="password", maxlength=64)
-						.submit-group
-							button.btn.btn-primary(name="submit", type="submit") Register
-
-	#user-panel.container(style"margin-bottom: 30px;").hide
-		hr
-		h3 로그인하셨습니다.
-		h5 그런데, 죄송합니다.
-		h5 아직 하실 수 있는 것이 없습니다. ^^;
+	else
+		#user-panel.container(style"margin-bottom: 30px;")
+			hr
+			h5 반갑습니다, #{user.name} 님.
+			h5 아직 하실 수 있는 것이 없습니다.
 
 	.container
 		hr
+		h3 회원수
+		h5 #{count}
 		h3 History
 		table
 			tr

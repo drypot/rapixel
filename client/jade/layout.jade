@@ -23,6 +23,10 @@ html
 		script(src="/lib/spin.min.js")
 		script(src="/lib/URI.js")
 
+		if locals.user
+			script
+				window.user = { name: '#{user.name}' };
+
 		script(src="/js/base.js")
 		script(src="/js/ui.js")
 		script(src="/js/auth.js")
@@ -43,7 +47,7 @@ html
 						//li: a(href="/photos") Photos
 						//li: a(href="/upload") Upload
 						if locals.user
-							li: a(href="javascript:session.logout(); return false;") Logout
+							li: a(href="javascript:auth.logout();") Logout
 
 		block content
 

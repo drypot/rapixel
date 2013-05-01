@@ -29,6 +29,7 @@ init.add(function () {
 //	});
 
 	app.post('/api/sessions', function (req, res) {
+		var body = req.body;
 		var email = String(body.email || '').trim();
 		var password = String(body.password || '').trim();
 		mongo.findUserByEmail(email, function (err, user) {
