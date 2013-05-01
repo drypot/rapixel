@@ -1,0 +1,57 @@
+{
+	"siteTitle": "sleek dev",
+
+	"port": 8010,
+	"cookieSecret": "o;iejf832ndvs",
+
+	"uploadUrl": "http://sleekfile:8080",
+	"uploadDir": "/Users/drypot/data/sleek-upload",
+	"uploadMax": 512,
+
+	"esUrl": "http://localhost:9200",
+	"esIndexName": "sleek",
+
+	"mongoDbName": "sleek",
+
+	"roles": [
+		{ "name": "user", "hash": "$2a$10$ku7nymS.1CPd8jMttYXZMe4wVWweWr1EqaYst75tzimQh2iAAqvZW" },
+		{ "name": "cheater", "hash": "$2a$10$UujeEPUXiV/ipq9Cl3htK.KrWLKHdxQcM5VFCBoxBV5pdNG3C2Exy" },
+		{ "name": "admin", "hash": "$2a$10$vIl4m5eO71dCHQmZH7/BxOwLIHZ/9NYASyosTHgtLEO/MRlCATU9S" }
+	],
+
+	"categories": [
+		{ "id": 0, "name": "all", "read": ["user", "cheater", "admin"], "write": [], "edit": [], "sep": true },
+
+		{ "id": 100, "name": "freetalk", "read": ["user", "cheater", "admin"], "write": ["user", "cheater", "admin"], "edit": ["admin"] },
+		{ "id": 104, "name": "health", "read": ["user", "cheater", "admin"], "write": ["user", "cheater", "admin"], "edit": ["admin"] },
+		{ "id": 401, "name": "trade", "read": ["user", "cheater", "admin"], "write": ["user", "cheater", "admin"], "edit": ["admin"] },
+		{ "id": 400, "name": "unwritable", "read": ["user", "cheater", "admin"], "write": ["cheater", "admin"], "edit": ["admin"] },
+		{ "id": 300, "name": "house", "read": ["user", "cheater", "admin"], "write": ["user", "cheater", "admin"], "edit": ["admin"], "sep": true },
+
+		{ "id": 102, "name": "blackkid", "read": ["user", "cheater", "admin"], "write": ["user", "cheater", "admin"], "edit": ["admin"] },
+		{ "id": 220, "name": "epicure", "read": ["user", "cheater", "admin"], "write": ["user", "cheater", "admin"], "edit": ["admin"], "sep": true },
+
+		{ "id": 215, "name": "apple", "read": ["user", "cheater", "admin"], "write": ["user", "cheater", "admin"], "edit": ["admin"] },
+		{ "id": 909, "name": "google", "read": ["user", "cheater", "admin"], "write": ["user", "cheater", "admin"], "edit": ["admin"] },
+		{ "id": 200, "name": "microsoft", "read": ["user", "cheater", "admin"], "write": ["user", "cheater", "admin"], "edit": ["admin"], "sep": true },
+
+		{ "id": 210, "name": "linux", "read": ["user", "cheater", "admin"], "write": ["user", "cheater", "admin"], "edit": ["admin"] },
+		{ "id": 203, "name": "java", "read": ["user", "cheater", "admin"], "write": ["user", "cheater", "admin"], "edit": ["admin"] },
+		{ "id": 217, "name": "pda", "read": ["user", "cheater", "admin"], "write": ["user", "cheater", "admin"], "edit": ["admin"] },
+		{ "id": 110, "name": "tool", "read": ["user", "cheater", "admin"], "write": ["user", "cheater", "admin"], "edit": ["admin"], "sep": true },
+
+		{ "id": 120, "name": "game", "read": ["user", "cheater", "admin"], "write": ["user", "cheater", "admin"], "edit": ["admin"] },
+		{ "id": 130, "name": "music", "read": ["user", "cheater", "admin"], "write": ["user", "cheater", "admin"], "edit": ["admin"] },
+		{ "id": 140, "name": "movie", "read": ["user", "cheater", "admin"], "write": ["user", "cheater", "admin"], "edit": ["admin"] },
+		{ "id": 150, "name": "anime", "read": ["user", "cheater", "admin"], "write": ["user", "cheater", "admin"], "edit": ["admin"], "sep": true },
+
+		{ "id": 101, "name": "who is it ?", "read": ["user", "cheater", "admin"], "write": ["user", "cheater", "admin"], "edit": ["admin"] },
+		{ "id": 910, "name": "obituary", "read": ["user", "cheater", "admin"], "write": ["user", "cheater", "admin"], "edit": ["admin"], "sep": true },
+
+		{ "id": 60, "name": "cheat", "read": ["cheater", "admin"], "write": ["cheater", "admin"], "edit": ["admin"], "sep": true },
+
+		{ "id": 40, "name": "recycle bin", "read": ["admin"], "write": ["admin"], "edit": ["admin"] },
+		{ "id": 50, "name": "test", "read": ["admin"], "write": ["admin"], "edit": ["admin"] }
+	]
+}
+

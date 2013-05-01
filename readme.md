@@ -1,0 +1,22 @@
+# Rapixel
+
+큰 사진을 웹에 올리고 보여주고 싶은데 마땅한 사이트가 없는 것 같아 만들어 보았다.
+
+# History
+
+2011.05.01 갑자기 사이트를 오픈하고 싶어졌다.
+
+2011.04.06 rapixel.com 도메인 구매. 사진 한 장 올려두고 2 년간 방치.
+
+
+# License
+
+The MIT License (MIT)
+
+Copyright (c) 2012 Kyuhyun Park
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

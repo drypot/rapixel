@@ -1,0 +1,28 @@
+{
+  "name": "Rapixel",
+  "version": "0.1.1",
+  "description": "Rapixel Photo Gallery",
+  "main": "app.js",
+  "directories": {
+    "test": "server/test"
+  },
+  "dependencies": {
+    "connect-redis": "~1.4.5",
+    "express": "~3.1.1",
+    "mongodb": "~1.2.14",
+    "should": "~1.2.2",
+    "superagent": "~0.14.0",
+    "jade": "~0.29.0",
+    "bcrypt": "~0.7.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/drypot/rapixel.git"
+  },
+  "author": "drypot@gmail.com",
+  "license": "MIT"
+}
