@@ -26,6 +26,7 @@ var express = require('../main/express');
 //require('../main/upload-api');
 require('../main/session-api');
 require('../main/hello-api');
+require('../main/statics-html');
 
 init.run(function (err) {
 	if (err) throw err;

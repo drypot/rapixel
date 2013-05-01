@@ -1,7 +1,7 @@
 {
 	"siteTitle": "Rapixel Test",
 
-	"port": 8010,
+	"port": 8040,
 	"cookieSecret": "o;iejf832ndvs",
 
 	"uploadUrl": "http://rapixelfile:8080",
