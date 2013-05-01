@@ -23,10 +23,7 @@ var init = require('../main/init');
 var config = require('../main/config')({ path: configPath });
 var express = require('../main/express');
 
-require('../main/post-api');
-require('../main/post-html');
-require('../main/search-api');
-require('../main/upload-api');
+//require('../main/upload-api');
 require('../main/session-api');
 require('../main/hello-api');
 

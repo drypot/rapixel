@@ -1,1 +1,1 @@
-NODE_ENV=production node server/main/app.js config-live/config.json
+NODE_ENV=production node server/main/app.js config-live/config-live.json

@@ -1,0 +1,19 @@
+{
+	"siteTitle": "Rapixel Dev",
+
+	"port": 8010,
+	"cookieSecret": "o;iejf832ndvs",
+
+	"uploadUrl": "http://rapixelfile:8080",
+	"uploadDir": "/Users/drypot/data/rapixel-upload",
+	"uploadMax": 10,
+
+	"mongoDbName": "rapixel",
+
+	"roles": [
+		{ "name": "user" },
+		{ "name": "admin" }
+	]
+
+}
+

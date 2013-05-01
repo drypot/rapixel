@@ -58,11 +58,7 @@ init.add(function () {
 	});
 
 	app.get('/', function (req, res) {
-		if (res.locals.role) {
-			res.redirect('/threads');
-		} else {
-			res.render('index');
-		}
+		res.render('index');
 	});
 
 	app.use(express.errorHandler());
