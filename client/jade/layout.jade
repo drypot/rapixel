@@ -1,0 +1,71 @@
+!!! 5
+html
+	head
+		meta(charset="utf-8")
+
+		block title
+
+		meta(name="viewport", content="width=device-width, initial-scale=1.0")
+		meta(name="description", content="")
+		meta(name="author", content="")
+
+		link(rel="shortcut icon", href="/image/favicon1.ico", type="image/x-icon")
+
+		link(rel="stylesheet", href="/lib/bootstrap/css/bootstrap.min.css")
+		link(rel="stylesheet", href="/css/base.css")
+
+		script(src="/lib/es5-shim.min.js")
+		script(src="/lib/json2.js")
+		script(src="/lib/jquery.min.js")
+		//script(src="/lib/jquery.simpleplaceholder.js")
+		script(src="/lib/bootstrap/js/bootstrap.min.js")
+		script(src="/lib/superagent.js")
+		script(src="/lib/spin.min.js")
+		script(src="/lib/URI.js")
+
+		script(src="/js/base.js")
+		script(src="/js/ui.js")
+		script(src="/js/session.js")
+		script(src="/js/post.js")
+		//script(src="/js/search.js")
+
+	body
+		// navbar
+		.navbar.navbar-fixed-top
+			.container
+				if role
+					button.navbar-toggle(type="button", data-toggle="collapse", data-target=".navbar-responsive-collapse")
+						span.icon-bar
+						span.icon-bar
+						span.icon-bar
+					a.navbar-brand(href="/threads")= siteTitle
+					.nav-collapse.collapse.navbar-responsive-collapse
+						form.navbar-form.pull-right
+							input(type="text", style="width:200px", placeholder="Search")
+							button.btn(onclick="session.logout(); return false;") Logout
+							button.btn.btn-primary(onclick="location='/thread/new?c=!{category.id}'; return false;") New
+
+				else
+					a.navbar-brand(href="/")= siteTitle
+
+		.container
+			if role
+				.well.well-small
+					ul.list-inline(style="margin: 5px")
+						for c in role.categoriesForMenu
+							if c.id === 0
+								li: a(href="/threads") #{c.name}
+							else
+								li: a(href="/threads?c=" + c.id) #{c.name}
+
+			block content
+
+		#error-modal.modal
+			.modal-dialog
+				.modal-content
+					.modal-header
+						button.close(type="button", data-dismiss="modal", aria-hidden="true") ×
+						h4.modal-title Modal title
+					.modal-body
+					.modal-footer
+						a.btn.btn-primary(data-dismiss="modal") Close

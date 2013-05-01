@@ -1,0 +1,29 @@
+extends layout
+
+block title
+	title Error - #{siteTitle}
+
+block content
+
+	.page-header
+		h1 Error
+
+	#content
+		if !locals.err
+			h3 'err' not defined
+		else
+			- var count = 0;
+			if err.rc
+				- count++;
+				h3 Message
+				pre= err.rc + ', ' + err.message
+			else if err.message
+				- count++;
+				h3 Message
+				pre= err.message
+			if err.stack
+				- count++;
+				h3 Stack
+				pre= err.stack
+			if !count
+				h3 Unknown Error
