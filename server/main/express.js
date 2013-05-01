@@ -34,7 +34,7 @@ init.add(function () {
 
 	app.use(express.cookieParser(config.data.cookieSecret));
 
-	if (opt.store === 'redis') {
+	if ('production' == app.get('env') || opt.store === 'redis') {
 		app.use(express.session({ store: new redisStore() }));
 		log += ' redis';
 	} else {
