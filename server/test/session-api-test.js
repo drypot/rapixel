@@ -9,7 +9,7 @@ var error = require('../main/error');
 var test = require('../main/test')({ request: request });
 
 require('../main/session-api');
-require('../main/users-api');
+require('../main/user-api');
 
 before(function (next) {
 	init.run(next);

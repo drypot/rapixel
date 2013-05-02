@@ -31,7 +31,6 @@ html
 		script(src="/js/ui.js")
 		script(src="/js/auth.js")
 		//script(src="/js/post.js")
-		//script(src="/js/search.js")
 
 	body
 		// navbar
@@ -44,9 +43,9 @@ html
 				a.navbar-brand(href="/")= siteTitle
 				.nav-collapse.collapse.navbar-responsive-collapse
 					ul.nav
-						//li: a(href="/photos") Photos
-						//li: a(href="/upload") Upload
+						li: a(href="/photos") Photos
 						if locals.user
+							li: a(href="/upload") Upload
 							li: a(href="javascript:auth.logout();") Logout
 
 		block content

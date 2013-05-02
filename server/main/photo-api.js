@@ -1,5 +1,5 @@
 var init = require('../main/init');
-var upload = require('../main/upload');
+var photo = require('../main/photo');
 var express = require('../main/express');
 var error = require('../main/error');
 
@@ -9,17 +9,20 @@ init.add(function () {
 
 	console.log('upload-api:');
 
-	app.post('/api/upload', function (req, res) {
-		req.role(function (err) {
+	app.post('/api/photos', function (req, res) {
+		req.user(function (err, user) {
 			if (err) return res.jsonErr(err);
-			res.json({
-				files: upload.tmpFiles(req.files.file)
+			upload.uploadPhoto(req.files.file, function (err, photoId) {
+				if (err) return res.jsonErr(err);
+				res.json({
+					photoId: photoId
+				});
 			});
 		});
 	});
 
 	app.del('/api/upload', function (req, res) {
-		req.role(function (err) {
+		req.user(function (err) {
 			if (err) return res.jsonErr(err);
 			upload.deleteTmpFiles(req.body.files);
 			res.jsonEmpty();

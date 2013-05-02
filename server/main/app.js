@@ -23,9 +23,9 @@ var init = require('../main/init');
 var config = require('../main/config')({ path: configPath });
 var express = require('../main/express');
 
-//require('../main/upload-api');
+require('../main/photo-api');
 require('../main/session-api');
-require('../main/users-api');
+require('../main/user-api');
 require('../main/hello-api');
 require('../main/statics-html');
 
