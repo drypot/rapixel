@@ -14,7 +14,7 @@ init.add(function () {
 	console.log('session-api:');
 
 //	app.get('/api/sessions', function (req, res) {
-//		req.role(function (err, role) {
+//		req.user(function (err, role) {
 //			if (err) {
 //				return res.jsonErr(err);
 //			}
@@ -76,21 +76,21 @@ init.add(function () {
 		});
 
 		app.get('/api/test/auth/any', function (req, res) {
-			req.role(function (err) {
+			req.user(function (err) {
 				if (err) return res.jsonErr(err);
 				res.jsonEmpty();
 			})
 		});
 
 		app.get('/api/test/auth/user', function (req, res) {
-			req.role('user', function (err) {
+			req.user('user', function (err) {
 				if (err) return res.jsonErr(err);
 				res.jsonEmpty();
 			});
 		});
 
 		app.get('/api/test/auth/admin', function (req, res) {
-			req.role('admin', function (err) {
+			req.user('admin', function (err) {
 				if (err) return res.jsonErr(err);
 				res.jsonEmpty();
 			});

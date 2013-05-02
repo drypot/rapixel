@@ -66,22 +66,15 @@ init.add(function () {
 
 	app.use(express.errorHandler());
 
-	should.not.exist(app.request.role);
-	app.request.role = function (roleName, next) {
-		if (typeof roleName === 'function') {
-			next = roleName;
-			roleName = null;
-		}
+	should.not.exist(app.request.user);
+	app.request.user = function (next) {
 		var req = this;
 		var res = this.res;
-		var role = res.locals.role;
-		if (!role) {
+		var user = res.locals.user;
+		if (!user) {
 			return next(error(error.NOT_AUTHENTICATED));
 		}
-		if (roleName && roleName !== role.name) {
-			return next(error(error.NOT_AUTHORIZED));
-		}
-		next(null, role);
+		next(null, user);
 	};
 
 	var empty = {};
