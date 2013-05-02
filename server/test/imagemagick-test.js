@@ -1,6 +1,6 @@
 var should = require('should');
 var fs = require('fs');
-var im = require('imagemagick');
+var img = require('imagemagick');
 
 before(function (next) {
 	fs.mkdir('tmp', function (err) {
@@ -21,7 +21,7 @@ before(function (next) {
 describe("imagemagick jpeg", function () {
 
 	it("can read meta", function (next) {
-		im.readMetadata('samples/b-16x9-720.jpg', function (err, meta) {
+		img.readMetadata('samples/b-16x9-720.jpg', function (err, meta) {
 			if (err) return next(err);
 			should(meta.exif);
 			//console.log(meta);
@@ -29,7 +29,7 @@ describe("imagemagick jpeg", function () {
 		})
 	});
 	it("can read features", function (next) {
-		im.identify('samples/b-16x9-720.jpg', function (err, feats) {
+		img.identify('samples/b-16x9-720.jpg', function (err, feats) {
 			if (err) return next(err);
 			//console.log(feats);
 			feats.format.should.equal('JPEG');
@@ -38,14 +38,14 @@ describe("imagemagick jpeg", function () {
 			feats.width.should.equal(1281);
 			feats.height.should.equal(720);
 			next();
-		})
+		});
 	});
 
 });
 
 describe("imagemagick png", function () {
 	it("can read features", function (next) {
-		im.identify('samples/b-16x9-720.png', function (err, feats) {
+		img.identify('samples/b-16x9-720.png', function (err, feats) {
 			if (err) return next(err);
 			//console.log(feats);
 			feats.format.should.equal('PNG');
@@ -53,7 +53,7 @@ describe("imagemagick png", function () {
 			feats.width.should.equal(1281);
 			feats.height.should.equal(720);
 			next();
-		})
+		});
 	});
 });
 
@@ -66,7 +66,7 @@ describe("resize", function () {
 			sharpening: 0,
 			height: 720
 		};
-		im.resize(opt, function (err, stdout, stderr) {
+		img.resize(opt, function (err, stdout, stderr) {
 			if (err) return next(err);
 			next();
 		});
@@ -79,7 +79,7 @@ describe("resize", function () {
 			sharpening: 0,
 			height: 720
 		};
-		im.resize(opt, function (err, stdout, stderr) {
+		img.resize(opt, function (err, stdout, stderr) {
 			if (err) return next(err);
 			next();
 		});
@@ -92,7 +92,7 @@ describe("resize", function () {
 			sharpening: 0,
 			height: 1440
 		};
-		im.resize(opt, function (err, stdout, stderr) {
+		img.resize(opt, function (err, stdout, stderr) {
 			if (err) return next(err);
 			next();
 		});
@@ -105,7 +105,7 @@ describe("resize", function () {
 			sharpening: 0,
 			height: 1440
 		};
-		im.resize(opt, function (err, stdout, stderr) {
+		img.resize(opt, function (err, stdout, stderr) {
 			if (err) return next(err);
 			next();
 		});
