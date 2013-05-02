@@ -1,20 +1,38 @@
 var fs = require('fs');
 
-exports.mkdirs = function (subs) {
-	var dir = null;
-	subs.forEach(function (sub) {
-		if (!dir) {
-			dir = sub;
-		} else {
-			dir += '/' + sub;
+exports.mkdirs = function () {
+	var _args = arguments;
+	var len = _args.length - 1;
+	var next = _args[len];
+	var path = null;
+	var i = 0;
+	function mkdir() {
+		if (i == len) return next(null, path);
+		var sub = _args[i++];
+		path = !path ? sub : path + '/' + sub;
+		fs.mkdir(path, 0755, function (err) {
+			if (err && err.code !== 'EEXIST') return next(err);
+			setImmediate(mkdir);
+		});
+	}
+	mkdir();
+};
+
+exports.emptyDir = function (path, next) {
+	fs.readdir(path, function (err, fnames) {
+		if (err) return next(err);
+		var i = 0;
+		function unlink() {
+			if (i == fnames.length) {
+				return next();
+			}
+			var fname = fnames[i++];
+			fs.unlink(path + '/' + fname, function (err) {
+				setImmediate(unlink);
+			});
 		}
-		try {
-			fs.mkdirSync(dir, 0755);
-		} catch (err) {
-			if (err.code !== 'EEXIST') throw err;
-		}
+		unlink();
 	});
-	return dir;
 };
 
 exports.safeFilename = function (name) {
