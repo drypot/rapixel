@@ -3,38 +3,142 @@ var fs = require('fs');
 
 var fs2 = require('../main/fs');
 
-var base = 'tmp';
+var testdir = 'tmp/fs-test';
+
+before(function (next) {
+	fs.mkdir('tmp', 0755, function (err) {
+		if (err && err.code !== 'EEXIST') return next(err);
+		fs.mkdir('tmp/fs-test', 0755, function (err) {
+			next();
+		});
+	});
+});
+
+describe("rmAll", function () {
+	beforeEach(function (next) {
+		fs.mkdir(testdir + '/sub1', 0755, function (err) {
+			fs.mkdir(testdir + '/sub2', 0755, function (err) {
+				fs.mkdir(testdir + '/sub2/sub3', 0755, function (err) {
+					fs.writeFileSync(testdir + '/sub1/f1.txt', 'abc');
+					fs.writeFileSync(testdir + '/sub2/f2.txt', 'abc');
+					fs.writeFileSync(testdir + '/sub2/sub3/f3.txt', 'abc');
+					next();
+				});
+			});
+		});
+	});
+	it("can remove one file", function (next) {
+		fs.existsSync(testdir + '/sub1').should.true;
+		fs.existsSync(testdir + '/sub2').should.true;
+		fs.existsSync(testdir + '/sub2/sub3').should.true;
+		fs.existsSync(testdir + '/sub1/f1.txt').should.true;
+		fs.existsSync(testdir + '/sub2/f2.txt').should.true;
+		fs.existsSync(testdir + '/sub2/sub3/f3.txt').should.true;
+		fs2.rmAll(testdir + '/sub2/f2.txt', function (err) {
+			if (err) return next(err);
+			fs.existsSync(testdir + '/sub1').should.true;
+			fs.existsSync(testdir + '/sub2').should.true;
+			fs.existsSync(testdir + '/sub2/sub3').should.true;
+			fs.existsSync(testdir + '/sub1/f1.txt').should.true;
+			fs.existsSync(testdir + '/sub2/f2.txt').should.false;
+			fs.existsSync(testdir + '/sub2/sub3/f3.txt').should.true;
+			next();
+		})
+	});
+	it("can remove one dir", function (next) {
+		fs.existsSync(testdir + '/sub1').should.true;
+		fs.existsSync(testdir + '/sub2').should.true;
+		fs.existsSync(testdir + '/sub2/sub3').should.true;
+		fs.existsSync(testdir + '/sub1/f1.txt').should.true;
+		fs.existsSync(testdir + '/sub2/f2.txt').should.true;
+		fs.existsSync(testdir + '/sub2/sub3/f3.txt').should.true;
+		fs2.rmAll(testdir + '/sub1', function (err) {
+			if (err) return next(err);
+			fs.existsSync(testdir + '/sub1').should.false;
+			fs.existsSync(testdir + '/sub2').should.true;
+			fs.existsSync(testdir + '/sub2/sub3').should.true;
+			fs.existsSync(testdir + '/sub1/f1.txt').should.false;
+			fs.existsSync(testdir + '/sub2/f2.txt').should.true;
+			fs.existsSync(testdir + '/sub2/sub3/f3.txt').should.true;
+			next();
+		})
+	});
+	it("can remove recursive", function (next) {
+		fs.existsSync(testdir + '/sub1').should.true;
+		fs.existsSync(testdir + '/sub2').should.true;
+		fs.existsSync(testdir + '/sub2/sub3').should.true;
+		fs.existsSync(testdir + '/sub1/f1.txt').should.true;
+		fs.existsSync(testdir + '/sub2/f2.txt').should.true;
+		fs.existsSync(testdir + '/sub2/sub3/f3.txt').should.true;
+		fs2.rmAll(testdir + '/sub2', function (err) {
+			if (err) return next(err);
+			fs.existsSync(testdir + '/sub1').should.true;
+			fs.existsSync(testdir + '/sub2').should.false;
+			fs.existsSync(testdir + '/sub2/sub3').should.false;
+			fs.existsSync(testdir + '/sub1/f1.txt').should.true;
+			fs.existsSync(testdir + '/sub2/f2.txt').should.false;
+			fs.existsSync(testdir + '/sub2/sub3/f3.txt').should.false;
+			next();
+		})
+	});
+});
+
+describe("emtpyDir", function () {
+	before(function (next) {
+		fs.mkdir(testdir + '/sub1', 0755, function (err) {
+			fs.mkdir(testdir + '/sub2', 0755, function (err) {
+				fs.mkdir(testdir + '/sub2/sub3', 0755, function (err) {
+					fs.writeFileSync(testdir + '/sub1/f1.txt', 'abc');
+					fs.writeFileSync(testdir + '/sub2/f2.txt', 'abc');
+					fs.writeFileSync(testdir + '/sub2/sub3/f3.txt', 'abc');
+					next();
+				});
+			});
+		});
+	});
+	it("should success", function (next) {
+		fs2.emptyDir(testdir, function (err) {
+			if (err) return next(err);
+			fs.readdir(testdir, function (err, files) {
+				if (err) return next(err);
+				files.should.length(0);
+				next();
+			});
+		});
+	});
+});
 
 describe("mkdirs", function () {
 	before(function (next) {
-		fs.rmdir(base + '/sub1/sub2', function (err) {
-			if (err && err.code !== 'ENOENT') return next(err);
+		fs2.emptyDir(testdir, next);
+	});
+	before(function (next) {
+		fs.rmdir(testdir + '/sub1/sub2', function (err) {
 			next();
 		});
 	});
 	before(function (next) {
-		fs.rmdir(base + '/sub1', function (err) {
-			if (err && err.code !== 'ENOENT') return next(err);
+		fs.rmdir(testdir + '/sub1', function (err) {
 			next();
 		});
 	});
 	it("can make sub1", function (next) {
-		fs.existsSync(base + '/sub1').should.be.false;
-		fs2.mkdirs(base, 'sub1', function (err, dir) {
+		fs.existsSync(testdir + '/sub1').should.be.false;
+		fs2.mkdirs(testdir, 'sub1', function (err, dir) {
 			should(!err);
-			dir.should.equal(base + '/sub1');
-			fs.existsSync(base + '/sub1').should.be.true;
+			dir.should.equal(testdir + '/sub1');
+			fs.existsSync(testdir + '/sub1').should.be.true;
 			next();
 		});
 	});
 	it("can make sub2", function (next) {
-		fs.existsSync(base + '/sub1/sub2').should.be.false;
-		fs2.mkdirs(base, 'sub1', 'sub2', function (err, dir) {
+		fs.existsSync(testdir + '/sub1/sub2').should.be.false;
+		fs2.mkdirs(testdir, 'sub1', 'sub2', function (err, dir) {
 			should(!err);
-			dir.should.equal(base + '/sub1/sub2');
-			fs.existsSync(base + '/sub1/sub2').should.be.true;
+			dir.should.equal(testdir + '/sub1/sub2');
+			fs.existsSync(testdir + '/sub1/sub2').should.be.true;
 			next();
-		})
+		});
 	});
 });
 

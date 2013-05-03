@@ -18,6 +18,38 @@ exports.mkdirs = function () {
 	mkdir();
 };
 
+exports.rmAll = function rmAll(path, next) {
+	fs.stat(path, function (err, stat) {
+		if (err) return next(err);
+		if(stat.isFile()) {
+			fs.unlink(path, function (err) {
+				next();
+			});
+			return;
+		}
+		if(stat.isDirectory()) {
+			fs.readdir(path, function (err, fnames) {
+				if (err) return next(err);
+				var i = 0;
+				function unlink() {
+					if (i == fnames.length) {
+						fs.rmdir(path, function (err) {
+							next();
+						});
+						return;
+					}
+					var fname = fnames[i++];
+					rmAll(path + '/' + fname, function (err) {
+						if (err) return next(err);
+						setImmediate(unlink);
+					});
+				}
+				unlink();
+			});
+		}
+	});
+};
+
 exports.emptyDir = function (path, next) {
 	fs.readdir(path, function (err, fnames) {
 		if (err) return next(err);
@@ -27,13 +59,14 @@ exports.emptyDir = function (path, next) {
 				return next();
 			}
 			var fname = fnames[i++];
-			fs.unlink(path + '/' + fname, function (err) {
+			exports.rmAll(path + '/' + fname, function (err) {
 				setImmediate(unlink);
 			});
 		}
 		unlink();
 	});
 };
+
 
 exports.safeFilename = function (name) {
 	var i = 0;
