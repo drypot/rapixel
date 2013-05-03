@@ -29,7 +29,7 @@ init.add(function (next) {
 				});
 			}
 			unlink();
-		}
+		};
 	};
 
 	fs2.mkdirs(config.data.uploadDir, 'public', 'photo', function (err) {

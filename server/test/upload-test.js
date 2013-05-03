@@ -45,3 +45,4 @@ describe("tmpDeleter", function () {
 		deleter(null, 'param1');
 	});
 });
+
