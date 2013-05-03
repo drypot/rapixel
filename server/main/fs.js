@@ -1,14 +1,25 @@
 var fs = require('fs');
 
 exports.mkdirs = function () {
-	var _args = arguments;
-	var len = _args.length - 1;
-	var next = _args[len];
+	var next = arguments[arguments.length - 1];
+	var subs = [];
+	for (var j = 0; j < arguments.length - 1; j++) {
+		var arg = arguments[j];
+		if (Array.isArray(arg)) {
+			for (var k = 0; k < arg.length; k++) {
+				subs.push(arg[k]);
+			}
+		} else {
+			subs.push(arg);
+		}
+	}
 	var path = null;
 	var i = 0;
 	function mkdir() {
-		if (i == len) return next(null, path);
-		var sub = _args[i++];
+		if (i == subs.length) {
+			return next(null, path);
+		}
+		var sub = subs[i++];
 		path = !path ? sub : path + '/' + sub;
 		fs.mkdir(path, 0755, function (err) {
 			if (err && err.code !== 'EEXIST') return next(err);
@@ -23,6 +34,7 @@ exports.rmAll = function rmAll(path, next) {
 		if (err) return next(err);
 		if(stat.isFile()) {
 			fs.unlink(path, function (err) {
+				if (err && err.code !== 'ENOENT') return next(err);
 				next();
 			});
 			return;
@@ -34,6 +46,7 @@ exports.rmAll = function rmAll(path, next) {
 				function unlink() {
 					if (i == fnames.length) {
 						fs.rmdir(path, function (err) {
+							if (err && err.code !== 'ENOENT') return next(err);
 							next();
 						});
 						return;
@@ -67,7 +80,6 @@ exports.emptyDir = function (path, next) {
 	});
 };
 
-
 exports.safeFilename = function (name) {
 	var i = 0;
 	var len = name.length;
@@ -84,3 +96,13 @@ exports.safeFilename = function (name) {
 	}
 	return safe;
 };
+
+exports.subs = function (id, iter) {
+	var path = [];
+	for (iter--; iter > 0; iter--) {
+		path.unshift(id % 1000);
+		id = Math.floor(id / 1000);
+	}
+	path.unshift(id);
+	return path;
+}

@@ -112,17 +112,7 @@ describe("mkdirs", function () {
 	before(function (next) {
 		fs2.emptyDir(testdir, next);
 	});
-	before(function (next) {
-		fs.rmdir(testdir + '/sub1/sub2', function (err) {
-			next();
-		});
-	});
-	before(function (next) {
-		fs.rmdir(testdir + '/sub1', function (err) {
-			next();
-		});
-	});
-	it("can make sub1", function (next) {
+	it("can make dir", function (next) {
 		fs.existsSync(testdir + '/sub1').should.be.false;
 		fs2.mkdirs(testdir, 'sub1', function (err, dir) {
 			should(!err);
@@ -131,12 +121,21 @@ describe("mkdirs", function () {
 			next();
 		});
 	});
-	it("can make sub2", function (next) {
+	it("can make dir in existing dir", function (next) {
 		fs.existsSync(testdir + '/sub1/sub2').should.be.false;
 		fs2.mkdirs(testdir, 'sub1', 'sub2', function (err, dir) {
 			should(!err);
 			dir.should.equal(testdir + '/sub1/sub2');
 			fs.existsSync(testdir + '/sub1/sub2').should.be.true;
+			next();
+		});
+	});
+	it("can make dirs with array ", function (next) {
+		fs.existsSync(testdir + '/sub3/sub4/sub5/sub6').should.be.false;
+		fs2.mkdirs(testdir, 'sub3', [ 'sub4', 'sub5' ], 'sub6', function (err, dir) {
+			should(!err);
+			dir.should.equal(testdir + '/sub3/sub4/sub5/sub6');
+			fs.existsSync(testdir + '/sub3/sub4/sub5/sub6').should.be.true;
 			next();
 		});
 	});
@@ -162,5 +161,18 @@ describe("safeFilename", function () {
 			if (a !== b) console.log(pair);
 			should(a === b);
 		})
+	});
+});
+
+describe("subs", function () {
+	it("should success", function () {
+		fs2.subs(1, 3).should.eql([0, 0, 1]);
+		fs2.subs(999, 3).should.eql([0, 0, 999]);
+		fs2.subs(1000, 3).should.eql([0, 1, 0]);
+		fs2.subs(1999, 3).should.eql([0, 1, 999]);
+		fs2.subs(999999, 3).should.eql([0, 999, 999]);
+		fs2.subs(1999999, 3).should.eql([1, 999, 999]);
+		fs2.subs(999999999, 3).should.eql([999, 999, 999]);
+		fs2.subs(9999999999, 3).should.eql([9999, 999, 999]);
 	});
 });
