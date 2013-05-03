@@ -9,9 +9,6 @@ init.add(function (next) {
 
 	console.log('upload: ' + config.data.uploadDir);
 
-	var pub = exports.pub = config.data.uploadDir + '/public';
-	var tmp = exports.tmp = config.data.uploadDir + '/tmp';
-
 	exports.tmpDeleter = function (files, next) {
 		return function () {
 			var _arg = arguments;
@@ -32,11 +29,16 @@ init.add(function (next) {
 		};
 	};
 
-	fs2.mkdirs(config.data.uploadDir, 'public', 'photo', function (err) {
+	fs2.mkdirs(config.data.uploadDir, 'public', function (err, dir) {
 		if (err) return next(err);
-		fs2.mkdirs(config.data.uploadDir, 'tmp', function (err) {
+		exports.pub = dir;
+		fs2.mkdirs(config.data.uploadDir, 'public', 'photo', function (err, dir) {
 			if (err) return next(err);
-			fs2.emptyDir(tmp, next);
+			fs2.mkdirs(config.data.uploadDir, 'tmp', function (err, dir) {
+				if (err) return next(err);
+				exports.tmp = dir;
+				fs2.emptyDir(dir, next);
+			});
 		});
 	});
 

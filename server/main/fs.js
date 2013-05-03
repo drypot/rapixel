@@ -1,58 +1,93 @@
 var fs = require('fs');
+var path = require('path');
 
 exports.mkdirs = function () {
 	var next = arguments[arguments.length - 1];
-	var subs = [];
-	for (var j = 0; j < arguments.length - 1; j++) {
-		var arg = arguments[j];
-		if (Array.isArray(arg)) {
-			for (var k = 0; k < arg.length; k++) {
-				subs.push(arg[k]);
-			}
-		} else {
-			subs.push(arg);
-		}
-	}
-	var path = null;
+	var subs = arguments;
+	var p = null;
 	var i = 0;
 	function mkdir() {
-		if (i == subs.length) {
-			return next(null, path);
+		if (i == subs.length - 1) {
+			return next(null, p);
 		}
 		var sub = subs[i++];
-		path = !path ? sub : path + '/' + sub;
-		fs.mkdir(path, 0755, function (err) {
-			if (err && err.code !== 'EEXIST') return next(err);
+		if (Array.isArray(sub)) {
+			mkArray(p, sub, function (err, _path) {
+				if (err) return next(err);
+				p = _path;
+				setImmediate(mkdir);
+			});
+			return;
+		}
+		p = !p ? sub : p + '/' + sub;
+		mkString(p, function (err) {
+			if (err) return next(err);
 			setImmediate(mkdir);
 		});
 	}
 	mkdir();
 };
 
-exports.rmAll = function rmAll(path, next) {
-	fs.stat(path, function (err, stat) {
+// 불필요한 클로저가 생기는 것을 막기 위해 밖으로 뽑았다.
+function mkArray(p, ary, next) {
+	var i = 0;
+	function mkdir() {
+		if (i == ary.length) {
+			return next(null, p);
+		}
+		var sub = ary[i++];
+		p = !p ? sub : p + '/' + sub;
+		fs.mkdir(p, 0755, function (err) {
+			if (err && err.code !== 'EEXIST') return next(err);
+			setImmediate(mkdir);
+		});
+	}
+	mkdir();
+}
+
+function mkString(p, next) {
+	fs.mkdir(p, 0755, function(err) {
+		if (err && err.code === 'ENOENT') {
+			mkString(path.dirname(p), function (err) {
+				if (err) return next(err);
+				fs.mkdir(p, 0755, function(err) {
+					if (err && err.code !== 'EEXIST') return next(err);
+					next();
+				});
+			});
+			return;
+		}
+		if (err && err.code !== 'EEXIST') {
+			return next(err);
+		}
+		next();
+	});
+}
+
+exports.rmAll = function rmAll(p, next) {
+	fs.stat(p, function (err, stat) {
 		if (err) return next(err);
 		if(stat.isFile()) {
-			fs.unlink(path, function (err) {
+			fs.unlink(p, function (err) {
 				if (err && err.code !== 'ENOENT') return next(err);
 				next();
 			});
 			return;
 		}
 		if(stat.isDirectory()) {
-			fs.readdir(path, function (err, fnames) {
+			fs.readdir(p, function (err, fnames) {
 				if (err) return next(err);
 				var i = 0;
 				function unlink() {
 					if (i == fnames.length) {
-						fs.rmdir(path, function (err) {
+						fs.rmdir(p, function (err) {
 							if (err && err.code !== 'ENOENT') return next(err);
 							next();
 						});
 						return;
 					}
 					var fname = fnames[i++];
-					rmAll(path + '/' + fname, function (err) {
+					rmAll(p + '/' + fname, function (err) {
 						if (err) return next(err);
 						setImmediate(unlink);
 					});
@@ -63,8 +98,8 @@ exports.rmAll = function rmAll(path, next) {
 	});
 };
 
-exports.emptyDir = function (path, next) {
-	fs.readdir(path, function (err, fnames) {
+exports.emptyDir = function (p, next) {
+	fs.readdir(p, function (err, fnames) {
 		if (err) return next(err);
 		var i = 0;
 		function unlink() {
@@ -72,7 +107,7 @@ exports.emptyDir = function (path, next) {
 				return next();
 			}
 			var fname = fnames[i++];
-			exports.rmAll(path + '/' + fname, function (err) {
+			exports.rmAll(p + '/' + fname, function (err) {
 				setImmediate(unlink);
 			});
 		}
