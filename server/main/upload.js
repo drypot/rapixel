@@ -29,15 +29,15 @@ init.add(function (next) {
 		};
 	};
 
-	fs2.mkdirs(config.data.uploadDir, 'public', function (err, dir) {
+	fs2.mkdirs(config.data.uploadDir, 'public', function (err, p) {
 		if (err) return next(err);
-		exports.pub = dir;
-		fs2.mkdirs(config.data.uploadDir, 'public', 'photo', function (err, dir) {
+		exports.pub = p;
+		fs2.mkdirs(config.data.uploadDir, 'public', 'photo', function (err, p) {
 			if (err) return next(err);
-			fs2.mkdirs(config.data.uploadDir, 'tmp', function (err, dir) {
+			fs2.mkdirs(config.data.uploadDir, 'tmp', function (err, p) {
 				if (err) return next(err);
-				exports.tmp = dir;
-				fs2.emptyDir(dir, next);
+				exports.tmp = p;
+				fs2.emptyDir(p, next);
 			});
 		});
 	});
