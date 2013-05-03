@@ -5,7 +5,7 @@
 	"cookieSecret": "o;iejf832ndvs",
 
 	"uploadUrl": "http://rapixelfile:8080",
-	"uploadDir": "/Users/drypot/data/rapixel-upload",
+	"uploadDir": "upload",
 	"uploadMax": 10,
 
 	"mongoDbName": "rapixel",
