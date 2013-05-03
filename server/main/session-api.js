@@ -39,7 +39,8 @@ init.add(function () {
 			}
 			req.session.regenerate(function (err) {
 				if (err) return res.jsonErr(err);
-				mongo.updateUserAdate(user._id, function (err, now) {
+				var now = new Date();
+				mongo.updateUserAdate(user._id, now, function (err) {
 					if (err) return res.jsonErr(err);
 					user.adate = now;
 					auth.cacheUser(user);

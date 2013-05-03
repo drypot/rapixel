@@ -73,10 +73,15 @@ init.add(function (next) {
 			users.findOne({ email: email }, next);
 		};
 
-		exports.updateUserAdate = function (id, next) {
-			var now = new Date();
+		exports.updateUserAdate = function (id, now, next) {
 			users.update({ _id: id }, { $set: { adate: now }}, function (err) {
-				next(err, now);
+				next(err);
+			});
+		};
+
+		exports.updateUserPdate = function (id, now, next) {
+			users.update({ _id: id }, { $set: { pdate: now }}, function (err) {
+				next(err);
 			});
 		};
 
@@ -107,10 +112,6 @@ init.add(function (next) {
 			photos.insert(photo, next);
 		};
 
-		exports.updatePhoto = function (photo, next) {
-			photos.save(photo, next);
-		};
-
 		exports.updatePhotoHit = function (photoId, next) {
 			photos.update({ _id: photoId }, { $inc: { hit: 1 }}, next);
 		};
@@ -131,7 +132,7 @@ init.add(function (next) {
 		};
 
 		photos = exports.photos = db.collection("photos");
-		photos.ensureIndex({ userId: 1 }, function (err) {
+		photos.ensureIndex({ userId: 1, _id: -1 }, function (err) {
 			if (err) return next(err);
 			photos.find({}, { _id: 1 }).sort({ _id: -1 }).limit(1).nextObject(function (err, obj) {
 				if (err) return next(err);
