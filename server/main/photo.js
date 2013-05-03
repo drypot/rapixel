@@ -1,53 +1,60 @@
 var fs = require('fs');
 var path = require('path');
+var img = require('imagemagick');
 
 var init = require('../main/init');
 var config = require('../main/config');
 var fs2 = require('../main/fs');
+var mongo = require('../main/mongo');
+var upload = require('../main/upload');
+var error = require('../main/error');
 
 init.add(function (next) {
 
-	exports.tmpFileExists = function (filename) {
-		return fs.existsSync(tmpDir + '/' + filename);
-	};
+	console.log('photo:');
 
-	exports.tmpFiles = function (files) {
-		var tmpFiles = [];
-		if (files) {
-			if (!Array.isArray(files)) {
-				files = [files];
+	var vers = [ 2160, 1440, 1080, 720, 480, 320 ];
+
+	exports.createPhoto = function(req, user, _next) {
+		var next = upload.tmpDeleter(req.files.file, _next);
+		if (user.pdate && ((Date.now() - user.pdate.getTime()) / (24 * 60 * 60 * 1000) < 1 )) {
+			return next(error(error.PHOTO_CYCLE));
+		}
+
+		// TODO: free space check
+
+		var file = req.files.file;
+		if (!file) {
+			return next(error(error.PHOTO_NO_FILE));
+		}
+		if (Array.isArray(file)) {
+			return next(error(error.PHOTO_NOT_ONE));
+		}
+		img.identify(file.path, function (err, f) {
+			if (err) return next(err);
+			if (f.height < 1440) {
+				return next(error(error.PHOTO_HEIGHT));
 			}
-			files.forEach(function (file) {
-				// 정상 업로드 size 가 0 으로 보고되는 경우 발견
-				//if (file.size) {
-					tmpFiles.push({
-						name: file.name,
-						tmpName: path.basename(file.path)
-					});
-				//}
-			});
-		}
-		return tmpFiles;
-	};
+			if (f.width / f.height < 1.75) {
+				return next(error(error.PHOTO_RATIO));
+			}
+			var photoId = mongo.getNewPhotoId();
+			var path =
 
-	exports.deleteTmpFiles = function (files) {
-		if (files) {
-			files.forEach(function (file) {
-				var tmpName = path.basename(file.tmpName);
-				try {
-					fs.unlinkSync(tmpDir + '/' + tmpName);
-				} catch (err) {
-					if (err.code !== 'ENOENT') throw err;
-				}
-			});
-		}
+			next();
+		});
+		req.user()
 	}
 
-	// Post File
 
-	exports.postFileDir = function (postId) {
-		return publicDir + '/post/' + Math.floor(postId / 10000) + '/' + postId
-	};
+	function dir(photoId) {
+		var path = upload.pub + '/photo/';
+		path += Math.floor(postId / 1000000000) + '/';
+		path += Math.floor((postId % 1000000000) / 1000000) + '/';
+		path += Math.floor((postId % 1000000) / 1000) + '/';
+		path += postId;
+		return path;
+	}
 
 	exports.postFileUrl = function (postId, fname) {
 		return config.data.uploadUrl + '/post/' + Math.floor(postId / 10000) + '/' + postId + '/' + encodeURIComponent(fname);
@@ -61,7 +68,7 @@ init.add(function (next) {
 		if (!files || files.length == 0) {
 			return next();
 		}
-		saveTmpFiles(files, [publicDir, 'post', Math.floor(postId / 10000), postId], next);
+		saveTmpFiles(files, [pub, 'post', Math.floor(postId / 10000), postId], next);
 	};
 
 	function saveTmpFiles(files, subs, next) {
@@ -73,7 +80,7 @@ init.add(function (next) {
 				var safeName = fs2.safeFilename(path.basename(file.name));
 				var tmpName = path.basename(file.tmpName);
 				try {
-					fs.renameSync(tmpDir + '/' + tmpName, tarDir + '/' + safeName);
+					fs.renameSync(tmp + '/' + tmpName, tarDir + '/' + safeName);
 				} catch (err) {
 					if (err.code !== 'ENOENT') next(err);
 				}
@@ -112,21 +119,5 @@ init.add(function (next) {
 		}
 	}
 
-	var publicDir = config.data.uploadDir + '/public';
-	var tmpDir = config.data.uploadDir + '/tmp';
-
-	console.log('upload: ' + config.data.uploadDir);
-
-	try {
-		fs2.mkdirs([config.data.uploadDir, 'public', 'post']);
-		fs2.mkdirs([config.data.uploadDir, 'tmp']);
-
-		fs.readdirSync(tmpDir).forEach(function (filename) {
-			fs.unlinkSync(tmpDir + '/' + filename);
-		});
-		next();
-	} catch (err) {
-		next(err);
-	}
-
+	next();
 });

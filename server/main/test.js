@@ -18,33 +18,40 @@ init.add(function () {
 	var url = exports.url = 'http://localhost:' + config.data.port;
 	var request = opt.request;
 
+	exports.createUser = function (next) {
+		var form = { name: 'snowman', email: 'abc@def.com', password: '1234' };
+		request.post(url + '/api/users').send(form).end(function (err,res) {
+			should(!res.body.err);
+			next();
+		});
+	}
 	exports.logout = function (next) {
 		request.del(url + '/api/sessions', function (err, res) {
-			should.not.exist(err);
-			res.should.have.status(200);
-			should.not.exist(res.body.err);
+			should(!err);
+			should(!res.error);
+			should(!res.body.err);
 			next();
 		});
 	}
 
 	exports.loginUser = function (next) {
-		request.post(url + '/api/sessions').send({ password: '1' }).end(function (err, res) {
-			should.not.exist(err);
-			res.should.have.status(200);
-			should.not.exist(res.body.err);
-			res.body.role.name.should.equal('user');
+		var form = { email: 'abc@def.com', password: '1234' };
+		request.post(url + '/api/sessions').send(form).end(function (err, res) {
+			should(!err);
+			should(!res.error);
+			should(!res.body.err);
 			next();
 		});
 	}
 
-	exports.loginAdmin = function (next) {
-		request.post(url + '/api/sessions').send({ password: '3' }).end(function (err, res) {
-			should.not.exist(err);
-			res.should.have.status(200);
-			should.not.exist(res.body.err);
-			res.body.role.name.should.equal('admin');
-			next();
-		});
-	}
+//	exports.loginAdmin = function (next) {
+//		request.post(url + '/api/sessions').send({ password: '3' }).end(function (err, res) {
+//			should(!err);
+//			should(!res.error);
+//			should(!res.body.err);
+//			res.body.role.name.should.equal('admin');
+//			next();
+//		});
+//	}
 
 });

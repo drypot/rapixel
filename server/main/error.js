@@ -25,9 +25,14 @@ exports.NOT_AUTHORIZED = 102;
 exports.INVALID_PASSWORD = 103;
 
 exports.INVALID_DATA = 201;
-exports.INVALID_CATEGORY = 202;
-exports.INVALID_THREAD = 203;
-exports.INVALID_POST = 204;
+
+exports.PHOTO_CYCLE = 300;
+exports.PHOTO_NO_FILE = 310;
+exports.PHOTO_NOT_ONE = 311;
+exports.PHOTO_RATIO = 321;
+exports.PHOTO_HEIGHT = 322;
+
+exports.USER_FREE_SPACE = 405;
 
 var msg = exports.msg = {
 	NAME_EMPTY: '이름을 입력해 주십시오.',
@@ -52,3 +57,11 @@ msg[exports.INVALID_DATA] = '비정상적인 값이 입력되었습니다.';
 msg[exports.INVALID_CATEGORY] = '정상적인 카테고리가 아닙니다.';
 msg[exports.INVALID_THREAD] = '정상적인 글줄이 아닙니다.';
 msg[exports.INVALID_POST] = '정상적인 글이 아닙니다.';
+
+msg[exports.PHOTO_CYCLE] = '사진은 하루 한장만 등록하실 수 있습니다.';
+msg[exports.PHOTO_NO_FILE] = '사진을 첨부해 주십시오.';
+msg[exports.PHOTO_NOT_ONE] = '사진은 한장만 등록하실 수 있습니다.';
+msg[exports.PHOTO_RATIO] = '사진의 가로 세로 비율은 16:9 이상이어야 합니다.';
+msg[exports.PHOTO_HEIGHT] = '사진의 세로 크기는 1440 픽셀 이상이어야 합니다.';
+
+msg[exports.USER_FREE_SPACE] = '개인공간에 여유가 없습니다.';
