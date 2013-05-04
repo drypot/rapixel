@@ -142,6 +142,16 @@ init.add(function (next) {
 			photos.find(findOp).sort({ updated: dir }).skip(skip).limit(pgsize).each(next);
 		};
 
+		exports.delPhoto = function (pid, uid, next) {
+			var sel = {
+				_id: pid
+			};
+			if (uid) {
+				sel.userId = uid
+			}
+			photos.remove(sel, next);
+		}
+
 		photos = exports.photos = db.collection("photos");
 		photos.ensureIndex({ userId: 1, _id: -1 }, function (err) {
 			if (err) return next(err);

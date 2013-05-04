@@ -140,8 +140,8 @@ init.add(function (next) {
 		});
 	};
 
-	exports.del = function (pid, next) {
-
+	exports.del = function (pid, u, next) {
+		mongo.delPhoto(pid, u.admin ? null : u._id, next);
 	};
 
 	exports.list = function (pg, pgsize, next) {
