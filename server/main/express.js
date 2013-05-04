@@ -120,4 +120,20 @@ init.add(function () {
 		console.log(log);
 	};
 
+	// for test
+
+	var request = require('superagent').agent();
+	var url = 'http://localhost:' + config.data.port;
+	var methods = [ 'post', 'get', 'put', 'del' ];
+
+	for (var i = 0; i < methods.length; i++) {
+		var method = methods[i];
+		exports[method] = (function (method) {
+			return function () {
+				arguments[0] = url + arguments[0];
+				return request[method].apply(request, arguments);
+			}
+		})(method)
+	}
+
 });
