@@ -16,7 +16,7 @@ init.add(function () {
 		form.name = String(req.body.name || '').trim();
 		form.email = String(req.body.email || '').trim();
 		form.password = String(req.body.password || '').trim();
-		user.create(form, function (err, u) {
+		user.createUser(form, function (err, u) {
 			if (err) return res.jsonErr(err);
 			res.json({
 				userId: u._id

@@ -78,6 +78,20 @@ init.add(function () {
 		next(null, u);
 	};
 
+	should.not.exist(app.request.admin);
+	app.request.admin = function (next) {
+		var req = this;
+		var res = this.res;
+		var u = res.locals.user;
+		if (!u) {
+			return next(error(error.NOT_AUTHENTICATED));
+		}
+		if (!u.admin) {
+			return next(error(error.NOT_AUTHORIZED));
+		}
+		next(null, u);
+	};
+
 	var empty = {};
 
 	should.not.exist(app.response.jsonEmpty);

@@ -13,25 +13,10 @@ init.add(function () {
 
 	console.log('session-api:');
 
-//	app.get('/api/sessions', function (req, res) {
-//		req.user(function (err, role) {
-//			if (err) {
-//				return res.jsonErr(err);
-//			}
-//			res.json({
-//				role: {
-//					name: role.name,
-//					categoriesForMenu: role.categoriesForMenu
-//				},
-//				uploadUrl: config.data.uploadUrl
-//			});
-//		});
-//	});
-
 	app.post('/api/sessions', function (req, res) {
-		var body = req.body;
-		var email = String(body.email || '').trim();
-		var password = String(body.password || '').trim();
+		var email = String(req.body.email || '').trim();
+		var password = String(req.body.password || '').trim();
+
 		mongo.findUserByEmail(email, function (err, u) {
 			if (err) return res.jsonErr(err);
 			if (!u || !bcrypt.compareSync(password, u.hash)) {
@@ -48,7 +33,6 @@ init.add(function () {
 					res.json({
 						name: u.name
 					});
-
 				});
 			});
 		})
@@ -57,45 +41,6 @@ init.add(function () {
 	app.del('/api/sessions', function (req, res) {
 		req.session.destroy();
 		res.jsonEmpty();
-	});
-
-	app.configure('development', function () {
-		app.put('/api/test/session', function (req, res) {
-			for (var key in req.body) {
-				req.session[key] = req.body[key];
-			}
-			res.json('ok');
-		});
-
-		app.get('/api/test/session', function (req, res) {
-			var obj = {};
-			for (var i = 0; i < req.body.length; i++) {
-				var key = req.body[i];
-				obj[key] = req.session[key];
-			}
-			res.json(obj);
-		});
-
-		app.get('/api/test/auth/any', function (req, res) {
-			req.user(function (err) {
-				if (err) return res.jsonErr(err);
-				res.jsonEmpty();
-			})
-		});
-
-		app.get('/api/test/auth/user', function (req, res) {
-			req.user('user', function (err) {
-				if (err) return res.jsonErr(err);
-				res.jsonEmpty();
-			});
-		});
-
-		app.get('/api/test/auth/admin', function (req, res) {
-			req.user('admin', function (err) {
-				if (err) return res.jsonErr(err);
-				res.jsonEmpty();
-			});
-		});
 	});
 
 });

@@ -119,7 +119,17 @@ init.add(function (next) {
 			photos.update({ _id: pid }, { $inc: { hit: 1 }}, next);
 		};
 
-		exports.find = function (pid, next) {
+		exports.delPhoto = function (pid, uid, next) {
+			var sel = {
+				_id: pid
+			};
+			if (uid) {
+				sel.userId = uid
+			}
+			photos.remove(sel, next);
+		}
+
+		exports.findPhoto = function (pid, next) {
 			photos.findOne({ _id: pid }, next);
 		};
 
@@ -131,26 +141,18 @@ init.add(function (next) {
 			photos.findOne({ userId: uid }, opt, next);
 		}
 
-		exports.findPhotosByUser = function (uid, pg, pgsize, next) {
-			var findOp = {};
-			var dir = -1;
-			var skip = (Math.abs(pg) - 1) * pgsize;
-
-			if (categoryId) {
-				findOp.categoryId = categoryId;
-			}
-			photos.find(findOp).sort({ updated: dir }).skip(skip).limit(pgsize).each(next);
+		exports.findPhotos = function (pg, pgsize) {
+			var opt = {
+				sort: { _id: -1 },
+				skip: (Math.abs(pg) - 1) * pgsize,
+				limit: pgsize
+			};
+			return photos.find({}, opt, next);
 		};
 
-		exports.delPhoto = function (pid, uid, next) {
-			var sel = {
-				_id: pid
-			};
-			if (uid) {
-				sel.userId = uid
-			}
-			photos.remove(sel, next);
-		}
+//		exports.findPhotosByUser = function (uid, pg, pgsize, next) {
+//
+//		};
 
 		photos = exports.photos = db.collection("photos");
 		photos.ensureIndex({ userId: 1, _id: -1 }, function (err) {

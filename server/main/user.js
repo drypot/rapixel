@@ -22,7 +22,7 @@ init.add(function (next) {
 		});
 	};
 
-	exports.create = function (form, next) {
+	exports.createUser = function (form, next) {
 		checkForm(form, function (err) {
 			if (err) return next(err);
 			mongo.findUserByName(form.name, function (err, u) {
@@ -54,6 +54,9 @@ init.add(function (next) {
 						disk: 0,
 						profile: ''
 					};
+					if (form.admin) {
+						u.admin = true;
+					}
 					mongo.insertUser(u, function (err) {
 						if (err) return next(err);
 						next(null, u);
