@@ -29,17 +29,28 @@ init.add(function (next) {
 		};
 	};
 
-	fs2.mkdirs(config.data.uploadDir, 'public', function (err, p) {
-		if (err) return next(err);
-		exports.pub = p;
-		fs2.mkdirs(config.data.uploadDir, 'public', 'photo', function (err, p) {
+	var pathes = [
+		exports.pub = config.data.uploadDir + '/public',
+		exports.pubPhoto = config.data.uploadDir + '/public/photo',
+		exports.archive = config.data.uploadDir + '/archive',
+		exports.archivePhoto = config.data.uploadDir + '/archive/photo',
+		exports.tmp = config.data.uploadDir + '/tmp'
+	];
+
+	var i = 0;
+
+	function mkdir() {
+		if (i == pathes.length) {
+			fs2.emptyDir(exports.tmp, next);
+			return;
+		}
+		var p = pathes[i++];
+		fs2.mkdirs(p, function (err) {
 			if (err) return next(err);
-			fs2.mkdirs(config.data.uploadDir, 'tmp', function (err, p) {
-				if (err) return next(err);
-				exports.tmp = p;
-				fs2.emptyDir(p, next);
-			});
-		});
-	});
+			setImmediate(mkdir);
+		})
+	}
+
+	mkdir();
 
 });
