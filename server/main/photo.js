@@ -6,6 +6,7 @@ var init = require('../main/init');
 var config = require('../main/config');
 var fs2 = require('../main/fs');
 var mongo = require('../main/mongo');
+var user = require('../main/user');
 var upload = require('../main/upload');
 var error = require('../main/error');
 
@@ -13,37 +14,40 @@ init.add(function (next) {
 
 	console.log('photo:');
 
-	exports.createPhoto = function(req, user, _next) {
+	exports.create = function(req, user, _next) {
 		var next = upload.tmpDeleter(req.files.file, _next);
-		checkPhoto(req, user, function (err, f) {
+		var now = new Date();
+		checkCycle(user, now, function (err) {
 			if (err) return next(err);
-			var photoId = mongo.getNewPhotoId();
-			makeVersions(req, photoId, f, function (err, vers, org) {
+			checkPhoto(req, user, function (err, f) {
 				if (err) return next(err);
-				var now = new Date();
-				var photo = {
-					_id: photoId,
-					hit: 0,
-					favCnt: 0,
-					userId: user._id,
-					fname: path.basename(req.files.file.name),
-					format: f.format,
-					width: f.width,
-					height: f.height,
-					vers: vers,
-					cdate: now,
-					comment: req.body.comment || ''
-				};
-				mongo.insertPhoto(photo, function (err) {
+				var photoId = mongo.getNewPhotoId();
+				makeVersions(req, photoId, f, function (err, vers, org) {
 					if (err) return next(err);
-					mongo.updateUserPdate(user._id, now, function (err) {
+					var p = {
+						_id: photoId,
+						userId: user._id,
+						hit: 0,
+						favCnt: 0,
+						fname: path.basename(req.files.file.name),
+						format: f.format,
+						width: f.width,
+						height: f.height,
+						vers: vers,
+						cdate: now,
+						comment: req.body.comment || ''
+					};
+					mongo.insertPhoto(p, function (err) {
 						if (err) return next(err);
-						next(null, photoId);
+						mongo.updateUserPdate(user._id, now, function (err) {
+							if (err) return next(err);
+							next(null, photoId);
+						});
 					});
 				});
-			})
+			});
 		});
-	}
+	};
 
 	var _vers = [ 2160, 1440, 1080, 720, 480, 320 ];
 
@@ -52,7 +56,7 @@ init.add(function (next) {
 			if (err) return next(err);
 			var vers = [];
 			var i = 0;
-			function makeVers() {
+			function makeVersion() {
 				if (i == _vers.length) {
 					var org = 'org.' + f.format.toLowerCase();
 					fs.rename(req.files.file.path, p + '/' + org, function (err) {
@@ -62,7 +66,7 @@ init.add(function (next) {
 				}
 				var v = _vers[i++];
 				if (v > f.height) {
-					setImmediate(makeVers);
+					setImmediate(makeVersion);
 					return;
 				}
 				var opt = {
@@ -75,17 +79,29 @@ init.add(function (next) {
 				img.resize(opt, function (err) {
 					if (err) return next(err);
 					vers.push(v);
-					setImmediate(makeVers);
+					setImmediate(makeVersion);
 				});
 			}
-			makeVers();
+			makeVersion();
+		});
+	}
+
+	function checkCycle(user, now, next) {
+//		사진을 삭제하고 다시 업하는 경우를 허용하도록 한다.
+//		if (user.pdate && ((Date.now() - user.pdate.getTime()) / (24 * 60 * 60 * 1000) < 1 )) {
+//			return next(error(error.PHOTO_CYCLE));
+//		}
+
+		mongo.findLastPhoto(user._id, function (err, p) {
+			if (err) return next(err);
+			if ((now - p.cdate.getTime()) / (24 * 60 * 60 * 1000) < 1 ) {
+				return next(error(error.PHOTO_CYCLE));
+			}
+			next();
 		});
 	}
 
 	function checkPhoto(req, user, next) {
-		if (user.pdate && ((Date.now() - user.pdate.getTime()) / (24 * 60 * 60 * 1000) < 1 )) {
-			return next(error(error.PHOTO_CYCLE));
-		}
 		var file = req.files.file;
 		if (!file) {
 			return next(error(error.PHOTO_NO_FILE));
@@ -94,7 +110,11 @@ init.add(function (next) {
 			return next(error(error.PHOTO_NOT_ONE));
 		}
 		img.identify(file.path, function (err, f) {
-			if (err) return next(err);
+			if (err) {
+				err.rc = error.PHOTO_TYPE;
+				err.message = error.msg[error.PHOTO_TYPE];
+				return next(err);
+			}
 			if (f.height < 1440) {
 				return next(error(error.PHOTO_HEIGHT));
 			}
@@ -103,6 +123,29 @@ init.add(function (next) {
 			}
 			next(null, f);
 		});
+	}
+
+	exports.find = function (pid, next) {
+		mongo.find(pid, function (err, p) {
+			if (err) return next(err);
+			user.cachedUser(p.userId, function (err, u) {
+				if (err) return next(err);
+				p.photoId = p._id;
+				p.user = {
+					userId: u._id,
+					name: u.name
+				};
+				next(null, p);
+			});
+		});
+	};
+
+	exports.del = function (pid, next) {
+
+	};
+
+	exports.list = function (pg, pgsize, next) {
+
 	}
 
 	next();

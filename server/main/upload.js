@@ -15,6 +15,9 @@ init.add(function (next) {
 			if (!files) {
 				return next.apply(null, _arg);
 			}
+			if (!files.length) {
+				files = [files];
+			}
 			var i = 0;
 			function unlink() {
 				if (i == files.length) {

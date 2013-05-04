@@ -22,7 +22,7 @@ init.add(function () {
 		var form = { name: 'snowman', email: 'abc@def.com', password: '1234' };
 		request.post(url + '/api/users').send(form).end(function (err,res) {
 			should(!res.body.err);
-			next();
+			next(null, res.body.userId);
 		});
 	}
 	exports.logout = function (next) {

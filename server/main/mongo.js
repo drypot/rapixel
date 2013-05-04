@@ -111,35 +111,35 @@ init.add(function (next) {
 			return ++photoIdSeed;
 		};
 
-		exports.insertPhoto = function (photo, next) {
-			photos.insert(photo, next);
+		exports.insertPhoto = function (p, next) {
+			photos.insert(p, next);
 		};
 
-		exports.updatePhotoHit = function (photoId, next) {
-			photos.update({ _id: photoId }, { $inc: { hit: 1 }}, next);
+		exports.updatePhotoHit = function (pid, next) {
+			photos.update({ _id: pid }, { $inc: { hit: 1 }}, next);
 		};
 
-		exports.findPhoto = function (id, next) {
-			photos.findOne({ _id: id }, next);
+		exports.find = function (pid, next) {
+			photos.findOne({ _id: pid }, next);
 		};
 
-		exports.findLastPhoto = function (userId, next) {
+		exports.findLastPhoto = function (uid, next) {
 			var opt = {
-				fields: { pdate: 1 },
+				fields: { cdate: 1 },
 				sort: { userId: 1, _id: -1 }
 			}
-			photos.findOne({ userId: userId }, opt, next);
+			photos.findOne({ userId: uid }, opt, next);
 		}
 
-		exports.findPhotosByUser = function (userId, page, pageSize, next) {
+		exports.findPhotosByUser = function (uid, pg, pgsize, next) {
 			var findOp = {};
 			var dir = -1;
-			var skip = (Math.abs(page) - 1) * pageSize;
+			var skip = (Math.abs(pg) - 1) * pgsize;
 
 			if (categoryId) {
 				findOp.categoryId = categoryId;
 			}
-			photos.find(findOp).sort({ updated: dir }).skip(skip).limit(pageSize).each(next);
+			photos.find(findOp).sort({ updated: dir }).skip(skip).limit(pgsize).each(next);
 		};
 
 		photos = exports.photos = db.collection("photos");
