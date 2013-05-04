@@ -14,7 +14,7 @@ init.add(function (next) {
 
 	console.log('photo:');
 
-	exports.create = function(req, user, _next) {
+	exports.createPhoto = function(req, user, _next) {
 		var next = upload.tmpDeleter(req.files.file, _next);
 		var now = new Date();
 		checkCycle(user, now, function (err) {
@@ -115,7 +115,7 @@ init.add(function (next) {
 				err.message = error.msg[error.PHOTO_TYPE];
 				return next(err);
 			}
-			if (f.height < 1440) {
+			if (f.height < 2160) {
 				return next(error(error.PHOTO_HEIGHT));
 			}
 			if (f.width / f.height < 1.75) {
@@ -125,14 +125,13 @@ init.add(function (next) {
 		});
 	}
 
-	exports.find = function (pid, next) {
-		mongo.find(pid, function (err, p) {
+	exports.findPhoto = function (pid, next) {
+		mongo.findPhoto(pid, function (err, p) {
 			if (err) return next(err);
 			user.cachedUser(p.userId, function (err, u) {
 				if (err) return next(err);
-				p.photoId = p._id;
 				p.user = {
-					userId: u._id,
+					_id: u._id,
 					name: u.name
 				};
 				next(null, p);
@@ -145,8 +144,27 @@ init.add(function (next) {
 	};
 
 	exports.list = function (pg, pgsize, next) {
-
-	}
+		var cursor = mongo.findPhotos(pg, pgsize);
+		var photos = [];
+		var count = 0;
+		function read() {
+			cursor.nextObject(function (err, p) {
+				if (err) return next(err);
+				if (!p) return next(null, photos, count !== pgsize);
+				user.cachedUser(p.userId, function (next, u) {
+					if (err) return next(err);
+					p.user = {
+						_id: u._id,
+						name: u.name
+					};
+					photos.push(p);
+					count++;
+					setImmediate(read);
+				});
+			});
+		}
+		read();
+	};
 
 	next();
 });

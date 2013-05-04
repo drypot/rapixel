@@ -11,7 +11,7 @@ init.add(function () {
 	app.post('/api/photos', function (req, res) {
 		req.user(function (err, user) {
 			if (err) return res.jsonErr(err);
-			photo.create(req, user, function (err, photoId) {
+			photo.createPhoto(req, user, function (err, photoId) {
 				if (err) return res.jsonErr(err);
 				res.json({
 					photoId: photoId
@@ -22,7 +22,7 @@ init.add(function () {
 
 	app.get('/api/photos/:pid([0-9]+)', function (req, res) {
 		var pid = parseInt(req.params.pid) || 0;
-		photo.find(pid, function (err, p) {
+		photo.findPhoto(pid, function (err, p) {
 			if (err) return res.jsonErr(err);
 			res.json(p);
 		});
