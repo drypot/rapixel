@@ -51,6 +51,14 @@ describe("creating", function () {
 			next();
 		});
 	});
+	it("should return userId", function (next) {
+		var form = { name: 'ab', email: 'abc@def.com', password: '1234' };
+		request.post(test.url + '/api/users').send(form).end(function (err,res) {
+			should(!res.body.err);
+			should(res.body.userId);
+			next();
+		});
+	});
 	it("should fail when name long", function (next) {
 		var form = { name: '123456789012345678901234567890123', email: 'abc@def.com', password: '1234' };
 		request.post(test.url + '/api/users').send(form).end(function (err,res) {

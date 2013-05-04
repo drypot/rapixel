@@ -56,8 +56,11 @@ init.add(function (next) {
 		var users;
 		var userIdSeed;
 
+		exports.getNewUserId = function () {
+			return ++userIdSeed;
+		};
+
 		exports.insertUser = function (user, next) {
-			user._id = ++userIdSeed;
 			users.insert(user, next);
 		};
 
@@ -119,6 +122,14 @@ init.add(function (next) {
 		exports.findPhoto = function (id, next) {
 			photos.findOne({ _id: id }, next);
 		};
+
+		exports.findLastPhoto = function (userId, next) {
+			var opt = {
+				fields: { pdate: 1 },
+				sort: { userId: 1, _id: -1 }
+			}
+			photos.findOne({ userId: userId }, opt, next);
+		}
 
 		exports.findPhotosByUser = function (userId, page, pageSize, next) {
 			var findOp = {};
