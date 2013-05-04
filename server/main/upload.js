@@ -32,9 +32,12 @@ init.add(function (next) {
 	var pathes = [
 		exports.pub = config.data.uploadDir + '/public',
 		exports.pubPhoto = config.data.uploadDir + '/public/photo',
-		exports.archive = config.data.uploadDir + '/archive',
-		exports.archivePhoto = config.data.uploadDir + '/archive/photo',
 		exports.tmp = config.data.uploadDir + '/tmp'
+
+//		별도 원본 아카아브 폴더는 안 만들도록 한다.
+// 		급할 때 웹에서 원본을 억세스 할 수 있도록 버전들과 함께 노출.
+//		exports.archive = config.data.uploadDir + '/archive',
+//		exports.archivePhoto = config.data.uploadDir + '/archive/photo',
 	];
 
 	var i = 0;
