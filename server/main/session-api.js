@@ -2,7 +2,7 @@ var bcrypt = require('bcrypt');
 
 var init = require('../main/init');
 var config = require('../main/config');
-var auth = require('../main/auth');
+var user = require('../main/user');
 var mongo = require('../main/mongo');
 var express = require('../main/express');
 var error = require('../main/error');
@@ -32,21 +32,21 @@ init.add(function () {
 		var body = req.body;
 		var email = String(body.email || '').trim();
 		var password = String(body.password || '').trim();
-		mongo.findUserByEmail(email, function (err, user) {
+		mongo.findUserByEmail(email, function (err, u) {
 			if (err) return res.jsonErr(err);
-			if (!user || !bcrypt.compareSync(password, user.hash)) {
+			if (!u || !bcrypt.compareSync(password, u.hash)) {
 				return res.jsonErr(error(error.INVALID_PASSWORD));
 			}
 			req.session.regenerate(function (err) {
 				if (err) return res.jsonErr(err);
 				var now = new Date();
-				mongo.updateUserAdate(user._id, now, function (err) {
+				mongo.updateUserAdate(u._id, now, function (err) {
 					if (err) return res.jsonErr(err);
-					user.adate = now;
-					auth.cacheUser(user);
-					req.session.userId = user._id;
+					u.adate = now;
+					user.cacheUser(u);
+					req.session.userId = u._id;
 					res.json({
-						name: user.name
+						name: u.name
 					});
 
 				});

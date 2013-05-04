@@ -4,7 +4,8 @@ var redisStore = require('connect-redis')(express);
 
 var init = require('../main/init');
 var config = require('../main/config');
-var auth = require('../main/auth');
+var user = require('../main/user');
+var upload = require('../main/upload');
 var error = require('../main/error');
 
 var opt = {};
@@ -42,13 +43,13 @@ init.add(function () {
 		log += ' memory';
 	}
 
-	app.use(express.bodyParser({ uploadDir: config.data.uploadDir + '/tmp' }));
+	app.use(express.bodyParser({ uploadDir: upload.tmp }));
 
 	app.use(function (req, res, next) {
 		if (req.session.userId) {
-			auth.user(req.session.userId, function (err, user) {
+			user.cachedUser(req.session.userId, function (err, u) {
 				if (err) return next(err);
-				res.locals.user = user;
+				res.locals.user = u;
 				next();
 			});
 			return;
@@ -70,11 +71,11 @@ init.add(function () {
 	app.request.user = function (next) {
 		var req = this;
 		var res = this.res;
-		var user = res.locals.user;
-		if (!user) {
+		var u = res.locals.user;
+		if (!u) {
 			return next(error(error.NOT_AUTHENTICATED));
 		}
-		next(null, user);
+		next(null, u);
 	};
 
 	var empty = {};

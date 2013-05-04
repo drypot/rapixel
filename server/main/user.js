@@ -6,6 +6,22 @@ var error = require('../main/error');
 
 init.add(function (next) {
 
+	var users = [];
+
+	exports.cacheUser = function (user) {
+		users[user._id] = user;
+	};
+
+	exports.cachedUser = function (id, next) {
+		var user = users[id];
+		if (user) return next(null, user);
+		mongo.findUser(id, function (err, user) {
+			if (err) return next(err);
+			users[id] = user;
+			next(null, user);
+		});
+	};
+
 	exports.create = function (form, next) {
 		checkForm(form, function (err) {
 			if (err) return next(err);
