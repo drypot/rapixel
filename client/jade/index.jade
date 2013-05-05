@@ -6,7 +6,7 @@ block title
 block content
 	script
 		init.add(function () {
-			auth.initLogin();
+			session.initLogin();
 		});
 
 	.container(style="margin-bottom: 30px;")
@@ -14,7 +14,7 @@ block content
 			h2 Rapixel
 
 	if !locals.user
-		#login-panel.container(style"margin-bottom: 30px;")
+		#login-panel.container(style"margin-bottom: 30px;").hide
 			.row
 				.col-span-4.well
 					form#login-form

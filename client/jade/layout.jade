@@ -29,7 +29,7 @@ html
 
 		script(src="/js/base.js")
 		script(src="/js/ui.js")
-		script(src="/js/auth.js")
+		script(src="/js/session.js")
 		//script(src="/js/post.js")
 
 	body
@@ -45,8 +45,8 @@ html
 					ul.nav
 						li: a(href="/photos") Photos
 						if locals.user
-							li: a(href="/upload") Upload
-							li: a(href="javascript:auth.logout();") Logout
+							li: a(href="/photos/upload") Upload
+							li: a(href="javascript:session.logout();") Logout
 
 		block content
 

@@ -1,22 +1,23 @@
 
 init.add(function () {
 
-	window.auth = {};
+	window.session = {};
 
 	var $loginForm;
 	var $regForm;
 
-	auth.initLogin = function () {
+	session.initLogin = function () {
 		if (window.user) return;
 		trySaved(function (err, success) {
-			if (err) return showError.system(err);
-			if (success) {
+			if (!err && success) {
 				location = '/';
 				return;
 			}
+			$('#login-panel').removeClass('hide');
 			$loginForm = $('#login-form');
 			$loginForm.find('[name=submit]').click(sendLoginForm);
-			auth.initReg();
+			if (err) return showError.system(err);
+			session.initReg();
 		});
 	};
 
@@ -27,7 +28,11 @@ init.add(function () {
 		console.log('trying saved password.');
 		request.post('/api/sessions').send({ email: email, password: password }).end(function (err, res) {
 			err = err || res.error || res.body.err;
-			if (err) return next(err, false);
+			if (err) {
+				localStorage.removeItem('email');
+				localStorage.removeItem('password');
+				return next(err, false);
+			}
 			next(null, true);
 		});
 	}
@@ -60,7 +65,7 @@ init.add(function () {
 		return false;
 	}
 
-	auth.logout = function () {
+	session.logout = function () {
 		request.del('/api/sessions').end(function (err, res) {
 			err = err || res.error || res.body.err;
 			if (err) return showError.system(err);
@@ -71,7 +76,7 @@ init.add(function () {
 		});
 	};
 
-	auth.initReg = function () {
+	session.initReg = function () {
 		$regForm = $('#reg-form');
 		$regForm.find('[name=submit]').click(sendRegForm);
 	};

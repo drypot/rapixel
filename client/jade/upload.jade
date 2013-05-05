@@ -1,0 +1,31 @@
+extends layout
+
+block title
+	title Upload - #{siteTitle}
+
+block content
+	script
+
+	.container(style="margin-bottom: 30px;")
+		.page-header
+			h2 Upload
+
+	.container
+		form#upload-form(action="/photos/upload", method="post", enctype="multipart/form-data")
+			div
+				input(name="file", type="file")
+			div
+				label Comment
+				textarea(rows=7)
+				.submit-group
+					button.btn.btn-primary(name="submit", type="submit") Upload
+
+		ol(style="margin-top:50px")
+			li 본인이 촬영하거나 그린 이미지만 업로드하실 수 있습니다.
+			li 저작권, 초상권등 전시에 법률적인 문제가 없어야합니다.
+			li 업로드 파일 최대 크기는 10MB 입니다.
+			li 하루 한번 업로드하실 수 있습니다.
+			li 이미지 세로 크기는 2160 픽셀 이상이어야 합니다.
+			li 이미지 비율은 16:9 이상이어야 합니다. 4:3, 3:2 는 등록되지 않습니다.
+			li 업로드된 이미지는 리사이징되어 폰, 패드, 피시, 티비등 다양한 기기로 송출될 수 있습니다.
+			li 운영자의 자의적 판단에 따라 등록하신 이미지가 삭제될 수 있습니다.

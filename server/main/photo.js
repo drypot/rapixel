@@ -14,19 +14,37 @@ init.add(function (next) {
 
 	console.log('photo:');
 
-	exports.createPhoto = function(req, user, _next) {
+	exports.checkCycle = function(u, now, next) {
+//		사진을 삭제하고 다시 업하는 경우를 허용하도록 한다.
+//		if (user.pdate && ((Date.now() - user.pdate.getTime()) / (24 * 60 * 60 * 1000) < 1 )) {
+//			return next(error(error.PHOTO_CYCLE));
+//		}
+
+		mongo.findLastPhoto(u._id, function (err, p) {
+			if (err) return next(err);
+			if (p) {
+				var hours = (now - p.cdate.getTime()) / (60 * 60 * 1000);
+				if (hours < 24) {
+					return next(error({ rc: error.PHOTO_CYCLE, hours: hours }));
+				}
+			}
+			next();
+		});
+	}
+
+	exports.createPhoto = function(req, u, _next) {
 		var next = upload.tmpDeleter(req.files.file, _next);
 		var now = new Date();
-		checkCycle(user, now, function (err) {
+		exports.checkCycle(u, now, function (err) {
 			if (err) return next(err);
-			checkPhoto(req, user, function (err, f) {
+			checkPhoto(req, u, function (err, f) {
 				if (err) return next(err);
 				var photoId = mongo.newPhotoId();
 				makeVersions(req, photoId, f, function (err, vers, org) {
 					if (err) return next(err);
 					var p = {
 						_id: photoId,
-						userId: user._id,
+						userId: u._id,
 						hit: 0,
 						favCnt: 0,
 						fname: path.basename(req.files.file.name),
@@ -39,7 +57,7 @@ init.add(function (next) {
 					};
 					mongo.insertPhoto(p, function (err) {
 						if (err) return next(err);
-						mongo.updateUserPdate(user._id, now, function (err) {
+						mongo.updateUserPdate(u._id, now, function (err) {
 							if (err) return next(err);
 							next(null, photoId);
 						});
@@ -51,8 +69,8 @@ init.add(function (next) {
 
 	var _vers = [ 2160, 1440, 1080, 720, 480, 320 ];
 
-	function makeVersions(req, photoId, f, next) {
-		fs2.mkdirs(upload.pub, 'photo', fs2.subs(photoId, 3), function (err, p) {
+	function makeVersions(req, pid, f, next) {
+		fs2.mkdirs(upload.pub, 'photo', fs2.subs(pid, 3), function (err, p) {
 			if (err) return next(err);
 			var vers = [];
 			var i = 0;
@@ -86,22 +104,7 @@ init.add(function (next) {
 		});
 	}
 
-	function checkCycle(user, now, next) {
-//		사진을 삭제하고 다시 업하는 경우를 허용하도록 한다.
-//		if (user.pdate && ((Date.now() - user.pdate.getTime()) / (24 * 60 * 60 * 1000) < 1 )) {
-//			return next(error(error.PHOTO_CYCLE));
-//		}
-
-		mongo.findLastPhoto(user._id, function (err, p) {
-			if (err) return next(err);
-			if (p && (now - p.cdate.getTime()) / (24 * 60 * 60 * 1000) < 1 ) {
-				return next(error(error.PHOTO_CYCLE));
-			}
-			next();
-		});
-	}
-
-	function checkPhoto(req, user, next) {
+	function checkPhoto(req, u, next) {
 		var file = req.files.file;
 		if (!file) {
 			return next(error(error.PHOTO_NO_FILE));
@@ -176,5 +179,6 @@ init.add(function (next) {
 	exports.photoPath = function (pid) {
 		return upload.pub + '/photo/' + fs2.subs(pid, 3).join('/');
 	}
+
 	next();
 });

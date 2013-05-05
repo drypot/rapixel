@@ -14,14 +14,14 @@ block content
 			h3 'err' not defined
 		else
 			- var count = 0;
-			if err.rc
-				- count++;
-				h3 Message
-				pre= err.rc + ', ' + err.message
-			else if err.message
+			if err.message
 				- count++;
 				h3 Message
 				pre= err.message
+			if err.rc
+				- count++;
+				h3 Error Code
+				pre= err.rc
 			if err.stack
 				- count++;
 				h3 Stack

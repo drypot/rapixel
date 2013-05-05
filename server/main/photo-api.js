@@ -1,6 +1,6 @@
 var init = require('../main/init');
-var photo = require('../main/photo');
 var express = require('../main/express');
+var photo = require('../main/photo');
 
 init.add(function () {
 
@@ -9,9 +9,9 @@ init.add(function () {
 	console.log('photo-api:');
 
 	app.post('/api/photos', function (req, res) {
-		req.user(function (err, user) {
+		req.user(function (err, u) {
 			if (err) return res.jsonErr(err);
-			photo.createPhoto(req, user, function (err, photoId) {
+			photo.createPhoto(req, u, function (err, photoId) {
 				if (err) return res.jsonErr(err);
 				res.json({
 					photoId: photoId
