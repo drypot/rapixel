@@ -94,7 +94,7 @@ init.add(function (next) {
 
 		mongo.findLastPhoto(user._id, function (err, p) {
 			if (err) return next(err);
-			if ((now - p.cdate.getTime()) / (24 * 60 * 60 * 1000) < 1 ) {
+			if (p && (now - p.cdate.getTime()) / (24 * 60 * 60 * 1000) < 1 ) {
 				return next(error(error.PHOTO_CYCLE));
 			}
 			next();
@@ -140,7 +140,14 @@ init.add(function (next) {
 	};
 
 	exports.del = function (pid, u, next) {
-		mongo.delPhoto(pid, u.admin ? null : u._id, next);
+		mongo.delPhoto(pid, u.admin ? null : u._id, function (err, cnt) {
+			if (err) return next(err);
+			if (!cnt) return next(error(error.PHOTO_NOTHING_TO_DEL));
+			fs2.rmAll(exports.photoPath(pid), function (err) {
+				if (err) return next(err);
+				next();
+			});
+		});
 	};
 
 	exports.list = function (pg, pgsize, next) {
@@ -166,5 +173,8 @@ init.add(function (next) {
 		read();
 	};
 
+	exports.photoPath = function (pid) {
+		return upload.pub + '/photo/' + fs2.subs(pid, 3).join('/');
+	}
 	next();
 });

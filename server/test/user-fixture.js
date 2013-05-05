@@ -49,7 +49,7 @@ init.add(function () {
 	};
 
 	exports.loginUser2 = function (next) {
-		var form = { email: exports.user1.email, password: exports.user1.password };
+		var form = { email: exports.user2.email, password: exports.user1.password };
 		express.post('/api/sessions').send(form).end(function (err, res) {
 			should(!err);
 			should(!res.error);
