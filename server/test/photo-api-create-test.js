@@ -1,5 +1,4 @@
 var should = require('should');
-var request = require('superagent').agent();
 
 var init = require('../main/init');
 var config = require('../main/config')({ test: true });
@@ -31,7 +30,7 @@ before(function (next) {
 describe("uploading photo within cycle", function () {
 	it("given photo uploaded 23 hour ago", function (next){
 		var ph = {
-			_id: mongo.getNewPhotoId(),
+			_id: mongo.newPhotoId(),
 			userId: userFix.user1._id,
 			cdate: new Date(Date.now() - (1 * 60 * 60 * 1000))
 		};
@@ -51,7 +50,7 @@ describe("uploading photo within cycle", function () {
 	});
 	it("given photo uploaded 25 hour ago", function (next){
 		var ph = {
-			_id: mongo.getNewPhotoId(),
+			_id: mongo.newPhotoId(),
 			userId: userFix.user1._id,
 			cdate: new Date(Date.now() - (25 * 60 * 60 * 1000))
 		};
@@ -137,7 +136,7 @@ describe("uploading 16:9 2160 jpg", function () {
 	var f1 = 'samples/b-16x9-2160.jpg';
 	var pid;
 	it("should success", function (next) {
-		this.timeout(8000);
+		this.timeout(10000);
 		express.post('/api/photos').field('comment', 'hello').attach('file', f1).end(function (err, res) {
 			should(!err);
 			should(!res.error);

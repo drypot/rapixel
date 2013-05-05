@@ -30,8 +30,8 @@ init.add(function () {
 
 	app.get('/api/photos', function (req, res) {
 		var pg = parseInt(req.query.p) || 1;
-		page = page < 1 ? 1 : page;
-		var pgsize = parseInt(query.ps) || 16;
+		pg = pg < 1 ? 1 : pg;
+		var pgsize = parseInt(req.query.ps) || 16;
 		pgsize = pgsize > 64 ? 64 : pgsize < 1 ? 1 : pgsize;
 		photo.list(pg, pgsize, function (err, photos, last) {
 			if (err) return res.jsonErr(err);

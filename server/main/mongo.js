@@ -56,7 +56,7 @@ init.add(function (next) {
 		var users;
 		var userIdSeed;
 
-		exports.getNewUserId = function () {
+		exports.newUserId = function () {
 			return ++userIdSeed;
 		};
 
@@ -107,7 +107,7 @@ init.add(function (next) {
 		var photos;
 		var photoIdSeed;
 
-		exports.getNewPhotoId = function () {
+		exports.newPhotoId = function () {
 			return ++photoIdSeed;
 		};
 
@@ -147,7 +147,7 @@ init.add(function (next) {
 				skip: (Math.abs(pg) - 1) * pgsize,
 				limit: pgsize
 			};
-			return photos.find({}, opt, next);
+			return photos.find({}, opt);
 		};
 
 //		exports.findPhotosByUser = function (uid, pg, pgsize, next) {

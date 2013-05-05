@@ -43,7 +43,7 @@ init.add(function (next) {
 					}
 					var now = new Date();
 					u = {
-						_id: mongo.getNewUserId(),
+						_id: mongo.newUserId(),
 						name: form.name,
 						email: form.email,
 						hash: bcrypt.hashSync(form.password, 10),

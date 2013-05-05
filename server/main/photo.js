@@ -21,7 +21,7 @@ init.add(function (next) {
 			if (err) return next(err);
 			checkPhoto(req, user, function (err, f) {
 				if (err) return next(err);
-				var photoId = mongo.getNewPhotoId();
+				var photoId = mongo.newPhotoId();
 				makeVersions(req, photoId, f, function (err, vers, org) {
 					if (err) return next(err);
 					var p = {
