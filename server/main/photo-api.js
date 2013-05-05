@@ -29,7 +29,7 @@ init.add(function () {
 	});
 
 	app.get('/api/photos', function (req, res) {
-		var pg = parseInt(req.query.p) || 1;
+		var pg = parseInt(req.query.pg) || 1;
 		pg = pg < 1 ? 1 : pg;
 		var pgsize = parseInt(req.query.ps) || 16;
 		pgsize = pgsize > 64 ? 64 : pgsize < 1 ? 1 : pgsize;

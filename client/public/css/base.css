@@ -8,3 +8,17 @@ body {
 .submit-group {
   margin-top: 25px;
 }
+.photos {
+  margin-top: 20px;
+}
+.photos .img {
+  margin: 0px 20px 20px 0px;
+  float: left;
+}
+.photos .desc {
+  margin: 0px 20px 20px 0px;
+  float: left;
+}
+.photo img {
+  max-width: none;
+}

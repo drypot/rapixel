@@ -33,6 +33,7 @@ exports.PHOTO_RATIO = 321;
 exports.PHOTO_HEIGHT = 322;
 exports.PHOTO_TYPE = 323;
 exports.PHOTO_NOTHING_TO_DEL = 324;
+exports.PHOTO_NOTHING_TO_SHOW = 325;
 
 exports.USER_FREE_SPACE = 405;
 
@@ -67,5 +68,6 @@ msg[exports.PHOTO_RATIO] = '사진의 가로 세로 비율은 16:9 이상이어�
 msg[exports.PHOTO_HEIGHT] = '사진의 세로 크기는 2160 픽셀 이상이어야 합니다.';
 msg[exports.PHOTO_TYPE] = '사진 파일 타입을 확인할 수 없습니다.';
 msg[exports.PHOTO_NOTHING_TO_DEL] = '삭제할 사진이 없습니다.';
+msg[exports.PHOTO_NOTHING_TO_SHOW] = '사진이 없습니다.';
 
 msg[exports.USER_FREE_SPACE] = '개인공간에 여유가 없습니다.';

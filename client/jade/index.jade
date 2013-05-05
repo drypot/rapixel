@@ -45,8 +45,9 @@ block content
 	else
 		#user-panel.container(style"margin-bottom: 30px;")
 			hr
-			h5 반갑습니다, #{user.name} 님.
-			h5 아직 하실 수 있는 것이 없습니다.
+			a(href="/photos") Go To Photos
+			br
+			a(href="/photos/upload") Go To Upload
 
 	.container
 		hr

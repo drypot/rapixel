@@ -5,6 +5,7 @@ var img = require('imagemagick');
 var init = require('../main/init');
 var config = require('../main/config');
 var fs2 = require('../main/fs');
+var dateTime = require('../main/dateTime');
 var mongo = require('../main/mongo');
 var user = require('../main/user');
 var upload = require('../main/upload');
@@ -25,7 +26,7 @@ init.add(function (next) {
 			if (p) {
 				var hours = (now - p.cdate.getTime()) / (60 * 60 * 1000);
 				if (hours < 24) {
-					return next(error({ rc: error.PHOTO_CYCLE, hours: hours }));
+					return next(error({ rc: error.PHOTO_CYCLE, hours: 24 - Math.floor(hours) }));
 				}
 			}
 			next();
@@ -131,12 +132,15 @@ init.add(function (next) {
 	exports.findPhoto = function (pid, next) {
 		mongo.findPhoto(pid, function (err, p) {
 			if (err) return next(err);
+			if (!p) return next(error(error.PHOTO_NOTHING_TO_SHOW));
 			user.cachedUser(p.userId, function (err, u) {
 				if (err) return next(err);
 				p.user = {
 					_id: u._id,
 					name: u.name
 				};
+				p.dirUrl = config.data.uploadUrl + '/photo/' + fs2.subs(p._id, 3).join('/');
+				p.cdateStr = dateTime.format(p.cdate);
 				next(null, p);
 			});
 		});
@@ -167,6 +171,8 @@ init.add(function (next) {
 						_id: u._id,
 						name: u.name
 					};
+					p.dirUrl = config.data.uploadUrl + '/photo/' + fs2.subs(p._id, 3).join('/');
+					p.cdateStr = dateTime.format(p.cdate);
 					photos.push(p);
 					count++;
 					setImmediate(read);

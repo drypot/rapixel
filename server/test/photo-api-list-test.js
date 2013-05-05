@@ -63,7 +63,7 @@ var _photos;
 describe("listing all", function () {
 	it("should success", function (next) {
 		var query = {
-			p: 1, ps: 99
+			pg: 1, ps: 99
 		}
 		express.get('/api/photos').query(query).end(function (err, res) {
 			should(!res.error);
@@ -82,7 +82,7 @@ describe("listing all", function () {
 describe("listing page 1", function () {
 	it("should success", function (next) {
 		var query = {
-			p: 1, ps: 4
+			pg: 1, ps: 4
 		}
 		express.get('/api/photos').query(query).end(function (err, res) {
 			should(!res.error);
@@ -99,7 +99,7 @@ describe("listing page 1", function () {
 describe("listing page 2", function () {
 	it("should success", function (next) {
 		var query = {
-			p: 2, ps: 4
+			pg: 2, ps: 4
 		}
 		express.get('/api/photos').query(query).end(function (err, res) {
 			should(!res.error);
@@ -116,7 +116,7 @@ describe("listing page 2", function () {
 describe("listing last page", function () {
 	it("should success", function (next) {
 		var query = {
-			p: 3, ps: 4
+			pg: 3, ps: 4
 		}
 		express.get('/api/photos').query(query).end(function (err, res) {
 			should(!res.error);

@@ -16,7 +16,7 @@ html
 
 		script(src="/lib/es5-shim.min.js")
 		script(src="/lib/json2.js")
-		script(src="/lib/jquery.min.js")
+		script(src="/lib/jquery-1.9.1.min.js")
 		//script(src="/lib/jquery.simpleplaceholder.js")
 		script(src="/lib/bootstrap/js/bootstrap.min.js")
 		script(src="/lib/superagent.js")
@@ -30,23 +30,24 @@ html
 		script(src="/js/base.js")
 		script(src="/js/ui.js")
 		script(src="/js/session.js")
-		//script(src="/js/post.js")
+		script(src="/js/photo.js")
 
 	body
-		// navbar
-		.navbar
-			.container
-				button.navbar-toggle(type="button", data-toggle="collapse", data-target=".navbar-responsive-collapse")
-					span.icon-bar
-					span.icon-bar
-					span.icon-bar
-				a.navbar-brand(href="/")= siteTitle
-				.nav-collapse.collapse.navbar-responsive-collapse
-					ul.nav
-						li: a(href="/photos") Photos
-						if locals.user
-							li: a(href="/photos/upload") Upload
-							li: a(href="javascript:session.logout();") Logout
+		if !locals.photoView
+			// navbar
+			.navbar
+				.container
+					button.navbar-toggle(type="button", data-toggle="collapse", data-target=".navbar-responsive-collapse")
+						span.icon-bar
+						span.icon-bar
+						span.icon-bar
+					a.navbar-brand(href="/")= siteTitle
+					.nav-collapse.collapse.navbar-responsive-collapse
+						ul.nav
+							li: a(href="/photos") Photos
+							if locals.user
+								li: a(href="/photos/upload") Upload
+								li: a(href="javascript:session.logout();") Logout
 
 		block content
 

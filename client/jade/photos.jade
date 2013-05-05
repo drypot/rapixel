@@ -1,0 +1,33 @@
+extends layout
+
+block title
+	title Photos - #{siteTitle}
+
+block content
+
+	.container.photos
+		for p in photos
+			.row
+				.img
+					a(href='/photos/' + p._id)
+						img(src=p.dirUrl + '/320.jpg')
+				.desc
+					ul.list-unstyled
+						li #{p.user.name}
+						li !{p.cdateStr}
+						li hit !{p.hit}
+
+	.container
+		ul.pager(style='text-align: left;')
+			if locals.prevUrl
+				li
+					a(href=prevUrl) Previous
+			else
+				li.disabled
+					a(href='javascript:void(0)') Previous
+			if locals.nextUrl
+				li
+					a(href=nextUrl) Next
+			else
+				li.disabled
+					a(href='javascript:void(0)') Next
