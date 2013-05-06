@@ -26,11 +26,6 @@ init.add(function () {
 			src: p.dirUrl + '/' + p._id + '-' + height + '.jpg'
 		});
 
-		$img.click(function () {
-			history.back();
-			return false;
-		})
-
 		$photo.append($img);
 	};
 });
