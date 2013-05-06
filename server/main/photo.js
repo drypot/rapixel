@@ -77,7 +77,7 @@ init.add(function (next) {
 			var i = 0;
 			function makeVersion() {
 				if (i == _vers.length) {
-					var org = 'org.' + f.format.toLowerCase();
+					var org = pid + '-org.' + f.format.toLowerCase();
 					fs.rename(req.files.file.path, p + '/' + org, function (err) {
 						if (err) return next(err);
 						next(null, vers);
@@ -90,7 +90,7 @@ init.add(function (next) {
 				}
 				var opt = {
 					srcPath: req.files.file.path,
-					dstPath: p + '/' + v + '.jpg',
+					dstPath: p + '/' + pid + '-' + v + '.jpg',
 					quality: f.format === 'JPEG' ? 0.92 : f.format === 'PNG' ? 0.89 : 0.8,
 					sharpening: 0,
 					height: v

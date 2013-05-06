@@ -9,7 +9,7 @@ init.add(function () {
 			if (err) {
 				return showError.system(res.body.err);
 			}
-
+			location = '/photos';
 		});
 	};
 
@@ -23,7 +23,7 @@ init.add(function () {
 			}
 		}
 		var $img = $('<img>', {
-			src: p.dirUrl + '/' + height + '.jpg'
+			src: p.dirUrl + '/' + p._id + '-' + height + '.jpg'
 		});
 
 		$img.click(function () {

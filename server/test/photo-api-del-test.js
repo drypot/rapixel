@@ -52,7 +52,7 @@ describe("deleting by admin", function () {
 		userFix.loginAdmin(next);
 	});
 	it("should fail", function (next) {
-		var p = photo.photoPath(pid) + '/2160.jpg';
+		var p = photo.photoPath(pid) + '/' + pid + '-' + '2160.jpg';
 		fs.existsSync(p).should.true;
 		express.del('/api/photos/' + pid, function (err, res) {
 			should(!err);
@@ -80,7 +80,7 @@ describe("deleting photo", function () {
 		});
 	});
 	it("should success", function (next) {
-		var p = photo.photoPath(pid) + '/2160.jpg';
+		var p = photo.photoPath(pid) + '/' + pid + '-' + '2160.jpg';
 		fs.existsSync(p).should.true;
 		express.del('/api/photos/' + pid, function (err, res) {
 			should(!err);
@@ -111,7 +111,7 @@ describe("deleting other's photo", function () {
 		userFix.loginUser2(next);
 	});
 	it("should fail", function (next) {
-		var p = photo.photoPath(pid) + '/2160.jpg';
+		var p = photo.photoPath(pid) + '/' + pid + '-' + '2160.jpg';
 		fs.existsSync(p).should.true;
 		express.del('/api/photos/' + pid, function (err, res) {
 			should(!err);
