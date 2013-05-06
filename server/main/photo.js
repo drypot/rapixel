@@ -17,7 +17,7 @@ init.add(function (next) {
 
 	exports.checkCycle = function(u, now, next) {
 //		사진을 삭제하고 다시 업하는 경우를 허용하도록 한다.
-//		if (user.pdate && ((Date.now() - user.pdate.getTime()) / (24 * 60 * 60 * 1000) < 1 )) {
+//		if (user.pdate && ((Date.now() - user.pdate.getTime()) / (18 * 60 * 60 * 1000) < 1 )) {
 //			return next(error(error.PHOTO_CYCLE));
 //		}
 
@@ -25,8 +25,8 @@ init.add(function (next) {
 			if (err) return next(err);
 			if (p) {
 				var hours = (now - p.cdate.getTime()) / (60 * 60 * 1000);
-				if (hours < 24) {
-					return next(error({ rc: error.PHOTO_CYCLE, hours: 24 - Math.floor(hours) }));
+				if (hours < 18) {
+					return next(error({ rc: error.PHOTO_CYCLE, hours: 18 - Math.floor(hours) }));
 				}
 			}
 			next();
