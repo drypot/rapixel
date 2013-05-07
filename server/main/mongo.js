@@ -33,7 +33,7 @@ init.add(function (next) {
 	});
 
 	function openDb(next) {
-		var server = new Server('localhost', 27017, { /* auto_reconnect: true */ } );
+		var server = new Server('localhost', 27017, { auto_reconnect: true } );
 		var client = new MongoClient(server);
 		client.open(function (err) {
 			if (err) return next(err);

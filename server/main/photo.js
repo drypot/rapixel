@@ -130,18 +130,21 @@ init.add(function (next) {
 	}
 
 	exports.findPhoto = function (pid, next) {
-		mongo.findPhoto(pid, function (err, p) {
+		mongo.updatePhotoHit(pid, function (err) {
 			if (err) return next(err);
-			if (!p) return next(error(error.PHOTO_NOTHING_TO_SHOW));
-			user.cachedUser(p.userId, function (err, u) {
+			mongo.findPhoto(pid, function (err, p) {
 				if (err) return next(err);
-				p.user = {
-					_id: u._id,
-					name: u.name
-				};
-				p.dirUrl = config.data.uploadUrl + '/photo/' + fs2.subs(p._id, 3).join('/');
-				p.cdateStr = dateTime.format(p.cdate);
-				next(null, p);
+				if (!p) return next(error(error.PHOTO_NOTHING_TO_SHOW));
+				user.cachedUser(p.userId, function (err, u) {
+					if (err) return next(err);
+					p.user = {
+						_id: u._id,
+						name: u.name
+					};
+					p.dirUrl = config.data.uploadUrl + '/photo/' + fs2.subs(p._id, 3).join('/');
+					p.cdateStr = dateTime.format(p.cdate);
+					next(null, p);
+				});
 			});
 		});
 	};
