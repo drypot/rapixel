@@ -13,6 +13,10 @@ init.add(function () {
 		});
 	};
 
+	var $img;
+	var srcHeight;
+	var srcWidth;
+
 	photo.showPhoto = function (p) {
 		var $photo = $('.photo');
 		var screenHeight = screen.width > screen.height ? screen.height : screen.width;
@@ -24,10 +28,24 @@ init.add(function () {
 			}
 			prevHeight = height;
 		}
-		var $img = $('<img>', {
-			src: p.dirUrl + '/' + p._id + '-' + (prevHeight ? prevHeight : height) + '.jpg'
+		srcHeight = prevHeight ? prevHeight : height;
+		srcWidth = srcHeight * 1.77777;
+		$img = $('<img>', {
+			src: p.dirUrl + '/' + p._id + '-' + srcHeight + '.jpg'
 		});
-
+		setImgWidth();
 		$photo.append($img);
+
+		$window.on('resize', setImgWidth);
 	};
+
+	function setImgWidth() {
+		var windowWidth = $(window).width();
+		var diff = Math.abs(srcWidth - windowWidth) / srcWidth;
+		if (diff > 0.02) {
+			$img.css('width', '100%');
+		} else {
+			$img.css('width', '');
+		}
+	}
 });

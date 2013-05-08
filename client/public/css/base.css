@@ -19,6 +19,9 @@ body {
   margin: 0px 20px 20px 0px;
   float: left;
 }
+.photo {
+  text-align: center;
+}
 .photo img {
-  width: 100%;
+  max-width: none;
 }

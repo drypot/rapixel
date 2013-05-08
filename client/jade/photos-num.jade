@@ -9,17 +9,18 @@ block content
 			photo.showPhoto(!{JSON.stringify(photo)});
 		});
 
-	.photo
+	div
+		.photo
 
-	ul.list-unstyled
-		li #{photo.user.name}
-		li !{photo.cdateStr}
-		li hit !{photo.hit}
-	p #{photo.comment}
+		ul.list-unstyled
+			li #{photo.user.name}
+			li !{photo.cdateStr}
+			li hit !{photo.hit}
+		p #{photo.comment}
 
-	hr
-	if locals.user && photo.user._id == user._id
-		button.btn.btn-danger(onclick='photo.delPhoto(' + photo._id + '); return false;') Delete Photo
+		hr
+		if locals.user && photo.user._id == user._id
+			button.btn.btn-danger(onclick='photo.delPhoto(' + photo._id + '); return false;') Delete Photo
 
-	hr
-	a(href="/") Home
+		hr
+		a(href="/") Home
