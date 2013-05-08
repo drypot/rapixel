@@ -119,6 +119,19 @@ describe("uploading 16:10 jpg", function () {
 	});
 });
 
+describe("uploading 617 jpg", function () {
+	var f1 = 'samples/b-617-2160.jpg';
+	it("should fail", function (next) {
+		express.post('/api/photos').attach('file', f1).end(function (err, res) {
+			should(!err);
+			should(!res.error);
+			should(res.body.err);
+			res.body.err.rc.should.equal(error.PHOTO_RATIO);
+			next();
+		});
+	});
+});
+
 describe("uploading text file", function () {
 	var f1 = 'server/test/fixture/dummy1.txt';
 	it("should fail", function (next) {

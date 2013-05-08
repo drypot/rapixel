@@ -123,7 +123,7 @@ init.add(function (next) {
 				return next(error(error.PHOTO_HEIGHT));
 			}
 			var ratio = f.width / f.height;
-			if (ratio < 1.75 && ratio > 1.79) {
+			if (ratio < 1.75 || ratio > 1.79) {
 				return next(error(error.PHOTO_RATIO));
 			}
 			next(null, f);
