@@ -22,7 +22,7 @@ before(function(next) {
 		next();
 	});
 
-	app.get('/api/send-invalid-data', function (req, res) {
+	app.get('/test/send-invalid-data', function (req, res) {
 		res.jsonErr(error(error.INVALID_DATA));
 	});
 
@@ -64,9 +64,9 @@ describe("/test/no-action", function () {
 	});
 });
 
-describe("/api/send-invalid-data", function () {
+describe("/test/send-invalid-data", function () {
 	it("should return rc", function (next) {
-		express.get('/api/send-invalid-data').end(function (err, res) {
+		express.get('/test/send-invalid-data').end(function (err, res) {
 			should(!err);
 			should(!res.error);
 			res.should.be.json;

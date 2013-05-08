@@ -122,7 +122,8 @@ init.add(function (next) {
 			if (f.height < 2160) {
 				return next(error(error.PHOTO_HEIGHT));
 			}
-			if (f.width / f.height < 1.75) {
+			var ratio = f.width / f.height;
+			if (ratio < 1.75 && ratio > 1.79) {
 				return next(error(error.PHOTO_RATIO));
 			}
 			next(null, f);
@@ -167,19 +168,22 @@ init.add(function (next) {
 		function read() {
 			cursor.nextObject(function (err, p) {
 				if (err) return next(err);
-				if (!p) return next(null, photos, count !== pgsize);
-				user.cachedUser(p.userId, function (next, u) {
-					if (err) return next(err);
-					p.user = {
-						_id: u._id,
-						name: u.name
-					};
-					p.dirUrl = config.data.uploadUrl + '/photo/' + fs2.subs(p._id, 3).join('/');
-					p.cdateStr = dateTime.format(p.cdate);
-					photos.push(p);
-					count++;
-					setImmediate(read);
-				});
+				if (p) {
+					user.cachedUser(p.userId, function (next, u) {
+						if (err) return next(err);
+						p.user = {
+							_id: u._id,
+							name: u.name
+						};
+						p.dirUrl = config.data.uploadUrl + '/photo/' + fs2.subs(p._id, 3).join('/');
+						p.cdateStr = dateTime.format(p.cdate);
+						photos.push(p);
+						count++;
+						setImmediate(read);
+					});
+					return;
+				}
+				next(null, photos, count !== pgsize);
 			});
 		}
 		read();

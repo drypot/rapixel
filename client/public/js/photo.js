@@ -14,16 +14,18 @@ init.add(function () {
 	};
 
 	photo.showPhoto = function (p) {
-		var scHeight = screen.width > screen.height ? screen.height : screen.width;
 		var $photo = $('.photo');
+		var screenHeight = screen.width > screen.height ? screen.height : screen.width;
+		var prevHeight;
 		for (var i = 0; i < p.vers.length; i++) {
 			var height = p.vers[i];
-			if (scHeight * 1.2 >= height) {
+			if (screenHeight > height) {
 				break;
 			}
+			prevHeight = height;
 		}
 		var $img = $('<img>', {
-			src: p.dirUrl + '/' + p._id + '-' + height + '.jpg'
+			src: p.dirUrl + '/' + p._id + '-' + (prevHeight ? prevHeight : height) + '.jpg'
 		});
 
 		$photo.append($img);

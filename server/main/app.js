@@ -28,7 +28,7 @@ require('../main/photo-html');
 require('../main/session-api');
 require('../main/user-api');
 require('../main/hello-api');
-require('../main/statics-html');
+require('../main/static-html');
 
 init.run(function (err) {
 	if (err) throw err;

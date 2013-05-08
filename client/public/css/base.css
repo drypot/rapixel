@@ -20,5 +20,5 @@ body {
   float: left;
 }
 .photo img {
-  max-width: none;
+  width: 100%;
 }

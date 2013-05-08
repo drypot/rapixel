@@ -44,7 +44,6 @@ init.add(function (next) {
 	];
 
 	var i = 0;
-
 	function mkdir() {
 		if (i == pathes.length) {
 			fs2.emptyDir(exports.tmp, next);
@@ -56,7 +55,6 @@ init.add(function (next) {
 			setImmediate(mkdir);
 		})
 	}
-
 	mkdir();
 
 });

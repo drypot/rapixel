@@ -4,7 +4,7 @@ var mongo = require('../main/mongo');
 
 init.add(function () {
 
-	console.log('statics-html:');
+	console.log('static-html:');
 
 	var app = express.app;
 

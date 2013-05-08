@@ -27,9 +27,7 @@ init.add(function () {
 	app.engine('jade', require('jade').renderFile);
 	app.set('view engine', 'jade'); // default view engine
 	app.set('views', process.cwd() + '/client/jade'); // view root
-	if ('development' == app.get('env')) {
-		app.locals.pretty = true;
-	}
+	app.locals.pretty = true;
 
 	app.locals.siteTitle = config.data.siteTitle;
 
