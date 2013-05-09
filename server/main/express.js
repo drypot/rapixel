@@ -33,13 +33,11 @@ init.add(function () {
 
 	app.use(express.cookieParser(config.data.cookieSecret));
 
-	if ('production' == app.get('env') || opt.store === 'redis') {
-		app.use(express.session({ store: new redisStore() }));
-		log += ' redis';
-	} else {
-		app.use(express.session());
-		log += ' memory';
-	}
+	app.use(express.session({ store: new redisStore({ ttl: 1800 /* 단위: 초. 30 분 */ }) }));
+	log += ' redis';
+
+//	app.use(express.session());
+//	log += ' memory';
 
 	app.use(express.bodyParser({ uploadDir: upload.tmp }));
 
