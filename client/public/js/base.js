@@ -77,8 +77,19 @@ init.add(function () {
 	window.$document = $(document);
 	window.$content = $('#content');
 
-	window.url = new URI(location.toString());
-	window.query = url.query(true);
+	window.url = {};
+	window.url.pathnames = window.location.pathname.slice(1).split('/');
+	window.url.query = (function () {
+		var plusPattern = /\+/g;
+		var paramPattern = /([^&=]+)=?([^&]*)/g;
+		var search = window.location.search.slice(1);
+		var query = {};
+		var match;
+		while (match = paramPattern.exec(search)) {
+			query[match[1]] = decodeURIComponent(match[2].replace(plusPattern, " "));
+		}
+		return query;
+	})();
 
 });
 
