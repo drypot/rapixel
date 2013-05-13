@@ -1,0 +1,28 @@
+extends layout
+
+block title
+	title Login - #{siteTitle}
+
+block content
+	script
+		init.add(function () {
+			session.initLogin();
+		});
+
+	.container
+		.content
+			.page-header
+				h2 Login
+
+			form#login-form
+				.form-row
+					label.control-label Email
+					input.input-with-feedback.col-lg-5(name="email", type="text")
+				.form-row
+					label.control-label Password
+					input.input-with-feedback.col-lg-5(name="password", type="password")
+				.checkbox
+					label Remember
+						input(name="remember", type="checkbox")
+				.form-action
+					button.btn.btn-primary(name="send") Login

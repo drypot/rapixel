@@ -1,0 +1,26 @@
+extends layout
+
+block title
+	title Photo/!{photo._id} - #{siteTitle}
+
+block content
+	script
+		init.add(function() {
+			photo.initPhotoView(!{JSON.stringify(photo)});
+		});
+
+	.photo
+
+	.info
+		span #{photo.user.name}
+		span hit !{photo.hit}
+		span !{photo.cdateStr}
+
+	.comment #{photo.comment}
+
+	.action
+		if locals.user && photo.user._id == user._id
+			button#del-btn.btn.btn-danger Delete Photo
+
+	.home
+		a(href='/') #{siteTitle}

@@ -1,0 +1,43 @@
+extends layout
+
+block title
+	title #{siteTitle}
+
+block content
+	script
+		init.add(function () {
+			session.initRegister();
+		});
+
+	.container
+		.content
+			.page-header
+				h2 Register
+
+			form#reg-form
+				.form-row
+					label.control-label Name
+					input.input-with-feedback.col-lg-5(name="name", type="text", maxlength=32)
+				.form-row
+					label.control-label Email
+					input.input-with-feedback.col-lg-5(name="email", type="text", maxlength=64)
+				.form-row
+					label.control-label Password
+					input.input-with-feedback.col-lg-5(name="password", type="password", maxlength=64)
+				.form-action
+					button.btn.btn-primary(name="send") Register
+
+			div(style='margin-top:50px; font-size:18px').
+				5 월 1 일 개발을 시작하여 개인정보변경등 기능이 많이 부족합니다.<br>
+				이해 부탁드립니다.<br>
+
+	#reg-modal.modal
+		.modal-dialog
+			.modal-content
+				.modal-header
+					button.close(type="button", data-dismiss="modal", aria-hidden="true") ×
+					h3.modal-title 감사합니다
+				.modal-body
+					p 회원가입이 완료되었습니다.
+				.modal-footer
+					a.btn.btn-primary(data-dismiss="modal") Close

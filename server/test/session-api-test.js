@@ -17,14 +17,14 @@ init.add(function () {
 	app.get('/api/test/user', function (req, res) {
 		req.user(function (err) {
 			if (err) return res.jsonErr(err);
-			res.jsonEmpty();
+			res.json({});
 		});
 	});
 
 	app.get('/api/test/admin', function (req, res) {
 		req.admin(function (err) {
 			if (err) return res.jsonErr(err);
-			res.jsonEmpty();
+			res.json({});
 		});
 	});
 

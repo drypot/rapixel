@@ -3,67 +3,59 @@ init.add(function () {
 
 	window.session = {};
 
-	var $loginForm;
-	var $regForm;
-
-	session.initLogin = function () {
+	session.autoLogin = function () {
 		if (window.user) return;
-		trySaved(function (err, success) {
-			if (!err && success) {
-				location = '/';
-				return;
-			}
-			$('#login-panel').removeClass('hide');
-			$loginForm = $('#login-form');
-			$loginForm.find('[name=submit]').click(sendLoginForm);
-			if (err) return showError.system(err);
-			session.initReg();
-		});
-	};
 
-	function trySaved(next) {
 		var email = localStorage.getItem('email');
 		var password = localStorage.getItem('password');
-		if (!email || !password) return next(null, false);
+
+		if (!email || !password) return;
+
 		console.log('trying saved password.');
 		request.post('/api/sessions').send({ email: email, password: password }).end(function (err, res) {
 			err = err || res.error || res.body.err;
 			if (err) {
 				localStorage.removeItem('email');
 				localStorage.removeItem('password');
-				return next(err, false);
+				showError.system(err);
+				return ;
 			}
-			next(null, true);
+			location.reload();
 		});
-	}
+	};
 
-	function sendLoginForm() {
-		var form = {
-			email: $loginForm.find('[name=email]').val(),
-			password: $loginForm.find('[name=password]').val()
-		};
-		var $remember = $loginForm.find('[name=remember]');
-		request.post('/api/sessions').send(form).end(function (err, res) {
-			err = err || res.error;
-			if (err) return showError.system(err);
-			if (res.body.err) {
-				var rc = res.body.err.rc;
-				if (rc && rc == error.INVALID_PASSWORD) {
-					return showError('Retry Please', res.body.err.message);
+	session.initLogin = function () {
+		var $form = $('#login-form');
+		$form.find('[name=send]').click(function () {
+			var form = {
+				email: $form.find('[name=email]').val(),
+				password: $form.find('[name=password]').val()
+			};
+			var $remember = $form.find('[name=remember]');
+			alerts.clear($form);
+			request.post('/api/sessions').send(form).end(function (err, res) {
+				err = err || res.error;
+				if (err) return showError.system(err);
+				if (res.body.err) {
+					var rc = res.body.err.rc;
+					if (rc && rc == error.INVALID_PASSWORD) {
+						alerts.add($form.find('[name=email]'), res.body.err.message);
+						return;
+					}
+					return showError.system(res.body.err);
 				}
-				return showError.system(res.body.err);
-			}
-			if ($remember.prop('checked')) {
-				localStorage.setItem('email', form.email);
-				localStorage.setItem('password', form.password);
-			} else {
-				localStorage.removeItem('email');
-				localStorage.removeItem('password');
-			}
-			location = '/';
+				if ($remember.prop('checked')) {
+					localStorage.setItem('email', form.email);
+					localStorage.setItem('password', form.password);
+				} else {
+					localStorage.removeItem('email');
+					localStorage.removeItem('password');
+				}
+				location = '/';
+			});
+			return false;
 		});
-		return false;
-	}
+	};
 
 	session.logout = function () {
 		request.del('/api/sessions').end(function (err, res) {
@@ -76,41 +68,34 @@ init.add(function () {
 		});
 	};
 
-	session.initReg = function () {
-		$regForm = $('#reg-form');
-		$regForm.find('[name=submit]').click(sendRegForm);
-	};
-
-	function sendRegForm() {
-		var form = {
-			name: $regForm.find('[name=name]').val(),
-			email: $regForm.find('[name=email]').val(),
-			password: $regForm.find('[name=password]').val()
-		};
-		request.post('/api/users').send(form).end(function (err, res) {
-			err = err || res.error;
-			if (err) return showError.system(err);
-			if (res.body.err) {
-				var rc = res.body.err.rc;
-				var fields = res.body.err.fields;
-				if (rc && rc == error.INVALID_DATA) {
-					var msg = '';
-					for (var i = 0; i < fields.length; i++) {
-						var field = fields[i];
-						msg += field.msg + '<br>';
+	session.initRegister = function () {
+		var $form = $('#reg-form');
+		$form.find('[name=send]').click(function () {
+			var form = {
+				name: $form.find('[name=name]').val(),
+				email: $form.find('[name=email]').val(),
+				password: $form.find('[name=password]').val()
+			};
+			alerts.clear($form);
+			request.post('/api/users').send(form).end(function (err, res) {
+				err = err || res.error;
+				if (err) return showError.system(err);
+				if (res.body.err) {
+					if (res.body.err.rc && res.body.err.rc == error.INVALID_DATA) {
+						alerts.fill($form, res.body.err.fields);
+						return;
 					}
-					return showError('Retry Please', msg);
+					return showError.system(res.body.err);
 				}
-				return showError.system(res.body.err);
-			}
-			var $regModal = $('#reg-modal');
-			$regModal.on('hidden', function () {
-				location = '/';
+				var $regModal = $('#reg-modal');
+				$regModal.on('hidden', function () {
+					location = '/users/login';
+				});
+				$regModal.modal('show');
 			});
-			$regModal.modal('show');
+			return false;
 		});
-		return false;
-	}
+	};
 
 
 });

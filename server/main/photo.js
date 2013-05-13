@@ -5,7 +5,7 @@ var img = require('imagemagick');
 var init = require('../main/init');
 var config = require('../main/config');
 var fs2 = require('../main/fs');
-var dateTime = require('../main/dateTime');
+var dt = require('../main/dt');
 var mongo = require('../main/mongo');
 var user = require('../main/user');
 var upload = require('../main/upload');
@@ -143,7 +143,7 @@ init.add(function (next) {
 						name: u.name
 					};
 					p.dirUrl = config.data.uploadUrl + '/photo/' + fs2.subs(p._id, 3).join('/');
-					p.cdateStr = dateTime.format(p.cdate);
+					p.cdateStr = dt.format(p.cdate);
 					next(null, p);
 				});
 			});
@@ -176,7 +176,7 @@ init.add(function (next) {
 							name: u.name
 						};
 						p.dirUrl = config.data.uploadUrl + '/photo/' + fs2.subs(p._id, 3).join('/');
-						p.cdateStr = dateTime.format(p.cdate);
+						p.cdateStr = dt.format(p.cdate);
 						photos.push(p);
 						count++;
 						setImmediate(read);
@@ -190,7 +190,7 @@ init.add(function (next) {
 	};
 
 	exports.photoPath = function (pid) {
-		return upload.pub + '/photo/' + fs2.subs(pid, 3).join('/');
+		return upload.pubPhoto + '/' + fs2.subs(pid, 3).join('/');
 	}
 
 	next();

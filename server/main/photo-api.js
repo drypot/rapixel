@@ -13,7 +13,7 @@ init.add(function () {
 			if (err) return res.jsonErr(err);
 			photo.createPhoto(req, u, function (err, photoId) {
 				if (err) return res.jsonErr(err);
-				res.json({
+				res.safeJson({
 					photoId: photoId
 				});
 			});
@@ -48,7 +48,7 @@ init.add(function () {
 			var pid = parseInt(req.params.pid) || 0;
 			photo.del(pid, u, function (err) {
 				if (err) return res.jsonErr(err);
-				res.jsonEmpty();
+				res.safeJson({});
 			});
 		});
 	});

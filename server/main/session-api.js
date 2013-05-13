@@ -40,7 +40,7 @@ init.add(function () {
 
 	app.del('/api/sessions', function (req, res) {
 		req.session.destroy();
-		res.jsonEmpty();
+		res.json({});
 	});
 
 });

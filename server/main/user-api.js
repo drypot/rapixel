@@ -25,7 +25,7 @@ init.add(function () {
 	});
 
 //	app.del('/api/users', function (req, res) {
-//		res.jsonEmpty();
+//		res.json({});
 //	});
 
 });

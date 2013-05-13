@@ -37,6 +37,7 @@ before(function (next) {
 		var p = {
 			_id: mongo.newPhotoId(),
 			userId: uid,
+			cdate: new Date(),
 			comment: '' + i
 		};
 		i++;

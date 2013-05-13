@@ -44,7 +44,7 @@ var msg = exports.msg = {
 
 	EMAIL_EMPTY: '이메일 주소를 입력해 주십시오.',
 	EMAIL_RANGE: '이메일 주소 길이는 8 ~ 64 글자입니다.',
-	EMAIL_PATTERN: '이메일 주소 모양이 이상합니다.',
+	EMAIL_PATTERN: '이메일 주소가 맞는지 다시 한번 확인해 주십시오.',
 	EMAIL_DUPE: '이미 등록되어 있는 이메일입니다.',
 
 	PASSWORD_EMPTY: '비밀번호를 입력해 주십시오.',

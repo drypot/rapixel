@@ -10,6 +10,11 @@ var request = superagent;
 			setItem: function () {},
 			removeItem: function () {}
 		}
+		window.sessionStorage = {
+			getItem: function () {},
+			setItem: function () {},
+			removeItem: function () {}
+		}
 	}
 
 	if (!window.console) {
@@ -17,6 +22,8 @@ var request = superagent;
 			log: function () {}
 		}
 	}
+
+	window.msie = /msie/.test(navigator.userAgent.toLowerCase());
 
 })();
 

@@ -73,23 +73,19 @@ init.add(function (next) {
 
 		if (!form.name.length) {
 			fields.push({ name: 'name', msg: error.msg.NAME_EMPTY });
-		}
-		if (form.name.length > 32 || form.name.length < 2) {
+		} else if (form.name.length > 32 || form.name.length < 2) {
 			fields.push({ name: 'name', msg: error.msg.NAME_RANGE });
 		}
 		if (!form.email.length) {
 			fields.push({ name: 'email', msg: error.msg.EMAIL_EMPTY });
-		}
-		if (form.email.length > 64 || form.email.length < 8) {
+		} else if (form.email.length > 64 || form.email.length < 8) {
 			fields.push({ name: 'email', msg: error.msg.EMAIL_RANGE });
-		}
-		if (!emailPattern.test(form.email)) {
+		} else if (!emailPattern.test(form.email)) {
 			fields.push({ name: 'email', msg: error.msg.EMAIL_PATTERN });
 		}
 		if (!form.password.length) {
 			fields.push({ name: 'password', msg: error.msg.PASSWORD_EMPTY });
-		}
-		if (form.password.length > 32 || form.password.length < 4) {
+		} else if (form.password.length > 32 || form.password.length < 4) {
 			fields.push({ name: 'password', msg: error.msg.PASSWORD_RANGE });
 		}
 		if (fields.length) {

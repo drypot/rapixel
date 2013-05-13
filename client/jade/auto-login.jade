@@ -1,0 +1,10 @@
+extends layout
+
+block title
+	title #{siteTitle}
+
+block content
+	script
+		init.add(function () {
+			session.initAutoLogin();
+		});

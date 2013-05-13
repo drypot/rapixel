@@ -1,24 +1,109 @@
 body {
   padding-bottom: 40px;
 }
+.jumbotron {
+  padding-left: 0px;
+  padding-right: 0px;
+  margin-bottom: 0px;
+  background-color: white;
+}
+.jumbotron p {
+  margin-top: 20px;
+}
+.content {
+  padding-left: 3px;
+  padding-right: 3px;
+  max-width: 570px;
+}
+.limit-width {
+  max-width: 570px;
+}
+.width100 {
+  width: 100%;
+}
 .page-header {
   border: 0;
   margin-bottom: 10px;
 }
-.submit-group {
-  margin-top: 25px;
-}
 .photos {
   margin-top: 20px;
+  margin-left: 1px;
+  margin-right: 1px;
+}
+.photos .photo {
+  margin-bottom: 15px;
 }
 .photos .img {
-  margin: 0px 20px 20px 0px;
-  float: left;
+  margin-bottom: 2px;
 }
 .photos .desc {
-  margin: 0px 20px 20px 0px;
-  float: left;
+  margin-left: 4px;
 }
-.photo img {
+.photos .desc span {
+  margin-right: 15px;
+}
+body.photo-view {
+  background-color: #111111;
+  color: #e0e0e0;
+}
+body.photo-view .photo {
+  margin: 0px;
+  margin-bottom: 15px;
+}
+body.photo-view .photo img {
   max-width: none;
+}
+body.photo-view .info {
+  margin: 0px 10px 15px 12px;
+  font-size: 14px;
+}
+body.photo-view .info span {
+  margin-right: 15px;
+}
+body.photo-view .comment {
+  margin: 0px 10px 30px 12px;
+  min-height: 70px;
+}
+body.photo-view .action {
+  margin: 0px 10px 70px 12px;
+}
+body.photo-view .home {
+  margin: 0px 10px 8px 12px;
+}
+body.photo-view .home a,
+body.photo-view .home a.hover {
+  color: white;
+  font-size: 38px;
+  font-weight: 500;
+}
+form .form-row {
+  margin-bottom: 10px;
+}
+form .form-row label {
+  display: block;
+}
+form .form-action {
+  margin-top: 25px;
+  margin-bottom: 20px;
+}
+form .file-group .col {
+  padding: 0px;
+  margin-right: 5px;
+}
+form .file-group .files .file {
+  margin-bottom: 5px;
+}
+form .file-group .files .file input[type=file] {
+  width: 100%;
+}
+form p.error {
+  display: block;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+form .alert {
+  margin-bottom: 5px;
+}
+form textarea {
+  font-family: monospace;
 }

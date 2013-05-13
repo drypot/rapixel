@@ -4,88 +4,85 @@ init.add(function() {
 	var $title = $modal.find('.modal-title');
 	var $body = $modal.find('.modal-body');
 
-	window.showError = function (header, text) {
+	window.showError = function (header, text, next) {
 		$title.empty();
-		$title.append(header);
+		$title.append('<h3>' + header + '</h3>');
 		$body.empty();
 		$body.append('<p>' + text + '</p>');
+		$modal.off('hidden');
+		if (next) {
+			$modal.on('hidden', next);
+		}
 		$modal.modal('show');
 	};
 
-	window.showError.system = function (err) {
+	window.showError.system = function (err, next) {
 		$title.empty();
-		$title.append('시스템 오류');
+		$title.append('<h3>시스템 오류</h3>');
 		$body.empty();
 		$body.append('<h3>Message</h3>');
 		$body.append('<pre>' + err.message + '</pre>');
 		$body.append('<h3>Stack</h3>');
 		$body.append('<pre>' + err.stack + '</pre>');
+		$modal.off('hidden');
+		if (next) {
+			$modal.on('hidden', next);
+		}
 		$modal.modal('show');
 	};
-
 });
 
 init.add(function () {
 
 	window.alerts = {};
 
-	alerts.clear = function ($content) {
-		$content.find('.alert').remove();
-		$content.find('.has-error').removeClass('has-error');
+	alerts.clear = function ($sec) {
+		$sec.find('.alert').remove();
+		$sec.find('.has-error').removeClass('has-error');
+		$sec.find('.text-danger').remove();
 	};
 
 	alerts.add = function ($control, msg) {
-		var $alert = $('<div>').addClass('alert alert-danger').text(msg);
 		var $group = $control.closest('div');
 		$group.addClass('has-error');
-		$group.before($alert);
+		//$control.before($('<div>').addClass('alert alert-danger').text(msg));
+		$group.append($('<p>').addClass('error text-danger').text(msg));
+	};
+
+	alerts.fill = function ($form, fields) {
+		for (var i = 0; i < fields.length; i++) {
+			var field = fields[i];
+			alerts.add($form.find('[name="' + field.name + '"]'), field.msg);
+		}
+	}
+
+});
+
+init.add(function () {
+
+	window.Sender = function ($form) {
+		var $send = $form.find('[name=send]');
+		var $sending = $form.find('[name=sending]');
+		this.beforeSend = function () {
+			$send.addClass('hide');
+			$sending.removeClass('hide');
+		};
+		this.complete = function () {
+			$send.removeClass('hide');
+			$sending.addClass('hide');
+		};
 	};
 
 });
 
-
 init.add(function () {
 
-	$('.navbar a[href="/logout"]').click(function () {
+	$('#logout-btn').click(function () {
 		session.logout();
 		return false;
 	});
 
 });
-
-//
-//init.add(function () {
-//
-//	// TODO:
-//
-//	jQuery.fn.attachScroller = function(callback) {
-//		var target = this;
-//		var y = 0;
-//		var ny = 0;
-//		var timer = null;
-//
-//		function scroll() {
-//			var scrollTop = document.documentElement.scrollTop + document.body.scrollTop;
-//			var dy = y - scrollTop;
-//			var ay = Math.max(Math.abs(Math.round(dy * 0.15)), 1) * (dy < 0 ? -1 : 1);
-//			clearTimeout(timer);
-//			if (Math.abs(dy) > 3 && Math.abs(ny - scrollTop) < 3) {
-//				ny = scrollTop + ay;
-//				scrollTo(0, ny);
-//				timer = setTimeout(scroll, 10);
-//			} else {
-//				if (callback) callback();
-//			}
-//		}
-//
-//		var viewportHeight = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight;
-//		y = target.offset().top;
-//		y = y - (viewportHeight / 4);
-//		y = Math.round(Math.max(y, 0));
-//		timer = setTimeout(scroll, 0);
-//	}
-//
-//});
 
 init.add(function () {
 

@@ -1,0 +1,38 @@
+extends layout
+
+block title
+	title Photos - #{siteTitle}
+
+block content
+
+	.container
+		.content
+			if firstPage
+				.jumbotron
+					h1 Rapixel
+					p 4K Images
+
+		.photos
+			for p in photos
+				.photo
+					.img
+						a(href='/photos/' + p._id)
+							img(src=p.dirUrl + '/' + p._id + '-320.jpg')
+					.desc
+						span #{p.user.name}
+						span hit !{p.hit}
+						span !{p.cdateStr}
+
+			ul.pager(style='text-align: left;')
+				if locals.prevUrl
+					li
+						a(href=prevUrl) Previous
+				else
+					li.disabled
+						a(href='javascript:void(0)') Previous
+				if locals.nextUrl
+					li
+						a(href=nextUrl) Next
+				else
+					li.disabled
+						a(href='javascript:void(0)') Next

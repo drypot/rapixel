@@ -63,7 +63,6 @@ init.add(function () {
 
 	app.use(express.errorHandler());
 
-	should.not.exist(app.request.user);
 	app.request.user = function (next) {
 		var req = this;
 		var res = this.res;
@@ -74,7 +73,6 @@ init.add(function () {
 		next(null, u);
 	};
 
-	should.not.exist(app.request.admin);
 	app.request.admin = function (next) {
 		var req = this;
 		var res = this.res;
@@ -88,17 +86,20 @@ init.add(function () {
 		next(null, u);
 	};
 
-	var empty = {};
-
-	should.not.exist(app.response.jsonEmpty);
-	app.response.jsonEmpty = function (err) {
-		this.json(empty);
-	}
-
 	var cut5LinesPattern = /^(?:.*\n){1,5}/m;
 	var emptyMatch = [''];
 
-	should.not.exist(app.response.jsonErr);
+	app.response.safeJson = function (obj) {
+		// IE9 + ajaxForm + multipart/form-data 사용할 경우 application/json 으로 리턴하면 저장하려든다.
+		//console.log(this.req.headers);
+		var accept = this.req.get('accept');
+		if (accept && accept.indexOf('text/html') != -1) {
+			this.send(JSON.stringify(obj));
+		} else {
+			this.json(obj);
+		}
+	};
+
 	app.response.jsonErr = function (err) {
 		var err2 = {};
 		for (var key in err) {
@@ -106,13 +107,12 @@ init.add(function () {
 		}
 		err2.message = err.message;
 		err2.stack = (err.stack.match(cut5LinesPattern) || emptyMatch)[0];
-		this.json({ err: err2 });
+		this.safeJson({ err: err2 });
 	}
 
-	should.not.exist(app.response.renderErr);
 	app.response.renderErr = function (err) {
 		if (err.rc && err.rc == error.NOT_AUTHENTICATED) {
-			this.redirect('/');
+			this.redirect('/users/login');
 			return;
 		}
 		var err2 = {};
