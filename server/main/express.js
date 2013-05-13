@@ -55,9 +55,15 @@ init.add(function () {
 
 	app.use(app.router);
 
-	// solve IE ajax caching problem.
-	app.all('/api/*', function (req, res, next) {
-		res.set('Cache-Control', 'no-cache');
+	var apiPath = /^\/api\//;
+	app.all('*', function (req, res, next) {
+		if (apiPath.test(req.path)) {
+			// solve IE ajax caching problem.
+			res.set('Cache-Control', 'no-cache');
+		} else {
+			// force web pages cacehd.
+			res.set('Cache-Control', 'private');
+		}
 		next();
 	});
 
