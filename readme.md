@@ -6,6 +6,8 @@
 
 # History
 
+2013.05.15 첫 디자인을 입혔다.
+
 2013.05.05 사진등록 시작.
 
 2013.05.01 회원등록 시작.
@@ -19,7 +21,7 @@
 
 The MIT License (MIT)
 
-Copyright (c) 2012 Kyuhyun Park
+Copyright (c) 2013 Kyuhyun Park
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
