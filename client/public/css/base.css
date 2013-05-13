@@ -62,7 +62,6 @@ body.photo-view .info span {
 }
 body.photo-view .comment {
   margin: 0px 10px 30px 12px;
-  min-height: 70px;
 }
 body.photo-view .action {
   margin: 0px 10px 70px 12px;
