@@ -7,7 +7,7 @@ var config = require('../main/config');
 var fs2 = require('../main/fs');
 var dt = require('../main/dt');
 var mongo = require('../main/mongo');
-var user = require('../main/user');
+var userl = require('../main/user');
 var upload = require('../main/upload');
 var error = require('../main/error');
 
@@ -136,7 +136,7 @@ init.add(function (next) {
 			mongo.findPhoto(pid, function (err, p) {
 				if (err) return next(err);
 				if (!p) return next(error(error.PHOTO_NOTHING_TO_SHOW));
-				user.cachedUser(p.userId, function (err, u) {
+				userl.findCachedUser(p.userId, function (err, u) {
 					if (err) return next(err);
 					p.user = {
 						_id: u._id,
@@ -169,7 +169,7 @@ init.add(function (next) {
 			cursor.nextObject(function (err, p) {
 				if (err) return next(err);
 				if (p) {
-					user.cachedUser(p.userId, function (next, u) {
+					userl.findCachedUser(p.userId, function (next, u) {
 						if (err) return next(err);
 						p.user = {
 							_id: u._id,

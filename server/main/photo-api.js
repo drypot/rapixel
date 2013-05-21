@@ -9,11 +9,11 @@ init.add(function () {
 	console.log('photo-api:');
 
 	app.post('/api/photos', function (req, res) {
-		req.user(function (err, u) {
+		req.findUser(function (err, u) {
 			if (err) return res.jsonErr(err);
 			photo.createPhoto(req, u, function (err, photoId) {
 				if (err) return res.jsonErr(err);
-				res.safeJson({
+				res.json({
 					photoId: photoId
 				});
 			});
@@ -43,12 +43,12 @@ init.add(function () {
 	});
 
 	app.del('/api/photos/:pid([0-9]+)', function (req, res) {
-		req.user(function (err, u) {
+		req.findUser(function (err, u) {
 			if (err) return res.jsonErr(err);
 			var pid = parseInt(req.params.pid) || 0;
 			photo.del(pid, u, function (err) {
 				if (err) return res.jsonErr(err);
-				res.safeJson({});
+				res.json({});
 			});
 		});
 	});

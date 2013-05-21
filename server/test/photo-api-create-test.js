@@ -6,7 +6,7 @@ var mongo = require('../main/mongo')({ dropDatabase: true });
 var upload = require('../main/upload');
 var express = require('../main/express');
 var error = require('../main/error');
-var userFix = require('../test/user-fixture');
+var ufix = require('../test/user-fixture');
 
 require('../main/session-api');
 require('../main/photo-api');
@@ -16,7 +16,7 @@ before(function (next) {
 });
 
 before(function (next) {
-	userFix.createFixtures(next);
+	ufix.createFixtures(next);
 });
 
 before(function () {
@@ -24,14 +24,14 @@ before(function () {
 });
 
 before(function (next) {
-	userFix.loginUser1(next);
+	ufix.loginUser1(next);
 });
 
 describe("uploading photo within cycle", function () {
 	it("given photo uploaded 23 hour ago", function (next){
 		var ph = {
 			_id: mongo.newPhotoId(),
-			userId: userFix.user1._id,
+			userId: ufix.user1._id,
 			cdate: new Date(Date.now() - (1 * 60 * 60 * 1000))
 		};
 		mongo.insertPhoto(ph, next);
@@ -51,7 +51,7 @@ describe("uploading photo within cycle", function () {
 	it("given photo uploaded 25 hour ago", function (next){
 		var ph = {
 			_id: mongo.newPhotoId(),
-			userId: userFix.user1._id,
+			userId: ufix.user1._id,
 			cdate: new Date(Date.now() - (25 * 60 * 60 * 1000))
 		};
 		mongo.insertPhoto(ph, next);
@@ -164,7 +164,7 @@ describe("uploading 16:9 2160 jpg", function () {
 			should(!res.error);
 			should(!res.body.err);
 			res.body._id.should.equal(pid);
-			res.body.user._id.should.equal(userFix.user1._id);
+			res.body.user._id.should.equal(ufix.user1._id);
 			res.body.fname.should.equal('b-16x9-2160.jpg');
 			res.body.format.should.equal('JPEG');
 			res.body.height.should.equal(2160);

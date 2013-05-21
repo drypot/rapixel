@@ -6,7 +6,7 @@ var mongo = require('../main/mongo')({ dropDatabase: true });
 var upload = require('../main/upload');
 var express = require('../main/express');
 var error = require('../main/error');
-var userFix = require('../test/user-fixture');
+var ufix = require('../test/user-fixture');
 
 require('../main/session-api');
 require('../main/photo-api');
@@ -16,7 +16,7 @@ before(function (next) {
 });
 
 before(function (next) {
-	userFix.createFixtures(next);
+	ufix.createFixtures(next);
 });
 
 before(function () {
@@ -24,11 +24,11 @@ before(function () {
 });
 
 before(function (next) {
-	userFix.loginUser1(next);
+	ufix.loginUser1(next);
 });
 
 before(function (next) {
-	var uid = userFix.user1._id;
+	var uid = ufix.user1._id;
 	var i = 0;
 	function insertPhoto() {
 		if (i == 10) {

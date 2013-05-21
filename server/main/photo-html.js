@@ -60,7 +60,7 @@ init.add(function () {
 	}
 
 	app.get('/photos/new', function (req, res) {
-		req.user(function (err, u) {
+		req.findUser(function (err, u) {
 			if (err) return res.renderErr(err);
 			var now = new Date();
 			photo.checkCycle(u, now, function (err) {
@@ -74,7 +74,7 @@ init.add(function () {
 	});
 
 //	app.post('/photos/upload', function (req, res) {
-//		req.user(function (err, u) {
+//		req.findUser(function (err, u) {
 //			if (err) return res.renderErr(err);
 //			photo.createPhoto(req, u, function (err, photoId) {
 //				if (err) return res.renderErr(err);

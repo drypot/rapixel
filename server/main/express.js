@@ -4,7 +4,7 @@ var redisStore = require('connect-redis')(express);
 
 var init = require('../main/init');
 var config = require('../main/config');
-var user = require('../main/user');
+var session = require('../main/session');
 var upload = require('../main/upload');
 var error = require('../main/error');
 
@@ -41,70 +41,62 @@ init.add(function () {
 
 	app.use(express.bodyParser({ uploadDir: upload.tmp }));
 
+	var apiRe = /^\/api\//;
+
 	app.use(function (req, res, next) {
-		if (req.session.userId) {
-			user.cachedUser(req.session.userId, function (err, u) {
-				if (err) return next(err);
-				res.locals.user = u;
-				next();
-			});
-			return;
-		}
-		next();
-	});
-
-	app.use(app.router);
-
-	var apiPath = /^\/api\//;
-	app.all('*', function (req, res, next) {
-		if (apiPath.test(req.path)) {
+		var api = res.locals.api = apiRe.test(req.path);
+		if (api) {
 			// solve IE ajax caching problem.
 			res.set('Cache-Control', 'no-cache');
 		} else {
-			// force web pages cacehd.
+			// force web page cacehd.
 			res.set('Cache-Control', 'private');
 		}
 		next();
 	});
 
+	app.use(session.setLocals);
+
+	app.use(app.router);
+
 	app.use(express.errorHandler());
 
-	app.request.user = function (next) {
+	app.request.findUser = function (next) {
 		var req = this;
 		var res = this.res;
-		var u = res.locals.user;
-		if (!u) {
+		var user = res.locals.user;
+		if (!user) {
 			return next(error(error.NOT_AUTHENTICATED));
 		}
-		next(null, u);
+		next(null, user);
 	};
 
-	app.request.admin = function (next) {
+	app.request.findAdmin = function (next) {
 		var req = this;
 		var res = this.res;
-		var u = res.locals.user;
-		if (!u) {
+		var user = res.locals.user;
+		if (!user) {
 			return next(error(error.NOT_AUTHENTICATED));
 		}
-		if (!u.admin) {
+		if (!user.admin) {
 			return next(error(error.NOT_AUTHORIZED));
 		}
-		next(null, u);
+		next(null, user);
 	};
 
 	var cut5LinesPattern = /^(?:.*\n){1,5}/m;
 	var emptyMatch = [''];
 
-	app.response.safeJson = function (obj) {
-		// IE9 + ajaxForm + multipart/form-data 사용할 경우 application/json 으로 리턴하면 저장하려든다.
-		//console.log(this.req.headers);
-		var accept = this.req.get('accept');
-		if (accept && accept.indexOf('text/html') != -1) {
-			this.send(JSON.stringify(obj));
-		} else {
-			this.json(obj);
-		}
-	};
+//	app.response.safeJson = function (obj) {
+//		// IE9 + ajaxForm + multipart/form-data 사용할 경우 application/json 으로 리턴하면 저장하려든다.
+//		//console.log(this.req.headers);
+//		var accept = this.req.get('accept');
+//		if (accept && accept.indexOf('text/html') != -1) {
+//			this.send(JSON.stringify(obj));
+//		} else {
+//			this.json(obj);
+//		}
+//	};
 
 	app.response.jsonErr = function (err) {
 		var err2 = {};
@@ -113,7 +105,7 @@ init.add(function () {
 		}
 		err2.message = err.message;
 		err2.stack = (err.stack.match(cut5LinesPattern) || emptyMatch)[0];
-		this.safeJson({ err: err2 });
+		this.json({ err: err2 });
 	}
 
 	app.response.renderErr = function (err) {
@@ -136,6 +128,7 @@ init.add(function () {
 		console.log(log);
 	};
 
+
 	// for test
 
 	var request = require('superagent').agent();
@@ -150,6 +143,10 @@ init.add(function () {
 				return request[method].apply(request, arguments);
 			}
 		})(method)
+	}
+
+	exports.newTestSession = function () {
+		request = require('superagent').agent();
 	}
 
 });

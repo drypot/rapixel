@@ -91,7 +91,7 @@ init.add(function () {
 	};
 
 	function addFileInput($form) {
-		var $fileTempl = $('#input-file-templ');
+		var $fileTempl = $('#file-input-templ');
 		var $files = $form.find('.files');
 		var basename = /[^\\]+$/;
 

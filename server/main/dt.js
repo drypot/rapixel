@@ -1,9 +1,13 @@
 
-function pad(n) {
-	var s = "0" + n;
-	return s.substr(s.length - 2, 2);
+function pad(number) {
+	var r = String(number);
+	if ( r.length === 1 ) {
+		r = '0' + r;
+	}
+	return r;
 }
 
 exports.format = function (d) {
-	return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+	return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + ' ' +
+		pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
 };

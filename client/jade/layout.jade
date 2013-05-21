@@ -76,3 +76,14 @@ html
 					.modal-body
 					.modal-footer
 						a.btn.btn-primary(data-dismiss="modal") Close
+
+	#file-input-templ.hide
+		.file
+			input.hide(type='file', name='file', multiple='multiple')
+			.input-group
+				input(type='text', disabled)
+				span.input-group-btn
+					button.btn.btn-default File
+	#file-input-templ-msie.hide
+		.file
+			input(type='file', name='file')

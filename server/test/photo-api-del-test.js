@@ -9,7 +9,7 @@ var photo = require('../main/photo');
 var fs2 = require('../main/fs');
 var express = require('../main/express');
 var error = require('../main/error');
-var userFix = require('../test/user-fixture');
+var ufix = require('../test/user-fixture');
 
 require('../main/session-api');
 require('../main/photo-api');
@@ -19,7 +19,7 @@ before(function (next) {
 });
 
 before(function (next) {
-	userFix.createFixtures(next);
+	ufix.createFixtures(next);
 });
 
 before(function (next) {
@@ -35,7 +35,7 @@ var pid;
 
 describe("deleting by admin", function () {
 	it("given user1 session", function (next) {
-		userFix.loginUser1(next);
+		ufix.loginUser1(next);
 	});
 	it("given photo", function (next) {
 		this.timeout(10000);
@@ -49,7 +49,7 @@ describe("deleting by admin", function () {
 		});
 	});
 	it("given admin session", function (next) {
-		userFix.loginAdmin(next);
+		ufix.loginAdmin(next);
 	});
 	it("should fail", function (next) {
 		var p = photo.photoPath(pid) + '/' + pid + '-' + '2160.jpg';
@@ -66,7 +66,7 @@ describe("deleting by admin", function () {
 
 describe("deleting photo", function () {
 	it("given user1 session", function (next) {
-		userFix.loginUser1(next);
+		ufix.loginUser1(next);
 	});
 	it("given photo", function (next) {
 		this.timeout(10000);
@@ -94,7 +94,7 @@ describe("deleting photo", function () {
 
 describe("deleting other's photo", function () {
 	it("given user1 session", function (next) {
-		userFix.loginUser1(next);
+		ufix.loginUser1(next);
 	});
 	it("given photo", function (next) {
 		this.timeout(10000);
@@ -108,7 +108,7 @@ describe("deleting other's photo", function () {
 		});
 	});
 	it("given user2 session", function (next) {
-		userFix.loginUser2(next);
+		ufix.loginUser2(next);
 	});
 	it("should fail", function (next) {
 		var p = photo.photoPath(pid) + '/' + pid + '-' + '2160.jpg';

@@ -8,20 +8,6 @@ init.add(function (next) {
 
 	var users = [];
 
-	exports.cacheUser = function (user) {
-		users[user._id] = user;
-	};
-
-	exports.cachedUser = function (id, next) {
-		var user = users[id];
-		if (user) return next(null, user);
-		mongo.findUser(id, function (err, user) {
-			if (err) return next(err);
-			users[id] = user;
-			next(null, user);
-		});
-	};
-
 	exports.createUser = function (form, next) {
 		checkForm(form, function (err) {
 			if (err) return next(err);
@@ -33,16 +19,16 @@ init.add(function (next) {
 						fields: [{ name: 'name', msg: error.msg.NAME_DUPE }]
 					}));
 				}
-				mongo.findUserByEmail(form.email, function (err, u) {
+				mongo.findUserByEmail(form.email, function (err, user) {
 					if (err) return next(err);
-					if (u) {
+					if (user) {
 						return next(error({
 							rc: error.INVALID_DATA,
 							fields: [{ name: 'email', msg: error.msg.EMAIL_DUPE }]
 						}));
 					}
 					var now = new Date();
-					u = {
+					user = {
 						_id: mongo.newUserId(),
 						name: form.name,
 						email: form.email,
@@ -51,15 +37,14 @@ init.add(function (next) {
 						cdate: now,
 						adate: now,
 						pdate: null,
-						disk: 0,
 						profile: ''
 					};
 					if (form.admin) {
-						u.admin = true;
+						user.admin = true;
 					}
-					mongo.insertUser(u, function (err) {
+					mongo.insertUser(user, function (err) {
 						if (err) return next(err);
-						next(null, u);
+						next(null, user);
 					});
 				});
 			});
@@ -94,5 +79,29 @@ init.add(function (next) {
 		next();
 	}
 
+	exports.findCachedUserByEmail = function (email, password, next) {
+		mongo.findUserByEmail(email, function (err, user) {
+			if (err) return next(err);
+			if (!user || !bcrypt.compareSync(password, user.hash)) {
+				return next(error(error.INVALID_PASSWORD));
+			}
+			users[user._id] = user;
+			next(null, user);
+		});
+	};
+
+	exports.findCachedUser = function (id, next) {
+		var user = users[id];
+		if (user) {
+			return next(null, user);
+		}
+		mongo.findUser(id, function (err, user) {
+			if (err) return next(err);
+			users[user._id] = user;
+			next(null, user);
+		});
+	};
+
 	next();
+
 });

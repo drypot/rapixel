@@ -88,7 +88,7 @@ init.add(function () {
 					return showError.system(res.body.err);
 				}
 				var $regModal = $('#reg-modal');
-				$regModal.on('hidden', function () {
+				$regModal.on('hidden.bs.modal', function () {
 					location = '/users/login';
 				});
 				$regModal.modal('show');

@@ -14,16 +14,20 @@ before(function (next) {
 before(function(next) {
 	var app = express.app;
 
-	app.get('/test', function (req, res) {
-		res.send('test home');
-	});
-
 	app.get('/test/no-action', function (req, res, next) {
 		next();
 	});
 
+	app.get('/test/send-hello', function (req, res) {
+		res.send('hello');
+	});
+
 	app.get('/test/send-invalid-data', function (req, res) {
 		res.jsonErr(error(error.INVALID_DATA));
+	});
+
+	app.get('/api/send-empty', function (req, res) {
+		res.json({});
 	});
 
 	express.listen();
@@ -31,30 +35,7 @@ before(function(next) {
 	next();
 });
 
-describe("/hello", function () {
-	it("should return 'hello'", function (next) {
-		express.get('/api/hello', function (err, res) {
-			should(!err);
-			should(!res.error);
-			res.should.be.json;
-			res.body.should.equal('hello');
-			next();
-		});
-	});
-});
-
-describe("/test", function () {
-	it("should return 'test home'", function (next) {
-		express.get('/test', function (err, res) {
-			should(!err);
-			should(!res.error);
-			res.text.should.equal('test home');
-			next();
-		});
-	});
-});
-
-describe("/test/no-action", function () {
+describe("no end point test", function () {
 	it("should return not found", function (next) {
 		express.get('/no-action', function (err, res) {
 			should(!err);
@@ -64,7 +45,18 @@ describe("/test/no-action", function () {
 	});
 });
 
-describe("/test/send-invalid-data", function () {
+describe("return text test", function () {
+	it("should return 'hello'", function (next) {
+		express.get('/test/send-hello', function (err, res) {
+			should(!err);
+			should(!res.error);
+			res.text.should.equal('hello');
+			next();
+		});
+	});
+});
+
+describe("return error test", function () {
 	it("should return rc", function (next) {
 		express.get('/test/send-invalid-data').end(function (err, res) {
 			should(!err);
@@ -78,3 +70,25 @@ describe("/test/send-invalid-data", function () {
 	});
 });
 
+describe("Cache-Control test", function () {
+	describe("/test/send-hello", function () {
+		it("should return private", function (next) {
+			express.get('/test/send-hello', function (err, res) {
+				should(!err);
+				should(!res.error);
+				res.get('Cache-Control').should.equal('private');
+				next();
+			});
+		});
+	});
+	describe("/api/send-empty", function () {
+		it("should return private", function (next) {
+			express.get('/api/send-empty', function (err, res) {
+				should(!err);
+				should(!res.error);
+				res.get('Cache-Control').should.equal('no-cache');
+				next();
+			});
+		});
+	});
+});

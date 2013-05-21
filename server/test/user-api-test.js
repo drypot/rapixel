@@ -19,6 +19,7 @@ before(function () {
 });
 
 describe("creating", function () {
+	// BEFORE EACH, REMOVE 가 돌고 있다. 헷갈리지 말것.
 	beforeEach(function (next) {
 		mongo.users.remove(next);
 	});
@@ -44,17 +45,13 @@ describe("creating", function () {
 		});
 	});
 	it("should success when name length 2", function (next) {
-		var form = { name: 'ab', email: 'abc@def.com', password: '1234' };
+		var form = { name: 'abxx', email: 'abc@def.com', password: '1234' };
 		express.post('/api/users').send(form).end(function (err,res) {
+			should(!err);
+			should(!res.error);
 			should(!res.body.err);
-			next();
-		});
-	});
-	it("should return userId", function (next) {
-		var form = { name: 'ab', email: 'abc@def.com', password: '1234' };
-		express.post('/api/users').send(form).end(function (err,res) {
-			should(!res.body.err);
-			should(res.body.userId);
+			should(res.body.user);
+			should(res.body.user._id);
 			next();
 		});
 	});

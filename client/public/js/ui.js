@@ -9,9 +9,9 @@ init.add(function() {
 		$title.append('<h3>' + header + '</h3>');
 		$body.empty();
 		$body.append('<p>' + text + '</p>');
-		$modal.off('hidden');
+		$modal.off('hidden.bs.modal');
 		if (next) {
-			$modal.on('hidden', next);
+			$modal.on('hidden.bs.modal', next);
 		}
 		$modal.modal('show');
 	};
@@ -24,12 +24,13 @@ init.add(function() {
 		$body.append('<pre>' + err.message + '</pre>');
 		$body.append('<h3>Stack</h3>');
 		$body.append('<pre>' + err.stack + '</pre>');
-		$modal.off('hidden');
+		$modal.off('hidden.bs.modal');
 		if (next) {
-			$modal.on('hidden', next);
+			$modal.on('hidden.bs.modal', next);
 		}
 		$modal.modal('show');
 	};
+
 });
 
 init.add(function () {

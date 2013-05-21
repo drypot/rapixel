@@ -37,13 +37,8 @@ var request = superagent;
 		funcs.push(func);
 	};
 
-	window.init.reset = function () {
-		funcs = [];
-	}
-
-	window.init.run = function () {
+	$(function () {
 		console.log('init:');
-		//console.log('before init: ' + Object.keys(window));
 
 		var i = 0;
 		var len = funcs.length;
@@ -51,14 +46,6 @@ var request = superagent;
 		for (i = 0; i < len; i++) {
 			funcs[i]();
 		}
-
-		//console.log('after init: ' + Object.keys(window));
-	};
-
-	init.reset();
-
-	$(function () {
-		init.run();
 	});
 
 })();
@@ -100,28 +87,3 @@ init.add(function () {
 
 });
 
-init.add(function () {
-
-	window.ping = function () {
-		request.get('/api/hello').end(function (err, res) {
-			if (err || !res.ok) {
-				console.log('ping: error');
-				return;
-			}
-			console.log('ping:');
-		});
-	};
-
-	window.ping.repeat = function () {
-		window.setInterval(function() {
-			request.get('/api/hello').end(function (err, res) {
-				if (err || !res.ok) {
-					console.log('ping: error');
-					return;
-				}
-				console.log('ping:');
-			});
-		}, 1000 * 60 * 5); // 5 min
-	};
-
-});
