@@ -1,7 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 
-exports.mkdirs = function () {
+exports.makeDirs = function () {
 	var next = arguments[arguments.length - 1];
 	var subs = arguments;
 	var p = null;
@@ -12,7 +12,7 @@ exports.mkdirs = function () {
 		}
 		var sub = subs[i++];
 		if (Array.isArray(sub)) {
-			mkArray(p, sub, function (err, _path) {
+			makeDirsArray(p, sub, function (err, _path) {
 				if (err) return next(err);
 				p = _path;
 				setImmediate(mkdir);
@@ -20,7 +20,7 @@ exports.mkdirs = function () {
 			return;
 		}
 		p = !p ? sub : p + '/' + sub;
-		mkString(p, function (err) {
+		makeDirsString(p, function (err) {
 			if (err) return next(err);
 			setImmediate(mkdir);
 		});
@@ -29,7 +29,7 @@ exports.mkdirs = function () {
 };
 
 // 불필요한 클로저가 생기는 것을 막기 위해 밖으로 뽑았다.
-function mkArray(p, ary, next) {
+function makeDirsArray(p, ary, next) {
 	var i = 0;
 	function mkdir() {
 		if (i == ary.length) {
@@ -45,10 +45,10 @@ function mkArray(p, ary, next) {
 	mkdir();
 }
 
-function mkString(p, next) {
+function makeDirsString(p, next) {
 	fs.mkdir(p, 0755, function(err) {
 		if (err && err.code === 'ENOENT') {
-			mkString(path.dirname(p), function (err) {
+			makeDirsString(path.dirname(p), function (err) {
 				if (err) return next(err);
 				fs.mkdir(p, 0755, function(err) {
 					if (err && err.code !== 'EEXIST') return next(err);
@@ -64,7 +64,7 @@ function mkString(p, next) {
 	});
 }
 
-exports.rmAll = function rmAll(p, next) {
+exports.removeDirs = function removeDirs(p, next) {
 	fs.stat(p, function (err, stat) {
 		if (err) return next(err);
 		if(stat.isFile()) {
@@ -87,7 +87,7 @@ exports.rmAll = function rmAll(p, next) {
 						return;
 					}
 					var fname = fnames[i++];
-					rmAll(p + '/' + fname, function (err) {
+					removeDirs(p + '/' + fname, function (err) {
 						if (err) return next(err);
 						setImmediate(unlink);
 					});
@@ -107,7 +107,7 @@ exports.emptyDir = function (p, next) {
 				return next();
 			}
 			var fname = fnames[i++];
-			exports.rmAll(p + '/' + fname, function (err) {
+			exports.removeDirs(p + '/' + fname, function (err) {
 				setImmediate(unlink);
 			});
 		}

@@ -14,7 +14,7 @@ before(function (next) {
 	});
 });
 
-describe("rmAll", function () {
+describe("removeDirs", function () {
 	beforeEach(function (next) {
 		fs.mkdir(testdir + '/sub1', 0755, function (err) {
 			fs.mkdir(testdir + '/sub2', 0755, function (err) {
@@ -34,7 +34,7 @@ describe("rmAll", function () {
 		fs.existsSync(testdir + '/sub1/f1.txt').should.true;
 		fs.existsSync(testdir + '/sub2/f2.txt').should.true;
 		fs.existsSync(testdir + '/sub2/sub3/f3.txt').should.true;
-		fs2.rmAll(testdir + '/sub2/f2.txt', function (err) {
+		fs2.removeDirs(testdir + '/sub2/f2.txt', function (err) {
 			if (err) return next(err);
 			fs.existsSync(testdir + '/sub1').should.true;
 			fs.existsSync(testdir + '/sub2').should.true;
@@ -52,7 +52,7 @@ describe("rmAll", function () {
 		fs.existsSync(testdir + '/sub1/f1.txt').should.true;
 		fs.existsSync(testdir + '/sub2/f2.txt').should.true;
 		fs.existsSync(testdir + '/sub2/sub3/f3.txt').should.true;
-		fs2.rmAll(testdir + '/sub1', function (err) {
+		fs2.removeDirs(testdir + '/sub1', function (err) {
 			if (err) return next(err);
 			fs.existsSync(testdir + '/sub1').should.false;
 			fs.existsSync(testdir + '/sub2').should.true;
@@ -70,7 +70,7 @@ describe("rmAll", function () {
 		fs.existsSync(testdir + '/sub1/f1.txt').should.true;
 		fs.existsSync(testdir + '/sub2/f2.txt').should.true;
 		fs.existsSync(testdir + '/sub2/sub3/f3.txt').should.true;
-		fs2.rmAll(testdir + '/sub2', function (err) {
+		fs2.removeDirs(testdir + '/sub2', function (err) {
 			if (err) return next(err);
 			fs.existsSync(testdir + '/sub1').should.true;
 			fs.existsSync(testdir + '/sub2').should.false;
@@ -108,13 +108,13 @@ describe("emtpyDir", function () {
 	});
 });
 
-describe("mkdirs", function () {
+describe("makeDirs", function () {
 	before(function (next) {
 		fs2.emptyDir(testdir, next);
 	});
 	it("can make dir", function (next) {
 		fs.existsSync(testdir + '/sub1').should.be.false;
-		fs2.mkdirs(testdir, 'sub1', function (err, dir) {
+		fs2.makeDirs(testdir, 'sub1', function (err, dir) {
 			should(!err);
 			dir.should.equal(testdir + '/sub1');
 			fs.existsSync(testdir + '/sub1').should.be.true;
@@ -123,7 +123,7 @@ describe("mkdirs", function () {
 	});
 	it("can make dir in existing dir", function (next) {
 		fs.existsSync(testdir + '/sub1/sub2').should.be.false;
-		fs2.mkdirs(testdir, 'sub1', 'sub2', function (err, dir) {
+		fs2.makeDirs(testdir, 'sub1', 'sub2', function (err, dir) {
 			should(!err);
 			dir.should.equal(testdir + '/sub1/sub2');
 			fs.existsSync(testdir + '/sub1/sub2').should.be.true;
@@ -132,7 +132,7 @@ describe("mkdirs", function () {
 	});
 	it("can make dirs with array ", function (next) {
 		fs.existsSync(testdir + '/ary1/ary2/ary3').should.be.false;
-		fs2.mkdirs(testdir, [ 'ary1', 'ary2', 'ary3' ], function (err, dir) {
+		fs2.makeDirs(testdir, [ 'ary1', 'ary2', 'ary3' ], function (err, dir) {
 			should(!err);
 			dir.should.equal(testdir + '/ary1/ary2/ary3');
 			fs.existsSync(testdir + '/ary1/ary2/ary3').should.be.true;
@@ -141,7 +141,7 @@ describe("mkdirs", function () {
 	});
 	it("can make dirs with string ", function (next) {
 		fs.existsSync(testdir + '/str1/str2/str3').should.be.false;
-		fs2.mkdirs(testdir, 'str1/str2/str3', function (err, dir) {
+		fs2.makeDirs(testdir, 'str1/str2/str3', function (err, dir) {
 			should(!err);
 			dir.should.equal(testdir + '/str1/str2/str3');
 			fs.existsSync(testdir + '/str1/str2/str3').should.be.true;
@@ -150,7 +150,7 @@ describe("mkdirs", function () {
 	});
 	it("can make dirs with string and array ", function (next) {
 		fs.existsSync(testdir + '/c1/c2/c3/c4/c5').should.be.false;
-		fs2.mkdirs(testdir, 'c1', [ 'c2', 'c3' ], 'c4/c5', function (err, dir) {
+		fs2.makeDirs(testdir, 'c1', [ 'c2', 'c3' ], 'c4/c5', function (err, dir) {
 			should(!err);
 			dir.should.equal(testdir + '/c1/c2/c3/c4/c5');
 			fs.existsSync(testdir + '/c1/c2/c3/c4/c5').should.be.true;
