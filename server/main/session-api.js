@@ -2,6 +2,7 @@ var init = require('../main/init');
 var userl = require('../main/user');
 var session = require('../main/session');
 var express = require('../main/express');
+var error = require('../main/error');
 
 init.add(function () {
 
@@ -14,6 +15,9 @@ init.add(function () {
 		var password = String(req.body.password || '').trim();
 		userl.findCachedUserByEmail(email, password, function (err, user) {
 			if (err) return res.jsonErr(err);
+			if (!user) {
+				return res.jsonErr(error('email', error.msg.USER_NOT_FOUND));
+			}
 			if (req.body.remember) {
 				res.cookie('email', email, {
 					maxAge: 30 * 24 * 60 * 60 * 1000,

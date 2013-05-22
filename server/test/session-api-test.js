@@ -51,24 +51,31 @@ describe("login", function () {
 	it("should fail with invalid email", function (next) {
 		var form = { email: 'xxx@xxx.com', password: 'xxxx' };
 		express.post('/api/sessions').send(form).end(function (err, res) {
+			should(!err);
 			should(!res.error);
 			should(res.body.err);
-			res.body.err.rc.should.equal(error.INVALID_PASSWORD);
+			res.body.err.rc.should.equal(error.ERROR_SET);
+			res.body.err.errors[0].name.should.equal('email');
+			res.body.err.errors[0].msg.should.equal(error.msg.USER_NOT_FOUND);
 			next();
 		})
 	});
 	it("should fail with invalid password", function (next) {
 		var form = { email: ufix.user1.email, password: 'xxxx' };
 		express.post('/api/sessions').send(form).end(function (err, res) {
+			should(!err);
 			should(!res.error);
 			should(res.body.err);
-			res.body.err.rc.should.equal(error.INVALID_PASSWORD);
+			res.body.err.rc.should.equal(error.ERROR_SET);
+			res.body.err.errors[0].name.should.equal('email');
+			res.body.err.errors[0].msg.should.equal(error.msg.USER_NOT_FOUND);
 			next();
 		})
 	});
 	it("should success", function (next) {
 		var form = { email: ufix.user1.email, password: ufix.user1.password };
 		express.post('/api/sessions').send(form).end(function (err, res) {
+			should(!err);
 			should(!res.error);
 			should(!res.body.err);
 			res.body.user.name.should.equal(ufix.user1.name);
@@ -83,6 +90,8 @@ describe("accessing user resource", function () {
 	});
 	it("should fail", function (next) {
 		express.get('/test/user').end(function (err, res) {
+			should(!err);
+			should(!res.error);
 			should(res.body.err);
 			res.body.err.rc.should.equal(error.NOT_AUTHENTICATED);
 			next();
@@ -93,6 +102,8 @@ describe("accessing user resource", function () {
 	});
 	it("should success", function (next) {
 		express.get('/test/user').end(function (err, res) {
+			should(!err);
+			should(!res.error);
 			should(!res.body.err);
 			next();
 		})
@@ -105,6 +116,8 @@ describe("accessing admin resource", function () {
 	});
 	it("should fail", function (next) {
 		express.get('/test/admin').end(function (err, res) {
+			should(!err);
+			should(!res.error);
 			should(res.body.err);
 			res.body.err.rc.should.equal(error.NOT_AUTHENTICATED);
 			next();
@@ -115,6 +128,8 @@ describe("accessing admin resource", function () {
 	});
 	it("should fail", function (next) {
 		express.get('/test/admin').end(function (err, res) {
+			should(!err);
+			should(!res.error);
 			should(res.body.err);
 			res.body.err.rc.should.equal(error.NOT_AUTHORIZED);
 			next();
@@ -125,6 +140,8 @@ describe("accessing admin resource", function () {
 	});
 	it("should fail", function (next) {
 		express.get('/test/admin').end(function (err, res) {
+			should(!err);
+			should(!res.error);
 			should(!res.body.err);
 			next();
 		})
@@ -138,6 +155,8 @@ describe("accessing /test/user with auto login", function () {
 	});
 	it("should fail", function (next) {
 		express.get('/test/user').end(function (err, res) {
+			should(!err);
+			should(!res.error);
 			should(res.body.err);
 			next();
 		});
@@ -147,6 +166,8 @@ describe("accessing /test/user with auto login", function () {
 	});
 	it("should success", function (next) {
 		express.get('/test/user').end(function (err, res) {
+			should(!err);
+			should(!res.error);
 			should(!res.body.err);
 			next();
 		})
@@ -157,6 +178,8 @@ describe("accessing /test/user with auto login", function () {
 	});
 	it("should fail", function (next) {
 		express.get('/test/user').end(function (err, res) {
+			should(!err);
+			should(!res.error);
 			should(res.body.err);
 			next();
 		})
@@ -182,6 +205,8 @@ describe("accessing /test/user with auto login", function () {
 	});
 	it("should success", function (next) {
 		express.get('/test/user').end(function (err, res) {
+			should(!err);
+			should(!res.error);
 			should(!res.body.err);
 			next();
 		});
@@ -191,6 +216,8 @@ describe("accessing /test/user with auto login", function () {
 	});
 	it("should fail", function (next) {
 		express.get('/test/user').end(function (err, res) {
+			should(!err);
+			should(!res.error);
 			should(res.body.err);
 			next();
 		})

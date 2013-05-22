@@ -31,35 +31,21 @@ init.add(function () {
 		if (res.locals.api) {
 			return next();
 		}
-		autoLogin(req, res, function (err, user) {
-			if (err) return next(err);
-			if (user) {
-				res.locals.user = user;
-			}
-			next();
-		});
-	};
-
-	function autoLogin(req, res, next) {
 		var email = req.cookies.email;
 		var password = req.cookies.password;
 		if (!email || !password) {
 			return next();
 		}
 		userl.findCachedUserByEmail(email, password, function (err, user) {
-			if (err) {
-				if (err.rc == error.INVALID_PASSWORD) {
-					res.clearCookie(email);
-					res.clearCookie(password);
-					return next();
-				}
-				return next(err);
+			if (err) return next(err);
+			if (!user) {
+				res.clearCookie(email);
+				res.clearCookie(password);
+				return next();
 			}
-			exports.initSession(req, user, function (err) {
-				if (err) return next(err);
-				next(null, user);
-			});
+			res.locals.user = user;
+			exports.initSession(req, user, next);
 		});
-	}
+	};
 
 });
