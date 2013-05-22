@@ -9,6 +9,48 @@ init.add(function (next) {
 
 	console.log('upload: ' + config.data.uploadDir);
 
+	exports.getTmpPath = function (fname) {
+		return exports.tmp + '/' + fname;
+	}
+
+	exports.getTmpFiles = function (_files) {
+		var files = [];
+		if (_files) {
+			if (!Array.isArray(_files)) {
+				pushFile(files, _files);
+			} else {
+				for (var i = 0; i < _files.length; i++) {
+					pushFile(files, _files[i]);
+				}
+			}
+		}
+		return files;
+	};
+
+	function pushFile(files, file) {
+		if (/*file.size &&*/ file.name) {
+			files.push({
+				oname: file.name,
+				tname: path.basename(file.path)
+			});
+		}
+	}
+
+	exports.deleteTmpFiles = function (files, next) {
+		if (files) {
+			var i = 0;
+			function del() {
+				if (i == files.length) return next();
+				var file = files[i++];
+				fs.unlink(exports.getTmpPath(path.basename(file.tname)), function (err) {
+					if (err && err.code !== 'ENOENT') return next(err);
+					setImmediate(del);
+				});
+			}
+			del();
+		}
+	}
+
 	exports.tmpDeleter = function (files, next) {
 		return function () {
 			var _arg = arguments;
@@ -33,14 +75,9 @@ init.add(function (next) {
 	};
 
 	var pathes = [
+		exports.tmp = config.data.uploadDir + '/tmp',
 		exports.pub = config.data.uploadDir + '/public',
-		exports.pubPhoto = config.data.uploadDir + '/public/photo',
-		exports.tmp = config.data.uploadDir + '/tmp'
-
-//		별도 원본 아카아브 폴더는 안 만들도록 한다.
-// 		급할 때 웹에서 원본을 억세스 할 수 있도록 버전들과 함께 노출.
-//		exports.archive = config.data.uploadDir + '/archive',
-//		exports.archivePhoto = config.data.uploadDir + '/archive/photo',
+		exports.pubPhoto = config.data.uploadDir + '/public/photo'
 	];
 
 	var i = 0;
@@ -50,7 +87,7 @@ init.add(function (next) {
 			return;
 		}
 		var p = pathes[i++];
-		fs2.mkdirs(p, function (err) {
+		fs2.makeDirs(p, function (err) {
 			if (err) return next(err);
 			setImmediate(mkdir);
 		})

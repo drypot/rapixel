@@ -14,7 +14,7 @@ before(function (next) {
 
 describe("tmpDeleter", function () {
 	before(function (next) {
-		fs2.mkdirs('tmp', 'upload-test', function (err) {
+		fs2.makeDirs('tmp', 'upload-test', function (err) {
 			fs.writeFile('tmp/upload-test/f1.txt', 'abc', function (err) {
 				if (err) return next(err);
 				fs.writeFile('tmp/upload-test/f2.txt', 'abc', function (err) {
