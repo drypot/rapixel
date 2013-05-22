@@ -23,17 +23,12 @@ html
 
 		if locals.user
 			script
-				window.user = { name: '#{user.name}' };
+				window.user = !{JSON.stringify({ name: user.name })};
 
 		script(src="/js/base.js")
 		script(src="/js/ui.js")
 		script(src="/js/session.js")
 		script(src="/js/photo.js")
-
-		script
-			init.add(function () {
-				session.autoLogin();
-			});
 
 	if !locals.photoView
 		body
@@ -45,7 +40,7 @@ html
 						span.icon-bar
 					a.navbar-brand(href="/")= siteTitle
 					.nav-collapse.collapse.navbar-responsive-collapse
-						ul.nav.navbar-nav
+						ul.nav.navbar-nav.pull-right
 							if locals.user
 								li: a(href="/photos/new") Upload
 								li: a#logout-btn(href="/users/logout") Logout
@@ -79,11 +74,13 @@ html
 
 	#file-input-templ.hide
 		.file
-			input.hide(type='file', name='file', multiple='multiple')
+			div(style='width: 0px; height: 0px;')
+				input(type='file', multiple='multiple')
 			.input-group
 				input(type='text', disabled)
 				span.input-group-btn
 					button.btn.btn-default File
+
 	#file-input-templ-msie.hide
 		.file
-			input(type='file', name='file')
+			input(type='file')

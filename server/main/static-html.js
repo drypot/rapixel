@@ -15,28 +15,30 @@ init.add(function () {
 	app.get('/users', function (req, res) {
 		mongo.users.count(function (err, count) {
 			if (err) return res.renderErr(err);
-			res.render('users', { count: count });
+			res.render('user-list', { count: count });
 		});
 	});
 
 	app.get('/users/login', function (req, res) {
-		res.render('login');
+		res.render('user-login', {
+			newUser: req.query.hasOwnProperty('newuser')
+		});
 	});
 
 	app.get('/users/register', function (req, res) {
-		res.render('register');
+		res.render('user-register');
 	});
 
 	app.get('/company', function (req, res) {
-		res.render('company');
+		res.render('about-company');
 	});
 
 	app.get('/privacy', function (req, res) {
-		res.render('privacy');
+		res.render('about-privacy');
 	});
 
 	app.get('/help', function (req, res) {
-		res.render('help');
+		res.render('about-help');
 	});
 
 });

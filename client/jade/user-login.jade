@@ -11,6 +11,14 @@ block content
 
 	.container
 		.content
+			if newUser
+				.page-header
+					h2 Thank you
+
+				h4 감사합니다. 회원으로 가입되셨습니다.
+				h4 등록하신 이메일과 비밀번호로 로그인하실 수 있습니다.
+				h4 자주 들러주십시오. ^^
+
 			.page-header
 				h2 Login
 
@@ -23,6 +31,6 @@ block content
 					input.input-with-feedback.col-lg-5(name="password", type="password")
 				.checkbox
 					label Remember
-						input(name="remember", type="checkbox")
-				.form-action
+					input(name="remember", type="checkbox")
+				.form-actions
 					button.btn.btn-primary(name="send") Login
