@@ -54,14 +54,12 @@ init.add(function () {
 
 	var error = window.error = {};
 
+	error.ERROR_SET = 10;
+
 	error.NOT_AUTHENTICATED = 101;
 	error.NOT_AUTHORIZED = 102;
-	error.INVALID_PASSWORD = 103;
 
 	error.INVALID_DATA = 201;
-	error.INVALID_CATEGORY = 202;
-	error.INVALID_THREAD = 203;
-	error.INVALID_POST = 204
 
 });
 
@@ -74,13 +72,13 @@ init.add(function () {
 	window.url = {};
 	window.url.pathnames = window.location.pathname.slice(1).split('/');
 	window.url.query = (function () {
-		var plusPattern = /\+/g;
-		var paramPattern = /([^&=]+)=?([^&]*)/g;
+		var plusRe = /\+/g;
+		var paramRe = /([^&=]+)=?([^&]*)/g;
 		var search = window.location.search.slice(1);
 		var query = {};
 		var match;
-		while (match = paramPattern.exec(search)) {
-			query[match[1]] = decodeURIComponent(match[2].replace(plusPattern, " "));
+		while (match = paramRe.exec(search)) {
+			query[match[1]] = decodeURIComponent(match[2].replace(plusRe, " "));
 		}
 		return query;
 	})();
