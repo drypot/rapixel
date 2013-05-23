@@ -12,14 +12,22 @@ before(function (next) {
 	init.run(next);
 });
 
+var path1, path2, path3;
+
+before(function () {
+	path1 = upload.getTmpPath('f1.txt');
+	path2 = upload.getTmpPath('f2.txt');
+	path3 = upload.getTmpPath('f3.txt');
+});
+
 describe("tmpDeleter", function () {
 	before(function (next) {
 		fs2.makeDirs('tmp', 'upload-test', function (err) {
-			fs.writeFile('tmp/upload-test/f1.txt', 'abc', function (err) {
+			fs.writeFile(path1, 'abc', function (err) {
 				if (err) return next(err);
-				fs.writeFile('tmp/upload-test/f2.txt', 'abc', function (err) {
+				fs.writeFile(path2, 'abc', function (err) {
 					if (err) return next(err);
-					fs.writeFile('tmp/upload-test/f3.txt', 'abc', function (err) {
+					fs.writeFile(path3, 'abc', function (err) {
 						next(err);
 					});
 				});
@@ -27,22 +35,22 @@ describe("tmpDeleter", function () {
 		});
 	});
 	it("should success", function (next) {
-		fs.existsSync('tmp/upload-test/f1.txt').should.true;
-		fs.existsSync('tmp/upload-test/f2.txt').should.true;
-		fs.existsSync('tmp/upload-test/f3.txt').should.true;
+		fs.existsSync(path1).should.true;
+		fs.existsSync(path2).should.true;
+		fs.existsSync(path3).should.true;
 		var files = [
-			{ path: 'tmp/upload-test/f1.txt' },
-			{ path: 'tmp/upload-test/f2.txt' }
+			{ tname: 'f1.txt' },
+			{ tname: 'f2.txt' }
 		];
-		var deleter = upload.tmpDeleter(files, function (err, param) {
-			should(!err);
+		var next2 = upload.tmpDeleter(files, function (err, param) {
+			err.should.equal('errxx');
 			param.should.equal('param1');
-			fs.existsSync('tmp/upload-test/f1.txt').should.false;
-			fs.existsSync('tmp/upload-test/f2.txt').should.false;
-			fs.existsSync('tmp/upload-test/f3.txt').should.true;
+			fs.existsSync(path1).should.false;
+			fs.existsSync(path2).should.false;
+			fs.existsSync(path3).should.true;
 			next();
 		});
-		deleter(null, 'param1');
+		next2('errxx', 'param1');
 	});
 });
 

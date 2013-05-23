@@ -13,23 +13,27 @@ init.add(function (next) {
 		return exports.tmp + '/' + fname;
 	}
 
-	exports.getTmpFiles = function (_files) {
-		var files = [];
-		if (_files) {
-			if (!Array.isArray(_files)) {
-				pushFile(files, _files);
+	exports.getTmpFiles = function (req) {
+		var files = {};
+		for (var key in req.files) {
+			var group = req.files[key];
+			if (!Array.isArray(group)) {
+				pushFile(files, key, group);
 			} else {
-				for (var i = 0; i < _files.length; i++) {
-					pushFile(files, _files[i]);
+				for (var i = 0; i < group.length; i++) {
+					pushFile(files, key, group[i]);
 				}
 			}
 		}
 		return files;
 	};
 
-	function pushFile(files, file) {
+	function pushFile(files, key, file) {
 		if (/*file.size &&*/ file.name) {
-			files.push({
+			if (!files[key]) {
+				files[key] = [];
+			}
+			files[key].push({
 				oname: file.name,
 				tname: path.basename(file.path)
 			});
@@ -42,7 +46,7 @@ init.add(function (next) {
 			function del() {
 				if (i == files.length) return next();
 				var file = files[i++];
-				fs.unlink(exports.getTmpPath(path.basename(file.tname)), function (err) {
+				fs.unlink(exports.getTmpPath(path.basename(file)), function (err) {
 					if (err && err.code !== 'ENOENT') return next(err);
 					setImmediate(del);
 				});
@@ -57,16 +61,13 @@ init.add(function (next) {
 			if (!files) {
 				return next.apply(null, _arg);
 			}
-			if (!files.length) {
-				files = [files];
-			}
 			var i = 0;
 			function unlink() {
 				if (i == files.length) {
 					return next.apply(null, _arg);
 				}
 				var file = files[i++];
-				fs.unlink(file.path, function (err) {
+				fs.unlink(exports.getTmpPath(path.basename(file.tname)), function (err) {
 					setImmediate(unlink);
 				});
 			}
