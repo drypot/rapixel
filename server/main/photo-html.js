@@ -1,6 +1,6 @@
 var init = require('../main/init');
 var express = require('../main/express');
-var photo = require('../main/photo');
+var photol = require('../main/photo');
 var error = require('../main/error');
 var UrlMaker = require('../main/UrlMaker');
 
@@ -12,10 +12,10 @@ init.add(function () {
 
 	app.get('/photos/:pid([0-9]+)', function (req, res) {
 		var pid = parseInt(req.params.pid) || 0;
-		photo.findPhoto(pid, function (err, p) {
+		photol.findPhoto(pid, function (err, photo) {
 			if (err) return res.renderErr(err);
 			res.render('photo-view', {
-				photo: p,
+				photo: photo,
 				photoView: true
 			});
 		});
@@ -30,7 +30,7 @@ init.add(function () {
 		pg = pg < 1 ? 1 : pg;
 		var pgsize = parseInt(req.query.ps) || 16;
 		pgsize = pgsize > 64 ? 64 : pgsize < 1 ? 1 : pgsize;
-		photo.list(pg, pgsize, function (err, photos, last) {
+		photol.list(pg, pgsize, function (err, photos, last) {
 			if (err) return res.renderErr(err);
 			prevNext(pg, last, function (prevUrl, nextUrl) {
 				res.render('photo-list', {
@@ -60,28 +60,15 @@ init.add(function () {
 	}
 
 	app.get('/photos/new', function (req, res) {
-		req.findUser(function (err, u) {
+		req.findUser(function (err, user) {
 			if (err) return res.renderErr(err);
 			var now = new Date();
-			photo.checkCycle(u, now, function (err) {
-				if (err && err.rc === error.PHOTO_CYCLE) {
-					err.message = '하루에 한 장 등록하실 수 있습니다.\n다음 등록까지 ' + err.hours + ' 시간 남으셨습니다.'
-				}
-				if (err) return res.renderErr(err);
-				res.render('photo-new');
+			photol.findHours(user, now, function (err, hours) {
+				res.render('photo-new', {
+					hours: hours
+				});
 			});
 		});
 	});
-
-//	app.post('/photos/upload', function (req, res) {
-//		req.findUser(function (err, u) {
-//			if (err) return res.renderErr(err);
-//			photo.createPhoto(req, u, function (err, photoId) {
-//				if (err) return res.renderErr(err);
-//				res.redirect('/');
-//			});
-//		});
-//	});
-
 
 });

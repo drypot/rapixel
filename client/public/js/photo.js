@@ -36,7 +36,7 @@ init.add(function () {
 		var srcHeight = prevHeight ? prevHeight : height;
 		var srcWidth = srcHeight * 1.77777;
 		var $img = $('<img>', {
-			src: p.dirUrl + '/' + p._id + '-' + srcHeight + '.jpg'
+			src: p.dir + '/' + p._id + '-' + srcHeight + '.jpg'
 		});
 
 		$window.on('resize', function () {
@@ -58,66 +58,15 @@ init.add(function () {
 init.add(function () {
 
 	photo.initNewForm = function () {
-		var $form = $('#new-form');
-		var sender = new Sender($form);
-
-		addFileInput($form);
-
-		$form.ajaxForm({
-			dataType: 'json',
-			beforeSend: function () {
-				alerts.clear($form);
-				sender.beforeSend();
-			},
-			success: function (body) {
-				if (body.err && (body.err.rc / 100 | 0) == 3) {
-					alerts.add($form.find('.files').parent(), body.err.message);
-					sender.complete();
-					return;
-				}
-				if (body.err) {
-					showError.system(body.err);
-					sender.complete();
-					return;
-				}
+		var $form = formty.getForm('#new-form');
+		formty.initFileGroup($form, 'files');
+		$form.$send.click(function (err, res) {
+			formty.post('/api/photos', $form, function (err) {
+				if (err) return showError(err);
 				location = '/';
-			},
-			error: function (xhr, textStatus, errorThrown) {
-				message = textStatus || errorThrown || 'Unknown Error';
-				showError.system({ message: message });
-				sender.complete();
-			}
-		});
-	};
-
-	function addFileInput($form) {
-		var $fileTempl = $('#file-input-templ');
-		var $files = $form.find('.files');
-		var basename = /[^\\]+$/;
-
-		if (msie) {
-			$files.append($('<div class="file"><input type="file" name="file" style="width:100%"></div>'));
-			return;
-		}
-		var $set = $fileTempl.children(0).clone();
-		var $file = $set.find('input[type="file"]');
-		var $text = $set.find('input[type="text"]');
-		var $btn = $set.find('button');
-		$btn.click(function () {
-			$file.click();
+			});
 			return false;
 		});
-		$file.change(function () {
-			var files = $file[0].files;
-			var text;
-			if (files && files.length > 1) {
-				text = files.length + ' files';
-			} else {
-				text = basename.exec($file.val())[0];
-			}
-			$text.val(text);
-		})
-		$files.append($set);
-	}
+	};
 
 });

@@ -25,7 +25,10 @@ block content
 					label.control-label Password
 					input.input-with-feedback.col-lg-5(name="password", type="password", maxlength=64)
 				.form-actions
-					button.btn.btn-primary(name="send") Register
+					.send-panel
+						button.btn.btn-primary(name='send') Send
+					.sending-panel.hide
+						button.btn.btn-default.disabled(name='sending') Sending
 
 			div(style='margin-top:50px; font-size:18px').
 				5 월 1 일 개발을 시작하여 개인정보변경등 기능이 많이 부족합니다.<br>

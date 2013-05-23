@@ -13,6 +13,7 @@ var ufix = require('../test/user-fixture');
 
 require('../main/session-api');
 require('../main/photo-api');
+require('../main/upload-api');
 
 before(function (next) {
 	init.run(next);
@@ -23,38 +24,48 @@ before(function (next) {
 });
 
 before(function (next) {
-	fs2.rmAll(upload.pubPhoto, next);
+	fs2.removeDirs(upload.pubPhoto, next);
 });
 
 before(function () {
 	express.listen();
 });
 
-var f1 = 'samples/b-16x9-2160.jpg';
-var pid;
+var _f1 = 'samples/b-16x9-2160.jpg';
+var _pid, _files;
 
 describe("deleting by admin", function () {
 	it("given user1 session", function (next) {
 		ufix.loginUser1(next);
 	});
-	it("given photo", function (next) {
-		this.timeout(10000);
-		express.post('/api/photos').field('comment', 'hello').attach('file', f1).end(function (err, res) {
+	it("given tmp file", function (next) {
+		express.post('/api/upload').attach('files', _f1).end(function (err, res) {
 			should(!err);
 			should(!res.error);
 			should(!res.body.err);
-			should(res.body.photoId);
-			pid = res.body.photoId;
+			_files = res.body.files;
+			next();
+		});
+	});
+	it("given photo", function (next) {
+		this.timeout(10000);
+		var form = { files: _files, comment: 'hello' };
+		express.post('/api/photos').send(form).end(function (err, res) {
+			should(!err);
+			should(!res.error);
+			should(!res.body.err);
+			should(res.body.pid);
+			_pid = res.body.pid;
 			next();
 		});
 	});
 	it("given admin session", function (next) {
 		ufix.loginAdmin(next);
 	});
-	it("should fail", function (next) {
-		var p = photo.photoPath(pid) + '/' + pid + '-' + '2160.jpg';
+	it("should success", function (next) {
+		var p = photo.getPhotoPath(_pid, _pid + '-' + '2160.jpg');
 		fs.existsSync(p).should.true;
-		express.del('/api/photos/' + pid, function (err, res) {
+		express.del('/api/photos/' + _pid, function (err, res) {
 			should(!err);
 			should(!res.error);
 			should(!res.body.err);
@@ -68,21 +79,31 @@ describe("deleting photo", function () {
 	it("given user1 session", function (next) {
 		ufix.loginUser1(next);
 	});
-	it("given photo", function (next) {
-		this.timeout(10000);
-		express.post('/api/photos').field('comment', 'hello').attach('file', f1).end(function (err, res) {
+	it("given tmp file", function (next) {
+		express.post('/api/upload').attach('files', _f1).end(function (err, res) {
 			should(!err);
 			should(!res.error);
 			should(!res.body.err);
-			should(res.body.photoId);
-			pid = res.body.photoId;
+			_files = res.body.files;
+			next();
+		});
+	});
+	it("given photo", function (next) {
+		this.timeout(10000);
+		var form = { files: _files, comment: 'hello' };
+		express.post('/api/photos').send(form).end(function (err, res) {
+			should(!err);
+			should(!res.error);
+			should(!res.body.err);
+			should(res.body.pid);
+			_pid = res.body.pid;
 			next();
 		});
 	});
 	it("should success", function (next) {
-		var p = photo.photoPath(pid) + '/' + pid + '-' + '2160.jpg';
+		var p = photo.getPhotoPath(_pid, _pid + '-' + '2160.jpg');
 		fs.existsSync(p).should.true;
-		express.del('/api/photos/' + pid, function (err, res) {
+		express.del('/api/photos/' + _pid, function (err, res) {
 			should(!err);
 			should(!res.error);
 			should(!res.body.err);
@@ -96,14 +117,24 @@ describe("deleting other's photo", function () {
 	it("given user1 session", function (next) {
 		ufix.loginUser1(next);
 	});
-	it("given photo", function (next) {
-		this.timeout(10000);
-		express.post('/api/photos').field('comment', 'hello').attach('file', f1).end(function (err, res) {
+	it("given tmp file", function (next) {
+		express.post('/api/upload').attach('files', _f1).end(function (err, res) {
 			should(!err);
 			should(!res.error);
 			should(!res.body.err);
-			should(res.body.photoId);
-			pid = res.body.photoId;
+			_files = res.body.files;
+			next();
+		});
+	});
+	it("given photo", function (next) {
+		this.timeout(10000);
+		var form = { files: _files, comment: 'hello' };
+		express.post('/api/photos').send(form).end(function (err, res) {
+			should(!err);
+			should(!res.error);
+			should(!res.body.err);
+			should(res.body.pid);
+			_pid = res.body.pid;
 			next();
 		});
 	});
@@ -111,9 +142,9 @@ describe("deleting other's photo", function () {
 		ufix.loginUser2(next);
 	});
 	it("should fail", function (next) {
-		var p = photo.photoPath(pid) + '/' + pid + '-' + '2160.jpg';
+		var p = photo.getPhotoPath(_pid, _pid + '-' + '2160.jpg');
 		fs.existsSync(p).should.true;
-		express.del('/api/photos/' + pid, function (err, res) {
+		express.del('/api/photos/' + _pid, function (err, res) {
 			should(!err);
 			should(!res.error);
 			should(res.body.err);

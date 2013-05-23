@@ -15,52 +15,68 @@ init.add(function (next) {
 
 	console.log('photo:');
 
-	exports.checkCycle = function(u, now, next) {
+	exports.findHours = function(user, now, next) {
 //		사진을 삭제하고 다시 업하는 경우를 허용하도록 한다.
 //		if (user.pdate && ((Date.now() - user.pdate.getTime()) / (18 * 60 * 60 * 1000) < 1 )) {
 //			return next(error(error.PHOTO_CYCLE));
 //		}
-
-		mongo.findLastPhoto(u._id, function (err, p) {
+		mongo.findLastPhoto(user._id, function (err, photo) {
 			if (err) return next(err);
-			if (p) {
-				var hours = (now - p.cdate.getTime()) / (60 * 60 * 1000);
-				if (hours < 18) {
-					return next(error({ rc: error.PHOTO_CYCLE, hours: 18 - Math.floor(hours) }));
-				}
+			var hours = 0;
+			if (photo) {
+				hours = 18 - Math.floor((now.getTime() - photo.cdate.getTime()) / (60 * 60 * 1000));
+				hours = hours < 0 ? 0 : hours;
 			}
-			next();
+			next(null, hours);
 		});
+	};
+
+	exports.makeForm = function (req) {
+		var body = req.body;
+		var form = {};
+		form.now = new Date();
+		form.comment = body.comment || '';
+		form.files = body.files || [];
+		for (var i = 0; i < form.files.length; i++) {
+			var file = form.files[i];
+			file.oname = fs2.safeFilename(path.basename(file.oname));
+			file.tname = path.basename(file.tname);
+			file.tpath = upload.getTmpPath(file.tname);
+		}
+		form.file = form.files[0];
+		return form;
 	}
 
-	exports.createPhoto = function(req, u, _next) {
-		var next = upload.tmpDeleter(req.files.file, _next);
-		var now = new Date();
-		exports.checkCycle(u, now, function (err) {
+	exports.createPhoto = function(user, form, _next) {
+		var next = upload.tmpDeleter(form.files, _next);
+		exports.findHours(user, form.now, function (err, hours) {
 			if (err) return next(err);
-			checkPhoto(req, u, function (err, f) {
+			if (hours > 0) {
+				return next(error('files', error.msg.PHOTO_CYCLE));
+			}
+			checkPhotoFeature(form, function (err, feature) {
 				if (err) return next(err);
-				var photoId = mongo.newPhotoId();
-				makeVersions(req, photoId, f, function (err, vers, org) {
+				var pid = mongo.newPhotoId();
+				makeVersions(pid, form, feature, function (err, vers) {
 					if (err) return next(err);
-					var p = {
-						_id: photoId,
-						userId: u._id,
+					var photo = {
+						_id: pid,
+						uid: user._id,
 						hit: 0,
 						favCnt: 0,
-						fname: path.basename(req.files.file.name),
-						format: f.format,
-						width: f.width,
-						height: f.height,
+						fname: form.file.oname,
+						format: feature.format,
+						width: feature.width,
+						height: feature.height,
 						vers: vers,
-						cdate: now,
-						comment: req.body.comment || ''
+						cdate: form.now,
+						comment: form.comment
 					};
-					mongo.insertPhoto(p, function (err) {
+					mongo.insertPhoto(photo, function (err) {
 						if (err) return next(err);
-						mongo.updateUserPdate(u._id, now, function (err) {
+						mongo.updateUserPdate(user._id, form.now, function (err) {
 							if (err) return next(err);
-							next(null, photoId);
+							next(null, pid);
 						});
 					});
 				});
@@ -68,32 +84,66 @@ init.add(function (next) {
 		});
 	};
 
+	function checkPhotoFeature(form, next) {
+		var file = form.file;
+		if (!file) {
+			return next(error('files', error.msg.PHOTO_NO_FILE));
+		}
+		if (form.files.length > 1) {
+			return next(error('files', error.msg.PHOTO_NOT_ONE));
+		}
+		img.identify(file.tpath, function (err, feature) {
+			if (err) {
+				return next(error('files', error.msg.PHOTO_TYPE))
+			}
+			if (feature.height < 2160) {
+				return next(error('files', error.msg.PHOTO_HEIGHT));
+			}
+			var ratio = feature.width / feature.height;
+			if (ratio < 1.75 || ratio > 1.79) {
+				return next(error('files', error.msg.PHOTO_RATIO));
+			}
+			feature.formatLowerCase = feature.format.toLowerCase();
+			next(null, feature);
+		});
+	}
+
+	exports.getPhotoPath = function (pid, fname) {
+		if (fname) {
+			return fs2.makeDeepPath(upload.pubPhoto, pid, 3) + '/' + fname;
+		}
+		return fs2.makeDeepPath(upload.pubPhoto, pid, 3);
+	}
+
 	var _vers = [ 2160, 1440, 1080, 720, 480, 320 ];
 
-	function makeVersions(req, pid, f, next) {
-		fs2.mkdirs(upload.pub, 'photo', fs2.subs(pid, 3), function (err, p) {
+	function makeVersions(pid, form, feature, next) {
+		var file = form.file;
+		fs2.makeDirs(exports.getPhotoPath(pid), function (err, ppath) {
 			if (err) return next(err);
 			var vers = [];
 			var i = 0;
 			function makeVersion() {
 				if (i == _vers.length) {
-					var org = pid + '-org.' + f.format.toLowerCase();
-					fs.rename(req.files.file.path, p + '/' + org, function (err) {
+					var org = ppath + '/' + pid + '-org.' + feature.formatLowerCase;
+					fs.rename(file.tpath, org, function (err) {
 						if (err) return next(err);
 						next(null, vers);
-					})
+					});
+					return;
 				}
 				var v = _vers[i++];
-				if (v > f.height) {
+				if (v > feature.height) {
 					setImmediate(makeVersion);
 					return;
 				}
 				var opt = {
-					srcPath: req.files.file.path,
-					dstPath: p + '/' + pid + '-' + v + '.jpg',
-					quality: f.format === 'JPEG' ? 0.92 : f.format === 'PNG' ? 0.89 : 0.8,
+					srcPath: file.tpath,
+					dstPath: ppath + '/' + pid + '-' + v + '.jpg',
+					quality: feature.format === 'JPEG' ? 0.92 : feature.format === 'PNG' ? 0.89 : 0.8,
 					sharpening: 0,
-					height: v
+					height: v,
+					format: 'jpg'
 				};
 				img.resize(opt, function (err) {
 					if (err) return next(err);
@@ -105,56 +155,34 @@ init.add(function (next) {
 		});
 	}
 
-	function checkPhoto(req, u, next) {
-		var file = req.files.file;
-		if (!file) {
-			return next(error(error.PHOTO_NO_FILE));
-		}
-		if (Array.isArray(file)) {
-			return next(error(error.PHOTO_NOT_ONE));
-		}
-		img.identify(file.path, function (err, f) {
-			if (err) {
-				err.rc = error.PHOTO_TYPE;
-				err.message = error.msg[error.PHOTO_TYPE];
-				return next(err);
-			}
-			if (f.height < 2160) {
-				return next(error(error.PHOTO_HEIGHT));
-			}
-			var ratio = f.width / f.height;
-			if (ratio < 1.75 || ratio > 1.79) {
-				return next(error(error.PHOTO_RATIO));
-			}
-			next(null, f);
-		});
-	}
+	var photoUrlPrefix = config.data.uploadUrl + '/photo';
 
 	exports.findPhoto = function (pid, next) {
 		mongo.updatePhotoHit(pid, function (err) {
 			if (err) return next(err);
-			mongo.findPhoto(pid, function (err, p) {
+			mongo.findPhoto(pid, function (err, photo) {
 				if (err) return next(err);
-				if (!p) return next(error(error.PHOTO_NOTHING_TO_SHOW));
-				userl.findCachedUser(p.userId, function (err, u) {
+				if (!photo) return next(error(error.PHOTO_NOTHING_TO_SHOW));
+				userl.findCachedUser(photo.uid, function (err, user) {
 					if (err) return next(err);
-					p.user = {
-						_id: u._id,
-						name: u.name
+					photo.user = {
+						_id: user._id,
+						name: user.name
 					};
-					p.dirUrl = config.data.uploadUrl + '/photo/' + fs2.subs(p._id, 3).join('/');
-					p.cdateStr = dt.format(p.cdate);
-					next(null, p);
+					photo.dir = fs2.makeDeepPath(photoUrlPrefix, photo._id, 3);
+					photo.cdateStr = dt.format(photo.cdate);
+					photo.cdate = photo.cdate.getTime();
+					next(null, photo);
 				});
 			});
 		});
 	};
 
-	exports.del = function (pid, u, next) {
-		mongo.delPhoto(pid, u.admin ? null : u._id, function (err, cnt) {
+	exports.del = function (pid, user, next) {
+		mongo.delPhoto(pid, user.admin ? null : user._id, function (err, cnt) {
 			if (err) return next(err);
 			if (!cnt) return next(error(error.PHOTO_NOTHING_TO_DEL));
-			fs2.rmAll(exports.photoPath(pid), function (err) {
+			fs2.removeDirs(exports.getPhotoPath(pid), function (err) {
 				if (err) return next(err);
 				next();
 			});
@@ -166,18 +194,18 @@ init.add(function (next) {
 		var photos = [];
 		var count = 0;
 		function read() {
-			cursor.nextObject(function (err, p) {
+			cursor.nextObject(function (err, photo) {
 				if (err) return next(err);
-				if (p) {
-					userl.findCachedUser(p.userId, function (next, u) {
+				if (photo) {
+					userl.findCachedUser(photo.uid, function (next, user) {
 						if (err) return next(err);
-						p.user = {
-							_id: u._id,
-							name: u.name
+						photo.user = {
+							_id: user._id,
+							name: user.name
 						};
-						p.dirUrl = config.data.uploadUrl + '/photo/' + fs2.subs(p._id, 3).join('/');
-						p.cdateStr = dt.format(p.cdate);
-						photos.push(p);
+						photo.dir = fs2.makeDeepPath(photoUrlPrefix, photo._id, 3);
+						photo.cdateStr = dt.format(photo.cdate);
+						photos.push(photo);
 						count++;
 						setImmediate(read);
 					});
@@ -188,10 +216,6 @@ init.add(function (next) {
 		}
 		read();
 	};
-
-	exports.photoPath = function (pid) {
-		return upload.pubPhoto + '/' + fs2.subs(pid, 3).join('/');
-	}
 
 	next();
 });

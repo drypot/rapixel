@@ -1,0 +1,6 @@
+db.photos.dropIndexes();
+
+db.photos.update({ userId: { $exists: true } },
+	{ $rename: { userId: 'uid' } },
+	{ multi: true }
+);

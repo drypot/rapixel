@@ -49,6 +49,8 @@ exports.NOT_AUTHORIZED = 102;
 
 exports.INVALID_DATA = 201;
 
+exports.PHOTO_NOTHING_TO_SHOW = 301;
+exports.PHOTO_NOTHING_TO_DEL = 302;
 
 var msg = exports.msg = {};
 
@@ -58,6 +60,9 @@ msg[exports.NOT_AUTHENTICATED] = '먼저 로그인해 주십시오.';
 msg[exports.NOT_AUTHORIZED] = '사용 권한이 없습니다.';
 
 msg[exports.INVALID_DATA] = '비정상적인 값이 입력되었습니다.';
+
+msg[exports.PHOTO_NOTHING_TO_SHOW] = '사진이 없습니다.';
+msg[exports.PHOTO_NOTHING_TO_DEL] = '삭제할 사진이 없습니다.';
 
 msg.NAME_EMPTY = '이름을 입력해 주십시오.';
 msg.NAME_RANGE = '이름 길이는 2 ~ 32 글자입니다.';
@@ -79,5 +84,3 @@ msg.PHOTO_NOT_ONE = '사진은 한장만 등록하실 수 있습니다.';
 msg.PHOTO_RATIO = '사진의 가로 세로 비율은 16:9 여야합니다.';
 msg.PHOTO_HEIGHT = '사진의 세로 크기는 2160 픽셀 이상이어야 합니다.';
 msg.PHOTO_TYPE = '사진 파일 타입을 확인할 수 없습니다.';
-msg.PHOTO_NOTHING_TO_DEL = '삭제할 사진이 없습니다.';
-msg.PHOTO_NOTHING_TO_SHOW = '사진이 없습니다.';

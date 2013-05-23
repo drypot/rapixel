@@ -39,8 +39,8 @@ describe("tmpDeleter", function () {
 		fs.existsSync(path2).should.true;
 		fs.existsSync(path3).should.true;
 		var files = [
-			{ tname: 'f1.txt' },
-			{ tname: 'f2.txt' }
+			{ tpath: path1 },
+			{ tpath: path2 }
 		];
 		var next2 = upload.tmpDeleter(files, function (err, param) {
 			err.should.equal('errxx');

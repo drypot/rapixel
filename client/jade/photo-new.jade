@@ -14,18 +14,25 @@ block content
 			.page-header
 				h2 Upload
 
-			form#new-form(action="/api/photos", method="post", enctype="multipart/form-data")
-				.form-row.clearfix
-					label.control-label Photo
-					.files
-				.form-row
-					label Comment
-					textarea(name='comment', rows=7)
-				.form-action
-					button.btn.btn-primary(name='send') Send
-					button.btn.btn-default.disabled.hide(name='sending') Sending
+			if hours > 0
+				h4 하루에 한 장 등록하실 수 있습니다.
+				h4 다음 등록까지 #{hours} 시간 남으셨습니다.
 
-			div(style='margin-top:50px; font-size:18px').
+			else
+				form#new-form
+					.form-row.file-group
+						label.control-label Photo
+						.files.col-lg-7
+					.form-row
+						label Comment
+						textarea(name='comment', rows=7)
+					.form-actions
+						.send-panel
+							button.btn.btn-primary(name='send') Send
+						.sending-panel.hide
+							button.btn.btn-default.disabled(name='sending') Sending
+
+				div(style='margin-top:50px; font-size:18px').
 					하루 한번 업로드하실 수 있습니다.<br>
 					<br>
 					본인이 촬영한 사진만<br>
@@ -36,6 +43,4 @@ block content
 					<br>
 					업로드된 이미지는 다양한 기기로 송출될 수 있습니다.<br>
 					운영자의 판단에 따라 사진이 삭제될 수 있습니다.
-
-			//(style="margin-bottom: 30px;")
 
