@@ -19,11 +19,14 @@ exports.merge = function () {
 	for (var a = 1; a < arguments.length - 1; a++) {
 		var src = arguments[a];
 		sloop:
-		for (var s = 0; s < src.length; s++) {
-			for (var t = 0; t < tar.length; t++) {
-				if (fn(tar[t], src[s])) continue sloop;
+			for (var s = 0; s < src.length; s++) {
+				for (var t = 0; t < tar.length; t++) {
+					if (fn(tar[t], src[s])) {
+						tar[t] = src[s];
+						continue sloop;
+					}
+				}
+				tar.push(src[s]);
 			}
-			tar.push(src[s]);
-		}
 	}
 }
