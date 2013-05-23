@@ -131,12 +131,11 @@ exports.safeFilename = function (name) {
 	return safe;
 };
 
-exports.subs = function (id, iter) {
-	var path = [];
+exports.makeDeepPath = function (base, id, iter) {
+	var path = '';
 	for (iter--; iter > 0; iter--) {
-		path.unshift(id % 1000);
+		path = '/' + id % 1000 + path;
 		id = Math.floor(id / 1000);
 	}
-	path.unshift(id);
-	return path;
+	return base + '/' + id + path;
 }

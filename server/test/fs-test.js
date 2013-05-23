@@ -182,15 +182,15 @@ describe("safeFilename", function () {
 	});
 });
 
-describe("subs", function () {
+describe("makeDeepPath", function () {
 	it("should success", function () {
-		fs2.subs(1, 3).should.eql([0, 0, 1]);
-		fs2.subs(999, 3).should.eql([0, 0, 999]);
-		fs2.subs(1000, 3).should.eql([0, 1, 0]);
-		fs2.subs(1999, 3).should.eql([0, 1, 999]);
-		fs2.subs(999999, 3).should.eql([0, 999, 999]);
-		fs2.subs(1999999, 3).should.eql([1, 999, 999]);
-		fs2.subs(999999999, 3).should.eql([999, 999, 999]);
-		fs2.subs(9999999999, 3).should.eql([9999, 999, 999]);
+		fs2.makeDeepPath('tmp', 1, 3).should.equal('tmp/0/0/1');
+		fs2.makeDeepPath('tmp', 999, 3).should.equal('tmp/0/0/999');
+		fs2.makeDeepPath('tmp', 1000, 3).should.equal('tmp/0/1/0');
+		fs2.makeDeepPath('tmp', 1999, 3).should.equal('tmp/0/1/999');
+		fs2.makeDeepPath('tmp', 999999, 3).should.equal('tmp/0/999/999');
+		fs2.makeDeepPath('tmp', 1999999, 3).should.equal('tmp/1/999/999');
+		fs2.makeDeepPath('tmp', 999999999, 3).should.equal('tmp/999/999/999');
+		fs2.makeDeepPath('tmp', 9999999999, 3).should.equal('tmp/9999/999/999');
 	});
 });
