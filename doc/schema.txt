@@ -1,3 +1,12 @@
+
+
+
+
+
+*
+
+done;;
+
 db.photos.dropIndexes();
 
 db.photos.update({ userId: { $exists: true } },
