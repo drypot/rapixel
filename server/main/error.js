@@ -73,7 +73,7 @@ msg.PASSWORD_RANGE = '비밀번호 길이는 4 ~ 32 글자입니다.'
 
 msg.USER_NOT_FOUND = '사용자 정보를 찾을 수 없습니다.';
 
-msg.PHOTO_CYCLE = '사진은 하루 한장만 등록하실 수 있습니다.';
+msg.PHOTO_CYCLE = '사진은 하루 한 장 등록하실 수 있습니다.';
 msg.PHOTO_NO_FILE = '사진을 첨부해 주십시오.';
 msg.PHOTO_NOT_ONE = '사진은 한장만 등록하실 수 있습니다.';
 msg.PHOTO_RATIO = '사진의 가로 세로 비율은 16:9 여야합니다.';

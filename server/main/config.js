@@ -2,9 +2,7 @@ var fs = require('fs');
 
 var init = require('../main/init');
 
-
 var opt = {};
-
 
 exports = module.exports = function (_opt) {
 	if (_opt.reset) {

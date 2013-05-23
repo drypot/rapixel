@@ -1,4 +1,18 @@
+
+process.on('uncaughtException', function (err) {
+	console.error('UNCAUGHT EXCEPTION');
+	if (err.stack) {
+		console.error(err.stack);
+	} else {
+		console.log(require('util').inspect(err));
+	}
+});
+
 var funcs;
+
+exports.reset = function () {
+	funcs = [];
+}
 
 exports.add = function (func) {
 	if (func.length == 0) {
@@ -10,10 +24,6 @@ exports.add = function (func) {
 		funcs.push(func);
 	}
 };
-
-exports.reset = function () {
-	funcs = [];
-}
 
 exports.run = function (next) {
 	console.log('init:');

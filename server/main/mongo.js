@@ -93,7 +93,12 @@ init.add(function (next) {
 			if (err) return next(err);
 			users.ensureIndex({ name: 1 }, function (err) {
 				if (err) return next(err);
-				users.find({}, { _id: 1 }).sort({ _id: -1 }).limit(1).nextObject(function (err, obj) {
+				var opt = {
+					fields: { _id: 1 },
+					sort: { _id: -1 },
+					limit: 1
+				}
+				users.find({}, opt).nextObject(function (err, obj) {
 					if (err) return next(err);
 					userIdSeed = obj ? obj._id : 0;
 					console.log('user id seed: ' + userIdSeed);
@@ -111,8 +116,8 @@ init.add(function (next) {
 			return ++photoIdSeed;
 		};
 
-		exports.insertPhoto = function (p, next) {
-			photos.insert(p, next);
+		exports.insertPhoto = function (photo, next) {
+			photos.insert(photo, next);
 		};
 
 		exports.updatePhotoHit = function (pid, next) {
@@ -124,7 +129,7 @@ init.add(function (next) {
 				_id: pid
 			};
 			if (uid) {
-				sel.userId = uid
+				sel.uid = uid
 			}
 			photos.remove(sel, next);
 		}
@@ -136,9 +141,9 @@ init.add(function (next) {
 		exports.findLastPhoto = function (uid, next) {
 			var opt = {
 				fields: { cdate: 1 },
-				sort: { userId: 1, _id: -1 }
+				sort: { uid: 1, _id: -1 }
 			}
-			photos.findOne({ userId: uid }, opt, next);
+			photos.findOne({ uid: uid }, opt, next);
 		}
 
 		exports.findPhotos = function (pg, pgsize) {
@@ -155,9 +160,14 @@ init.add(function (next) {
 //		};
 
 		photos = exports.photos = db.collection("photos");
-		photos.ensureIndex({ userId: 1, _id: -1 }, function (err) {
+		photos.ensureIndex({ uid: 1, _id: -1 }, function (err) {
 			if (err) return next(err);
-			photos.find({}, { _id: 1 }).sort({ _id: -1 }).limit(1).nextObject(function (err, obj) {
+			var opt = {
+				fields: { _id: 1 },
+				sort: { _id: -1 },
+				limit: 1
+			};
+			photos.find({}, opt).nextObject(function (err, obj) {
 				if (err) return next(err);
 				photoIdSeed = obj ? obj._id : 0;
 				console.log('photo id seed: ' + photoIdSeed);

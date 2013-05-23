@@ -28,7 +28,6 @@ exports.makeDirs = function () {
 	mkdir();
 };
 
-// 불필요한 클로저가 생기는 것을 막기 위해 밖으로 뽑았다.
 function makeDirsArray(p, ary, next) {
 	var i = 0;
 	function mkdir() {
