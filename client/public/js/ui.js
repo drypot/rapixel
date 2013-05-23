@@ -124,7 +124,9 @@ init.add(function() {
 				formty.showSending($form);
 				formty.sendFiles($form, function (err, res) {
 					if (err) return next(err);
-					form.files = res.body.files;
+					for (var key in res.body) {
+						form[key] = res.body[key];
+					}
 					request[method].call(request, url).send(form).end(function (err, res) {
 						err = err || res.error;
 						if (err) return next(err);
