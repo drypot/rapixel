@@ -67,7 +67,7 @@ init.add(function (next) {
 					return next.apply(null, _arg);
 				}
 				var file = files[i++];
-				fs.unlink(exports.getTmpPath(path.basename(file.tname)), function (err) {
+				fs.unlink(file.tpath, function (err) {
 					setImmediate(unlink);
 				});
 			}
