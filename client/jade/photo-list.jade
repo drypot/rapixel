@@ -13,15 +13,16 @@ block content
 					p 4K Images
 
 		.photos
-			for p in photos
+			for photo in photos
 				.photo
 					.img
-						a(href='/photos/' + p._id)
-							img(src=p.dir + '/' + p._id + '-320.jpg')
-					.desc
-						span #{p.user.name}
-						span hit !{p.hit}
-						span !{p.cdateStr}
+						a(href='/photos/' + photo._id)
+							img(src=photo.dir + '/' + photo._id + '-320.jpg')
+					.info
+						span
+							a(href='/users/' + photo.user._id) #{photo.user.name}
+						span hit !{photo.hit}
+						span !{photo.cdateStr}
 
 			ul.pager(style='text-align: left;')
 				if locals.prevUrl

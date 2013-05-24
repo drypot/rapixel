@@ -34,12 +34,12 @@ body {
   margin-bottom: 15px;
 }
 .photos .img {
-  margin-bottom: 2px;
+  margin-bottom: 0px;
 }
-.photos .desc {
+.photos .info {
   margin-left: 4px;
 }
-.photos .desc span {
+.photos .info span {
   margin-right: 15px;
 }
 body.photo-view {
