@@ -37,7 +37,7 @@ init.add(function (next) {
 		var client = new MongoClient(server);
 		client.open(function (err) {
 			if (err) return next(err);
-			var db = exports.db = client.db(config.data.mongoDbName);
+			var db = exports.db = client.db(config.data.mongoDb);
 			log += ' ' + db.databaseName;
 			next(null, db);
 		});

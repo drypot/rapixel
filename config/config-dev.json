@@ -8,7 +8,7 @@
 	"uploadDir": "upload",
 	"uploadMax": 10,
 
-	"mongoDbName": "rapixel"
+	"mongoDb": "rapixel"
 
 }
 
