@@ -61,6 +61,10 @@ init.add(function () {
 
 	app.use(express.errorHandler());
 
+	// 사용자 확인을 미들웨어로 할 경우 리턴 형식을 결정하기 어려워진다.
+	// res.locals.api 로 확인할 수 없다.
+	// /upload 같은 경우 html url 이지만 json 을 리턴해야 한다.
+
 	app.request.findUser = function (next) {
 		var req = this;
 		var res = this.res;
