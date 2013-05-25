@@ -9,9 +9,9 @@ init.add(function () {
 
 	exports.createFixtures = function (next) {
 		var forms = [
-			{ en:'user1', name: 'snowman', email: 'abc@def.com', password: '1234' },
-			{ en:'user2', name: 'snowman2', email: 'abc2@def.com', password: '1234' },
-			{ en:'admin', name: 'admin', email: 'admin@def.com', password: '1234', admin: true }
+			{ en:'user1', name: 'snowman', email: 'abc@def.com', password: '1234', profile: 'p1' },
+			{ en:'user2', name: 'snowman2', email: 'abc2@def.com', password: '1234', profile: 'p2' },
+			{ en:'admin', name: 'admin', email: 'admin@def.com', password: '1234', profile: 'p3', admin: true }
 		];
 		var i = 0;
 		function create() {

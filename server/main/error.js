@@ -46,6 +46,7 @@ exports.ERROR_SET = 10;
 
 exports.NOT_AUTHENTICATED = 101;
 exports.NOT_AUTHORIZED = 102;
+exports.USER_NOT_FOUND = 103;
 
 exports.INVALID_DATA = 201;
 
@@ -58,6 +59,7 @@ msg[exports.ERROR_SET] = '*';
 
 msg[exports.NOT_AUTHENTICATED] = '먼저 로그인해 주십시오.';
 msg[exports.NOT_AUTHORIZED] = '사용 권한이 없습니다.';
+msg[exports.USER_NOT_FOUND] = '등록되지 않은 사용자입니다.';
 
 msg[exports.INVALID_DATA] = '비정상적인 값이 입력되었습니다.';
 

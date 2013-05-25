@@ -56,7 +56,7 @@ init.add(function (next) {
 		var users;
 		var userIdSeed;
 
-		exports.newUserId = function () {
+		exports.getNewUserId = function () {
 			return ++userIdSeed;
 		};
 
@@ -84,6 +84,12 @@ init.add(function (next) {
 
 		exports.updateUserPdate = function (id, now, next) {
 			users.update({ _id: id }, { $set: { pdate: now }}, function (err) {
+				next(err);
+			});
+		};
+
+		exports.updateUserStatus = function (id, status, next) {
+			users.update({ _id: id }, { $set: { status: status }}, function (err) {
 				next(err);
 			});
 		};

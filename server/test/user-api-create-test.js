@@ -28,9 +28,9 @@ describe("creating", function () {
 		express.post('/api/users').send(form).end(function (err,res) {
 			should(!res.error);
 			should(res.body.err);
-			res.body.err.rc.should.equal(error.INVALID_DATA);
-			res.body.err.fields[0].name.should.equal('name');
-			res.body.err.fields[0].msg.should.equal(error.msg.NAME_EMPTY);
+			res.body.err.rc.should.equal(error.ERROR_SET);
+			res.body.err.errors[0].name.should.equal('name');
+			res.body.err.errors[0].msg.should.equal(error.msg.NAME_EMPTY);
 			next();
 		});
 	});
@@ -38,9 +38,9 @@ describe("creating", function () {
 		var form = { name: 'a', email: 'abc@def.com', password: '1234' };
 		express.post('/api/users').send(form).end(function (err,res) {
 			should(res.body.err);
-			res.body.err.rc.should.equal(error.INVALID_DATA);
-			res.body.err.fields[0].name.should.equal('name');
-			res.body.err.fields[0].msg.should.equal(error.msg.NAME_RANGE);
+			res.body.err.rc.should.equal(error.ERROR_SET);
+			res.body.err.errors[0].name.should.equal('name');
+			res.body.err.errors[0].msg.should.equal(error.msg.NAME_RANGE);
 			next();
 		});
 	});
@@ -59,9 +59,9 @@ describe("creating", function () {
 		var form = { name: '123456789012345678901234567890123', email: 'abc@def.com', password: '1234' };
 		express.post('/api/users').send(form).end(function (err,res) {
 			should(res.body.err);
-			res.body.err.rc.should.equal(error.INVALID_DATA);
-			res.body.err.fields[0].name.should.equal('name');
-			res.body.err.fields[0].msg.should.equal(error.msg.NAME_RANGE);
+			res.body.err.rc.should.equal(error.ERROR_SET);
+			res.body.err.errors[0].name.should.equal('name');
+			res.body.err.errors[0].msg.should.equal(error.msg.NAME_RANGE);
 			next();
 		});
 	});
@@ -76,9 +76,9 @@ describe("creating", function () {
 		var form = { name: 'abcd', email: 'abc.def.com', password: '1234' };
 		express.post('/api/users').send(form).end(function (err,res) {
 			should(res.body.err);
-			res.body.err.rc.should.equal(error.INVALID_DATA);
-			res.body.err.fields[0].name.should.equal('email');
-			res.body.err.fields[0].msg.should.equal(error.msg.EMAIL_PATTERN);
+			res.body.err.rc.should.equal(error.ERROR_SET);
+			res.body.err.errors[0].name.should.equal('email');
+			res.body.err.errors[0].msg.should.equal(error.msg.EMAIL_PATTERN);
 			next();
 		});
 	});
@@ -86,9 +86,9 @@ describe("creating", function () {
 		var form = { name: 'abcd', email: 'abc@def.com', password: '123' };
 		express.post('/api/users').send(form).end(function (err,res) {
 			should(res.body.err);
-			res.body.err.rc.should.equal(error.INVALID_DATA);
-			res.body.err.fields[0].name.should.equal('password');
-			res.body.err.fields[0].msg.should.equal(error.msg.PASSWORD_RANGE);
+			res.body.err.rc.should.equal(error.ERROR_SET);
+			res.body.err.errors[0].name.should.equal('password');
+			res.body.err.errors[0].msg.should.equal(error.msg.PASSWORD_RANGE);
 			next();
 		});
 	});
@@ -96,9 +96,9 @@ describe("creating", function () {
 		var form = { name: 'abcd', email: 'abc@def.com', password: '123456789012345678901234567890123' };
 		express.post('/api/users').send(form).end(function (err,res) {
 			should(res.body.err);
-			res.body.err.rc.should.equal(error.INVALID_DATA);
-			res.body.err.fields[0].name.should.equal('password');
-			res.body.err.fields[0].msg.should.equal(error.msg.PASSWORD_RANGE);
+			res.body.err.rc.should.equal(error.ERROR_SET);
+			res.body.err.errors[0].name.should.equal('password');
+			res.body.err.errors[0].msg.should.equal(error.msg.PASSWORD_RANGE);
 			next();
 		});
 	});
@@ -123,9 +123,9 @@ describe("creating dupe", function () {
 		var form = { name: 'snowman', email: 'snowman@xyz.com', password: '1234' };
 		express.post('/api/users').send(form).end(function (err,res) {
 			should(res.body.err);
-			res.body.err.rc.should.equal(error.INVALID_DATA);
-			res.body.err.fields[0].name.should.equal('name');
-			res.body.err.fields[0].msg.should.equal(error.msg.NAME_DUPE);
+			res.body.err.rc.should.equal(error.ERROR_SET);
+			res.body.err.errors[0].name.should.equal('name');
+			res.body.err.errors[0].msg.should.equal(error.msg.NAME_DUPE);
 			next();
 		});
 	});
@@ -133,9 +133,9 @@ describe("creating dupe", function () {
 		var form = { name: 'snowboy', email: 'snowman@def.com', password: '1234' };
 		express.post('/api/users').send(form).end(function (err,res) {
 			should(res.body.err);
-			res.body.err.rc.should.equal(error.INVALID_DATA);
-			res.body.err.fields[0].name.should.equal('email');
-			res.body.err.fields[0].msg.should.equal(error.msg.EMAIL_DUPE);
+			res.body.err.rc.should.equal(error.ERROR_SET);
+			res.body.err.errors[0].name.should.equal('email');
+			res.body.err.errors[0].msg.should.equal(error.msg.EMAIL_DUPE);
 			next();
 		});
 	});
