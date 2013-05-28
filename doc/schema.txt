@@ -1,4 +1,5 @@
 
+db.users.update({}, { $set: { footer: '' }}, { multi: true })
 
 
 

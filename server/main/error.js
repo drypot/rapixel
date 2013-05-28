@@ -1,3 +1,4 @@
+var should = require('should');
 
 exports = module.exports = function (arg, arg2) {
 	var err, key;
@@ -29,6 +30,23 @@ exports = module.exports = function (arg, arg2) {
 	return err;
 };
 
+exports.find = function (err, arg1, arg2) {
+	should(err);
+	if (arg2) {
+		err.rc.should.equal(exports.ERROR_SET);
+		should(err.errors);
+		for (var i = 0; i < err.errors.length; i++) {
+			var error = err.errors[i];
+			if (error.name == arg1 && error.msg == arg2) {
+				return true;
+			}
+		}
+		//throw new Error("error: ('" + arg1 + "', '" + arg2 + "') not found.");
+	}
+	return false;
+	//throw new Error('unknown error');
+}
+
 var Errors = exports.Errors = function () {
 	this.errors = [];
 };
@@ -42,6 +60,10 @@ Errors.prototype.hasErrors = function () {
 };
 
 
+var msg = exports.msg = {};
+
+// for error code
+
 exports.ERROR_SET = 10;
 
 exports.NOT_AUTHENTICATED = 101;
@@ -53,18 +75,18 @@ exports.INVALID_DATA = 201;
 exports.PHOTO_NOTHING_TO_SHOW = 301;
 exports.PHOTO_NOTHING_TO_DEL = 302;
 
-var msg = exports.msg = {};
-
 msg[exports.ERROR_SET] = '*';
 
 msg[exports.NOT_AUTHENTICATED] = '먼저 로그인해 주십시오.';
 msg[exports.NOT_AUTHORIZED] = '사용 권한이 없습니다.';
-msg[exports.USER_NOT_FOUND] = '등록되지 않은 사용자입니다.';
+msg[exports.USER_NOT_FOUND] = '사용자를 찾을 수 없습니다.';
 
 msg[exports.INVALID_DATA] = '비정상적인 값이 입력되었습니다.';
 
 msg[exports.PHOTO_NOTHING_TO_SHOW] = '사진이 없습니다.';
 msg[exports.PHOTO_NOTHING_TO_DEL] = '삭제할 사진이 없습니다.';
+
+// for form field error
 
 msg.NAME_EMPTY = '이름을 입력해 주십시오.';
 msg.NAME_RANGE = '이름 길이는 2 ~ 32 글자입니다.';
@@ -78,7 +100,7 @@ msg.EMAIL_DUPE = '이미 등록되어 있는 이메일입니다.';
 msg.PASSWORD_EMPTY = '비밀번호를 입력해 주십시오.';
 msg.PASSWORD_RANGE = '비밀번호 길이는 4 ~ 32 글자입니다.'
 
-msg.USER_NOT_FOUND = '사용자 정보를 찾을 수 없습니다.';
+msg.USER_NOT_FOUND = '사용자를 찾을 수 없습니다.';
 
 msg.PHOTO_CYCLE = '사진은 하루 한 장 등록하실 수 있습니다.';
 msg.PHOTO_NO_FILE = '사진을 첨부해 주십시오.';

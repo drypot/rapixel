@@ -15,9 +15,6 @@ init.add(function () {
 		var password = String(req.body.password || '').trim();
 		userl.findCachedUserByEmail(email, password, function (err, user) {
 			if (err) return res.jsonErr(err);
-			if (!user) {
-				return res.jsonErr(error('email', error.msg.USER_NOT_FOUND));
-			}
 			if (req.body.remember) {
 				res.cookie('email', email, {
 					maxAge: 30 * 24 * 60 * 60 * 1000,

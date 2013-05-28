@@ -77,21 +77,19 @@ init.add(function (next) {
 		};
 
 		exports.updateUserAdate = function (id, now, next) {
-			users.update({ _id: id }, { $set: { adate: now }}, function (err) {
-				next(err);
-			});
+			users.update({ _id: id }, { $set: { adate: now }}, next);
 		};
 
 		exports.updateUserPdate = function (id, now, next) {
-			users.update({ _id: id }, { $set: { pdate: now }}, function (err) {
-				next(err);
-			});
+			users.update({ _id: id }, { $set: { pdate: now }}, next);
 		};
 
 		exports.updateUserStatus = function (id, status, next) {
-			users.update({ _id: id }, { $set: { status: status }}, function (err) {
-				next(err);
-			});
+			users.update({ _id: id }, { $set: { status: status }}, next);
+		};
+
+		exports.updateUser = function (id, fields, next) {
+			users.update({ _id: id }, { $set: fields}, next);
 		};
 
 		users = exports.users = db.collection("users");
