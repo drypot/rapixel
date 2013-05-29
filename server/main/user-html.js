@@ -4,6 +4,7 @@ var dt = require('../main/dt');
 var userl = require('../main/user');
 var photol = require('../main/photo');
 var express = require('../main/express');
+var UrlMaker = require('../main/UrlMaker');
 
 init.add(function () {
 
