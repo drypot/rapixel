@@ -35,7 +35,7 @@ init.add(function () {
 	};
 
 	session.initProfile = function () {
-		var $profile = $('#profile');
+		var $profile = $('.profile-text');
 		$profile.html(tagUpText($profile.html()));
 	};
 

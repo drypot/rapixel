@@ -14,11 +14,12 @@ block content
 			if firstPage
 				.page-header
 					h2 #{tuser.name}
-				#profile
-					| !{jade.escape(tuser.profile).replace(/.*/g, "<h4>$&</h4>")}
-				if showActions
-					.actions
-						a.btn.btn-mini.btn-primary(href='/users/' + tuser._id + '/edit') Edit Profile
+				.profile
+					.profile-text.
+						!{jade.escape(tuser.profile).replace(/.*/g, "<h4>$&</h4>")}
+					if showActions
+						.profile-actions
+							a.btn.btn-mini.btn-primary(href='/users/' + tuser._id + '/edit') Edit Profile
 
 		if photos.length
 			.photos

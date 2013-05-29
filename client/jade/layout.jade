@@ -50,13 +50,13 @@ html
 
 		block content
 
-		.container(style='margin-top:30px')
-			.content
-				hr
-				ul.list-inline
-					li: a(href="/company") Company
-					li: a(href="/privacy") Privacy
-					li: a(href="/help") Help
+		.container
+			.limit-width
+				#footer
+					ul.list-inline
+						li: a(href="/company") Company
+						li: a(href="/privacy") Privacy
+						li: a(href="/help") Help
 
 	else
 		body.photo-view
