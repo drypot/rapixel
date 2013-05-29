@@ -1,0 +1,38 @@
+extends layout
+
+block title
+	title Edit Profile - #{siteTitle}
+
+block content
+	script
+		init.add(function () {
+			session.initEditProfile();
+		});
+
+	.container
+		.content
+			.page-header
+				h2 Edit Profile
+
+			form#edit-form
+				.form-row
+					label.control-label Name
+					input.input-with-feedback.col-lg-5(name="name", type="text", maxlength=32, value=tuser.name)
+				.form-row
+					label.control-label Email
+					input.input-with-feedback.col-lg-5(name="email", type="text", maxlength=64, value=tuser.email)
+				.form-row
+					label.control-label Password
+					input.input-with-feedback.col-lg-5(name="password", type="password", maxlength=64)
+				.form-row
+					label.control-label Profile
+					textarea(name="profile", rows=5) #{tuser.profile}
+				.form-row
+					label.control-label Photo Footer
+					textarea(name="footer", rows=5) #{tuser.footer}
+					p.help-block shows with every photo.
+				.form-actions
+					.send-panel
+						button.btn.btn-primary(name='send') Send
+					.sending-panel.hide
+						button.btn.btn-default.disabled(name='sending') Sending

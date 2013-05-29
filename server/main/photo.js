@@ -15,6 +15,16 @@ init.add(function (next) {
 
 	console.log('photo:');
 
+	exports.getPage = function(_pg) {
+		var pg = parseInt(_pg) || 1;
+		return pg < 1 ? 1 : pg;
+	};
+
+	exports.getPageSize = function (ps) {
+		var pgsize = parseInt(ps) || 16;
+		return pgsize > 64 ? 64 : pgsize < 1 ? 1 : pgsize;
+	};
+
 	exports.findHours = function(user, now, next) {
 //		사진을 삭제하고 다시 업하는 경우를 허용하도록 한다.
 //		if (user.pdate && ((Date.now() - user.pdate.getTime()) / (18 * 60 * 60 * 1000) < 1 )) {
@@ -167,7 +177,8 @@ init.add(function (next) {
 					if (err) return next(err);
 					photo.user = {
 						_id: user._id,
-						name: user.name
+						name: user.name,
+						footer: user.footer
 					};
 					photo.dir = fs2.makeDeepPath(photoUrlPrefix, photo._id, 3);
 					photo.cdateStr = dt.format(photo.cdate);
@@ -189,8 +200,8 @@ init.add(function (next) {
 		});
 	};
 
-	exports.list = function (pg, pgsize, next) {
-		var cursor = mongo.findPhotos(pg, pgsize);
+	exports.findPhotos = function (pg, ps, next) {
+		var cursor = mongo.findPhotos(pg, ps);
 		var photos = [];
 		var count = 0;
 		function read() {
@@ -211,7 +222,28 @@ init.add(function (next) {
 					});
 					return;
 				}
-				next(null, photos, count !== pgsize);
+				next(null, photos, count !== ps);
+			});
+		}
+		read();
+	};
+
+	exports.findPhotosByUser = function (uid, pg, ps, next) {
+		var cursor = mongo.findPhotosByUser(uid, pg, ps);
+		var photos = [];
+		var count = 0;
+		function read() {
+			cursor.nextObject(function (err, photo) {
+				if (err) return next(err);
+				if (photo) {
+					photo.dir = fs2.makeDeepPath(photoUrlPrefix, photo._id, 3);
+					photo.cdateStr = dt.format(photo.cdate);
+					photos.push(photo);
+					count++;
+					setImmediate(read);
+					return;
+				}
+				next(null, photos, count !== ps);
 			});
 		}
 		read();

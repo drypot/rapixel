@@ -2,13 +2,15 @@ body {
   padding-bottom: 40px;
 }
 .jumbotron {
-  padding-left: 0px;
-  padding-right: 0px;
+  padding: 30px 0px 30px 13px;
   margin-bottom: 0px;
   background-color: white;
 }
+.jumbotron h2 {
+  font-size: 49px;
+}
 .jumbotron p {
-  margin-top: 20px;
+  margin-top: 25px;
 }
 .content {
   padding-left: 3px;
@@ -43,8 +45,9 @@ body {
   margin-right: 15px;
 }
 body.photo-view {
-  background-color: #111111;
+  background-color: #222222;
   color: #e0e0e0;
+  font-size: 18px;
 }
 body.photo-view .photo {
   margin: 0px;
@@ -55,7 +58,6 @@ body.photo-view .photo img {
 }
 body.photo-view .info {
   margin: 0px 10px 15px 12px;
-  font-size: 14px;
 }
 body.photo-view .info span {
   margin-right: 15px;
@@ -63,8 +65,11 @@ body.photo-view .info span {
 body.photo-view .comment {
   margin: 0px 10px 30px 12px;
 }
+body.photo-view .footer {
+  margin: 0px 10px 30px 12px;
+}
 body.photo-view .action {
-  margin: 0px 10px 70px 12px;
+  margin: 45px 10px 70px 12px;
 }
 body.photo-view .home {
   margin: 0px 10px 8px 12px;
@@ -72,8 +77,12 @@ body.photo-view .home {
 body.photo-view .home a,
 body.photo-view .home a.hover {
   color: white;
-  font-size: 38px;
+  font-size: 28px;
   font-weight: 500;
+}
+body.photo-view a {
+  font-size: 18px;
+  color: #e0e0e0;
 }
 form .form-row {
   margin-bottom: 10px;
@@ -105,4 +114,12 @@ form .alert {
 }
 form textarea {
   font-family: monospace;
+}
+.btn-mini {
+  padding: 2px 6px;
+  font-size: 12px;
+}
+.actions {
+  margin-top: 20px;
+  margin-bottom: 30px;
 }

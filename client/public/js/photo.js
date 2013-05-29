@@ -15,8 +15,6 @@ init.add(function () {
 			});
 			return false;
 		});
-		var $comment = $('.comment');
-		$comment.html($comment.html().replace(/\n/g, '<br>'));
 	};
 
 	function showPhoto(p) {

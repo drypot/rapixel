@@ -12,15 +12,18 @@ block content
 	.photo
 
 	.info
-		span #{photo.user.name}
+		span
+			a(href='/users/' + photo.user._id) #{photo.user.name}
 		span hit !{photo.hit}
 		span !{photo.cdateStr}
 
-	.comment #{photo.comment}
+	.comment !{jade.escape(photo.comment).replace(/\n/g, '<br>')}
+
+	.footer !{jade.escape(photo.user.footer).replace(/\n/g, '<br>')}
 
 	.action
 		if locals.user && photo.user._id == user._id
-			button#del-btn.btn.btn-danger Delete Photo
+			button#del-btn.btn.btn-danger.btn-mini Delete Photo
 
 	.home
 		a(href='/') #{siteTitle}

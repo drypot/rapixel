@@ -6,6 +6,7 @@ require('../main/photo-api');
 require('../main/photo-html');
 require('../main/session-api');
 require('../main/user-api');
+require('../main/user-html');
 require('../main/hello-api');
 require('../main/static-html');
 require('../main/upload-api');

@@ -11,34 +11,12 @@ init.add(function () {
 
 	app.get('/api/users/:id([0-9]+)', function (req, res) {
 		var id = parseInt(req.params.id) || 0;
-		var user = res.locals.user;
-		userl.findCachedUser(id, function (err, cuser) {
+		userl.findUserForView(id, res.locals.user, function (err, tuser) {
 			if (err) return res.jsonErr(err);
-			if (user && (user._id == cuser._id || user.admin)) {
-				res.json({
-					user: {
-						_id: cuser._id,
-						name: cuser.name,
-						status: cuser.status,
-						cdate: cuser.cdate.getTime(),
-						adate: cuser.adate.getTime(),
-						profile: cuser.profile,
-						email: cuser.email
-					}
-				});
-			} else {
-				res.json({
-					user: {
-						_id: cuser._id,
-						name: cuser.name,
-						status: cuser.status,
-						cdate: cuser.cdate.getTime(),
-						adate: cuser.adate.getTime(),
-						profile: cuser.profile
-					}
-				});
-			}
-		});
+			res.json({
+				user: tuser
+			});
+		})
 	});
 
 	app.post('/api/users', function (req, res) {

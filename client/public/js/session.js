@@ -34,4 +34,20 @@ init.add(function () {
 		});
 	};
 
+	session.initProfile = function () {
+		var $profile = $('#profile');
+		$profile.html(tagUpText($profile.html()));
+	};
+
+	session.initEditProfile = function () {
+		var $form = formty.getForm('#edit-form');
+		var uid = url.pathnames[1];
+		$form.$send.click(function () {
+			formty.put('/api/users/' + uid, $form, function (err, res) {
+				location = '/users/' + uid;
+			});
+			return false;
+		});
+	};
+
 });

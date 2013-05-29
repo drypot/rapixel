@@ -4,12 +4,14 @@ body {
 }
 
 .jumbotron {
-	padding-left: 0px;
-	padding-right: 0px;
+	padding: 30px 0px 30px 13px;
 	margin-bottom: 0px;
 	background-color: white;
+	h2 {
+		font-size: 49px
+	}
 	p {
-		margin-top:20px;
+		margin-top:25px;
 	}
 }
 
@@ -53,8 +55,10 @@ body {
 }
 
 body.photo-view {
-	background-color: #111111;
+	background-color: #222222;
 	color: #e0e0e0;
+	font-size: 18px;
+
 	.photo {
 		margin: 0px;
 		margin-bottom: 15px;
@@ -64,26 +68,32 @@ body.photo-view {
 	}
 	.info {
 		margin: 0px 10px 15px 12px;
-		font-size: 14px;
 		span {
 			margin-right: 15px;
 		}
 	}
 	.comment {
 		margin: 0px 10px 30px 12px;
+	}
+	.footer {
+		margin: 0px 10px 30px 12px;
 
 	}
 	.action {
-		margin: 0px 10px 70px 12px;
+		margin: 45px 10px 70px 12px;
 
 	}
 	.home {
 		margin: 0px 10px 8px 12px;
 		a, a.hover {
 			color: white;
-			font-size: 38px;
+			font-size: 28px;
 			font-weight: 500;
 		}
+	}
+	a {
+		font-size: 18px;
+		color: #e0e0e0;
 	}
 }
 
@@ -124,4 +134,14 @@ form {
 	textarea {
 		font-family: monospace;
 	}
+}
+
+.btn-mini {
+	padding: 2px 6px;
+	font-size: 12px;
+}
+
+.actions {
+	margin-top: 20px;
+	margin-bottom: 30px;
 }

@@ -205,6 +205,64 @@ init.add(function (next) {
 		});
 	};
 
+	exports.findUserForView = function (id, user, next) {
+		exports.findCachedUser(id, function (err, _tuser) {
+			if (err) return next(err);
+			var tuesr;
+			if (user && user.admin) {
+				tuesr = {
+					_id: _tuser._id,
+					name: _tuser.name,
+					email: _tuser.email,
+					status: _tuser.status,
+					cdate: _tuser.cdate.getTime(),
+					adate: _tuser.adate.getTime(),
+					profile: _tuser.profile,
+					footer: _tuser.footer
+				};
+			} else if (user && user._id == _tuser._id) {
+				tuesr = {
+					_id: _tuser._id,
+					name: _tuser.name,
+					email: _tuser.email,
+					status: _tuser.status,
+					cdate: _tuser.cdate.getTime(),
+					adate: _tuser.adate.getTime(),
+					profile: _tuser.profile,
+					footer: _tuser.footer
+				};
+			} else {
+				tuesr = {
+					_id: _tuser._id,
+					name: _tuser.name,
+					//email: _tuser.email,
+					status: _tuser.status,
+					cdate: _tuser.cdate.getTime(),
+					//adate: _tuser.adate.getTime(),
+					profile: _tuser.profile,
+					footer: _tuser.footer
+				};
+			}
+			next(null, tuesr);
+		});
+	}
+
+	exports.findUserForEdit = function (id, user, next) {
+		checkUpdateAuth(id, user, function (err) {
+			if (err) return next(err);
+			exports.findCachedUser(id, function (err, _tuser) {
+				if (err) return next(err);
+				next(null, {
+					_id: _tuser._id,
+					name: _tuser.name,
+					email: _tuser.email,
+					profile: _tuser.profile,
+					footer: _tuser.footer
+				});
+			});
+		});
+	};
+
 	next();
 
 });

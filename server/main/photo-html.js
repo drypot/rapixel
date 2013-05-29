@@ -1,3 +1,4 @@
+var l = require('../main/l');
 var init = require('../main/init');
 var express = require('../main/express');
 var photol = require('../main/photo');
@@ -14,6 +15,8 @@ init.add(function () {
 		var pid = parseInt(req.params.pid) || 0;
 		photol.findPhoto(pid, function (err, photo) {
 			if (err) return res.renderErr(err);
+			photo.commentEscaped = l.escapeForHtml(photo.comment);
+			photo.user.footerEscaped = l.escapeForHtml(photo.user.footer);
 			res.render('photo-view', {
 				photo: photo,
 				photoView: true
@@ -26,11 +29,9 @@ init.add(function () {
 	});
 
 	app.get('/', function (req, res) {
-		var pg = parseInt(req.query.pg) || 1;
-		pg = pg < 1 ? 1 : pg;
-		var pgsize = parseInt(req.query.ps) || 16;
-		pgsize = pgsize > 64 ? 64 : pgsize < 1 ? 1 : pgsize;
-		photol.list(pg, pgsize, function (err, photos, last) {
+		var pg = photol.getPage(req.query.pg);
+		var ps = photol.getPageSize(req.query.ps);
+		photol.findPhotos(pg, ps, function (err, photos, last) {
 			if (err) return res.renderErr(err);
 			prevNext(pg, last, function (prevUrl, nextUrl) {
 				res.render('photo-list', {

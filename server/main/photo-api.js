@@ -30,11 +30,9 @@ init.add(function () {
 	});
 
 	app.get('/api/photos', function (req, res) {
-		var pg = parseInt(req.query.pg) || 1;
-		pg = pg < 1 ? 1 : pg;
-		var pgsize = parseInt(req.query.ps) || 16;
-		pgsize = pgsize > 64 ? 64 : pgsize < 1 ? 1 : pgsize;
-		photol.list(pg, pgsize, function (err, photos, last) {
+		var pg = photol.getPage(req.query.pg);
+		var ps = photol.getPageSize(req.query.ps);
+		photol.findPhotos(pg, ps, function (err, photos, last) {
 			if (err) return res.jsonErr(err);
 			res.json({
 				photos: photos,

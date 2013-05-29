@@ -130,3 +130,5 @@ describe("listing last page", function () {
 		});
 	});
 });
+
+// TODO: find photos by user

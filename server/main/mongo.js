@@ -159,9 +159,14 @@ init.add(function (next) {
 			return photos.find({}, opt);
 		};
 
-//		exports.findPhotosByUser = function (uid, pg, pgsize, next) {
-//
-//		};
+		exports.findPhotosByUser = function (uid, pg, pgsize) {
+			var opt = {
+				sort: { _id: -1 },
+				skip: (Math.abs(pg) - 1) * pgsize,
+				limit: pgsize
+			};
+			return photos.find({ uid: uid }, opt);
+		};
 
 		photos = exports.photos = db.collection("photos");
 		photos.ensureIndex({ uid: 1, _id: -1 }, function (err) {
