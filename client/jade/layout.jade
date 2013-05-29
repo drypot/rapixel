@@ -29,8 +29,8 @@ html
 		script(src="/js/session.js")
 		script(src="/js/photo.js")
 
-	if !locals.photoView
-		body
+	body(class= locals.photoView ? 'photo-view' : '')
+		if !locals.photoView
 			.container
 				.navbar.limit-width
 					button.navbar-toggle(type="button", data-toggle="collapse", data-target=".navbar-responsive-collapse")
@@ -48,39 +48,38 @@ html
 								li: a(href="/users/login") Login
 								li: a(href="/users/register") Register
 
-		block content
+			block content
 
-		.container
-			.limit-width
-				#footer
-					ul.list-inline
-						li: a(href="/company") Company
-						li: a(href="/privacy") Privacy
-						li: a(href="/help") Help
+			.container
+				.limit-width
+					#footer
+						ul.list-inline
+							li: a(href="/company") Company
+							li: a(href="/privacy") Privacy
+							li: a(href="/help") Help
 
-	else
-		body.photo-view
-		block content
+		else
+			block content
 
-	#error-modal.modal
-			.modal-dialog
-				.modal-content
-					.modal-header
-						button.close(type="button", data-dismiss="modal", aria-hidden="true") ×
-						h3.modal-title Modal title
-					.modal-body
-					.modal-footer
-						a.btn.btn-primary(data-dismiss="modal") Close
+		#error-modal.modal
+				.modal-dialog
+					.modal-content
+						.modal-header
+							button.close(type="button", data-dismiss="modal", aria-hidden="true") ×
+							h3.modal-title Modal title
+						.modal-body
+						.modal-footer
+							a.btn.btn-primary(data-dismiss="modal") Close
 
-	#file-input-templ.hide
-		.file
-			div(style='width: 0px; height: 0px;')
-				input(type='file', multiple='multiple')
-			.input-group
-				input(type='text', disabled)
-				span.input-group-btn
-					button.btn.btn-default File
+		#file-input-templ.hide
+			.file
+				div(style='width: 0px; height: 0px;')
+					input(type='file', multiple='multiple')
+				.input-group
+					input(type='text', disabled)
+					span.input-group-btn
+						button.btn.btn-default File
 
-	#file-input-templ-msie.hide
-		.file
-			input(type='file')
+		#file-input-templ-msie.hide
+			.file
+				input(type='file')
