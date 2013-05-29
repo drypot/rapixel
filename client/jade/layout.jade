@@ -42,6 +42,7 @@ html
 						ul.nav.navbar-nav.pull-right
 							if locals.user
 								li: a(href="/photos/new") Upload
+								li: a(href="/users/" + user._id) Profile
 								li: a#logout-btn(href="/users/logout") Logout
 							else
 								li: a(href="/users/login") Login

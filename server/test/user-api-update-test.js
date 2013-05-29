@@ -7,6 +7,7 @@ var config = require('../main/config')({ test: true });
 var mongo = require('../main/mongo')({ dropDatabase: true });
 var express = require('../main/express');
 var error = require('../main/error');
+var userl = require('../main/user');
 var ufix = require('../test/user-fixture');
 
 require('../main/session-api');
@@ -24,7 +25,7 @@ before(function (next) {
 	ufix.createFixtures(next);
 });
 
-describe("updating", function () {
+describe("updating and permission", function () {
 	describe("given new user", function () {
 		var _user = { name: 'testauth', email: 'testauth@def.com', password: '1234' };
 		before(function (next) {
@@ -43,15 +44,17 @@ describe("updating", function () {
 				next();
 			});
 		});
-		it("should success", function (next) {
-			var form = { name: 'testauth2', email: 'testauth2@def.com' };
-			express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-				should(!res.error);
-				should(!res.body.err);
-				next();
+		describe("updating own profile", function () {
+			it("should success", function (next) {
+				var form = { name: 'testauth2', email: 'testauth2@def.com' };
+				express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
+					should(!res.error);
+					should(!res.body.err);
+					next();
+				});
 			});
 		});
-		describe("logged in as other", function () {
+		describe("updating other's profile", function () {
 			before(function (next) {
 				ufix.loginUser1(next);
 			});
@@ -64,15 +67,73 @@ describe("updating", function () {
 				});
 			});
 		});
-		describe("logged in as admin", function () {
+		describe("updating by admin", function () {
 			before(function (next) {
 				ufix.loginAdmin(next);
 			});
-			it("should fail", function (next) {
+			it("should success", function (next) {
 				var form = { name: 'testauth2', email: 'testauth2@def.com' };
 				express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
 					should(!res.error);
 					should(!res.body.err);
+					next();
+				});
+			});
+			it("should fail for invalid id", function (next) {
+				var form = { name: 'testauth3', email: 'testauth3@def.com' };
+				express.put('/api/users/' + 999).send(form).end(function (err,res) {
+					should(!res.error);
+					res.body.err.rc.should.equal(error.USER_NOT_FOUND);
+					next();
+				});
+			});
+		});
+	});
+});
+
+describe("updating and cache", function () {
+	describe("given new user", function () {
+		var _user = { name: 'testcache', email: 'testcache@def.com', password: '1234' };
+		before(function (next) {
+			express.post('/api/users').send(_user).end(function (err,res) {
+				should(!res.error);
+				should(!res.body.err);
+				_user._id = res.body.user._id;
+				next();
+			});
+		});
+		before(function (next) {
+			var form = { email: _user.email, password: _user.password };
+			express.post('/api/sessions').send(form).end(function (err, res) {
+				should(!res.error);
+				should(!res.body.err);
+				next();
+			});
+		});
+		describe("checking cache before update", function () {
+			it("should success", function (next) {
+				userl.findCachedUser(_user._id, function (err, user) {
+					should(!err);
+					user.name.should.equal('testcache');
+					user.email.should.equal('testcache@def.com');
+					next();
+				});
+			});
+		});
+		describe("checking cache after update", function () {
+			before(function (next) {
+				var form = { name: 'testcache2', email: 'testcache2@def.com' };
+				express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
+					should(!res.error);
+					should(!res.body.err);
+					next();
+				});
+			});
+			it("should success", function (next) {
+				userl.findCachedUser(_user._id, function (err, user) {
+					should(!err);
+					user.name.should.equal('testcache2');
+					user.email.should.equal('testcache2@def.com');
 					next();
 				});
 			});

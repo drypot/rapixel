@@ -68,7 +68,7 @@ init.add(function (next) {
 					mongo.updateUser(id, fields, function (err, cnt) {
 						if (err) return next(err);
 						if (!cnt) {
-							return next(error.USER_NOT_FOUND);
+							return next(error(error.USER_NOT_FOUND));
 						}
 						delete users[id];
 						next();
@@ -84,7 +84,7 @@ init.add(function (next) {
 			mongo.updateUserStatus(id, 'd', function (err, cnt) {
 				if (err) return next(err);
 				if (!cnt) {
-					return next(error.USER_NOT_FOUND);
+					return next(error(error.USER_NOT_FOUND));
 				}
 				delete users[id];
 				next();
