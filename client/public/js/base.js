@@ -85,3 +85,33 @@ init.add(function () {
 
 });
 
+init.add(function () {
+
+	var patterns = [
+		{	// url
+			pattern: /(https?:\/\/[^ "'><)\n\r]+)/g,
+			replace: '<a href="$1" target="_blank">$1</a>'
+		}
+	];
+
+	window.tagUpText = function (s, pi) {
+		if (pi == undefined) {
+			pi = 0;
+		}
+		if (pi == patterns.length) {
+			return s;
+		}
+		var p = patterns[pi];
+		var r = '';
+		var a = 0;
+		var match;
+		while(match = p.pattern.exec(s)) {
+			r += tagUpText(s.slice(a, match.index), pi + 1);
+			r += p.replace.replace(/\$1/g, match[1]);
+			a = match.index + match[0].length;
+		}
+		r += tagUpText(s.slice(a), pi + 1);
+		return r;
+	};
+
+});
