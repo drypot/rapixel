@@ -15,8 +15,6 @@ init.add(function () {
 		var pid = parseInt(req.params.pid) || 0;
 		photol.findPhoto(pid, function (err, photo) {
 			if (err) return res.renderErr(err);
-			photo.commentEscaped = l.escapeForHtml(photo.comment);
-			photo.user.footerEscaped = l.escapeForHtml(photo.user.footer);
 			res.render('photo-view', {
 				photo: photo,
 				photoView: true
