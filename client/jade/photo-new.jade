@@ -5,39 +5,38 @@ block title
 
 block content
 
-	.container
-		.content
-			.page-header
-				h2 Upload
+	.side-space
+		.page-header
+			h2 Upload
 
-			if hours > 0
-				h4 One photo per day.
-				h4 You can upload after #{hours} hours.
+		if hours > 0
+			h4 One photo per day.
+			h4 You can upload after #{hours} hours.
 
-			else
-				script
-					init.add(function() {
-						photo.initNewForm();
-					});
+		else
+			script
+				init.add(function() {
+					photo.initNewForm();
+				});
 
-				form#new-form
-					.form-row.file-group
-						label.control-label Photo
-						.files.col-lg-7
-					.form-row
-						label Comment
-						textarea(name='comment', rows=7)
-					.form-actions
-						.send-panel
-							button.btn.btn-primary(name='send') Send
-						.sending-panel.hide
-							button.btn.btn-default.disabled(name='sending') Sending
+			form#form
+				.form-row.file-group
+					label.control-label Photo
+					.files.col-lg-7
+				.form-row
+					label Comment
+					textarea(name='comment', rows=7)
+				.form-actions
+					.send-panel
+						button.btn.btn-primary(name='send') Send
+					.sending-panel.hide
+						button.btn.btn-default.disabled(name='sending') Sending
 
-				div(style='margin-top:50px; font-size:18px').
-					Image height must be 2160 pixels or above.<br>
-					Image ratio must be 16:9.<br>
-					Image size must be 10MB or below.<br>
-					<br>
-					You must be copyright owner.<br>
-					We can deliver uploaded images to various devices.<br>
+			div(style='margin-top:50px; font-size:18px').
+				Image height must be 2160 pixels or above.<br>
+				Image ratio must be 16:9.<br>
+				Image size must be 10MB or below.<br>
+				<br>
+				You must be copyright owner.<br>
+				We can deliver uploaded images to various devices.<br>
 

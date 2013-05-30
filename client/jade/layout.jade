@@ -32,31 +32,31 @@ html
 	body(class= locals.photoView ? 'photo-view' : '')
 		if !locals.photoView
 			.container
-				.navbar.limit-width
-					button.navbar-toggle(type="button", data-toggle="collapse", data-target=".navbar-responsive-collapse")
-						span.icon-bar
-						span.icon-bar
-						span.icon-bar
-					a.navbar-brand(href="/")= siteTitle
-					.nav-collapse.collapse.navbar-responsive-collapse
-						ul.nav.navbar-nav.pull-right
-							if locals.user
-								li: a(href="/photos/new") Upload
-								li: a(href="/users/" + user._id) Profile
-								li: a#logout-btn(href="/users/logout") Logout
-							else
-								li: a(href="/users/login") Login
-								li: a(href="/users/register") Register
-
-			block content
-
-			.container
 				.limit-width
-					#footer
-						ul.list-inline
-							li: a(href="/company") Company
-							li: a(href="/privacy") Privacy
-							li: a(href="/help") Help
+					.navbar
+						button.navbar-toggle(type="button", data-toggle="collapse", data-target=".navbar-responsive-collapse")
+							span.icon-bar
+							span.icon-bar
+							span.icon-bar
+						a.navbar-brand(href="/")= siteTitle
+						.nav-collapse.collapse.navbar-responsive-collapse
+							ul.nav.navbar-nav.pull-right
+								if locals.user
+									li: a(href="/photos/new") Upload
+									li: a(href="/users/" + user._id) Profile
+									li: a#logout-btn(href="/users/logout") Logout
+								else
+									li: a(href="/users/login") Login
+									li: a(href="/users/register") Register
+
+					block content
+
+					.footer
+						.side-space
+							ul.list-inline
+								li: a(href="/company") Company
+								li: a(href="/privacy") Privacy
+								li: a(href="/help") Help
 
 		else
 			block content

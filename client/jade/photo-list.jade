@@ -5,35 +5,23 @@ block title
 
 block content
 
-	.container
-		.content
-			if firstPage
-				.jumbotron
-					h1 Rapixel
-					p 4K Images
+	.side-space
+		if firstPage
+			.jumbotron
+				h1 Rapixel
+				p 4K Images
 
-		.photos
-			for photo in photos
-				.photo
-					.img
-						a(href='/photos/' + photo._id)
-							img(src=photo.dir + '/' + photo._id + '-320.jpg')
-					.info
-						span
-							a(href='/users/' + photo.user._id) #{photo.user.name}
-						span hit !{photo.hit}
-						span !{photo.cdateStr}
+	.photos
+		for photo in photos
+			.photo
+				.img
+					a(href='/photos/' + photo._id)
+						img(src=photo.dir + '/' + photo._id + '-320.jpg')
+				.info
+					span
+						a(href='/users/' + photo.user._id) #{photo.user.name}
+					span hit !{photo.hit}
+					span !{photo.cdateStr}
+	.side-space
+		include pager
 
-			ul.pager(style='text-align: left;')
-				if locals.prevUrl
-					li
-						a(href=prevUrl) Previous
-				else
-					li.disabled
-						a(href='javascript:void(0)') Previous
-				if locals.nextUrl
-					li
-						a(href=nextUrl) Next
-				else
-					li.disabled
-						a(href='javascript:void(0)') Next

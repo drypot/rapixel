@@ -9,41 +9,29 @@ block content
 			session.initProfile();
 		});
 
-	.container
-		.content
-			if firstPage
-				.page-header
-					h2 #{tuser.name}
-				.profile
-					.profile-text.
-						!{jade.escape(tuser.profile).replace(/.*/g, "<h4>$&</h4>")}
-					if showActions
-						.profile-actions
-							a.btn.btn-mini.btn-primary(href='/users/' + tuser._id + '/edit') Edit Profile
+	.side-space
+		if firstPage
+			.page-header
+				h2 #{tuser.name}
+			.profile
+				.profile-text.
+					!{jade.escape(tuser.profile).replace(/.*/g, "<h4>$&</h4>")}
+				if showActions
+					.profile-actions
+						a.btn.btn-mini.btn-primary(href='/users/' + tuser._id + '/edit') Edit Profile
 
-		if photos.length
-			.photos
-				for photo in photos
-					.photo
-						.img
-							a(href='/photos/' + photo._id)
-								img(src=photo.dir + '/' + photo._id + '-320.jpg')
-						.info
-							span
-								a(href='/users/' + tuser._id) #{tuser.name}
-							span hit !{photo.hit}
-							span !{photo.cdateStr}
+	if photos.length
+		.photos
+			for photo in photos
+				.photo
+					.img
+						a(href='/photos/' + photo._id)
+							img(src=photo.dir + '/' + photo._id + '-320.jpg')
+					.info
+						span
+							a(href='/users/' + tuser._id) #{tuser.name}
+						span hit !{photo.hit}
+						span !{photo.cdateStr}
 
-				ul.pager(style='text-align: left;')
-					if locals.prevUrl
-						li
-							a(href=prevUrl) Previous
-					else
-						li.disabled
-							a(href='javascript:void(0)') Previous
-					if locals.nextUrl
-						li
-							a(href=nextUrl) Next
-					else
-						li.disabled
-							a(href='javascript:void(0)') Next
+		.side-space
+			include pager

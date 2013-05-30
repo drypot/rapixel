@@ -11,19 +11,20 @@ block content
 
 	.photo
 
-	.info
-		span
-			a(href='/users/' + photo.user._id) #{photo.user.name}
-		span hit !{photo.hit}
-		span !{photo.cdateStr}
+	.side-space
+		.info
+			span
+				a(href='/users/' + photo.user._id) #{photo.user.name}
+			span hit !{photo.hit}
+			span !{photo.cdateStr}
 
-	.comment !{jade.escape(photo.comment).replace(/\n/g, '<br>')}
+		.comment !{jade.escape(photo.comment).replace(/\n/g, '<br>')}
 
-	.footer !{jade.escape(photo.user.footer).replace(/\n/g, '<br>')}
+		.photo-footer !{jade.escape(photo.user.footer).replace(/\n/g, '<br>')}
 
-	.action
-		if locals.user && photo.user._id == user._id
-			button#del-btn.btn.btn-danger.btn-mini Delete Photo
+		.action
+			if locals.user && photo.user._id == user._id
+				button#del-btn.btn.btn-danger.btn-mini Delete Photo
 
-	.home
-		a(href='/') #{siteTitle}
+		.home
+			a(href='/') #{siteTitle}

@@ -3,25 +3,32 @@ body {
 	padding-bottom: 40px;
 }
 
-.content {
-	padding-left:15px;
-	padding-right:15px;
-	max-width: 570px;
-}
-
-#footer {
-	margin-top:30px;
-	padding-top:10px;
-	padding-left:10px;
-	border-top: 1px solid #eeeeee;
-}
-
 .limit-width {
 	max-width: 570px;
 }
 
-.width100 {
-	width: 100%;
+.side-space {
+	margin-left: 1px;
+	margin-right: 1px;
+	padding-left: 8px;
+	padding-right: 8px;
+}
+
+.footer {
+	margin-top: 45px;
+	border-top: 1px solid #eeeeee;
+	padding-top: 12px;
+	color: #888;
+	a {
+		color: inherit;
+	}
+	ul {
+		margin: 0px;
+		li {
+			padding-left:0px;
+			padding-right:9px;
+		}
+	}
 }
 
 .jumbotron {
@@ -53,67 +60,65 @@ body {
 }
 
 .photos {
-	margin-top:20px;
-	margin-left:1px;
-	margin-right:1px;
-
+	margin:20px 1px 25px 1px;
 	.photo {
+		color: #888;
 		margin-bottom: 15px;
-	}
-	.img {
-		margin-bottom: 0px;
-	}
-	.info {
-		margin-left:4px;
-		span {
-			margin-right:15px;
+		.img {
+			margin-bottom: 0px;
 		}
-	}
-	a {
-		color: #333;
+		.info {
+			margin-left:8px;
+			span {
+				margin-right:15px;
+			}
+		}
+		a {
+			color: inherit;
+		}
 	}
 }
 
 body.photo-view {
 	background-color: #222222;
-	color: #e0e0e0;
-	font-size: 18px;
+	color: #888;
+	font-size: 16px;
+
+	a {
+		font-size: 18px;
+		color: #e0e0e0;
+	}
 
 	.photo {
 		margin: 0px;
-		margin-bottom: 15px;
+		margin-bottom: 8px;
 		img {
 			max-width: none;
 		}
 	}
 	.info {
-		margin: 0px 10px 15px 12px;
+		margin: 0px 10px 24px 12px;
 		span {
 			margin-right: 15px;
 		}
 	}
 	.comment {
-		margin: 0px 10px 30px 12px;
+		margin: 0px 10px 24px 12px;
 	}
-	.footer {
-		margin: 0px 10px 30px 12px;
+	.photo-footer {
+		margin: 0px 10px 24px 12px;
 
 	}
 	.action {
-		margin: 45px 10px 70px 12px;
+		margin: 45px 10px 24px 12px;
 
 	}
 	.home {
-		margin: 0px 10px 8px 12px;
+		margin: 55px 10px 8px 12px;
 		a, a.hover {
-			color: white;
 			font-size: 28px;
 			font-weight: 500;
 		}
-	}
-	a {
-		font-size: 18px;
-		color: #e0e0e0;
 	}
 }
 
@@ -154,6 +159,16 @@ form {
 	textarea {
 		font-family: monospace;
 	}
+}
+
+.pager {
+	margin-left: -6px;
+	text-align: left;
+}
+
+.pagination {
+	margin: 0px;
+	margin-left: -1px;
 }
 
 .btn-mini {

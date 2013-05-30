@@ -1,0 +1,13 @@
+ul.pagination
+	if locals.prevUrl
+		li
+			a(href=prevUrl): span.glyphicon.glyphicon-chevron-left
+	else
+		li.disabled
+			a(href='javascript:void(0)'): span.glyphicon.glyphicon-chevron-left
+	if locals.nextUrl
+		li
+			a(href=nextUrl): span.glyphicon.glyphicon-chevron-right
+	else
+		li.disabled
+			a(href='javascript:void(0)'): span.glyphicon.glyphicon-chevron-right

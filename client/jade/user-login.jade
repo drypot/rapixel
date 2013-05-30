@@ -9,30 +9,29 @@ block content
 			session.initLogin();
 		});
 
-	.container
-		.content
-			if newUser
-				.page-header
-					h2 Thank you
-
-				h4 회원으로 가입되셨습니다.
-				h4 등록하신 이메일과 비밀번호로 로그인하실 수 있습니다.
-
+	.side-space
+		if newUser
 			.page-header
-				h2 Login
+				h2 Thank you
 
-			form#login-form
-				.form-row
-					label.control-label Email
-					input.input-with-feedback.col-lg-5(name="email", type="text")
-				.form-row
-					label.control-label Password
-					input.input-with-feedback.col-lg-5(name="password", type="password")
-				.checkbox
-					label Remember
-					input(name="remember", type="checkbox")
-				.form-actions
-					.send-panel
-						button.btn.btn-primary(name='send') Send
-					.sending-panel.hide
-						button.btn.btn-default.disabled(name='sending') Sending
+			h4 회원으로 가입되셨습니다.
+			h4 등록하신 이메일과 비밀번호로 로그인하실 수 있습니다.
+
+		.page-header
+			h2 Login
+
+		form#form
+			.form-row
+				label.control-label Email
+				input.input-with-feedback.col-lg-5(name="email", type="text")
+			.form-row
+				label.control-label Password
+				input.input-with-feedback.col-lg-5(name="password", type="password")
+			.checkbox
+				label Remember
+				input(name="remember", type="checkbox")
+			.form-actions
+				.send-panel
+					button.btn.btn-primary(name='send') Send
+				.sending-panel.hide
+					button.btn.btn-default.disabled(name='sending') Sending

@@ -4,7 +4,7 @@ init.add(function () {
 	window.session = {};
 
 	session.initLogin = function () {
-		var $form = formty.getForm('#login-form');
+		var $form = formty.getForm('#form');
 		$form.$email.focus();
 		$form.$send.click(function () {
 			formty.post('/api/sessions', $form, function (err) {
@@ -25,7 +25,7 @@ init.add(function () {
 	};
 
 	session.initRegister = function () {
-		var $form = formty.getForm('#reg-form');
+		var $form = formty.getForm('#form');
 		$form.$send.click(function () {
 			formty.post('/api/users', $form, function (err, res) {
 				location = '/users/login?newuser';
@@ -40,7 +40,7 @@ init.add(function () {
 	};
 
 	session.initEditProfile = function () {
-		var $form = formty.getForm('#edit-form');
+		var $form = formty.getForm('#form');
 		var uid = url.pathnames[1];
 		$form.$send.click(function () {
 			formty.put('/api/users/' + uid, $form, function (err, res) {

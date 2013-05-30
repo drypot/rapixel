@@ -9,27 +9,22 @@ block content
 			session.initRegister();
 		});
 
-	.container
-		.content
-			.page-header
-				h2 Register
+	.side-space
+		.page-header
+			h2 Register
 
-			form#reg-form
-				.form-row
-					label.control-label Name
-					input.input-with-feedback.col-lg-5(name="name", type="text", maxlength=32)
-				.form-row
-					label.control-label Email
-					input.input-with-feedback.col-lg-5(name="email", type="text", maxlength=64)
-				.form-row
-					label.control-label Password
-					input.input-with-feedback.col-lg-5(name="password", type="password", maxlength=64)
-				.form-actions
-					.send-panel
-						button.btn.btn-primary(name='send') Send
-					.sending-panel.hide
-						button.btn.btn-default.disabled(name='sending') Sending
-
-			div(style='margin-top:50px; font-size:18px').
-				5 월 1 일 개발을 시작하여 개인정보변경등 기능이 많이 부족합니다.<br>
-				이해 부탁드립니다.<br>
+		form#form
+			.form-row
+				label.control-label Name
+				input.input-with-feedback.col-lg-5(name="name", type="text", maxlength=32)
+			.form-row
+				label.control-label Email
+				input.input-with-feedback.col-lg-5(name="email", type="text", maxlength=64)
+			.form-row
+				label.control-label Password
+				input.input-with-feedback.col-lg-5(name="password", type="password", maxlength=64)
+			.form-actions
+				.send-panel
+					button.btn.btn-primary(name='send') Send
+				.sending-panel.hide
+					button.btn.btn-default.disabled(name='sending') Sending

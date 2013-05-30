@@ -56,7 +56,7 @@ init.add(function () {
 init.add(function () {
 
 	photo.initNewForm = function () {
-		var $form = formty.getForm('#new-form');
+		var $form = formty.getForm('#form');
 		formty.initFileGroup($form, 'files');
 		$form.$send.click(function (err, res) {
 			formty.post('/api/photos', $form, function (err) {

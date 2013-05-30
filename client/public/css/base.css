@@ -1,22 +1,30 @@
 body {
   padding-bottom: 40px;
 }
-.content {
-  padding-left: 15px;
-  padding-right: 15px;
-  max-width: 570px;
-}
-#footer {
-  margin-top: 30px;
-  padding-top: 10px;
-  padding-left: 10px;
-  border-top: 1px solid #eeeeee;
-}
 .limit-width {
   max-width: 570px;
 }
-.width100 {
-  width: 100%;
+.side-space {
+  margin-left: 1px;
+  margin-right: 1px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+.footer {
+  margin-top: 45px;
+  border-top: 1px solid #eeeeee;
+  padding-top: 12px;
+  color: #888;
+}
+.footer a {
+  color: inherit;
+}
+.footer ul {
+  margin: 0px;
+}
+.footer ul li {
+  padding-left: 0px;
+  padding-right: 9px;
 }
 .jumbotron {
   padding: 30px 0px 30px 0px;
@@ -40,64 +48,62 @@ body {
   margin-bottom: 10px;
 }
 .photos {
-  margin-top: 20px;
-  margin-left: 1px;
-  margin-right: 1px;
+  margin: 20px 1px 25px 1px;
 }
 .photos .photo {
+  color: #888;
   margin-bottom: 15px;
 }
-.photos .img {
+.photos .photo .img {
   margin-bottom: 0px;
 }
-.photos .info {
-  margin-left: 4px;
+.photos .photo .info {
+  margin-left: 8px;
 }
-.photos .info span {
+.photos .photo .info span {
   margin-right: 15px;
 }
-.photos a {
-  color: #333;
+.photos .photo a {
+  color: inherit;
 }
 body.photo-view {
   background-color: #222222;
-  color: #e0e0e0;
+  color: #888;
+  font-size: 16px;
+}
+body.photo-view a {
   font-size: 18px;
+  color: #e0e0e0;
 }
 body.photo-view .photo {
   margin: 0px;
-  margin-bottom: 15px;
+  margin-bottom: 8px;
 }
 body.photo-view .photo img {
   max-width: none;
 }
 body.photo-view .info {
-  margin: 0px 10px 15px 12px;
+  margin: 0px 10px 24px 12px;
 }
 body.photo-view .info span {
   margin-right: 15px;
 }
 body.photo-view .comment {
-  margin: 0px 10px 30px 12px;
+  margin: 0px 10px 24px 12px;
 }
-body.photo-view .footer {
-  margin: 0px 10px 30px 12px;
+body.photo-view .photo-footer {
+  margin: 0px 10px 24px 12px;
 }
 body.photo-view .action {
-  margin: 45px 10px 70px 12px;
+  margin: 45px 10px 24px 12px;
 }
 body.photo-view .home {
-  margin: 0px 10px 8px 12px;
+  margin: 55px 10px 8px 12px;
 }
 body.photo-view .home a,
 body.photo-view .home a.hover {
-  color: white;
   font-size: 28px;
   font-weight: 500;
-}
-body.photo-view a {
-  font-size: 18px;
-  color: #e0e0e0;
 }
 form .form-row {
   margin-bottom: 10px;
@@ -129,6 +135,14 @@ form .alert {
 }
 form textarea {
   font-family: monospace;
+}
+.pager {
+  margin-left: -6px;
+  text-align: left;
+}
+.pagination {
+  margin: 0px;
+  margin-left: -1px;
 }
 .btn-mini {
   padding: 2px 6px;
