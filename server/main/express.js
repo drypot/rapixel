@@ -20,7 +20,6 @@ exports = module.exports = function (_opt) {
 init.add(function () {
 
 	var app = exports.app = express();
-	var log = 'express:';
 
 	app.disable('x-powered-by');
 
@@ -29,12 +28,12 @@ init.add(function () {
 	app.set('views', process.cwd() + '/client/jade'); // view root
 	app.locals.pretty = true;
 
-	app.locals.siteTitle = config.data.siteTitle;
+	app.locals.appName = config.data.appName;
 
 	app.use(express.cookieParser(config.data.cookieSecret));
 
 	app.use(express.session({ store: new redisStore({ ttl: 1800 /* 단위: 초. 30 분 */ }) }));
-	log += ' redis';
+	console.log('express: redis');
 
 //	app.use(express.session());
 //	log += ' memory';
@@ -127,9 +126,8 @@ init.add(function () {
 	}
 
 	exports.listen = function () {
-		app.listen(config.data.port);
-		log += ' ' + config.data.port;
-		console.log(log);
+		app.listen(config.data.appPort);
+		console.log('express: listening ' + config.data.appPort);
 	};
 
 

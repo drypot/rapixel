@@ -1,7 +1,7 @@
 extends layout
 
 block title
-	title Photo/!{photo._id} - #{siteTitle}
+	title Photo/!{photo._id} - #{appName}
 
 block content
 	script
@@ -27,4 +27,4 @@ block content
 				button#del-btn.btn.btn-danger.btn-mini Delete Photo
 
 		.home
-			a(href='/') #{siteTitle}
+			a(href='/') #{appName}

@@ -1,14 +1,16 @@
 {
-	"siteTitle": "Rapixel Dev",
+	"appName": "Rapixel Dev",
+	"appPort": 8040,
+	"appUrl": "http://rapixel:8080",
 
-	"port": 8040,
 	"cookieSecret": "o;iejf832ndvs",
 
 	"uploadUrl": "http://rapixelfile:8080",
 	"uploadDir": "upload",
 	"uploadMax": 10,
 
-	"mongoDb": "rapixel"
+	"mongoDb": "rapixel",
 
+	"mailServer": ""
 }
 

@@ -19,7 +19,7 @@ describe("config with test: true", function () {
 		config({ reset: true, test: true });
 		init.run(function (err) {
 			should.not.exists(err);
-			config.data.siteTitle.should.equal("Rapixel Test");
+			config.data.appName.should.equal("Rapixel Test");
 			next();
 		});
 	});
@@ -30,7 +30,7 @@ describe("config with valid path", function () {
 		config({ reset: true, path: 'config/config-test.json' });
 		init.run(function (err) {
 			should.not.exists(err);
-			config.data.siteTitle.should.equal("Rapixel Test");
+			config.data.appName.should.equal("Rapixel Test");
 			next();
 		});
 	});

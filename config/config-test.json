@@ -1,14 +1,16 @@
 {
-	"siteTitle": "Rapixel Test",
+	"appName": "Rapixel Test",
+	"appPort": 8140,
+	"appUrl": "http://rapixel:8080",
 
-	"port": 8140,
 	"cookieSecret": "o;iejf832ndvs",
 
 	"uploadUrl": "http://rapixelfile:8080",
 	"uploadDir": "tmp/upload",
 	"uploadMax": 10,
 
-	"mongoDb": "rapixel-test"
+	"mongoDb": "rapixel-test",
 
+	"mailServer": ""
 }
 
