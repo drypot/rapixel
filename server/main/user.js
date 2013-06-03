@@ -1,4 +1,5 @@
 var bcrypt = require('bcrypt');
+var crypto = require('crypto');
 
 var init = require('../main/init');
 var mongo = require('../main/mongo');
@@ -18,7 +19,7 @@ init.add(function (next) {
 		return form;
 	}
 
-	var emailRe = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)+$/i
+	var emailRe = /^[a-z0-9-_+]+@[a-z0-9-]+(\.[a-z0-9-]+)+$/i
 
 	exports.createUser = function (form, next) {
 		checkForm(form, function (err) {
@@ -263,6 +264,14 @@ init.add(function (next) {
 		});
 	};
 
+	exports.sendPasswordResetMail = function (to, next) {
+
+		crypto.randomBytes(48, function(ex, buf) {
+			var token = buf.toString('hex');
+			console.log();
+		});
+		next();
+	};
 	next();
 
 });
