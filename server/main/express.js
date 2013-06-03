@@ -7,6 +7,7 @@ var config = require('../main/config');
 var session = require('../main/session');
 var upload = require('../main/upload');
 var error = require('../main/error');
+var ecode = require('../main/ecode');
 
 var opt = {};
 
@@ -69,7 +70,7 @@ init.add(function () {
 		var res = this.res;
 		var user = res.locals.user;
 		if (!user) {
-			return next(error(error.NOT_AUTHENTICATED));
+			return next(error(ecode.NOT_AUTHENTICATED));
 		}
 		next(null, user);
 	};
@@ -79,10 +80,10 @@ init.add(function () {
 		var res = this.res;
 		var user = res.locals.user;
 		if (!user) {
-			return next(error(error.NOT_AUTHENTICATED));
+			return next(error(ecode.NOT_AUTHENTICATED));
 		}
 		if (!user.admin) {
-			return next(error(error.NOT_AUTHORIZED));
+			return next(error(ecode.NOT_AUTHORIZED));
 		}
 		next(null, user);
 	};
@@ -112,7 +113,7 @@ init.add(function () {
 	}
 
 	app.response.renderErr = function (err) {
-		if (err.rc && err.rc == error.NOT_AUTHENTICATED) {
+		if (err.rc && err.rc == ecode.NOT_AUTHENTICATED.rc) {
 			this.redirect('/users/login');
 			return;
 		}
@@ -134,7 +135,7 @@ init.add(function () {
 	// for test
 
 	var request = require('superagent').agent();
-	var url = 'http://localhost:' + config.data.port;
+	var url = 'http://localhost:' + config.data.appPort;
 	var methods = [ 'post', 'get', 'put', 'del' ];
 
 	for (var i = 0; i < methods.length; i++) {

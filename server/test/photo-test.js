@@ -4,7 +4,6 @@ var init = require('../main/init');
 var config = require('../main/config')({ test: true });
 var mongo = require('../main/mongo')({ dropDatabase: true });
 var photol = require('../main/photo');
-var error = require('../main/error');
 var ufix = require('../test/user-fixture');
 
 var now = new Date();

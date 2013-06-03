@@ -10,6 +10,7 @@ var mongo = require('../main/mongo');
 var userl = require('../main/user');
 var upload = require('../main/upload');
 var error = require('../main/error');
+var ecode = require('../main/ecode');
 
 init.add(function (next) {
 
@@ -28,7 +29,7 @@ init.add(function (next) {
 	exports.findHours = function(user, now, next) {
 //		사진을 삭제하고 다시 업하는 경우를 허용하도록 한다.
 //		if (user.pdate && ((Date.now() - user.pdate.getTime()) / (18 * 60 * 60 * 1000) < 1 )) {
-//			return next(error(error.PHOTO_CYCLE));
+//			return next(error(ecode.PHOTO_CYCLE));
 //		}
 		mongo.findLastPhoto(user._id, function (err, photo) {
 			if (err) return next(err);
@@ -62,7 +63,7 @@ init.add(function (next) {
 		exports.findHours(user, form.now, function (err, hours) {
 			if (err) return next(err);
 			if (hours > 0) {
-				return next(error('files', error.msg.PHOTO_CYCLE));
+				return next(error(ecode.fields.PHOTO_CYCLE));
 			}
 			checkPhotoFeature(form, function (err, feature) {
 				if (err) return next(err);
@@ -97,21 +98,21 @@ init.add(function (next) {
 	function checkPhotoFeature(form, next) {
 		var file = form.file;
 		if (!file) {
-			return next(error('files', error.msg.PHOTO_NO_FILE));
+			return next(error(ecode.fields.PHOTO_NO_FILE));
 		}
 		if (form.files.length > 1) {
-			return next(error('files', error.msg.PHOTO_NOT_ONE));
+			return next(error(ecode.fields.PHOTO_NOT_ONE));
 		}
 		img.identify(file.tpath, function (err, feature) {
 			if (err) {
-				return next(error('files', error.msg.PHOTO_TYPE))
+				return next(error(ecode.fields.PHOTO_TYPE))
 			}
 			if (feature.height < 2160) {
-				return next(error('files', error.msg.PHOTO_HEIGHT));
+				return next(error(ecode.fields.PHOTO_HEIGHT));
 			}
 			var ratio = feature.width / feature.height;
 			if (ratio < 1.75 || ratio > 1.79) {
-				return next(error('files', error.msg.PHOTO_RATIO));
+				return next(error(ecode.fields.PHOTO_RATIO));
 			}
 			feature.formatLowerCase = feature.format.toLowerCase();
 			next(null, feature);
@@ -172,7 +173,7 @@ init.add(function (next) {
 			if (err) return next(err);
 			mongo.findPhoto(pid, function (err, photo) {
 				if (err) return next(err);
-				if (!photo) return next(error(error.PHOTO_NOTHING_TO_SHOW));
+				if (!photo) return next(error(ecode.PHOTO_NOTHING_TO_SHOW));
 				userl.findCachedUser(photo.uid, function (err, user) {
 					if (err) return next(err);
 					photo.user = {
@@ -192,7 +193,7 @@ init.add(function (next) {
 	exports.del = function (pid, user, next) {
 		mongo.delPhoto(pid, user.admin ? null : user._id, function (err, cnt) {
 			if (err) return next(err);
-			if (!cnt) return next(error(error.PHOTO_NOTHING_TO_DEL));
+			if (!cnt) return next(error(ecode.PHOTO_NOTHING_TO_DEL));
 			fs2.removeDirs(exports.getPhotoPath(pid), function (err) {
 				if (err) return next(err);
 				next();

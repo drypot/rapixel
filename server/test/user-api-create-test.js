@@ -7,6 +7,7 @@ var config = require('../main/config')({ test: true });
 var mongo = require('../main/mongo')({ dropDatabase: true });
 var express = require('../main/express');
 var error = require('../main/error');
+var ecode = require('../main/ecode');
 
 require('../main/user-api');
 
@@ -26,7 +27,7 @@ describe("creating name check", function () {
 		var form = { name: '', email: 'abc@def.com', password: '1234' };
 		express.post('/api/users').send(form).end(function (err,res) {
 			should(!res.error);
-			should(error.find(res.body.err, 'name', error.msg.NAME_EMPTY));
+			should(error.find(res.body.err, ecode.fields.NAME_EMPTY));
 			next();
 		});
 	});
@@ -35,7 +36,7 @@ describe("creating name check", function () {
 		express.post('/api/users').send(form).end(function (err,res) {
 			should(!res.error);
 			should(res.body.err);
-			should(error.find(res.body.err, 'name', error.msg.NAME_RANGE));
+			should(error.find(res.body.err, ecode.fields.NAME_RANGE));
 			next();
 		});
 	});
@@ -44,7 +45,7 @@ describe("creating name check", function () {
 		express.post('/api/users').send(form).end(function (err,res) {
 			should(!res.error);
 			should(res.body.err);
-			should(error.find(res.body.err, 'name', error.msg.NAME_RANGE));
+			should(error.find(res.body.err, ecode.fields.NAME_RANGE));
 			next();
 		});
 	});
@@ -82,7 +83,7 @@ describe("creating name check", function () {
 			var form = { name: 'snowman', email: 'snowman-xyz@def.com', password: '1234' };
 			express.post('/api/users').send(form).end(function (err,res) {
 				should(res.body.err);
-				should(error.find(res.body.err, 'name', error.msg.NAME_DUPE));
+				should(error.find(res.body.err, ecode.fields.NAME_DUPE));
 				next();
 			});
 		});
@@ -131,7 +132,7 @@ describe("creating email check", function () {
 		express.post('/api/users').send(form).end(function (err,res) {
 			should(!res.error);
 			should(res.body.err);
-			should(error.find(res.body.err, 'email', error.msg.EMAIL_PATTERN));
+			should(error.find(res.body.err, ecode.fields.EMAIL_PATTERN));
 			next();
 		});
 	});
@@ -140,7 +141,7 @@ describe("creating email check", function () {
 		express.post('/api/users').send(form).end(function (err,res) {
 			should(!res.error);
 			should(res.body.err);
-			should(error.find(res.body.err, 'email', error.msg.EMAIL_PATTERN));
+			should(error.find(res.body.err, ecode.fields.EMAIL_PATTERN));
 			next();
 		});
 	});
@@ -174,7 +175,7 @@ describe("creating email check", function () {
 			express.post('/api/users').send(form).end(function (err,res) {
 				should(!res.error);
 				should(res.body.err);
-				should(error.find(res.body.err, 'email', error.msg.EMAIL_DUPE));
+				should(error.find(res.body.err, ecode.fields.EMAIL_DUPE));
 				next();
 			});
 		});
@@ -191,7 +192,7 @@ describe("creating password check", function () {
 		express.post('/api/users').send(form).end(function (err,res) {
 			should(!res.error);
 			should(res.body.err);
-			should(error.find(res.body.err, 'password', error.msg.PASSWORD_RANGE));
+			should(error.find(res.body.err, ecode.fields.PASSWORD_RANGE));
 			next();
 		});
 	});
@@ -200,7 +201,7 @@ describe("creating password check", function () {
 		express.post('/api/users').send(form).end(function (err,res) {
 			should(!res.error);
 			should(res.body.err);
-			should(error.find(res.body.err, 'password', error.msg.PASSWORD_RANGE));
+			should(error.find(res.body.err, ecode.fields.PASSWORD_RANGE));
 			next();
 		});
 	});

@@ -2,7 +2,6 @@ var should = require('should');
 
 var init = require('../main/init');
 var userl = require('../main/user');
-var error = require('../main/error');
 var express = require('../main/express');
 
 init.add(function () {

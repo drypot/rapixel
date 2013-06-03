@@ -4,6 +4,7 @@ var init = require('../main/init');
 var mongo = require('../main/mongo');
 var mailer = require('../main/mailer');
 var error = require('../main/error');
+var ecode = require('../main/ecode');
 
 init.add(function (next) {
 
@@ -69,7 +70,7 @@ init.add(function (next) {
 					mongo.updateUser(id, fields, function (err, cnt) {
 						if (err) return next(err);
 						if (!cnt) {
-							return next(error(error.USER_NOT_FOUND));
+							return next(error(ecode.USER_NOT_FOUND));
 						}
 						delete users[id];
 						next();
@@ -85,7 +86,7 @@ init.add(function (next) {
 			mongo.updateUserStatus(id, 'd', function (err, cnt) {
 				if (err) return next(err);
 				if (!cnt) {
-					return next(error(error.USER_NOT_FOUND));
+					return next(error(ecode.USER_NOT_FOUND));
 				}
 				delete users[id];
 				next();
@@ -94,24 +95,24 @@ init.add(function (next) {
 	};
 
 	function checkForm(form, next) {
-		var errors = new error.Errors();
+		var errors = [];
 		checkFormName(form, errors);
 		checkFormEmail(form, errors);
 		checkFormPassword(form, errors);
-		if (errors.hasErrors()) {
+		if (errors.length) {
 			return next(error(errors));
 		}
 		next();
 	}
 
 	function checkFormForUpdate(form, next) {
-		var errors = new error.Errors();
+		var errors = [];
 		checkFormName(form, errors);
 		checkFormEmail(form, errors);
 		if (form.password.length) {
 			checkFormPassword(form, errors);
 		}
-		if (errors.hasErrors()) {
+		if (errors.length) {
 			return next(error(errors));
 		}
 		next();
@@ -119,29 +120,29 @@ init.add(function (next) {
 
 	function checkFormName(form, errors) {
 		if (!form.name.length) {
-			errors.add('name', error.msg.NAME_EMPTY);
+			errors.push(ecode.fields.NAME_EMPTY);
 		} else if (form.name.length > 32 || form.name.length < 2) {
-			errors.add('name', error.msg.NAME_RANGE);
+			errors.push(ecode.fields.NAME_RANGE);
 		}
 
 	}
 
 	function checkFormEmail(form, errors) {
 		if (!form.email.length) {
-			errors.add('email', error.msg.EMAIL_EMPTY);
+			errors.push(ecode.fields.EMAIL_EMPTY);
 		} else if (form.email.length > 64 || form.email.length < 8) {
-			errors.add('email', error.msg.EMAIL_RANGE);
+			errors.push(ecode.fields.EMAIL_RANGE);
 		} else if (!emailRe.test(form.email)) {
-			errors.add('email', error.msg.EMAIL_PATTERN);
+			errors.push(ecode.fields.EMAIL_PATTERN);
 		}
 
 	}
 
 	function checkFormPassword(form, errors) {
 		if (!form.password.length) {
-			errors.add('password', error.msg.PASSWORD_EMPTY);
+			errors.push(ecode.fields.PASSWORD_EMPTY);
 		} else if (form.password.length > 32 || form.password.length < 4) {
-			errors.add('password', error.msg.PASSWORD_RANGE);
+			errors.push(ecode.fields.PASSWORD_RANGE);
 		}
 
 	}
@@ -150,12 +151,12 @@ init.add(function (next) {
 		mongo.findUserByName(form.name, function (err, user) {
 			if (err) return next(err);
 			if (user) {
-				return next(error('name', error.msg.NAME_DUPE));
+				return next(error(ecode.fields.NAME_DUPE));
 			}
 			mongo.findUserByEmail(form.email, function (err, user) {
 				if (err) return next(err);
 				if (user) {
-					return next(error('email', error.msg.EMAIL_DUPE));
+					return next(error(ecode.fields.EMAIL_DUPE));
 				}
 				next();
 			});
@@ -166,12 +167,12 @@ init.add(function (next) {
 		mongo.findUserByName(form.name, function (err, user) {
 			if (err) return next(err);
 			if (user && user._id != id) {
-				return next(error('name', error.msg.NAME_DUPE));
+				return next(error(ecode.fields.NAME_DUPE));
 			}
 			mongo.findUserByEmail(form.email, function (err, user) {
 				if (err) return next(err);
 				if (user && user._id != id) {
-					return next(error('email', error.msg.EMAIL_DUPE));
+					return next(error(ecode.fields.EMAIL_DUPE));
 				}
 				next();
 			});
@@ -180,7 +181,7 @@ init.add(function (next) {
 
 	function checkUpdateAuth(id, user, next) {
 		if (user._id != id && !user.admin) {
-			return next(error(error.NOT_AUTHORIZED))
+			return next(error(ecode.NOT_AUTHORIZED))
 		}
 		next();
 	}
@@ -189,7 +190,7 @@ init.add(function (next) {
 		mongo.findUserByEmail(email, function (err, user) {
 			if (err) return next(err);
 			if (!user || !bcrypt.compareSync(password, user.hash)) {
-				return next(error('email', error.msg.USER_NOT_FOUND));
+				return next(error(ecode.fields.USER_NOT_FOUND));
 			}
 			users[user._id] = user;
 			next(null, user);
@@ -203,7 +204,7 @@ init.add(function (next) {
 		}
 		mongo.findUser(id, function (err, user) {
 			if (err) return next(err);
-			if (!user) return next(error(error.USER_NOT_FOUND));
+			if (!user) return next(error(ecode.USER_NOT_FOUND));
 			users[user._id] = user;
 			next(null, user);
 		});
@@ -274,9 +275,9 @@ init.add(function (next) {
 	}
 
 	exports.createResetReq = function (form, next) {
-		var errors = new error.Errors();
+		var errors = [];
 		checkFormEmail(form, errors);
-		if (errors.hasErrors()) {
+		if (errors.length) {
 			return next(error(errors));
 		}
 		mongo.insertReset(form.email, function (err, resets) {
@@ -304,27 +305,17 @@ init.add(function (next) {
 	}
 
 	exports.reset = function (form, next) {
-		var errors = new error.Errors();
+		var errors = [];
 		checkFormPassword(form, errors);
-		if (errors.hasErrors()) {
+		if (errors.length) {
 			return next(error(errors));
 		}
 		mongo.findReset(form._id, function (err, reset) {
 			if (err) return next(err);
 			if (!reset) {
-				return next(error(error.INVALID_DATA));
+				return next(error(ecode.INVALID_DATA));
 			}
-			var reset = resets[0];
-			mailer.send({
-				from: 'no-reply@raysoda.com',
-				to: reset.email,
-				subject: 'Reset Password - ' + config.data.appName,
-				text:
-					'\n' +
-					'Open folling url on browser to reset password.\n\n' +
-					config.data.appUrl + '/users/reset?id=' + reset._id + '&t=' + reset.token + '\n\n' +
-					config.data.appName
-			}, next);
+			// TODO
 		});
 	};
 

@@ -4,6 +4,7 @@ var init = require('../main/init');
 var config = require('../main/config')({ test: true });
 var express = require('../main/express');
 var error = require('../main/error');
+var ecode = require('../main/ecode');
 
 require('../main/hello-api');
 
@@ -23,7 +24,7 @@ before(function(next) {
 	});
 
 	app.get('/test/send-invalid-data', function (req, res) {
-		res.jsonErr(error(error.INVALID_DATA));
+		res.jsonErr(error(ecode.INVALID_DATA));
 	});
 
 	app.get('/api/send-empty', function (req, res) {
@@ -62,9 +63,8 @@ describe("return error test", function () {
 			should(!err);
 			should(!res.error);
 			res.should.be.json;
-			res.body.err.rc.should.equal(error.INVALID_DATA);
-			res.body.err.message.should.equal(error.msg[error.INVALID_DATA]);
-			should(res.body.err.stack);
+			should(res.body.err);
+			should(error.find(res.body.err, ecode.INVALID_DATA));
 			next();
 		});
 	});

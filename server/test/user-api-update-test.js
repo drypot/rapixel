@@ -6,8 +6,9 @@ var init = require('../main/init');
 var config = require('../main/config')({ test: true });
 var mongo = require('../main/mongo')({ dropDatabase: true });
 var express = require('../main/express');
-var error = require('../main/error');
 var userl = require('../main/user');
+var error = require('../main/error');
+var ecode = require('../main/ecode');
 var ufix = require('../test/user-fixture');
 
 require('../main/session-api');
@@ -62,7 +63,8 @@ describe("updating and permission", function () {
 				var form = { name: 'testauth2', email: 'testauth2@def.com' };
 				express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
 					should(!res.error);
-					res.body.err.rc.should.equal(error.NOT_AUTHORIZED)
+					should(res.body.err);
+					should(error.find(res.body.err, ecode.NOT_AUTHORIZED));
 					next();
 				});
 			});
@@ -83,7 +85,7 @@ describe("updating and permission", function () {
 				var form = { name: 'testauth3', email: 'testauth3@def.com' };
 				express.put('/api/users/' + 999).send(form).end(function (err,res) {
 					should(!res.error);
-					res.body.err.rc.should.equal(error.USER_NOT_FOUND);
+					should(error.find(res.body.err, ecode.USER_NOT_FOUND));
 					next();
 				});
 			});
@@ -164,7 +166,7 @@ describe("updating user name", function () {
 			var form = { name: ufix.user1.name, email: 'testname@def.com', password: '1234' };
 			express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
 				should(!res.error);
-				should(error.find(res.body.err, 'name', error.msg.NAME_DUPE));
+				should(error.find(res.body.err, ecode.fields.NAME_DUPE));
 				next();
 			});
 		});
@@ -172,7 +174,7 @@ describe("updating user name", function () {
 			var form = { name: '', email: 'testname@def.com', password: '1234' };
 			express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
 				should(!res.error);
-				should(error.find(res.body.err, 'name', error.msg.NAME_EMPTY));
+				should(error.find(res.body.err, ecode.fields.NAME_EMPTY));
 				next();
 			});
 		});
@@ -180,7 +182,7 @@ describe("updating user name", function () {
 			var form = { name: 'u', email: 'testname@def.com', password: '1234' };
 			express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
 				should(!res.error);
-				should(error.find(res.body.err, 'name', error.msg.NAME_RANGE));
+				should(error.find(res.body.err, ecode.fields.NAME_RANGE));
 				next();
 
 			});
@@ -197,7 +199,7 @@ describe("updating user name", function () {
 			var form = { name: '123456789012345678901234567890123', email: 'testname@def.com', password: '1234' };
 			express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
 				should(!res.error);
-				should(error.find(res.body.err, 'name', error.msg.NAME_RANGE));
+				should(error.find(res.body.err, ecode.fields.NAME_RANGE));
 				next();
 			});
 		});
@@ -247,7 +249,7 @@ describe("updating user email", function () {
 			var form = { name: 'testemail', email: ufix.user1.email, password: '1234' };
 			express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
 				should(!res.error);
-				should(error.find(res.body.err, 'email', error.msg.EMAIL_DUPE));
+				should(error.find(res.body.err, ecode.fields.EMAIL_DUPE));
 				next();
 			});
 		});
@@ -255,7 +257,7 @@ describe("updating user email", function () {
 			var form = { name: 'testemail', email: 'abc.def.com', password: '1234' };
 			express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
 				should(!res.error);
-				should(error.find(res.body.err, 'email', error.msg.EMAIL_PATTERN));
+				should(error.find(res.body.err, ecode.fields.EMAIL_PATTERN));
 				next();
 			});
 		});
@@ -303,7 +305,7 @@ describe("updating user password", function () {
 			var form = { name: 'testpw', email: 'testpw@def.com', password: '123' };
 			express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
 				should(!res.error);
-				should(error.find(res.body.err, 'password', error.msg.PASSWORD_RANGE));
+				should(error.find(res.body.err, ecode.fields.PASSWORD_RANGE));
 				next();
 			});
 		});
@@ -311,7 +313,7 @@ describe("updating user password", function () {
 			var form = { name: 'testpw', email: 'testpw@def.com', password: '123456789012345678901234567890123' };
 			express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
 				should(!res.error);
-				should(error.find(res.body.err, 'password', error.msg.PASSWORD_RANGE));
+				should(error.find(res.body.err, ecode.fields.PASSWORD_RANGE));
 				next();
 			});
 		});

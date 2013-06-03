@@ -6,8 +6,9 @@ var config = require('../main/config')({ test: true });
 var mongo = require('../main/mongo')({ dropDatabase: true });
 var upload = require('../main/upload');
 var express = require('../main/express');
-var error = require('../main/error');
 var photo = require('../main/photo');
+var error = require('../main/error');
+var ecode = require('../main/ecode');
 var ufix = require('../test/user-fixture');
 
 require('../main/session-api');
@@ -45,9 +46,7 @@ describe("uploading photo within cycle", function () {
 			should(!err);
 			should(!res.error);
 			should(res.body.err);
-			res.body.err.rc.should.equal(error.ERROR_SET);
-			res.body.err.errors[0].name.should.equal('files');
-			res.body.err.errors[0].msg.should.equal(error.msg.PHOTO_CYCLE);
+			should(error.find(res.body.err, ecode.fields.PHOTO_CYCLE));
 			next();
 		});
 	});
@@ -63,9 +62,7 @@ describe("uploading no file", function () {
 			should(!err);
 			should(!res.error);
 			should(res.body.err);
-			res.body.err.rc.should.equal(error.ERROR_SET);
-			res.body.err.errors[0].name.should.equal('files');
-			res.body.err.errors[0].msg.should.equal(error.msg.PHOTO_NO_FILE);
+			should(error.find(res.body.err, ecode.fields.PHOTO_NO_FILE));
 			next();
 		});
 	});
@@ -90,9 +87,7 @@ describe("uploading two file", function () {
 			should(!err);
 			should(!res.error);
 			should(res.body.err);
-			res.body.err.rc.should.equal(error.ERROR_SET);
-			res.body.err.errors[0].name.should.equal('files');
-			res.body.err.errors[0].msg.should.equal(error.msg.PHOTO_NOT_ONE);
+			should(error.find(res.body.err, ecode.fields.PHOTO_NOT_ONE));
 			next();
 		});
 	});
@@ -116,9 +111,7 @@ describe("uploading 1440 jpg", function () {
 			should(!err);
 			should(!res.error);
 			should(res.body.err);
-			res.body.err.rc.should.equal(error.ERROR_SET);
-			res.body.err.errors[0].name.should.equal('files');
-			res.body.err.errors[0].msg.should.equal(error.msg.PHOTO_HEIGHT);
+			should(error.find(res.body.err, ecode.fields.PHOTO_HEIGHT));
 			next();
 		});
 	});
@@ -142,9 +135,7 @@ describe("uploading 16:10 jpg", function () {
 			should(!err);
 			should(!res.error);
 			should(res.body.err);
-			res.body.err.rc.should.equal(error.ERROR_SET);
-			res.body.err.errors[0].name.should.equal('files');
-			res.body.err.errors[0].msg.should.equal(error.msg.PHOTO_RATIO);
+			should(error.find(res.body.err, ecode.fields.PHOTO_RATIO));
 			next();
 		});
 	});
@@ -168,9 +159,7 @@ describe("uploading 617 jpg", function () {
 			should(!err);
 			should(!res.error);
 			should(res.body.err);
-			res.body.err.rc.should.equal(error.ERROR_SET);
-			res.body.err.errors[0].name.should.equal('files');
-			res.body.err.errors[0].msg.should.equal(error.msg.PHOTO_RATIO);
+			should(error.find(res.body.err, ecode.fields.PHOTO_RATIO));
 			next();
 		});
 	});
@@ -194,9 +183,7 @@ describe("uploading text file", function () {
 			should(!err);
 			should(!res.error);
 			should(res.body.err);
-			res.body.err.rc.should.equal(error.ERROR_SET);
-			res.body.err.errors[0].name.should.equal('files');
-			res.body.err.errors[0].msg.should.equal(error.msg.PHOTO_TYPE);
+			should(error.find(res.body.err, ecode.fields.PHOTO_TYPE));
 			next();
 		});
 	});

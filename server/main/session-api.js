@@ -2,7 +2,6 @@ var init = require('../main/init');
 var userl = require('../main/user');
 var session = require('../main/session');
 var express = require('../main/express');
-var error = require('../main/error');
 
 init.add(function () {
 

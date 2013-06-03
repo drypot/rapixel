@@ -6,6 +6,7 @@ var config = require('../main/config')({ test: true });
 var mongo = require('../main/mongo')({ dropDatabase: true });
 var express = require('../main/express');
 var error = require('../main/error');
+var ecode = require('../main/ecode');
 var ufix = require('../test/user-fixture');
 
 require('../main/session-api');
@@ -39,7 +40,7 @@ describe("finding user", function () {
 				should(!err);
 				should(!res.error);
 				should(res.body.err);
-				res.body.err.rc.should.equal(error.USER_NOT_FOUND);
+				should(error.find(res.body.err, ecode.USER_NOT_FOUND));
 				next();
 			});
 		});

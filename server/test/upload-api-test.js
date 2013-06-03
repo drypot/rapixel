@@ -7,7 +7,6 @@ var config = require('../main/config')({ test: true });
 var mongo = require('../main/mongo')({ dropDatabase: true });
 var upload = require('../main/upload');
 var express = require('../main/express');
-var error = require('../main/error');
 var ufix = require('../test/user-fixture');
 
 require('../main/session-api');
@@ -15,11 +14,9 @@ require('../main/upload-api');
 require('../main/upload-html');
 
 function find(files, oname) {
-	var file = l.find(files, function (file) {
+	return l.find(files, function (file) {
 		return file.oname === oname;
 	});
-	should.exist(file);
-	return file;
 }
 
 function exists(file) {

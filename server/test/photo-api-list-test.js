@@ -6,6 +6,7 @@ var mongo = require('../main/mongo')({ dropDatabase: true });
 var upload = require('../main/upload');
 var express = require('../main/express');
 var error = require('../main/error');
+var ecode = require('../main/ecode');
 var ufix = require('../test/user-fixture');
 
 require('../main/session-api');

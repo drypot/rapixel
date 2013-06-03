@@ -131,7 +131,7 @@ init.add(function() {
 						err = err || res.error;
 						if (err) return next(err);
 						if (res.body.err) {
-							if (res.body.err.rc === error.ERROR_SET) {
+							if (res.body.err.rc === ecode.ERROR_SET) {
 								formty.addAlerts($form, res.body.err.errors);
 								formty.hideSending($form);
 								return;
@@ -181,7 +181,7 @@ init.add(function() {
 	formty.addAlerts = function ($form, fields) {
 		for (var i = 0; i < fields.length; i++) {
 			var field = fields[i];
-			formty.addAlert($form.find('[name="' + field.name + '"]'), field.msg);
+			formty.addAlert($form.find('[name="' + field.name + '"]'), field.message);
 		}
 	}
 

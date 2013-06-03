@@ -9,6 +9,7 @@ var photo = require('../main/photo');
 var fs2 = require('../main/fs');
 var express = require('../main/express');
 var error = require('../main/error');
+var ecode = require('../main/ecode');
 var ufix = require('../test/user-fixture');
 
 require('../main/session-api');
@@ -149,7 +150,7 @@ describe("deleting other's photo", function () {
 			should(!res.error);
 			should(res.body.err);
 			fs.existsSync(p).should.true;
-			res.body.err.rc.should.equal(error.PHOTO_NOTHING_TO_DEL);
+			should(error.find(res.body.err, ecode.PHOTO_NOTHING_TO_DEL));
 			next();
 		});
 	});
