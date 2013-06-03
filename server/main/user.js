@@ -1,8 +1,8 @@
 var bcrypt = require('bcrypt');
-var crypto = require('crypto');
 
 var init = require('../main/init');
 var mongo = require('../main/mongo');
+var mailer = require('../main/mailer');
 var error = require('../main/error');
 
 init.add(function (next) {
@@ -95,23 +95,9 @@ init.add(function (next) {
 
 	function checkForm(form, next) {
 		var errors = new error.Errors();
-		if (!form.name.length) {
-			errors.add('name', error.msg.NAME_EMPTY);
-		} else if (form.name.length > 32 || form.name.length < 2) {
-			errors.add('name', error.msg.NAME_RANGE);
-		}
-		if (!form.email.length) {
-			errors.add('email', error.msg.EMAIL_EMPTY);
-		} else if (form.email.length > 64 || form.email.length < 8) {
-			errors.add('email', error.msg.EMAIL_RANGE);
-		} else if (!emailRe.test(form.email)) {
-			errors.add('email', error.msg.EMAIL_PATTERN);
-		}
-		if (!form.password.length) {
-			errors.add('password', error.msg.PASSWORD_EMPTY);
-		} else if (form.password.length > 32 || form.password.length < 4) {
-			errors.add('password', error.msg.PASSWORD_RANGE);
-		}
+		checkFormName(form, errors);
+		checkFormEmail(form, errors);
+		checkFormPassword(form, errors);
 		if (errors.hasErrors()) {
 			return next(error(errors));
 		}
@@ -120,11 +106,27 @@ init.add(function (next) {
 
 	function checkFormForUpdate(form, next) {
 		var errors = new error.Errors();
+		checkFormName(form, errors);
+		checkFormEmail(form, errors);
+		if (form.password.length) {
+			checkFormPassword(form, errors);
+		}
+		if (errors.hasErrors()) {
+			return next(error(errors));
+		}
+		next();
+	}
+
+	function checkFormName(form, errors) {
 		if (!form.name.length) {
 			errors.add('name', error.msg.NAME_EMPTY);
 		} else if (form.name.length > 32 || form.name.length < 2) {
 			errors.add('name', error.msg.NAME_RANGE);
 		}
+
+	}
+
+	function checkFormEmail(form, errors) {
 		if (!form.email.length) {
 			errors.add('email', error.msg.EMAIL_EMPTY);
 		} else if (form.email.length > 64 || form.email.length < 8) {
@@ -132,15 +134,16 @@ init.add(function (next) {
 		} else if (!emailRe.test(form.email)) {
 			errors.add('email', error.msg.EMAIL_PATTERN);
 		}
-		if (form.password.length) {
-			if (form.password.length > 32 || form.password.length < 4) {
-				errors.add('password', error.msg.PASSWORD_RANGE);
-			}
+
+	}
+
+	function checkFormPassword(form, errors) {
+		if (!form.password.length) {
+			errors.add('password', error.msg.PASSWORD_EMPTY);
+		} else if (form.password.length > 32 || form.password.length < 4) {
+			errors.add('password', error.msg.PASSWORD_RANGE);
 		}
-		if (errors.hasErrors()) {
-			return next(error(errors));
-		}
-		next();
+
 	}
 
 	function checkDupe(form, next) {
@@ -264,14 +267,67 @@ init.add(function (next) {
 		});
 	};
 
-	exports.sendPasswordResetMail = function (to, next) {
+	exports.makeResetReqForm = function (req) {
+		var form = {};
+		form.email = String(req.body.email || '').trim();
+		return form;
+	}
 
-		crypto.randomBytes(48, function(ex, buf) {
-			var token = buf.toString('hex');
-			console.log();
+	exports.createResetReq = function (form, next) {
+		var errors = new error.Errors();
+		checkFormEmail(form, errors);
+		if (errors.hasErrors()) {
+			return next(error(errors));
+		}
+		mongo.insertReset(form.email, function (err, resets) {
+			if (err) return next(err);
+			var reset = resets[0];
+			mailer.send({
+				from: 'no-reply@raysoda.com',
+				to: reset.email,
+				subject: 'Reset Password - ' + config.data.appName,
+				text:
+					'\n' +
+					'Open folling url on browser to reset password.\n\n' +
+					config.data.appUrl + '/users/reset?id=' + reset._id + '&t=' + reset.token + '\n\n' +
+					config.data.appName
+			}, next);
 		});
-		next();
 	};
+
+	exports.makeResetForm = function (req) {
+		var form = {};
+		form._id = String(req.body._id || '').trim();
+		form.token = String(req.body.token || '').trim();
+		form.password = String(req.body.password || '').trim();
+		return form;
+	}
+
+	exports.reset = function (form, next) {
+		var errors = new error.Errors();
+		checkFormPassword(form, errors);
+		if (errors.hasErrors()) {
+			return next(error(errors));
+		}
+		mongo.findReset(form._id, function (err, reset) {
+			if (err) return next(err);
+			if (!reset) {
+				return next(error(error.INVALID_DATA));
+			}
+			var reset = resets[0];
+			mailer.send({
+				from: 'no-reply@raysoda.com',
+				to: reset.email,
+				subject: 'Reset Password - ' + config.data.appName,
+				text:
+					'\n' +
+					'Open folling url on browser to reset password.\n\n' +
+					config.data.appUrl + '/users/reset?id=' + reset._id + '&t=' + reset.token + '\n\n' +
+					config.data.appName
+			}, next);
+		});
+	};
+
 	next();
 
 });

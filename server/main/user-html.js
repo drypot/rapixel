@@ -64,4 +64,29 @@ init.add(function () {
 		});
 	});
 
+	app.get('/users/login', function (req, res) {
+		res.render('user-login', {
+			newUser: req.query.hasOwnProperty('newuser')
+		});
+	});
+
+	app.get('/users/register', function (req, res) {
+		res.render('user-register');
+	});
+
+	app.get('/users/req-reset', function (req, res) {
+		res.render('user-req-reset');
+	});
+
+	app.get('/users/reset', function (req, res) {
+		res.render('user-reset');
+	});
+
+	app.get('/users', function (req, res) {
+		mongo.users.count(function (err, count) {
+			if (err) return res.renderErr(err);
+			res.render('user-list', { count: count });
+		});
+	});
+
 });

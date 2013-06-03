@@ -54,4 +54,20 @@ init.add(function () {
 		});
 	});
 
+	app.post('/api/resets', function (req, res) {
+		var form = userl.makeResetReqForm(req);
+		userl.createResetReq(form, function (err) {
+			if (err) return res.jsonErr(err);
+			res.json({});
+		});
+	});
+
+	app.put('/api/resets', function (req, res) {
+		var form = userl.makePassResetForm(req);
+		userl.xxsendPassResetMail(form, function (err) {
+			if (err) return res.jsonErr(err);
+			res.json({});
+		});
+	});
+
 });
