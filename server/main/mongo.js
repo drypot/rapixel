@@ -1,7 +1,6 @@
-var crypto = require('crypto');
 var MongoClient = require('mongodb').MongoClient;
 var Server = require('mongodb').Server;
-var ObjectId = require('mongodb').ObjectId;
+var ObjectID = require('mongodb').ObjectID;
 
 var init = require('../main/init');
 var config = require('../main/config');
@@ -15,10 +14,13 @@ exports = module.exports = function (_opt) {
 	return exports;
 };
 
+
 init.add(function (next) {
 
 	var server = new Server('localhost', 27017, { auto_reconnect: true } );
 	var client = new MongoClient(server);
+
+	exports.ObjectID = ObjectID;
 
 	client.open(function (err) {
 		if (err) return next(err);
@@ -60,20 +62,24 @@ init.add(function (next) {
 	};
 
 	exports.updateUserAdate = function (id, now, next) {
-		users.update({ _id: id }, { $set: { adate: now }}, next);
+		users.update({ _id: id }, { $set: { adate: now } }, next);
 	};
 
 	exports.updateUserPdate = function (id, now, next) {
-		users.update({ _id: id }, { $set: { pdate: now }}, next);
+		users.update({ _id: id }, { $set: { pdate: now } }, next);
 	};
 
 	exports.updateUserStatus = function (id, status, next) {
-		users.update({ _id: id }, { $set: { status: status }}, next);
+		users.update({ _id: id }, { $set: { status: status } }, next);
 	};
 
 	exports.updateUser = function (id, fields, next) {
 		users.update({ _id: id }, { $set: fields}, next);
 	};
+
+	exports.updateUserHash = function (email, hash, next) {
+		users.update({ email: email }, { $set: { hash: hash } }, next)
+	}
 
 	users = exports.users = exports.db.collection("users");
 	users.ensureIndex({ email: 1 }, function (err) {
@@ -175,15 +181,8 @@ init.add(function (next) {
 
 	var resets;
 
-	exports.insertReset = function (email, next) {
-		exports.delReset(email, function (err) {
-			if (err) return next(err);
-			crypto.randomBytes(12, function(err, buf) {
-				if (err) return next(err);
-				var token = buf.toString('hex');
-				resets.insert({ email: email, token: token }, next);
-			});
-		});
+	exports.insertReset = function (reset, next) {
+		resets.insert(reset, next);
 	};
 
 	exports.delReset = function (email, next) {

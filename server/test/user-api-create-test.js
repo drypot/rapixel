@@ -1,11 +1,11 @@
 var should = require('should');
 var request = require('superagent').agent();
-var bcrypt = require('bcrypt');
 
 var init = require('../main/init');
 var config = require('../main/config')({ test: true });
 var mongo = require('../main/mongo')({ dropDatabase: true });
 var express = require('../main/express');
+var userl = require('../main/user');
 var error = require('../main/error');
 var ecode = require('../main/ecode');
 
@@ -27,7 +27,7 @@ describe("creating name check", function () {
 		var form = { name: '', email: 'abc@def.com', password: '1234' };
 		express.post('/api/users').send(form).end(function (err,res) {
 			should(!res.error);
-			should(error.find(res.body.err, ecode.fields.NAME_EMPTY));
+			should(error.find(res.body.err, ecode.NAME_EMPTY));
 			next();
 		});
 	});
@@ -36,7 +36,7 @@ describe("creating name check", function () {
 		express.post('/api/users').send(form).end(function (err,res) {
 			should(!res.error);
 			should(res.body.err);
-			should(error.find(res.body.err, ecode.fields.NAME_RANGE));
+			should(error.find(res.body.err, ecode.NAME_RANGE));
 			next();
 		});
 	});
@@ -45,7 +45,7 @@ describe("creating name check", function () {
 		express.post('/api/users').send(form).end(function (err,res) {
 			should(!res.error);
 			should(res.body.err);
-			should(error.find(res.body.err, ecode.fields.NAME_RANGE));
+			should(error.find(res.body.err, ecode.NAME_RANGE));
 			next();
 		});
 	});
@@ -83,7 +83,7 @@ describe("creating name check", function () {
 			var form = { name: 'snowman', email: 'snowman-xyz@def.com', password: '1234' };
 			express.post('/api/users').send(form).end(function (err,res) {
 				should(res.body.err);
-				should(error.find(res.body.err, ecode.fields.NAME_DUPE));
+				should(error.find(res.body.err, ecode.NAME_DUPE));
 				next();
 			});
 		});
@@ -132,7 +132,7 @@ describe("creating email check", function () {
 		express.post('/api/users').send(form).end(function (err,res) {
 			should(!res.error);
 			should(res.body.err);
-			should(error.find(res.body.err, ecode.fields.EMAIL_PATTERN));
+			should(error.find(res.body.err, ecode.EMAIL_PATTERN));
 			next();
 		});
 	});
@@ -141,7 +141,7 @@ describe("creating email check", function () {
 		express.post('/api/users').send(form).end(function (err,res) {
 			should(!res.error);
 			should(res.body.err);
-			should(error.find(res.body.err, ecode.fields.EMAIL_PATTERN));
+			should(error.find(res.body.err, ecode.EMAIL_PATTERN));
 			next();
 		});
 	});
@@ -175,7 +175,7 @@ describe("creating email check", function () {
 			express.post('/api/users').send(form).end(function (err,res) {
 				should(!res.error);
 				should(res.body.err);
-				should(error.find(res.body.err, ecode.fields.EMAIL_DUPE));
+				should(error.find(res.body.err, ecode.EMAIL_DUPE));
 				next();
 			});
 		});
@@ -192,7 +192,7 @@ describe("creating password check", function () {
 		express.post('/api/users').send(form).end(function (err,res) {
 			should(!res.error);
 			should(res.body.err);
-			should(error.find(res.body.err, ecode.fields.PASSWORD_RANGE));
+			should(error.find(res.body.err, ecode.PASSWORD_RANGE));
 			next();
 		});
 	});
@@ -201,7 +201,7 @@ describe("creating password check", function () {
 		express.post('/api/users').send(form).end(function (err,res) {
 			should(!res.error);
 			should(res.body.err);
-			should(error.find(res.body.err, ecode.fields.PASSWORD_RANGE));
+			should(error.find(res.body.err, ecode.PASSWORD_RANGE));
 			next();
 		});
 	});
@@ -228,8 +228,8 @@ describe("creating password check", function () {
 			mongo.findUserByEmail('snowman@def.com', function (err, user) {
 				should(!err);
 				user.name.should.equal('snowman');
-				bcrypt.compareSync('1234', user.hash).should.true;
-				bcrypt.compareSync('4444', user.hash).should.false;
+				userl.validatePassword('1234', user.hash).should.true;
+				userl.validatePassword('4444', user.hash).should.false;
 				next();
 			});
 		});

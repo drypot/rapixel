@@ -63,7 +63,7 @@ init.add(function (next) {
 		exports.findHours(user, form.now, function (err, hours) {
 			if (err) return next(err);
 			if (hours > 0) {
-				return next(error(ecode.fields.PHOTO_CYCLE));
+				return next(error(ecode.PHOTO_CYCLE));
 			}
 			checkPhotoFeature(form, function (err, feature) {
 				if (err) return next(err);
@@ -98,21 +98,21 @@ init.add(function (next) {
 	function checkPhotoFeature(form, next) {
 		var file = form.file;
 		if (!file) {
-			return next(error(ecode.fields.PHOTO_NO_FILE));
+			return next(error(ecode.PHOTO_NO_FILE));
 		}
 		if (form.files.length > 1) {
-			return next(error(ecode.fields.PHOTO_NOT_ONE));
+			return next(error(ecode.PHOTO_NOT_ONE));
 		}
 		img.identify(file.tpath, function (err, feature) {
 			if (err) {
-				return next(error(ecode.fields.PHOTO_TYPE))
+				return next(error(ecode.PHOTO_TYPE))
 			}
 			if (feature.height < 2160) {
-				return next(error(ecode.fields.PHOTO_HEIGHT));
+				return next(error(ecode.PHOTO_HEIGHT));
 			}
 			var ratio = feature.width / feature.height;
 			if (ratio < 1.75 || ratio > 1.79) {
-				return next(error(ecode.fields.PHOTO_RATIO));
+				return next(error(ecode.PHOTO_RATIO));
 			}
 			feature.formatLowerCase = feature.format.toLowerCase();
 			next(null, feature);

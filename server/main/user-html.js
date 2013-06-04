@@ -74,7 +74,7 @@ init.add(function () {
 		res.render('user-register');
 	});
 
-	app.get('/users/req-reset', function (req, res) {
+	app.get('/users/reset-req', function (req, res) {
 		res.render('user-req-reset');
 	});
 

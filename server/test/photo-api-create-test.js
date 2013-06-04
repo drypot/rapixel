@@ -46,7 +46,7 @@ describe("uploading photo within cycle", function () {
 			should(!err);
 			should(!res.error);
 			should(res.body.err);
-			should(error.find(res.body.err, ecode.fields.PHOTO_CYCLE));
+			should(error.find(res.body.err, ecode.PHOTO_CYCLE));
 			next();
 		});
 	});
@@ -62,7 +62,7 @@ describe("uploading no file", function () {
 			should(!err);
 			should(!res.error);
 			should(res.body.err);
-			should(error.find(res.body.err, ecode.fields.PHOTO_NO_FILE));
+			should(error.find(res.body.err, ecode.PHOTO_NO_FILE));
 			next();
 		});
 	});
@@ -87,7 +87,7 @@ describe("uploading two file", function () {
 			should(!err);
 			should(!res.error);
 			should(res.body.err);
-			should(error.find(res.body.err, ecode.fields.PHOTO_NOT_ONE));
+			should(error.find(res.body.err, ecode.PHOTO_NOT_ONE));
 			next();
 		});
 	});
@@ -111,7 +111,7 @@ describe("uploading 1440 jpg", function () {
 			should(!err);
 			should(!res.error);
 			should(res.body.err);
-			should(error.find(res.body.err, ecode.fields.PHOTO_HEIGHT));
+			should(error.find(res.body.err, ecode.PHOTO_HEIGHT));
 			next();
 		});
 	});
@@ -135,7 +135,7 @@ describe("uploading 16:10 jpg", function () {
 			should(!err);
 			should(!res.error);
 			should(res.body.err);
-			should(error.find(res.body.err, ecode.fields.PHOTO_RATIO));
+			should(error.find(res.body.err, ecode.PHOTO_RATIO));
 			next();
 		});
 	});
@@ -159,7 +159,7 @@ describe("uploading 617 jpg", function () {
 			should(!err);
 			should(!res.error);
 			should(res.body.err);
-			should(error.find(res.body.err, ecode.fields.PHOTO_RATIO));
+			should(error.find(res.body.err, ecode.PHOTO_RATIO));
 			next();
 		});
 	});
@@ -183,7 +183,7 @@ describe("uploading text file", function () {
 			should(!err);
 			should(!res.error);
 			should(res.body.err);
-			should(error.find(res.body.err, ecode.fields.PHOTO_TYPE));
+			should(error.find(res.body.err, ecode.PHOTO_TYPE));
 			next();
 		});
 	});

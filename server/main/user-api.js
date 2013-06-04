@@ -63,8 +63,8 @@ init.add(function () {
 	});
 
 	app.put('/api/resets', function (req, res) {
-		var form = userl.makePassResetForm(req);
-		userl.xxsendPassResetMail(form, function (err) {
+		var form = userl.makeResetForm(req);
+		userl.reset(form, function (err) {
 			if (err) return res.jsonErr(err);
 			res.json({});
 		});

@@ -5,14 +5,14 @@ var ecode = require('../main/ecode');
 exports = module.exports = function (ec) {
 	var err, key;
 	if (Array.isArray(ec)) {
-		err = new Error(ecode.ERROR_SET.message);
-		err.rc = ecode.ERROR_SET.rc;
+		err = new Error(ecode.ERRORS.message);
+		err.rc = ecode.ERRORS.rc;
 		err.errors = ec;
 		return err;
 	}
 	if (ec.field) {
-		err = new Error(ecode.ERROR_SET.message);
-		err.rc = ecode.ERROR_SET.rc;
+		err = new Error(ecode.ERRORS.message);
+		err.rc = ecode.ERRORS.rc;
 		err.errors = [ec];
 		return err;
 	}
@@ -30,7 +30,7 @@ exports = module.exports = function (ec) {
 
 exports.find = function (err, ec) {
 	if (ec.field) {
-		err.rc.should.equal(ecode.ERROR_SET.rc);
+		err.rc.should.equal(ecode.ERRORS.rc);
 		should(err.errors);
 		for (var i = 0; i < err.errors.length; i++) {
 			var error = err.errors[i];

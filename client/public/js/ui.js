@@ -131,7 +131,7 @@ init.add(function() {
 						err = err || res.error;
 						if (err) return next(err);
 						if (res.body.err) {
-							if (res.body.err.rc === ecode.ERROR_SET) {
+							if (res.body.err.rc === ecode.ERRORS) {
 								formty.addAlerts($form, res.body.err.errors);
 								formty.hideSending($form);
 								return;

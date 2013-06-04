@@ -52,18 +52,17 @@ var request = superagent;
 
 init.add(function () {
 
-	var error = window.ecode = {};
+	var exports = window.ecode = {};
 
 	function mke(rc, msg) {
 		return { rc: rc, msg: msg };
 	}
 
-	ecode.ERROR_SET = mke(10, '*');
+	exports.INVALID_DATA = mke(100, '비정상적인 값이 입력되었습니다.');
+	exports.ERRORS = mke(110, '*');
 
-	ecode.NOT_AUTHENTICATED = mke(101, '먼저 로그인해 주십시오.');
-	ecode.NOT_AUTHORIZED = mke(102, '사용 권한이 없습니다.');
-
-	ecode.INVALID_DATA = mke(201, '비정상적인 값이 입력되었습니다.');
+	exports.NOT_AUTHENTICATED = mke(200, '먼저 로그인해 주십시오.');
+	exports.NOT_AUTHORIZED = mke(201, '사용 권한이 없습니다.');
 
 });
 

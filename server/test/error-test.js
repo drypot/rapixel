@@ -15,20 +15,20 @@ describe("error(number)", function () {
 describe("error(field errors)", function () {
 	it("should success", function () {
 		var errors = [];
-		errors.push(ecode.fields.NAME_DUPE);
-		errors.push(ecode.fields.PASSWORD_EMPTY);
+		errors.push(ecode.NAME_DUPE);
+		errors.push(ecode.PASSWORD_EMPTY);
 		var err = error(errors);
-		err.rc.should.equal(ecode.ERROR_SET.rc);
-		err.errors[0].should.eql(ecode.fields.NAME_DUPE);
-		err.errors[1].should.eql(ecode.fields.PASSWORD_EMPTY);
+		err.rc.should.equal(ecode.ERRORS.rc);
+		err.errors[0].should.eql(ecode.NAME_DUPE);
+		err.errors[1].should.eql(ecode.PASSWORD_EMPTY);
 	})
 });
 
 describe("error(field error)", function () {
 	it("should success", function () {
-		var err = error(ecode.fields.NAME_DUPE);
-		err.rc.should.equal(ecode.ERROR_SET.rc);
-		err.errors[0].should.eql(ecode.fields.NAME_DUPE);
+		var err = error(ecode.NAME_DUPE);
+		err.rc.should.equal(ecode.ERRORS.rc);
+		err.errors[0].should.eql(ecode.NAME_DUPE);
 	})
 });
 

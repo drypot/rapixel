@@ -54,7 +54,7 @@ describe("login", function () {
 		express.post('/api/sessions').send(form).end(function (err, res) {
 			should(!res.error);
 			should(res.body.err);
-			should(error.find(res.body.err, ecode.fields.USER_NOT_FOUND))
+			should(error.find(res.body.err, ecode.EMAIL_NOT_FOUND))
 			next();
 		})
 	});
@@ -63,7 +63,7 @@ describe("login", function () {
 		express.post('/api/sessions').send(form).end(function (err, res) {
 			should(!res.error);
 			should(res.body.err);
-			should(error.find(res.body.err, ecode.fields.USER_NOT_FOUND))
+			should(error.find(res.body.err, ecode.EMAIL_NOT_FOUND))
 			next();
 		})
 	});
