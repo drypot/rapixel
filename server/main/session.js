@@ -6,7 +6,32 @@ init.add(function () {
 
 	console.log('session:');
 
-	exports.initSession = function (req, user, next) {
+	exports.makeSessionForm = function (req) {
+		var form = {};
+		form.email = String(req.body.email || '').trim();
+		form.password = String(req.body.password || '').trim();
+		form.remember = !!req.body.remember;
+		return form;
+	};
+
+	exports.createSession = function (req, res, form, next) {
+		userl.findCachedUserByEmail(form.email, form.password, function (err, user) {
+			if (err) return next(err);
+			if (form.remember) {
+				res.cookie('email', form.email, {
+					maxAge: 30 * 24 * 60 * 60 * 1000,
+					httpOnly: true
+				});
+				res.cookie('password', form.password, {
+					maxAge: 30 * 24 * 60 * 60 * 1000,
+					httpOnly: true
+				});
+			}
+			createSession(req, user, next);
+		});
+	};
+
+	function createSession(req, user, next) {
 		req.session.regenerate(function (err) {
 			if (err) return next(err);
 			var now = new Date();
@@ -14,7 +39,7 @@ init.add(function () {
 				if (err) return next(err);
 				user.adate = now;
 				req.session.uid = user._id;
-				next();
+				next(null, user);
 			});
 		});
 	}
@@ -44,7 +69,7 @@ init.add(function () {
 				return next();
 			}
 			res.locals.user = user;
-			exports.initSession(req, user, next);
+			createSession(req, user, next);
 		});
 	};
 
