@@ -34,7 +34,7 @@ module.exports = {
 
 	EMAIL_EMPTY: mkf('email', '이메일 주소를 입력해 주십시오.'),
 	EMAIL_RANGE: mkf('email', '이메일 주소 길이는 8 ~ 64 글자입니다.'),
-	EMAIL_PATTERN: mkf('email', '이메일 주소가 맞는지 다시 한번 확인해 주십시오.'),
+	EMAIL_PATTERN: mkf('email', '이메일 형식이 잘못되었습니다.'),
 	EMAIL_DUPE: mkf('email', '이미 등록되어 있는 이메일입니다.'),
 
 	PASSWORD_EMPTY: mkf('password', '비밀번호를 입력해 주십시오.'),

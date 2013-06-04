@@ -1,6 +1,7 @@
 var bcrypt = require('bcrypt');
 var crypto = require('crypto');
 
+var l = require('../main/l');
 var init = require('../main/init');
 var config = require('../main/config');
 var mongo = require('../main/mongo');
@@ -35,8 +36,6 @@ init.add(function (next) {
 		form.footer = String(req.body.footer || '').trim();
 		return form;
 	}
-
-	var emailRe = /^[a-z0-9-_+]+@[a-z0-9-]+(\.[a-z0-9-]+)+$/i
 
 	exports.createUser = function (form, next) {
 		checkForm(form, function (err) {
@@ -148,7 +147,7 @@ init.add(function (next) {
 			errors.push(ecode.EMAIL_EMPTY);
 		} else if (form.email.length > 64 || form.email.length < 8) {
 			errors.push(ecode.EMAIL_RANGE);
-		} else if (!emailRe.test(form.email)) {
+		} else if (!l.emailSn.test(form.email)) {
 			errors.push(ecode.EMAIL_PATTERN);
 		}
 

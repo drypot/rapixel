@@ -44,3 +44,12 @@ describe("merge", function () {
 		obj1[3].value.should.equal('v4n');
 	});
 });
+
+describe("emailSn", function () {
+	it("should success", function () {
+		l.emailSn.test("abc.def.com").should.false;
+		l.emailSn.test("abc*xyz@def.com").should.false;
+		l.emailSn.test("-a-b-c_d-e-f@def.com").should.true;
+		l.emailSn.test("develop.bj@def.com").should.true;
+	});
+});
