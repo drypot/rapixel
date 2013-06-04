@@ -349,9 +349,8 @@ init.add(function (next) {
 							subject: 'Reset Password - ' + config.data.appName,
 							text:
 								'\n' +
-									'Open folling url on browser to reset password.\n\n' +
-									config.data.appUrl + '/users/reset?id=' + reset._id + '&t=' + reset.token + '\n\n' +
-									config.data.appName
+									'Open the following URL to reset password.\n\n' +
+									config.data.appUrl + '/users/reset?id=' + reset._id + '&t=' + reset.token + '\n\n'
 						};
 						mailer.send(mail, next);
 					});
