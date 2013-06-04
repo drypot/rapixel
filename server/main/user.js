@@ -350,7 +350,8 @@ init.add(function (next) {
 							text:
 								'\n' +
 									'Open the following URL to reset password.\n\n' +
-									config.data.appUrl + '/users/reset?id=' + reset._id + '&t=' + reset.token + '\n\n'
+									config.data.appUrl + '/users/reset?id=' + reset._id + '&t=' + reset.token + '\n\n' +
+									config.data.appName
 						};
 						mailer.send(mail, next);
 					});
