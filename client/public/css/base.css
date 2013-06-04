@@ -10,6 +10,9 @@ body {
   padding-left: 8px;
   padding-right: 8px;
 }
+.bottom-space {
+  margin-bottom: 30px;
+}
 .footer {
   margin-top: 45px;
   border-top: 1px solid #eeeeee;

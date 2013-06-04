@@ -21,9 +21,7 @@ init.add(function () {
 	});
 
 	app.del('/api/sessions', function (req, res) {
-		res.clearCookie('email');
-		res.clearCookie('password');
-		req.session.destroy();
+		session.delSession(req, res);
 		res.json({});
 	});
 

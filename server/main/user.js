@@ -96,7 +96,7 @@ init.add(function (next) {
 		});
 	};
 
-	exports.delUser = function (id, user, next) {
+	exports.deactivateUser = function (id, user, next) {
 		checkUpdateAuth(id, user, function (err) {
 			if (err) return next(err);
 			mongo.updateUserStatus(id, 'd', function (err, cnt) {
@@ -242,8 +242,14 @@ init.add(function (next) {
 	exports.findUserByEmailAndCache = function (email, password, next) {
 		mongo.findUserByEmail(email, function (err, user) {
 			if (err) return next(err);
-			if (!user || !exports.validatePassword(password, user.hash)) {
+			if (!user) {
 				return next(error(ecode.EMAIL_NOT_FOUND));
+			}
+			if (user.status == 'd') {
+				return next(error(ecode.ACCOUNT_DEACTIVATED));
+			}
+			if (!exports.validatePassword(password, user.hash)) {
+				return next(error(ecode.PASSWORD_WRONG));
 			}
 			addCache(user);
 			next(null, user);
@@ -376,7 +382,6 @@ init.add(function (next) {
 			if (form.token != reset.token) {
 				return next(error(ecode.INVALID_DATA));
 			}
-			console.log('time diff:' + (Date.now() - reset._id.getTimestamp().getTime()));
 			if (Date.now() - reset._id.getTimestamp().getTime() > 15 * 60 * 1000) {
 				return next(error(ecode.RESET_TIMEOUT));
 			}

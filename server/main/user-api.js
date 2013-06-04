@@ -1,7 +1,8 @@
 var init = require('../main/init');
 var dt = require('../main/dt');
-var userl = require('../main/user');
 var express = require('../main/express');
+var userl = require('../main/user');
+var session = require('../main/session');
 
 init.add(function () {
 
@@ -47,8 +48,9 @@ init.add(function () {
 		req.findUser(function (err, user) {
 			if (err) return res.jsonErr(err);
 			var id = parseInt(req.params.id) || 0;
-			userl.delUser(id, function (err) {
+			userl.deactivateUser(id, user, function (err) {
 				if (err) return res.jsonErr(err);
+				session.delSession(req, res);
 				res.json({});
 			});
 		});

@@ -42,6 +42,9 @@ init.add(function() {
 				obj[name] = $this.val();
 			}
 		});
+		for (var key in $form.extra) {
+			obj[key] = $form.extra[key];
+		}
 		return obj;
 	};
 
@@ -113,6 +116,8 @@ init.add(function() {
 		next(null, { body: {} });
 	};
 
+	// gen http methods
+
 	var methods = [ 'post', 'get', 'put', 'del' ];
 
 	for (var i = 0; i < methods.length; i++) {
@@ -131,7 +136,7 @@ init.add(function() {
 						err = err || res.error;
 						if (err) return next(err);
 						if (res.body.err) {
-							if (res.body.err.rc === ecode.ERRORS) {
+							if (res.body.err.rc === ecode.ERRORS.rc) {
 								formty.addAlerts($form, res.body.err.errors);
 								formty.hideSending($form);
 								return;
@@ -178,10 +183,10 @@ init.add(function() {
 		$group.append($('<p>').addClass('error text-danger').text(msg));
 	};
 
-	formty.addAlerts = function ($form, fields) {
-		for (var i = 0; i < fields.length; i++) {
-			var field = fields[i];
-			formty.addAlert($form.find('[name="' + field.name + '"]'), field.message);
+	formty.addAlerts = function ($form, errors) {
+		for (var i = 0; i < errors.length; i++) {
+			var error = errors[i];
+			formty.addAlert($form.find('[name="' + error.field + '"]'), error.message);
 		}
 	}
 
@@ -219,7 +224,7 @@ init.add(function() {
 init.add(function () {
 
 	$('#logout-btn').click(function () {
-		session.logout();
+		userl.logout();
 		return false;
 	});
 

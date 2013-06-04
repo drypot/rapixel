@@ -79,11 +79,18 @@ init.add(function () {
 	});
 
 	app.get('/users/reset-req', function (req, res) {
-		res.render('user-req-reset');
+		res.render('user-reset-req');
 	});
 
 	app.get('/users/reset', function (req, res) {
 		res.render('user-reset');
+	});
+
+	app.get('/users/deactivate', function (req, res) {
+		req.findUser(function (err, user) {
+			if (err) return res.renderErr(err);
+			res.render('user-deactivate');
+		});
 	});
 
 	app.get('/users', function (req, res) {

@@ -22,11 +22,11 @@ html
 
 		if locals.user
 			script
-				window.user = !{JSON.stringify({ name: user.name })};
+				window.user = !{JSON.stringify({ _id: user._id, name: user.name })};
 
 		script(src="/js/base.js")
 		script(src="/js/ui.js")
-		script(src="/js/session.js")
+		script(src="/js/user.js")
 		script(src="/js/photo.js")
 
 	body(class= locals.photoView ? 'photo-view' : '')

@@ -42,7 +42,9 @@ module.exports = {
 
 	// login
 
-	EMAIL_NOT_FOUND: mkf('email', '사용자를 찾을 수 없습니다.'),
+	EMAIL_NOT_FOUND: mkf('email', '등록되지 않은 이메일입니다.'),
+	ACCOUNT_DEACTIVATED: mkf('email', '사용중지된 계정입니다.'),
+	PASSWORD_WRONG: mkf('password', '비밀번호가 틀렸습니다.'),
 
 	// upload photo
 

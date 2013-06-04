@@ -6,7 +6,7 @@ block title
 block content
 	script
 		init.add(function () {
-			session.initLogin();
+			userl.initLogin();
 		});
 
 	.side-space
@@ -35,3 +35,4 @@ block content
 					button.btn.btn-primary(name='send') Send
 				.sending-panel.hide
 					button.btn.btn-default.disabled(name='sending') Sending
+		a(href='/users/reset-req') Reset Password

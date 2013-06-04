@@ -19,7 +19,7 @@ block content
 						img(src=photo.dir + '/' + photo._id + '-320.jpg')
 				.info
 					span
-						a(href='/users/' + photo.user._id) #{photo.user.name}
+						a(href='/' + photo.user.name) #{photo.user.name}
 					span hit !{photo.hit}
 					span !{photo.cdateStr}
 	.side-space

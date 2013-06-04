@@ -1,0 +1,92 @@
+
+init.add(function () {
+
+	window.userl = {};
+
+	userl.initLogin = function () {
+		var $form = formty.getForm('#form');
+		$form.$email.focus();
+		$form.$send.click(function () {
+			formty.post('/api/sessions', $form, function (err) {
+				if (err) return showError(err);
+				location = '/';
+			});
+			return false;
+		});
+	};
+
+	userl.logout = function () {
+		request.del('/api/sessions').end(function (err, res) {
+			err = err || res.error || res.body.err;
+			if (err) return showError.system(err);
+			console.log('logged out');
+			location = '/';
+		});
+	};
+
+	userl.initRegister = function () {
+		var $form = formty.getForm('#form');
+		$form.$send.click(function () {
+			formty.post('/api/users', $form, function (err, res) {
+				location = '/users/login?newuser';
+			});
+			return false;
+		});
+	};
+
+	userl.initResetReq = function () {
+		var $form = formty.getForm('#form');
+		$form.$email.focus();
+		$form.$send.click(function () {
+			formty.post('/api/resets', $form, function (err) {
+				if (err) return showError(err);
+				$('#form-panel').addClass('hide');
+				$('#complete-panel').removeClass('hide');
+			});
+			return false;
+		});
+	};
+
+	userl.initReset = function () {
+		var $form = formty.getForm('#form');
+		$form.extra = {
+			_id: url.query.id,
+			token: url.query.t
+		};
+		$form.$password.focus();
+		$form.$send.click(function () {
+			formty.put('/api/resets', $form, function (err) {
+				if (err) return showError(err);
+				location = '/users/login';
+			});
+			return false;
+		});
+	};
+
+	userl.initProfile = function () {
+		var $profile = $('.profile-text');
+		$profile.html(tagUpText($profile.html()));
+	};
+
+	userl.initEditProfile = function () {
+		var $form = formty.getForm('#form');
+		var uid = url.pathnames[1];
+		$form.$send.click(function () {
+			formty.put('/api/users/' + uid, $form, function (err, res) {
+				location = '/users/' + uid;
+			});
+			return false;
+		});
+	};
+
+	userl.initDeactivate = function () {
+		var $form = formty.getForm('#form');
+		$form.$send.click(function () {
+			formty.del('/api/users/' + user._id, $form, function (err) {
+				if (err) return showError(err);
+				location = '/';
+			});
+			return false;
+		});
+	};
+});

@@ -1,0 +1,24 @@
+extends layout
+
+block title
+	title Password Reset - #{appName}
+
+block content
+	script
+		init.add(function () {
+			userl.initReset();
+		});
+
+	.side-space
+		.page-header
+			h2 Password Reset
+
+		form#form
+			.form-row
+				label.control-label Password
+				input.input-with-feedback.col-lg-5(name="password", type="password")
+			.form-actions
+				.send-panel
+					button.btn.btn-primary(name='send') Send
+				.sending-panel.hide
+					button.btn.btn-default.disabled(name='sending') Sending

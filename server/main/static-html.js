@@ -24,4 +24,8 @@ init.add(function () {
 		res.render('about-help');
 	});
 
+	app.get('/support', function (req, res) {
+		res.render('about-help');
+	});
+
 });

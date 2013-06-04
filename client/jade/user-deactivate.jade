@@ -1,0 +1,25 @@
+extends layout
+
+block title
+	title Deactivate My Account - #{appName}
+
+block content
+	script
+		init.add(function () {
+			userl.initDeactivate();
+		});
+
+	.side-space
+		.page-header
+			h2 Deactivate My Account
+
+		h4 YOU CAN NOT LOGIN AGAIN.
+		h4 DELETE YOUR PHOTOS FIRST.
+		h4 PHOTOS ARE NOT DELETED AUTOMATICALLY.
+
+		form#form
+			.form-actions
+				.send-panel
+					button.btn.btn-danger(name='send') Deactivate My Account
+				.sending-panel.hide
+					button.btn.btn-default.disabled(name='sending') Sending

@@ -44,6 +44,12 @@ init.add(function () {
 		});
 	}
 
+	exports.delSession = function (req, res) {
+		res.clearCookie('email');
+		res.clearCookie('password');
+		req.session.destroy();
+	};
+
 	exports.setLocals = function (req, res, next) {
 		if (req.session.uid) {
 			userl.findCachedUser(req.session.uid, function (err, user) {
