@@ -11,6 +11,7 @@ require('../main/hello-api');
 require('../main/static-html');
 require('../main/upload-api');
 require('../main/upload-html');
+require('../main/user-profile-html');
 
 init.run(function (err) {
 	if (err) throw err;

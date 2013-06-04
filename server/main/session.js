@@ -15,7 +15,7 @@ init.add(function () {
 	};
 
 	exports.createSession = function (req, res, form, next) {
-		userl.findCachedUserByEmail(form.email, form.password, function (err, user) {
+		userl.findUserByEmailAndCache(form.email, form.password, function (err, user) {
 			if (err) return next(err);
 			if (form.remember) {
 				res.cookie('email', form.email, {
@@ -61,7 +61,7 @@ init.add(function () {
 		if (!email || !password) {
 			return next();
 		}
-		userl.findCachedUserByEmail(email, password, function (err, user) {
+		userl.findUserByEmailAndCache(email, password, function (err, user) {
 			if (err) return next(err);
 			if (!user) {
 				res.clearCookie(email);

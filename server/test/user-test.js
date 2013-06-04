@@ -1,3 +1,3 @@
 
-// TODO: test findCachedUserByEmail
+// TODO: test findUserByEmailAndCache
 // TODO: test findCachedUser

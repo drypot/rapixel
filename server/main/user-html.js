@@ -14,6 +14,10 @@ init.add(function () {
 
 	app.get('/users/:id([0-9]+)', function (req, res) {
 		var id = parseInt(req.params.id) || 0;
+		exports.renderProfile(req, res, id);
+	});
+
+	exports.renderProfile = function (req, res, id) {
 		var user = res.locals.user;
 		userl.findUserForView(id, user, function (err, tuser) {
 			if (err) return res.renderErr(err);
@@ -21,7 +25,7 @@ init.add(function () {
 			var ps = photol.getPageSize(req.query.ps);
 			photol.findPhotosByUser(id, pg, ps, function (err, photos, last) {
 				if (err) return res.renderErr(err);
-				prevNext(id, pg, last, function (prevUrl, nextUrl) {
+				prevNext(req.path, pg, last, function (prevUrl, nextUrl) {
 					res.render('user-profile', {
 						tuser: tuser,
 						showActions: user && (user.admin || user._id === id),
@@ -33,18 +37,18 @@ init.add(function () {
 				});
 			});
 		});
-	});
+	};
 
-	function prevNext(id, pg, last, next) {
+	function prevNext(path, pg, last, next) {
 		var prevUrl, nextUrl;
 		var u;
 		if (pg > 1) {
-			u = new UrlMaker('/users/' + id)
+			u = new UrlMaker(path)
 			u.add('pg', pg - 1, 1);
 			prevUrl = u.toString();
 		}
 		if (!last) {
-			u = new UrlMaker('/users/' + id);
+			u = new UrlMaker(path);
 			u.add('pg', pg + 1, 1);
 			nextUrl = u.toString();
 		}

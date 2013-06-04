@@ -11,6 +11,20 @@ var ecode = require('../main/ecode');
 init.add(function (next) {
 
 	var users = [];
+	var usersByName = {};
+
+	function deleteCache(id) {
+		var user = users[id];
+		if (user) {
+			delete users[id];
+			delete usersByName[user.name];
+		}
+	}
+
+	function addCache(user) {
+		users[user._id] = user;
+		usersByName[user.name] = user;
+	}
 
 	exports.makeForm = function (req) {
 		var form = {};
@@ -74,7 +88,7 @@ init.add(function (next) {
 						if (!cnt) {
 							return next(error(ecode.USER_NOT_FOUND));
 						}
-						delete users[id];
+						deleteCache(id);
 						next();
 					});
 				});
@@ -90,7 +104,7 @@ init.add(function (next) {
 				if (!cnt) {
 					return next(error(ecode.USER_NOT_FOUND));
 				}
-				delete users[id];
+				deleteCache(id);
 				next();
 			});
 		});
@@ -196,17 +210,6 @@ init.add(function (next) {
 		return bcrypt.compareSync(password, hash);
 	}
 
-	exports.findCachedUserByEmail = function (email, password, next) {
-		mongo.findUserByEmail(email, function (err, user) {
-			if (err) return next(err);
-			if (!user || !exports.validatePassword(password, user.hash)) {
-				return next(error(ecode.EMAIL_NOT_FOUND));
-			}
-			users[user._id] = user;
-			next(null, user);
-		});
-	};
-
 	exports.findCachedUser = function (id, next) {
 		var user = users[id];
 		if (user) {
@@ -215,7 +218,34 @@ init.add(function (next) {
 		mongo.findUser(id, function (err, user) {
 			if (err) return next(err);
 			if (!user) return next(error(ecode.USER_NOT_FOUND));
-			users[user._id] = user;
+			addCache(user);
+			next(null, user);
+		});
+	};
+
+	exports.findCachedUserByName = function (name, next) {
+		var user = usersByName[name];
+		if (user) {
+			return next(null, user);
+		}
+		mongo.findUserByName(name, function (err, user) {
+			if (err) return next(err);
+			if (!user) {
+				// 사용자 프로필 URL 검색에 주로 사용되므로 error 생성은 패스한다.
+				return next();
+			}
+			addCache(user);
+			next(null, user);
+		});
+	};
+
+	exports.findUserByEmailAndCache = function (email, password, next) {
+		mongo.findUserByEmail(email, function (err, user) {
+			if (err) return next(err);
+			if (!user || !exports.validatePassword(password, user.hash)) {
+				return next(error(ecode.EMAIL_NOT_FOUND));
+			}
+			addCache(user);
 			next(null, user);
 		});
 	};
