@@ -28,7 +28,11 @@ before(function(next) {
 	});
 
 	app.get('/api/send-empty', function (req, res) {
-		res.json({});
+		res.json();
+	});
+
+	app.get('/api/send-null', function (req, res) {
+		res.json();
 	});
 
 	express.listen();
@@ -89,6 +93,17 @@ describe("Cache-Control test", function () {
 				res.get('Cache-Control').should.equal('no-cache');
 				next();
 			});
+		});
+	});
+});
+
+describe("send-null test", function () {
+	it("should success", function (next) {
+		express.get('/api/send-null', function (err, res) {
+			should(!err);
+			should(!res.error);
+			res.body.should.eql({});
+			next();
 		});
 	});
 });

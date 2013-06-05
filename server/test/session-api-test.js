@@ -18,20 +18,20 @@ init.add(function () {
 	app.get('/test/user', function (req, res) {
 		req.findUser(function (err) {
 			if (err) return res.jsonErr(err);
-			res.json({});
+			res.json();
 		});
 	});
 
 	app.get('/test/admin', function (req, res) {
 		req.findAdmin(function (err) {
 			if (err) return res.jsonErr(err);
-			res.json({});
+			res.json();
 		});
 	});
 
 	app.del('/test/del-session', function (req, res) {
 		req.session.destroy();
-		res.json({});
+		res.json();
 	});
 
 });
