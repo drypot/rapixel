@@ -18,7 +18,7 @@ body {
 	margin-bottom: 30px;
 }
 
-.footer {
+.page-footer {
 	margin-top: 45px;
 	border-top: 1px solid #eeeeee;
 	padding-top: 10px;
@@ -85,13 +85,6 @@ body {
 
 body.photo-view {
 	background-color: #222222;
-	color: #888;
-	font-size: 16px;
-
-	a {
-		font-size: 18px;
-		color: #e0e0e0;
-	}
 
 	.photo {
 		margin: 0px;
@@ -100,28 +93,37 @@ body.photo-view {
 			max-width: none;
 		}
 	}
-	.info {
-		margin: 0px 10px 24px 12px;
-		span {
-			margin-right: 15px;
+	.extra {
+		color: #888;
+		a {
+			font-size: 18px;
+			color: #e0e0e0;
 		}
-	}
-	.comment {
-		margin: 0px 10px 24px 12px;
-	}
-	.photo-footer {
-		margin: 0px 10px 24px 12px;
+		.name {
+			margin: 0px 10px 24px 12px;
+			span {
+				margin-right: 15px;
+			}
+		}
+		.comment {
+			margin: 0px 10px 24px 12px;
+		}
+		.footer {
+			margin: 0px 10px 24px 12px;
 
-	}
-	.action {
-		margin: 45px 10px 24px 12px;
-
-	}
-	.home {
-		margin: 55px 10px 8px 12px;
-		a, a.hover {
-			font-size: 28px;
-			font-weight: 500;
+		}
+		.action {
+			margin: 45px 10px 24px 12px;
+			button#del-btn {
+				margin-left: 15px;
+			}
+		}
+		.home {
+			margin: 55px 10px 8px 12px;
+			a, a.hover {
+				font-size: 28px;
+				font-weight: 500;
+			}
 		}
 	}
 }
@@ -180,3 +182,26 @@ form {
 	font-size: 12px;
 }
 
+pre.error-report {
+	margin: 0px;
+	margin-top:50px;
+	margin-bottom:60px;
+
+	padding: 0px;
+	padding-top: 5px;
+
+	border: 0;
+	border-top: 1px solid #eeeeee;
+
+	font-family: monospace;
+	font-size: 14px;
+	background-color: white;
+	white-space: nowrap;
+}
+
+.modal-body {
+	p {
+		white-space: nowrap;
+		overflow: scroll;
+	}
+}

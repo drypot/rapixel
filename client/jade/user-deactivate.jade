@@ -13,13 +13,10 @@ block content
 		.page-header
 			h2 Deactivate My Account
 
-		h4 YOU CAN NOT LOGIN AGAIN.
-		h4 DELETE YOUR PHOTOS FIRST.
-		h4 PHOTOS ARE NOT DELETED AUTOMATICALLY.
+		.bottom-space
+			h4 YOU CAN NOT LOGIN AGAIN.
+			h4 PHOTOS ARE NOT DELETED AUTOMATICALLY.
+			h4 DELETE YOUR PHOTOS FIRST.
 
-		form#form
-			.form-actions
-				.send-panel
-					button.btn.btn-danger(name='send') Deactivate My Account
-				.sending-panel.hide
-					button.btn.btn-default.disabled(name='sending') Sending
+		button#dea-btn.btn.btn-danger Deactivate My Account
+		button#dea-confirm-btn.btn.btn-danger.hide Yes, Deactivate

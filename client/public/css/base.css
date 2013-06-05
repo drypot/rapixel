@@ -13,19 +13,19 @@ body {
 .bottom-space {
   margin-bottom: 30px;
 }
-.footer {
+.page-footer {
   margin-top: 45px;
   border-top: 1px solid #eeeeee;
   padding-top: 10px;
   color: #888;
 }
-.footer a {
+.page-footer a {
   color: inherit;
 }
-.footer ul {
+.page-footer ul {
   margin: 0px;
 }
-.footer ul li {
+.page-footer ul li {
   padding-left: 0px;
   padding-right: 9px;
 }
@@ -71,12 +71,6 @@ body {
 }
 body.photo-view {
   background-color: #222222;
-  color: #888;
-  font-size: 16px;
-}
-body.photo-view a {
-  font-size: 18px;
-  color: #e0e0e0;
 }
 body.photo-view .photo {
   margin: 0px;
@@ -85,26 +79,36 @@ body.photo-view .photo {
 body.photo-view .photo img {
   max-width: none;
 }
-body.photo-view .info {
+body.photo-view .extra {
+  color: #888;
+}
+body.photo-view .extra a {
+  font-size: 18px;
+  color: #e0e0e0;
+}
+body.photo-view .extra .name {
   margin: 0px 10px 24px 12px;
 }
-body.photo-view .info span {
+body.photo-view .extra .name span {
   margin-right: 15px;
 }
-body.photo-view .comment {
+body.photo-view .extra .comment {
   margin: 0px 10px 24px 12px;
 }
-body.photo-view .photo-footer {
+body.photo-view .extra .footer {
   margin: 0px 10px 24px 12px;
 }
-body.photo-view .action {
+body.photo-view .extra .action {
   margin: 45px 10px 24px 12px;
 }
-body.photo-view .home {
+body.photo-view .extra .action button#del-btn {
+  margin-left: 15px;
+}
+body.photo-view .extra .home {
   margin: 55px 10px 8px 12px;
 }
-body.photo-view .home a,
-body.photo-view .home a.hover {
+body.photo-view .extra .home a,
+body.photo-view .extra .home a.hover {
   font-size: 28px;
   font-weight: 500;
 }
@@ -150,4 +154,21 @@ form textarea {
 .btn-mini {
   padding: 2px 6px;
   font-size: 12px;
+}
+pre.error-report {
+  margin: 0px;
+  margin-top: 50px;
+  margin-bottom: 60px;
+  padding: 0px;
+  padding-top: 5px;
+  border: 0;
+  border-top: 1px solid #eeeeee;
+  font-family: monospace;
+  font-size: 14px;
+  background-color: white;
+  white-space: nowrap;
+}
+.modal-body p {
+  white-space: nowrap;
+  overflow: scroll;
 }

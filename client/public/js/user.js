@@ -18,7 +18,7 @@ init.add(function () {
 	userl.logout = function () {
 		request.del('/api/sessions').end(function (err, res) {
 			err = err || res.error || res.body.err;
-			if (err) return showError.system(err);
+			if (err) return showError(err);
 			console.log('logged out');
 			location = '/';
 		});
@@ -80,10 +80,14 @@ init.add(function () {
 	};
 
 	userl.initDeactivate = function () {
-		var $form = formty.getForm('#form');
-		$form.$send.click(function () {
-			formty.del('/api/users/' + user._id, $form, function (err) {
-				if (err) return showError(err);
+		$('#dea-btn').click(function () {
+			$('#dea-confirm-btn').removeClass('hide');
+			return false;
+		});
+		$('#dea-confirm-btn').click(function () {
+			request.del('/api/users/' + user._id).end(function (err, res) {
+				err = err || res.error || res.body.err;
+				if (err) return showError(res.body.err);
 				location = '/';
 			});
 			return false;

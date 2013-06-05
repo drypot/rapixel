@@ -6,13 +6,13 @@ block title
 block content
 	script
 		init.add(function() {
-			photo.initPhotoView(!{JSON.stringify(photo)});
+			photol.initPhotoView(!{JSON.stringify(photo)});
 		});
 
 	.photo
 
-	.side-space
-		.info
+	.extra.side-space
+		.name
 			span
 				a(href='/users/' + photo.user._id) #{photo.user.name}
 			span hit !{photo.hit}
@@ -20,11 +20,13 @@ block content
 
 		.comment !{jade.escape(photo.comment).replace(/\n/g, '<br>')}
 
-		.photo-footer !{jade.escape(photo.user.footer).replace(/\n/g, '<br>')}
+		.footer !{jade.escape(photo.user.footer).replace(/\n/g, '<br>')}
 
 		.action
 			if locals.user && photo.user._id == user._id
-				button#del-btn.btn.btn-danger.btn-mini Delete Photo
+				button#edit-btn.btn.btn-primary.btn-mini Edit Photo
+				button#del-btn.btn.btn-danger.btn-mini Delete
+				button#del-confirm-btn.btn.btn-danger.btn-mini.hide Yes, Delete
 
 		.home
 			a(href='/') #{appName}

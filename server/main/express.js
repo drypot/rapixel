@@ -88,19 +88,7 @@ init.add(function () {
 		next(null, user);
 	};
 
-	var cut5LinesPattern = /^(?:.*\n){1,5}/m;
 	var emptyMatch = [''];
-
-//	app.response.safeJson = function (obj) {
-//		// IE9 + ajaxForm + multipart/form-data 사용할 경우 application/json 으로 리턴하면 저장하려든다.
-//		//console.log(this.req.headers);
-//		var accept = this.req.get('accept');
-//		if (accept && accept.indexOf('text/html') != -1) {
-//			this.send(JSON.stringify(obj));
-//		} else {
-//			this.json(obj);
-//		}
-//	};
 
 	app.response.jsonErr = function (err) {
 		var err2 = {};
@@ -108,7 +96,7 @@ init.add(function () {
 			err2[key] = err[key];
 		}
 		err2.message = err.message;
-		err2.stack = (err.stack.match(cut5LinesPattern) || emptyMatch)[0];
+		err2.stack = (err.stack.match(/^(?:.*\n){1,6}/m) || emptyMatch)[0];
 		this.json({ err: err2 });
 	}
 
@@ -122,7 +110,7 @@ init.add(function () {
 			err2[key] = err[key];
 		}
 		err2.message = err.message;
-		err2.stack = err.stack;
+		err2.stack = (err.stack.match(/^(?:.*\n){1,6}/m) || emptyMatch)[0].replace(/Error:.+\n/, '');
 		this.render('error', { err: err2 });
 	}
 

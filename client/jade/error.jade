@@ -10,20 +10,14 @@ block content
 			h2 Error
 
 		if !locals.err
-			h3 'err' not defined
+			h4 'err' is not defined
 		else
-			- var count = 0;
 			if err.rc
-				- count++;
-				h3 Message
-				pre #{err.rc + ', ' + err.message}
+				h4 #{err.message}
+				pre.error-report.
+					#{'Code: ' + err.rc}<br>
+					!{err.stack.replace(/\n/g, '<br>')}
 			else if err.message
-				- count++;
-				h3 Message
-				pre #{err.message}
-			if err.stack
-				- count++;
-				h3 Stack
-				pre #{err.stack}
-			if !count
-				h3 Unknown Error
+				h4 #{err.message}
+			else
+				h4 Unknown Error

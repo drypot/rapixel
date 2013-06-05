@@ -134,7 +134,10 @@ init.add(function() {
 					}
 					request[method].call(request, url).send(form).end(function (err, res) {
 						err = err || res.error;
-						if (err) return next(err);
+						if (err) {
+							formty.hideSending($form);
+							return next(err);
+						}
 						if (res.body.err) {
 							if (res.body.err.rc === ecode.ERRORS.rc) {
 								formty.addAlerts($form, res.body.err.errors);
@@ -145,6 +148,8 @@ init.add(function() {
 							formty.hideSending($form);
 							return;
 						}
+						// formty.hideSending($form) 을 부르지 않는다.
+						// 보통 페이지 이동이 일어나므로 버튼을 바꿀 필요가 없다.
 						next(null, res);
 					});
 				});
@@ -199,19 +204,16 @@ init.add(function() {
 	var $body = $modal.find('.modal-body');
 
 	window.showError = function (err, next) {
-		$title.empty();
-		$title.append('<h3>시스템 오류</h3>');
-		$body.empty();
-		$body.append('<h3>Message</h3>');
-		$body.append('<pre>' + err.message + '</pre>');
+		$title.text(err.message);
+		var body = '';
 		if (err.stack) {
-			$body.append('<h3>Stack</h3>');
-			$body.append('<pre>' + err.stack + '</pre>');
+			body += '<p>System Error ' + err.stack.replace(/Error:.+\n/, '').replace(/\n/g, '<br>') + '</p>';
 		}
 		if (err.detail) {
-			$body.append('<h3>Detail</h3>');
-			$body.append('<pre>' + err.detail + '</pre>');
+			body += '<pre>' + err.detail.replace(/\n/g, '<br>') + '</pre>';
 		}
+		console.log(body);
+		$body.html(body);
 		$modal.off('hidden.bs.modal');
 		if (next) {
 			$modal.on('hidden.bs.modal', next);
