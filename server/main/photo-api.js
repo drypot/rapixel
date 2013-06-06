@@ -8,22 +8,9 @@ init.add(function () {
 
 	console.log('photo-api:');
 
-	app.post('/api/photos', function (req, res) {
-		req.findUser(function (err, user) {
-			if (err) return res.jsonErr(err);
-			var form = photol.makeForm(req);
-			photol.createPhoto(user, form, function (err, pid) {
-				if (err) return res.jsonErr(err);
-				res.json({
-					pid: pid
-				});
-			});
-		});
-	});
-
-	app.get('/api/photos/:pid([0-9]+)', function (req, res) {
-		var pid = parseInt(req.params.pid) || 0;
-		photol.findPhoto(pid, function (err, photo) {
+	app.get('/api/photos/:id([0-9]+)', function (req, res) {
+		var id = parseInt(req.params.id) || 0;
+		photol.findPhoto(id, function (err, photo) {
 			if (err) return res.jsonErr(err);
 			res.json(photo);
 		});
@@ -41,13 +28,41 @@ init.add(function () {
 		});
 	});
 
-	app.del('/api/photos/:pid([0-9]+)', function (req, res) {
+	app.post('/api/photos', function (req, res) {
 		req.findUser(function (err, user) {
 			if (err) return res.jsonErr(err);
-			var pid = parseInt(req.params.pid) || 0;
-			photol.del(pid, user, function (err) {
+			var form = photol.makeForm(req);
+			photol.createPhoto(user, form, function (err, id) {
 				if (err) return res.jsonErr(err);
-				res.json({});
+				res.json({
+					photo: {
+						_id: id
+					}
+				});
+			});
+		});
+	});
+
+	app.put('/api/photos/:id([0-9]+)', function (req, res) {
+		req.findUser(function (err, user) {
+			if (err) return res.jsonErr(err);
+			var form = photol.makeForm(req);
+			form._id = parseInt(req.params.id) || 0;
+			photol.updatePhoto(user, form, function (err) {
+				if (err) return res.jsonErr(err);
+				res.json();
+			});
+		});
+	});
+
+
+	app.del('/api/photos/:id([0-9]+)', function (req, res) {
+		req.findUser(function (err, user) {
+			if (err) return res.jsonErr(err);
+			var id = parseInt(req.params.id) || 0;
+			photol.del(id, user, function (err) {
+				if (err) return res.jsonErr(err);
+				res.json();
 			});
 		});
 	});

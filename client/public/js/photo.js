@@ -13,7 +13,7 @@ init.add(function () {
 			request.del('/api/photos/' + photo._id).end(function (err, res) {
 				err = err || res.error || res.body.err;
 				if (err) return showError(res.body.err);
-				history.go(-1);
+				location = '/';
 			});
 			return false;
 		});

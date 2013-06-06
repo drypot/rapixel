@@ -11,7 +11,7 @@ init.add(function () {
 	app.post('/upload', function (req, res) {
 		req.findUser(function (err) {
 			if (err) return res.send(JSON.stringify(err));
-			res.send(JSON.stringify(upload.getTmpFiles(req)));
+			res.send(JSON.stringify(upload.makeFiles(req)));
 		});
 	});
 

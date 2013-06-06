@@ -11,7 +11,7 @@ init.add(function () {
 	app.post('/api/upload', function (req, res) {
 		req.findUser(function (err) {
 			if (err) return res.jsonErr(err);
-			res.json(upload.getTmpFiles(req));
+			res.json(upload.makeFiles(req));
 		});
 	});
 
@@ -20,7 +20,7 @@ init.add(function () {
 			if (err) return res.jsonErr(err);
 			upload.deleteTmpFiles(req.body.files, function (err) {
 				if (err) return res.jsonErr(err);
-				res.json({});
+				res.json();
 			});
 		});
 	});

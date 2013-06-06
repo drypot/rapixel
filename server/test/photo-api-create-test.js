@@ -209,8 +209,8 @@ describe("uploading 16:9 2160 jpg", function () {
 			should(!err);
 			should(!res.error);
 			should(!res.body.err);
-			should(res.body.pid);
-			_pid = res.body.pid;
+			should(res.body.photo._id);
+			_pid = res.body.photo._id;
 			next();
 		});
 	});

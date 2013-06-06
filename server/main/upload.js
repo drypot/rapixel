@@ -9,36 +9,43 @@ init.add(function (next) {
 
 	console.log('upload: ' + config.data.uploadDir);
 
-	exports.getTmpPath = function (fname) {
-		return exports.tmp + '/' + fname;
+	exports.getTmpPath = function (tname) {
+		return exports.tmp + '/' + tname;
 	}
 
-	exports.getTmpFiles = function (req) {
+	exports.makeFiles = function (req) {
 		var files = {};
 		for (var key in req.files) {
-			var group = req.files[key];
-			if (!Array.isArray(group)) {
-				pushFile(files, key, group);
-			} else {
-				for (var i = 0; i < group.length; i++) {
-					pushFile(files, key, group[i]);
+			var tmpFiles = req.files[key];
+			if (!Array.isArray(tmpFiles)) {
+				tmpFiles = [tmpFiles];
+			}
+			for (var i = 0; i < tmpFiles.length; i++) {
+				var tmpFile = tmpFiles[i];
+				if (/*tmpFile.size &&*/ tmpFile.name) {
+					if (!files[key]) {
+						files[key] = [];
+					}
+					files[key].push({
+						oname: tmpFile.name,
+						tname: path.basename(tmpFile.path)
+					});
 				}
 			}
 		}
 		return files;
 	};
 
-	function pushFile(files, key, file) {
-		if (/*file.size &&*/ file.name) {
-			if (!files[key]) {
-				files[key] = [];
-			}
-			files[key].push({
-				oname: file.name,
-				tname: path.basename(file.path)
-			});
+	exports.normalizeFiles = function (files) {
+		files = files || [];
+		for (var i = 0; i < files.length; i++) {
+			var file = files[i];
+			file.oname = fs2.safeFilename(path.basename(file.oname));
+			file.tname = path.basename(file.tname);
+			file.tpath = exports.getTmpPath(file.tname);
 		}
-	}
+		return files;
+	};
 
 	exports.deleteTmpFiles = function (files, next) {
 		if (files) {

@@ -43,17 +43,10 @@ init.add(function (next) {
 	};
 
 	exports.makeForm = function (req) {
-		var body = req.body;
 		var form = {};
 		form.now = new Date();
-		form.comment = body.comment || '';
-		form.files = body.files || [];
-		for (var i = 0; i < form.files.length; i++) {
-			var file = form.files[i];
-			file.oname = fs2.safeFilename(path.basename(file.oname));
-			file.tname = path.basename(file.tname);
-			file.tpath = upload.getTmpPath(file.tname);
-		}
+		form.comment = req.body.comment || '';
+		form.files = upload.normalizeFiles(req.body.files);
 		form.file = form.files[0];
 		return form;
 	}
