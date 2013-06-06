@@ -313,6 +313,10 @@ init.add(function (next) {
 		});
 	};
 
+	exports.countUsers = function (next) {
+		mongo.users.count(next);
+	};
+
 	exports.makeResetReqForm = function (req) {
 		var form = {};
 		form.email = String(req.body.email || '').trim();

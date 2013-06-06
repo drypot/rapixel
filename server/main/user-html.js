@@ -94,7 +94,7 @@ init.add(function () {
 	});
 
 	app.get('/users', function (req, res) {
-		mongo.users.count(function (err, count) {
+		userl.countUsers(function (err, count) {
 			if (err) return res.renderErr(err);
 			res.render('user-list', { count: count });
 		});
