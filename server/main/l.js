@@ -31,4 +31,8 @@ exports.merge = function () {
 	}
 }
 
+exports.pass = function () {
+	arguments[arguments.length - 1]();
+}
+
 exports.emailSn = /^[a-z0-9-_+.]+@[a-z0-9-]+(\.[a-z0-9-]+)+$/i

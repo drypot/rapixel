@@ -45,6 +45,21 @@ describe("merge", function () {
 	});
 });
 
+describe("pass", function () {
+	it("should success", function (next) {
+		l.pass(function (err) {
+			should(!err);
+			next();
+		});
+	});
+	it("should success", function (next) {
+		l.pass(1, 2, 3, function (err) {
+			should(!err);
+			next();
+		});
+	});
+});
+
 describe("emailSn", function () {
 	it("should success", function () {
 		l.emailSn.test("abc.def.com").should.false;
