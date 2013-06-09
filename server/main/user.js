@@ -67,7 +67,7 @@ init.add(function (next) {
 	};
 
 	exports.updateUser = function (id, user, form, next) {
-		checkUpdateAuth(id, user, function (err) {
+		checkUpdatable(id, user, function (err) {
 			if (err) return next(err);
 			checkFormForUpdate(form, function (err) {
 				if (err) return next(err);
@@ -96,7 +96,7 @@ init.add(function (next) {
 	};
 
 	exports.deactivateUser = function (id, user, next) {
-		checkUpdateAuth(id, user, function (err) {
+		checkUpdatable(id, user, function (err) {
 			if (err) return next(err);
 			mongo.updateUserStatus(id, 'd', function (err, cnt) {
 				if (err) return next(err);
@@ -194,7 +194,7 @@ init.add(function (next) {
 		});
 	}
 
-	function checkUpdateAuth(id, user, next) {
+	function checkUpdatable(id, user, next) {
 		if (user._id != id && !user.admin) {
 			return next(error(ecode.NOT_AUTHORIZED))
 		}
@@ -298,7 +298,7 @@ init.add(function (next) {
 	}
 
 	exports.findUserForEdit = function (id, user, next) {
-		checkUpdateAuth(id, user, function (err) {
+		checkUpdatable(id, user, function (err) {
 			if (err) return next(err);
 			exports.findCachedUser(id, function (err, _tuser) {
 				if (err) return next(err);

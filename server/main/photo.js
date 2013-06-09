@@ -2,6 +2,7 @@ var fs = require('fs');
 var path = require('path');
 var img = require('imagemagick');
 
+var l = require('../main/l');
 var init = require('../main/init');
 var config = require('../main/config');
 var fs2 = require('../main/fs');
@@ -58,13 +59,49 @@ init.add(function (next) {
 			if (hours > 0) {
 				return next(error(ecode.PHOTO_CYCLE));
 			}
+			checkPhotoFile(form, function (err) {
+				if (err) return next(err);
+				checkPhotoFeature(form, function (err, feature) {
+					if (err) return next(err);
+					var id = mongo.newPhotoId();
+					makeVersions(id, form, feature, function (err, vers) {
+						if (err) return next(err);
+						var photo = {
+							_id: id,
+							uid: user._id,
+							hit: 0,
+							favCnt: 0,
+							fname: form.file.oname,
+							format: feature.format,
+							width: feature.width,
+							height: feature.height,
+							vers: vers,
+							cdate: form.now,
+							comment: form.comment
+						};
+						mongo.insertPhoto(photo, function (err) {
+							if (err) return next(err);
+							mongo.updateUserPdate(user._id, form.now, function (err) {
+								if (err) return next(err);
+								next(null, id);
+							});
+						});
+					});
+				});
+			});
+		});
+	};
+
+	exports.updatePhoto = function(user, form, _next) {
+		var next = upload.tmpDeleter(form.files, _next);
+		if (form.file) {
 			checkPhotoFeature(form, function (err, feature) {
 				if (err) return next(err);
-				var pid = mongo.newPhotoId();
-				makeVersions(pid, form, feature, function (err, vers) {
+				var id = mongo.newPhotoId();
+				makeVersions(id, form, feature, function (err, vers) {
 					if (err) return next(err);
 					var photo = {
-						_id: pid,
+						_id: id,
 						uid: user._id,
 						hit: 0,
 						favCnt: 0,
@@ -80,23 +117,26 @@ init.add(function (next) {
 						if (err) return next(err);
 						mongo.updateUserPdate(user._id, form.now, function (err) {
 							if (err) return next(err);
-							next(null, pid);
+							next(null, id);
 						});
 					});
 				});
 			});
-		});
+		}
 	};
 
-	function checkPhotoFeature(form, next) {
-		var file = form.file;
-		if (!file) {
+	function checkPhotoFile(form, next) {
+		if (!form.file) {
 			return next(error(ecode.PHOTO_NO_FILE));
 		}
 		if (form.files.length > 1) {
 			return next(error(ecode.PHOTO_NOT_ONE));
 		}
-		img.identify(file.tpath, function (err, feature) {
+		next();
+	}
+
+	function checkPhotoFeature(form, next) {
+		img.identify(form.file.tpath, function (err, feature) {
 			if (err) {
 				return next(error(ecode.PHOTO_TYPE))
 			}
@@ -112,24 +152,24 @@ init.add(function (next) {
 		});
 	}
 
-	exports.getPhotoPath = function (pid, fname) {
+	exports.getPhotoPath = function (id, fname) {
 		if (fname) {
-			return fs2.makeDeepPath(upload.photoDir, pid, 3) + '/' + fname;
+			return fs2.makeDeepPath(upload.photoDir, id, 3) + '/' + fname;
 		}
-		return fs2.makeDeepPath(upload.photoDir, pid, 3);
+		return fs2.makeDeepPath(upload.photoDir, id, 3);
 	}
 
 	var _vers = [ 2160, 1440, 1080, 720, 480, 320 ];
 
-	function makeVersions(pid, form, feature, next) {
+	function makeVersions(id, form, feature, next) {
 		var file = form.file;
-		fs2.makeDirs(exports.getPhotoPath(pid), function (err, ppath) {
+		fs2.makeDirs(exports.getPhotoPath(id), function (err, ppath) {
 			if (err) return next(err);
 			var vers = [];
 			var i = 0;
 			function makeVersion() {
 				if (i == _vers.length) {
-					var org = ppath + '/' + pid + '-org.' + feature.formatLowerCase;
+					var org = ppath + '/' + id + '-org.' + feature.formatLowerCase;
 					fs.rename(file.tpath, org, function (err) {
 						if (err) return next(err);
 						next(null, vers);
@@ -143,7 +183,7 @@ init.add(function (next) {
 				}
 				var opt = {
 					srcPath: file.tpath,
-					dstPath: ppath + '/' + pid + '-' + v + '.jpg',
+					dstPath: ppath + '/' + id + '-' + v + '.jpg',
 					quality: feature.format === 'JPEG' ? 0.92 : feature.format === 'PNG' ? 0.89 : 0.8,
 					sharpening: 0,
 					height: v,
@@ -161,10 +201,10 @@ init.add(function (next) {
 
 	var photoUrl = config.data.uploadUrl + '/photo';
 
-	exports.findPhoto = function (pid, next) {
-		mongo.updatePhotoHit(pid, function (err) {
+	exports.findPhoto = function (id, next) {
+		mongo.updatePhotoHit(id, function (err) {
 			if (err) return next(err);
-			mongo.findPhoto(pid, function (err, photo) {
+			mongo.findPhoto(id, function (err, photo) {
 				if (err) return next(err);
 				if (!photo) return next(error(ecode.PHOTO_NOTHING_TO_SHOW));
 				userl.findCachedUser(photo.uid, function (err, user) {
@@ -183,16 +223,31 @@ init.add(function (next) {
 		});
 	};
 
-	exports.del = function (pid, user, next) {
-		mongo.delPhoto(pid, user.admin ? null : user._id, function (err, cnt) {
+	exports.delPhoto = function (id, user, next) {
+		checkUpdatable(id, user, function (err) {
 			if (err) return next(err);
-			if (!cnt) return next(error(ecode.PHOTO_NOTHING_TO_DEL));
-			fs2.removeDirs(exports.getPhotoPath(pid), function (err) {
+			mongo.delPhoto(id, function (err, cnt) {
 				if (err) return next(err);
-				next();
+				fs2.removeDirs(exports.getPhotoPath(id), function (err) {
+					if (err) return next(err);
+					next();
+				});
 			});
 		});
 	};
+
+	function checkUpdatable(id, user, next) {
+		mongo.findPhoto(id, function (err, photo) {
+			if (err) return next(err);
+			if (!photo) {
+				return next(error(ecode.PHOTO_NOTHING_TO_DEL));
+			}
+			if (!user.admin && photo.uid != user._id) {
+				return next(error(ecode.NOT_AUTHORIZED));
+			}
+			next();
+		});
+	}
 
 	exports.findPhotos = function (pg, ps, next) {
 		var cursor = mongo.findPhotos(pg, ps);

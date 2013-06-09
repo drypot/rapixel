@@ -60,7 +60,7 @@ init.add(function () {
 		req.findUser(function (err, user) {
 			if (err) return res.jsonErr(err);
 			var id = parseInt(req.params.id) || 0;
-			photol.del(id, user, function (err) {
+			photol.delPhoto(id, user, function (err) {
 				if (err) return res.jsonErr(err);
 				res.json();
 			});

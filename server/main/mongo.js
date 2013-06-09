@@ -115,22 +115,16 @@ init.add(function (next) {
 		photos.insert(photo, next);
 	};
 
-	exports.updatePhotoHit = function (pid, next) {
-		photos.update({ _id: pid }, { $inc: { hit: 1 }}, next);
+	exports.updatePhotoHit = function (id, next) {
+		photos.update({ _id: id }, { $inc: { hit: 1 }}, next);
 	};
 
-	exports.delPhoto = function (pid, uid, next) {
-		var sel = {
-			_id: pid
-		};
-		if (uid) {
-			sel.uid = uid
-		}
-		photos.remove(sel, next);
+	exports.delPhoto = function (id, next) {
+		photos.remove({ _id: id }, next);
 	}
 
-	exports.findPhoto = function (pid, next) {
-		photos.findOne({ _id: pid }, next);
+	exports.findPhoto = function (id, next) {
+		photos.findOne({ _id: id }, next);
 	};
 
 	exports.findLastPhoto = function (uid, next) {

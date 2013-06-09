@@ -55,8 +55,8 @@ describe("deleting by admin", function () {
 			should(!err);
 			should(!res.error);
 			should(!res.body.err);
-			should(res.body.pid);
-			_pid = res.body.pid;
+			should(res.body.photo._id);
+			_pid = res.body.photo._id;
 			next();
 		});
 	});
@@ -96,8 +96,8 @@ describe("deleting photo", function () {
 			should(!err);
 			should(!res.error);
 			should(!res.body.err);
-			should(res.body.pid);
-			_pid = res.body.pid;
+			should(res.body.photo._id);
+			_pid = res.body.photo._id;
 			next();
 		});
 	});
@@ -134,8 +134,8 @@ describe("deleting other's photo", function () {
 			should(!err);
 			should(!res.error);
 			should(!res.body.err);
-			should(res.body.pid);
-			_pid = res.body.pid;
+			should(res.body.photo._id);
+			_pid = res.body.photo._id;
 			next();
 		});
 	});
@@ -150,7 +150,7 @@ describe("deleting other's photo", function () {
 			should(!res.error);
 			should(res.body.err);
 			fs.existsSync(p).should.true;
-			should(error.find(res.body.err, ecode.PHOTO_NOTHING_TO_DEL));
+			should(error.find(res.body.err, ecode.NOT_AUTHORIZED));
 			next();
 		});
 	});
