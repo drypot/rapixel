@@ -39,7 +39,7 @@ init.add(function () {
 //	app.use(express.session());
 //	log += ' memory';
 
-	app.use(express.bodyParser({ uploadDir: upload.tmp }));
+	app.use(express.bodyParser({ uploadDir: upload.tmpDir }));
 
 	var apiRe = /^\/api\//;
 

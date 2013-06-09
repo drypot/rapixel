@@ -25,7 +25,7 @@ before(function (next) {
 });
 
 before(function (next) {
-	fs2.removeDirs(upload.pubPhoto, next);
+	fs2.removeDirs(upload.photoDir, next);
 });
 
 before(function () {

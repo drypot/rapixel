@@ -10,7 +10,7 @@ init.add(function (next) {
 	console.log('upload: ' + config.data.uploadDir);
 
 	exports.getTmpPath = function (tname) {
-		return exports.tmp + '/' + tname;
+		return exports.tmpDir + '/' + tname;
 	}
 
 	exports.makeFiles = function (req) {
@@ -83,15 +83,14 @@ init.add(function (next) {
 	};
 
 	var pathes = [
-		exports.tmp = config.data.uploadDir + '/tmp',
-		exports.pub = config.data.uploadDir + '/public',
-		exports.pubPhoto = config.data.uploadDir + '/public/photo'
+		exports.tmpDir = config.data.uploadDir + '/tmp',
+		exports.photoDir = config.data.uploadDir + '/public/photo'
 	];
 
 	var i = 0;
 	function mkdir() {
 		if (i == pathes.length) {
-			fs2.emptyDir(exports.tmp, next);
+			fs2.emptyDir(exports.tmpDir, next);
 			return;
 		}
 		var p = pathes[i++];

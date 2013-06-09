@@ -114,9 +114,9 @@ init.add(function (next) {
 
 	exports.getPhotoPath = function (pid, fname) {
 		if (fname) {
-			return fs2.makeDeepPath(upload.pubPhoto, pid, 3) + '/' + fname;
+			return fs2.makeDeepPath(upload.photoDir, pid, 3) + '/' + fname;
 		}
-		return fs2.makeDeepPath(upload.pubPhoto, pid, 3);
+		return fs2.makeDeepPath(upload.photoDir, pid, 3);
 	}
 
 	var _vers = [ 2160, 1440, 1080, 720, 480, 320 ];
@@ -159,7 +159,7 @@ init.add(function (next) {
 		});
 	}
 
-	var photoUrlPrefix = config.data.uploadUrl + '/photo';
+	var photoUrl = config.data.uploadUrl + '/photo';
 
 	exports.findPhoto = function (pid, next) {
 		mongo.updatePhotoHit(pid, function (err) {
@@ -174,7 +174,7 @@ init.add(function (next) {
 						name: user.name,
 						footer: user.footer
 					};
-					photo.dir = fs2.makeDeepPath(photoUrlPrefix, photo._id, 3);
+					photo.dir = fs2.makeDeepPath(photoUrl, photo._id, 3);
 					photo.cdateStr = dt.format(photo.cdate);
 					photo.cdate = photo.cdate.getTime();
 					next(null, photo);
@@ -208,7 +208,7 @@ init.add(function (next) {
 							_id: user._id,
 							name: user.name
 						};
-						photo.dir = fs2.makeDeepPath(photoUrlPrefix, photo._id, 3);
+						photo.dir = fs2.makeDeepPath(photoUrl, photo._id, 3);
 						photo.cdateStr = dt.format(photo.cdate);
 						photos.push(photo);
 						count++;
@@ -230,7 +230,7 @@ init.add(function (next) {
 			cursor.nextObject(function (err, photo) {
 				if (err) return next(err);
 				if (photo) {
-					photo.dir = fs2.makeDeepPath(photoUrlPrefix, photo._id, 3);
+					photo.dir = fs2.makeDeepPath(photoUrl, photo._id, 3);
 					photo.cdateStr = dt.format(photo.cdate);
 					photos.push(photo);
 					count++;
