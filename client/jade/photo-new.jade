@@ -7,11 +7,13 @@ block content
 
 	.side-space
 		.page-header
-			h2 Upload
+			h1 Upload
 
 		if hours > 0
-			h4 One photo a day.
-			h4 You can upload after #{hours} hours.
+			p.card
+				| One photo a day.
+				br
+				| You can upload after #{hours} hours.
 
 		else
 			script
@@ -26,17 +28,21 @@ block content
 				.form-row
 					label Comment
 					textarea(name='comment', rows=7)
-				.form-actions
+				.form-btns
 					.send-panel
 						button.btn.btn-primary(name='send') Send
 					.sending-panel.hide
 						button.btn.btn-default.disabled(name='sending') Sending
 
-			div(style='margin-top:50px; font-size:18px').
-				Image width must be 3840 pixels or above.<br>
-				Image ratio must be 16:9.<br>
-				Image size must be 10MB or below.<br>
-				<br>
-				You must be copyright owner.<br>
-				We can deliver uploaded images to various devices.<br>
+				.form-comments
+					p.card
+						| Image width must be greater than 3840.
+						br
+						| Image size must be below 10MB.
+						br
+						| Image will be cropped to 16:9.
+						br
+						| Resized versions are used for service. 5120x2880, 3840x2160, ...
+						br
+						| You must be copyright owner.
 

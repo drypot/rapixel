@@ -7,17 +7,17 @@ block content
 
 	.side-space
 		.page-header
-			h2 Error
+			h1 Error
 
-		if !locals.err
-			h4 'err' is not defined
-		else
-			if err.rc
-				h4 #{err.message}
-				pre.error-report.
-					#{'Code: ' + err.rc}<br>
-					!{err.stack.replace(/\n/g, '<br>')}
-			else if err.message
-				h4 #{err.message}
+		p.card
+			if err.message
+				| #{err.message}
 			else
-				h4 Unknown Error
+				| Unknown Error
+
+		pre.error-report
+			if err.rc
+				| #{'Code: ' + err.rc}
+				br
+			if err.stack
+				| !{err.stack.replace(/\n/g, '<br>')}

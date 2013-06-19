@@ -29,26 +29,27 @@ body {
   padding-left: 0px;
   padding-right: 9px;
 }
-.jumbotron {
-  padding: 30px 0px 30px 0px;
-  margin-bottom: 0px;
-  background-color: white;
-}
-.jumbotron h2 {
-  font-size: 49px;
-}
-.jumbotron p {
-  margin-top: 25px;
-}
-.profile {
-  margin-bottom: 50px;
-}
-.profile .profile-actions {
-  margin-top: 20px;
-}
 .page-header {
   border: 0;
   margin-bottom: 10px;
+}
+.site-title {
+  margin-top: 60px;
+  margin-bottom: 40px;
+}
+.site-title h1 {
+  margin-bottom: 10px;
+  font-size: 63px;
+}
+.site-title p {
+  font-size: 21px;
+}
+.update {
+  margin-bottom: 30px;
+}
+p.card {
+  font-size: 18px;
+  line-height: 1.5;
 }
 .photos {
   margin: 20px 0px 25px 0px;
@@ -118,7 +119,7 @@ form .form-row {
 form .form-row label {
   display: block;
 }
-form .form-actions {
+form .form-btns {
   margin-top: 25px;
   margin-bottom: 20px;
 }
@@ -143,6 +144,9 @@ form .alert {
 form textarea {
   font-family: monospace;
 }
+form .form-comments {
+  margin-top: 50px;
+}
 .pager {
   margin-left: -6px;
   text-align: left;
@@ -154,6 +158,10 @@ form textarea {
 .btn-mini {
   padding: 2px 6px;
   font-size: 12px;
+}
+.btns {
+  margin-top: 25px;
+  margin-bottom: 30px;
 }
 pre.error-report {
   margin: 0px;

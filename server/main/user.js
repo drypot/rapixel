@@ -342,7 +342,7 @@ init.add(function (next) {
 					var reset = {
 						email: form.email,
 						token: token
-					}
+					};
 					mongo.insertReset(reset, function (err, resets) {
 						if (err) return next(err);
 						var reset = resets[0];

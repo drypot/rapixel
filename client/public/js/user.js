@@ -40,8 +40,7 @@ init.add(function () {
 		$form.$send.click(function () {
 			formty.post('/api/resets', $form, function (err) {
 				if (err) return showError(err);
-				$('#form-panel').addClass('hide');
-				$('#complete-panel').removeClass('hide');
+				location = '?done';
 			});
 			return false;
 		});
@@ -64,7 +63,7 @@ init.add(function () {
 	};
 
 	userl.initProfile = function () {
-		var $profile = $('.profile-text');
+		var $profile = $('#profile-text');
 		$profile.html(tagUpText($profile.html()));
 	};
 

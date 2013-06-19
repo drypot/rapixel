@@ -28,4 +28,15 @@ init.add(function () {
 		res.render('about-help');
 	});
 
+	app.get('/error', function (req, res) {
+		var err = new Error('Error Sample Page');
+		err.rc = 999;
+//		delete err.message;
+//		delete err.stack;
+		res.render('error', {
+			err: err
+		});
+	});
+
+
 });

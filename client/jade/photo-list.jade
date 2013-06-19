@@ -7,9 +7,12 @@ block content
 
 	.side-space
 		if firstPage
-			.jumbotron
+			.page-header.site-title
 				h1 Rapixel
 				p 4K Images
+			.update
+				p.card
+					| Update: Images will be cropped automatically.
 
 	.photos
 		for photo in photos

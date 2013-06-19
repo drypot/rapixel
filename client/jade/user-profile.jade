@@ -12,13 +12,14 @@ block content
 	.side-space
 		if firstPage
 			.page-header
-				h2 #{tuser.name}
-			.profile
-				.profile-text.
-					!{jade.escape(tuser.profile).replace(/.*/g, "<h4>$&</h4>")}
-				if showActions
-					.profile-actions
-						a.btn.btn-mini.btn-primary(href='/users/' + tuser._id + '/edit') Edit Profile
+				h1 #{tuser.name}
+
+			p#profile-text.card
+				| !{jade.escape(tuser.profile).replace(/\n/g, "<br>")}
+
+			if showBtns
+				.btns
+					a.btn.btn-mini.btn-primary(href='/users/' + tuser._id + '/edit') Edit Profile
 
 	if photos.length
 		.photos

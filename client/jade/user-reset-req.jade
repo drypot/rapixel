@@ -11,17 +11,19 @@ block content
 
 	.side-space
 		.page-header
-			h2 Reset Password
+			h1 Reset Password
 
-		#form-panel
-			form#form
-				.form-row
-					label.control-label Email
-					input.input-with-feedback.col-lg-5(name="email", type="text")
-				.form-actions
-					.send-panel
-						button.btn.btn-primary(name='send') Send
-					.sending-panel.hide
-						button.btn.btn-default.disabled(name='sending') Sending
-		#complete-panel.hide
-			h4 Check your mailbox.
+		if query.hasOwnProperty('done')
+			p.card
+				| Check your mailbox.
+		else
+			#form-panel
+				form#form
+					.form-row
+						label.control-label Email
+						input.input-with-feedback.col-lg-5(name="email", type="text")
+					.form-btns
+						.send-panel
+							button.btn.btn-primary(name='send') Send
+						.sending-panel.hide
+							button.btn.btn-default.disabled(name='sending') Sending

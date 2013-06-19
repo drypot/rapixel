@@ -10,15 +10,17 @@ block content
 		});
 
 	.side-space
-		if newUser
+		if query.hasOwnProperty('newuser')
 			.page-header
-				h2 Thank you
+				h1 Thank you
 
-			h4 회원으로 가입되셨습니다.
-			h4 등록하신 이메일과 비밀번호로 로그인하실 수 있습니다.
+			p.card
+				| 회원으로 가입되셨습니다.
+				br
+				| 등록하신 이메일과 비밀번호로 로그인하실 수 있습니다.
 
 		.page-header
-			h2 Login
+			h1 Login
 
 		form#form
 			.form-row
@@ -30,9 +32,11 @@ block content
 			.checkbox
 				label Remember
 				input(name="remember", type="checkbox")
-			.form-actions
+			.form-btns
 				.send-panel
 					button.btn.btn-primary(name='send') Send
 				.sending-panel.hide
 					button.btn.btn-default.disabled(name='sending') Sending
-		a(href='/users/reset-req') Reset Password
+
+			.form-comments
+				a(href='/users/reset-req') Reset Password

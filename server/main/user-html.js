@@ -28,7 +28,7 @@ init.add(function () {
 				prevNext(req.path, pg, last, function (prevUrl, nextUrl) {
 					res.render('user-profile', {
 						tuser: tuser,
-						showActions: user && (user.admin || user._id === id),
+						showBtns: user && (user.admin || user._id === id),
 						photos: photos,
 						prevUrl: prevUrl,
 						nextUrl: nextUrl,
@@ -69,9 +69,7 @@ init.add(function () {
 	});
 
 	app.get('/users/login', function (req, res) {
-		res.render('user-login', {
-			newUser: req.query.hasOwnProperty('newuser')
-		});
+		res.render('user-login');
 	});
 
 	app.get('/users/register', function (req, res) {
