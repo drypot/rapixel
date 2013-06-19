@@ -1,5 +1,6 @@
 var fs = require('fs');
 var path = require('path');
+var exec = require('child_process').exec;
 
 var l = require('../main/l');
 var init = require('../main/init');
@@ -9,9 +10,25 @@ var dt = require('../main/dt');
 var mongo = require('../main/mongo');
 var userl = require('../main/user');
 var upload = require('../main/upload');
-var magick = require('../main/magick');
 var error = require('../main/error');
 var ecode = require('../main/ecode');
+
+var _vers = [
+	{ width:5120, height: 2880 },
+	{ width:3840, height: 2160 },
+	{ width:2880, height: 1620 },
+	{ width:2560, height: 1440 },
+	{ width:2048, height: 1152 },
+	{ width:1920, height: 1080 },
+	{ width:1680, height: 945 },
+	{ width:1440, height: 810 },
+	{ width:1366, height: 768 },
+	{ width:1280, height: 720 },
+	{ width:1136, height: 639 },
+	{ width:1024, height: 576 },
+	{ width:960 , height: 540 },
+	{ width:640 , height: 360 }
+];
 
 init.add(function (next) {
 
@@ -26,6 +43,84 @@ init.add(function (next) {
 		var pgsize = parseInt(ps) || 16;
 		return pgsize > 64 ? 64 : pgsize < 1 ? 1 : pgsize;
 	};
+
+	exports.getPhotoDir = function (id) {
+		return fs2.makeDeepPath(upload.photoDir, id, 3);
+	};
+
+	exports.getOrginalPath = function (dir, id, format) {
+		return dir + '/' + id + '-org.' + format;
+	}
+
+	exports.getVersionPath = function (dir, id, width) {
+		return dir + '/' + id + '-' + width + '.jpg';
+	};
+
+	exports.identify = function (fname, next) {
+		exec('identify -format "%m %w %h" ' + fname, function (err, stdout, stderr) {
+			if (err) return next(err);
+			var a = stdout.split(/[ \n]/);
+			var meta = {
+				format: a[0].toLowerCase(),
+				width: parseInt(a[1]) || 0,
+				height: parseInt(a[2]) || 0
+			};
+			next(null, meta);
+		});
+	};
+
+	exports.makeVersions = function (org, width, dir, id, next) {
+		var cmd = 'convert ' + org;
+		cmd += ' -quality 92';
+		cmd += ' -gravity center';
+
+		var i = 0;
+		var vers = [];
+		for (; i < _vers.length; i++) {
+			if (_vers[i].width < width + 15) {
+				break;
+			}
+		}
+		for (; i < _vers.length; i++) {
+			var dim = _vers[i];
+			vers.push(dim.width);
+			cmd += ' -resize ' + dim.width + 'x' + dim.height + '^'
+			cmd += ' -crop ' + dim.width + 'x' + dim.height + '+0+0'
+			cmd	+= ' +repage'
+			if (i == _vers.length - 1) {
+				cmd += ' ' + exports.getVersionPath(dir, id, dim.width);
+			} else {
+				cmd += ' -write ' + exports.getVersionPath(dir, id, dim.width);
+			}
+		}
+		exec(cmd, function (err) {
+			next(err, vers);
+		});
+	};
+
+	exports.removeVersions = function (dir, next) {
+		fs.readdir(dir, function (err, fnames) {
+			if (err) return next(err);
+			var i = 0;
+			function unlink() {
+				if (i == fnames.length) {
+					return next();
+				}
+				var fname = fnames[i++];
+				if (~fname.indexOf('org')) {
+					//console.log('preserve ' + dir + '/' + fname);
+					setImmediate(unlink);
+				} else {
+					//console.log('delete ' + dir + '/' + fname);
+					fs.unlink(dir + '/' + fname, function (err) {
+						if (err && err.code !== 'ENOENT') return next(err);
+						setImmediate(unlink);
+					});
+				}
+			}
+			unlink();
+		});
+	}
 
 	exports.findHours = function(user, now, next) {
 //		사진을 삭제하고 다시 업하는 경우를 허용하도록 한다.
@@ -64,27 +159,32 @@ init.add(function (next) {
 				checkPhotoMeta(form, function (err, meta) {
 					if (err) return next(err);
 					var id = mongo.newPhotoId();
-					moveOriginal(form.file.tpath, id, meta.format, function (err, dir, org) {
+					var dir = exports.getPhotoDir(id);
+					fs2.makeDirs(dir, function (err) {
 						if (err) return next(err);
-						magick.makeVersions(org, meta.width, dir, id, function (err, vers) {
+						var org = exports.getOrginalPath(dir, id, meta.format);
+						fs.rename(form.file.tpath, org, function (err) {
 							if (err) return next(err);
-							var photo = {
-								_id: id,
-								uid: user._id,
-								hit: 0,
-								fname: form.file.oname,
-								format: meta.format,
-								width: meta.width,
-								height: meta.height,
-								vers: vers,
-								cdate: form.now,
-								comment: form.comment
-							};
-							mongo.insertPhoto(photo, function (err) {
+							exports.makeVersions(org, meta.width, dir, id, function (err, vers) {
 								if (err) return next(err);
-								mongo.updateUserPdate(user._id, form.now, function (err) {
+								var photo = {
+									_id: id,
+									uid: user._id,
+									hit: 0,
+									fname: form.file.oname,
+									format: meta.format,
+									width: meta.width,
+									height: meta.height,
+									vers: vers,
+									cdate: form.now,
+									comment: form.comment
+								};
+								mongo.insertPhoto(photo, function (err) {
 									if (err) return next(err);
-									next(null, id);
+									mongo.updateUserPdate(user._id, form.now, function (err) {
+										if (err) return next(err);
+										next(null, id);
+									});
 								});
 							});
 						});
@@ -94,36 +194,47 @@ init.add(function (next) {
 		});
 	};
 
-	exports.updatePhoto = function(user, form, _next) {
+	exports.updatePhoto = function(user, id, form, _next) {
 		var next = upload.tmpDeleter(form.files, _next);
-		if (form.file) {
-			checkPhotoMeta(form, function (err, meta) {
-				if (err) return next(err);
-				var id = mongo.newPhotoId();
-				makeVersions(id, form, meta, function (err, vers) {
+		checkUpdatable(user, id, function (err) {
+			if (err) return next(err);
+			if (form.file) {
+				checkPhotoFile(form, function (err) {
 					if (err) return next(err);
-					var photo = {
-						_id: id,
-						uid: user._id,
-						hit: 0,
-						fname: form.file.oname,
-						format: meta.format,
-						width: meta.width,
-						height: meta.height,
-						vers: vers,
-						cdate: form.now,
-						comment: form.comment
-					};
-					mongo.insertPhoto(photo, function (err) {
+					checkPhotoMeta(form, function (err, meta) {
 						if (err) return next(err);
-						mongo.updateUserPdate(user._id, form.now, function (err) {
+						var dir = photol.getPhotoDir(id);
+						fs2.removeDirs(dir, function (err) {
 							if (err) return next(err);
-							next(null, id);
+							fs2.makeDirs(dir, function (err) {
+								if (err) return next(err);
+								var org = exports.getOrginalPath(dir, id, meta.format);
+								fs.rename(form.file.tpath, org, function (err) {
+									if (err) return next(err);
+									exports.makeVersions(org, meta.width, dir, id, function (err, vers) {
+										if (err) return next(err);
+										var fields = {
+											fname: form.file.oname,
+											format: meta.format,
+											width: meta.width,
+											height: meta.height,
+											vers: vers,
+											comment: form.comment
+										}
+										mongo.updatePhotoFields(id, fields, next);
+									});
+								});
+							});
 						});
 					});
 				});
-			});
-		}
+			} else {
+				var fields = {
+					comment: form.comment
+				};
+				mongo.updatePhotoFields(id, fields, next);
+			}
+		});
 	};
 
 	function checkPhotoFile(form, next) {
@@ -137,7 +248,7 @@ init.add(function (next) {
 	}
 
 	function checkPhotoMeta(form, next) {
-		magick.identify([form.file.tpath], function (err, meta) {
+		exports.identify([form.file.tpath], function (err, meta) {
 			if (err) {
 				return next(error(ecode.PHOTO_TYPE))
 			}
@@ -152,21 +263,29 @@ init.add(function (next) {
 		});
 	}
 
-	exports.getPhotoPath = function (id, fname) {
-		if (fname) {
-			return fs2.makeDeepPath(upload.photoDir, id, 3) + '/' + fname;
-		}
-		return fs2.makeDeepPath(upload.photoDir, id, 3);
-	}
-
-	function moveOriginal(tpath, id, format, next) {
-		fs2.makeDirs(exports.getPhotoPath(id), function (err, dir) {
+	exports.delPhoto = function (user, id, next) {
+		checkUpdatable(user, id, function (err) {
 			if (err) return next(err);
-			var org = dir + '/' + id + '-org.' + format;
-			fs.rename(tpath, org, function (err) {
+			mongo.delPhoto(id, function (err, cnt) {
 				if (err) return next(err);
-				next(null, dir, org);
+				fs2.removeDirs(exports.getPhotoDir(id), function (err) {
+					if (err) return next(err);
+					next();
+				});
 			});
+		});
+	};
+
+	function checkUpdatable(user, id, next) {
+		mongo.findPhoto(id, function (err, photo) {
+			if (err) return next(err);
+			if (!photo) {
+				return next(error(ecode.PHOTO_NOT_EXIST));
+			}
+			if (!user.admin && photo.uid != user._id) {
+				return next(error(ecode.NOT_AUTHORIZED));
+			}
+			next(null, photo);
 		});
 	}
 
@@ -177,7 +296,7 @@ init.add(function (next) {
 			if (err) return next(err);
 			mongo.findPhoto(id, function (err, photo) {
 				if (err) return next(err);
-				if (!photo) return next(error(ecode.PHOTO_NOTHING_TO_SHOW));
+				if (!photo) return next(error(ecode.PHOTO_NOT_EXIST));
 				userl.findCachedUser(photo.uid, function (err, user) {
 					if (err) return next(err);
 					photo.user = {
@@ -193,32 +312,6 @@ init.add(function (next) {
 			});
 		});
 	};
-
-	exports.delPhoto = function (id, user, next) {
-		checkUpdatable(id, user, function (err) {
-			if (err) return next(err);
-			mongo.delPhoto(id, function (err, cnt) {
-				if (err) return next(err);
-				fs2.removeDirs(exports.getPhotoPath(id), function (err) {
-					if (err) return next(err);
-					next();
-				});
-			});
-		});
-	};
-
-	function checkUpdatable(id, user, next) {
-		mongo.findPhoto(id, function (err, photo) {
-			if (err) return next(err);
-			if (!photo) {
-				return next(error(ecode.PHOTO_NOTHING_TO_DEL));
-			}
-			if (!user.admin && photo.uid != user._id) {
-				return next(error(ecode.NOT_AUTHORIZED));
-			}
-			next();
-		});
-	}
 
 	exports.findPhotos = function (pg, ps, next) {
 		var cursor = mongo.findPhotos(pg, ps);

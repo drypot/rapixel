@@ -205,9 +205,10 @@ describe("uploading 3840 jpg", function () {
 				res.body.vers.should.eql([ 3840, 2880, 2560, 2048, 1920, 1680, 1440, 1366, 1280, 1136, 1024, 960, 640 ]);
 				should(res.body.cdate);
 				res.body.comment.should.equal('hello');
-				fs.existsSync(photol.getPhotoPath(_pid, _pid + '-3840.jpg')).should.be.true;
-				fs.existsSync(photol.getPhotoPath(_pid, _pid + '-1280.jpg')).should.be.true;
-				fs.existsSync(photol.getPhotoPath(_pid, _pid + '-640.jpg')).should.be.true;
+				var dir = photol.getPhotoDir(_pid);
+				fs.existsSync(photol.getVersionPath(dir, _pid, 3840)).should.be.true;
+				fs.existsSync(photol.getVersionPath(dir, _pid, 1280)).should.be.true;
+				fs.existsSync(photol.getVersionPath(dir, _pid, 640)).should.be.true;
 				next();
 			});
 		});

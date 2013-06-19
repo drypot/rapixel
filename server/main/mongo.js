@@ -119,6 +119,10 @@ init.add(function (next) {
 		photos.update({ _id: id }, { $inc: { hit: 1 }}, next);
 	};
 
+	exports.updatePhotoFields = function (id, fields, next) {
+		photos.update({ _id: id }, { $set: fields }, next);
+	}
+
 	exports.delPhoto = function (id, next) {
 		photos.remove({ _id: id }, next);
 	}

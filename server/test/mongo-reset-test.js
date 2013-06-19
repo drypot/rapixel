@@ -18,7 +18,11 @@ describe("creating", function () {
 	var _email = 'abc@def.com';
 	var _id;
 	it("should success", function (next) {
-		mongo.insertReset(_email, function (err, reset) {
+		var reset = {
+			email: _email,
+			token: 'xxx'
+		};
+		mongo.insertReset(reset, function (err, reset) {
 			should(!err);
 			should(reset);
 			reset = reset[0];

@@ -46,9 +46,9 @@ init.add(function () {
 	app.put('/api/photos/:id([0-9]+)', function (req, res) {
 		req.findUser(function (err, user) {
 			if (err) return res.jsonErr(err);
+			var id = parseInt(req.params.id) || 0;
 			var form = photol.makeForm(req);
-			form._id = parseInt(req.params.id) || 0;
-			photol.updatePhoto(user, form, function (err) {
+			photol.updatePhoto(user, id, form, function (err) {
 				if (err) return res.jsonErr(err);
 				res.json({});
 			});
@@ -60,7 +60,7 @@ init.add(function () {
 		req.findUser(function (err, user) {
 			if (err) return res.jsonErr(err);
 			var id = parseInt(req.params.id) || 0;
-			photol.delPhoto(id, user, function (err) {
+			photol.delPhoto(user, id, function (err) {
 				if (err) return res.jsonErr(err);
 				res.json({});
 			});

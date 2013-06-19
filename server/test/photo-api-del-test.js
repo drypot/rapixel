@@ -5,7 +5,7 @@ var init = require('../main/init');
 var config = require('../main/config')({ test: true });
 var mongo = require('../main/mongo')({ dropDatabase: true });
 var upload = require('../main/upload');
-var photo = require('../main/photo');
+var photol = require('../main/photo');
 var fs2 = require('../main/fs');
 var express = require('../main/express');
 var error = require('../main/error');
@@ -64,7 +64,8 @@ describe("deleting by admin", function () {
 		ufix.loginAdmin(next);
 	});
 	it("should success", function (next) {
-		var p = photo.getPhotoPath(_pid, _pid + '-' + '3840.jpg');
+		var dir = photol.getPhotoDir(_pid);
+		var p = photol.getVersionPath(dir, _pid, 3840);
 		fs.existsSync(p).should.true;
 		express.del('/api/photos/' + _pid, function (err, res) {
 			should(!err);
@@ -102,7 +103,8 @@ describe("deleting photo", function () {
 		});
 	});
 	it("should success", function (next) {
-		var p = photo.getPhotoPath(_pid, _pid + '-' + '3840.jpg');
+		var dir = photol.getPhotoDir(_pid);
+		var p = photol.getVersionPath(dir, _pid, 3840);
 		fs.existsSync(p).should.true;
 		express.del('/api/photos/' + _pid, function (err, res) {
 			should(!err);
@@ -143,7 +145,8 @@ describe("deleting other's photo", function () {
 		ufix.loginUser2(next);
 	});
 	it("should fail", function (next) {
-		var p = photo.getPhotoPath(_pid, _pid + '-' + '3840.jpg');
+		var dir = photol.getPhotoDir(_pid);
+		var p = photol.getVersionPath(dir, _pid, 3840);
 		fs.existsSync(p).should.true;
 		express.del('/api/photos/' + _pid, function (err, res) {
 			should(!err);

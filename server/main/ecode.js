@@ -23,8 +23,7 @@ module.exports = {
 	USER_NOT_FOUND: mke(202, '사용자를 찾을 수 없습니다.'),
 	RESET_TIMEOUT: mke(210, '비밀번호 초기화 토큰 유효시간이 지났습니다.'),
 
-	PHOTO_NOTHING_TO_SHOW: mke(300, '사진이 없습니다.'),
-	PHOTO_NOTHING_TO_DEL: mke(301, '삭제할 사진이 없습니다.'),
+	PHOTO_NOT_EXIST: mke(300, '사진이 없습니다.'),
 
 	// register & edit
 
