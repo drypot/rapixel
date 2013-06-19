@@ -14,7 +14,7 @@ block content
 	.extra.side-space
 		.name
 			span
-				a(href='/users/' + photo.user._id) #{photo.user.name}
+				a(href='/' + encodeURIComponent(photo.user.name)) #{photo.user.name}
 			span hit !{photo.hit}
 			span !{photo.cdateStr}
 
@@ -24,7 +24,7 @@ block content
 
 		.action
 			if locals.user && photo.user._id == user._id
-				button#edit-btn.btn.btn-primary.btn-mini Edit Photo
+				//button#edit-btn.btn.btn-primary.btn-mini Edit Photo
 				button#del-btn.btn.btn-danger.btn-mini Delete
 				button#del-confirm-btn.btn.btn-danger.btn-mini.hide Yes, Delete
 

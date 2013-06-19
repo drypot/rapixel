@@ -12,7 +12,7 @@ block content
 				p 4K Images
 			.update
 				p.card
-					| Update: Images will be cropped automatically.
+					| Update: Uploads are cropped automatically.
 
 	.photos
 		for photo in photos
@@ -22,7 +22,7 @@ block content
 						img(src=photo.dir + '/' + photo._id + '-640.jpg')
 				.info
 					span
-						a(href='/' + photo.user.name) #{photo.user.name}
+						a(href='/' + encodeURIComponent(photo.user.name)) #{photo.user.name}
 					span hit !{photo.hit}
 					span !{photo.cdateStr}
 	.side-space

@@ -30,7 +30,7 @@ block content
 							img(src=photo.dir + '/' + photo._id + '-640.jpg')
 					.info
 						span
-							a(href='/' + tuser.name) #{tuser.name}
+							a(href='/' + encodeURIComponent(tuser.name)) #{tuser.name}
 						span hit !{photo.hit}
 						span !{photo.cdateStr}
 
