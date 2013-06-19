@@ -2,7 +2,7 @@ body {
   padding-bottom: 40px;
 }
 .limit-width {
-  max-width: 570px;
+  max-width: 640px;
 }
 .side-space {
   margin-left: 1px;
@@ -57,7 +57,7 @@ body {
   color: #888;
   margin-bottom: 15px;
 }
-.photos .photo .img {
+.photos .photo img {
   margin-bottom: 0px;
 }
 .photos .photo .info {

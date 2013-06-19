@@ -21,27 +21,25 @@ init.add(function () {
 
 	function renderPhoto(photo) {
 		var $photo = $('.photo');
-		var screenHeight = screen.width > screen.height ? screen.height : screen.width;
+		var screenWidth = screen.width > screen.height ? screen.width : screen.height;
 		if (window.devicePixelRatio > 1) {
-			screenHeight *= 2;
+			screenWidth *= 2;
 		}
-		var prevHeight;
+		var ver;
 		for (var i = 0; i < photo.vers.length; i++) {
-			var height = photo.vers[i];
-			if (screenHeight > height) {
+			ver = photo.vers[i]
+			if (photo.vers[i+1] < screenWidth ) {
 				break;
 			}
-			prevHeight = height;
 		}
-		var srcHeight = prevHeight ? prevHeight : height;
-		var srcWidth = srcHeight * 1.77777;
+
 		var $img = $('<img>', {
-			src: photo.dir + '/' + photo._id + '-' + srcHeight + '.jpg'
+			src: photo.dir + '/' + photo._id + '-' + ver + '.jpg'
 		});
 
 		$window.on('resize', function () {
 			var windowWidth = $(window).width();
-			var diff = Math.abs(srcWidth - windowWidth) / srcWidth;
+			var diff = Math.abs(ver - windowWidth) / ver;
 			if (diff > 0.02) {
 				$img.css('width', '100%');
 			} else {

@@ -32,7 +32,7 @@ before(function () {
 	express.listen();
 });
 
-var _f1 = 'samples/b-16x9-2160.jpg';
+var _f1 = 'samples/c-169-3840.jpg';
 var _pid, _files;
 
 describe("deleting by admin", function () {
@@ -64,7 +64,7 @@ describe("deleting by admin", function () {
 		ufix.loginAdmin(next);
 	});
 	it("should success", function (next) {
-		var p = photo.getPhotoPath(_pid, _pid + '-' + '2160.jpg');
+		var p = photo.getPhotoPath(_pid, _pid + '-' + '3840.jpg');
 		fs.existsSync(p).should.true;
 		express.del('/api/photos/' + _pid, function (err, res) {
 			should(!err);
@@ -102,7 +102,7 @@ describe("deleting photo", function () {
 		});
 	});
 	it("should success", function (next) {
-		var p = photo.getPhotoPath(_pid, _pid + '-' + '2160.jpg');
+		var p = photo.getPhotoPath(_pid, _pid + '-' + '3840.jpg');
 		fs.existsSync(p).should.true;
 		express.del('/api/photos/' + _pid, function (err, res) {
 			should(!err);
@@ -143,7 +143,7 @@ describe("deleting other's photo", function () {
 		ufix.loginUser2(next);
 	});
 	it("should fail", function (next) {
-		var p = photo.getPhotoPath(_pid, _pid + '-' + '2160.jpg');
+		var p = photo.getPhotoPath(_pid, _pid + '-' + '3840.jpg');
 		fs.existsSync(p).should.true;
 		express.del('/api/photos/' + _pid, function (err, res) {
 			should(!err);

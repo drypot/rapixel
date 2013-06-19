@@ -34,8 +34,8 @@ var _vers = [
 	{ width:640 , height: 360 }
 ];
 
-exports.makeVersions = function (src, width, dir, id, next) {
-	var cmd = 'convert ' + src;
+exports.makeVersions = function (org, width, dir, id, next) {
+	var cmd = 'convert ' + org;
 
 	cmd += ' -quality 92';
 	cmd += ' -gravity center';

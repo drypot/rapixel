@@ -1,6 +1,5 @@
 var fs = require('fs');
 var path = require('path');
-var img = require('imagemagick');
 
 var l = require('../main/l');
 var init = require('../main/init');
@@ -10,6 +9,7 @@ var dt = require('../main/dt');
 var mongo = require('../main/mongo');
 var userl = require('../main/user');
 var upload = require('../main/upload');
+var magick = require('../main/magick');
 var error = require('../main/error');
 var ecode = require('../main/ecode');
 
@@ -61,29 +61,31 @@ init.add(function (next) {
 			}
 			checkPhotoFile(form, function (err) {
 				if (err) return next(err);
-				checkPhotoFeature(form, function (err, feature) {
+				checkPhotoMeta(form, function (err, meta) {
 					if (err) return next(err);
 					var id = mongo.newPhotoId();
-					makeVersions(id, form, feature, function (err, vers) {
+					moveOriginal(form.file.tpath, id, meta.format, function (err, dir, org) {
 						if (err) return next(err);
-						var photo = {
-							_id: id,
-							uid: user._id,
-							hit: 0,
-							favCnt: 0,
-							fname: form.file.oname,
-							format: feature.format,
-							width: feature.width,
-							height: feature.height,
-							vers: vers,
-							cdate: form.now,
-							comment: form.comment
-						};
-						mongo.insertPhoto(photo, function (err) {
+						magick.makeVersions(org, meta.width, dir, id, function (err, vers) {
 							if (err) return next(err);
-							mongo.updateUserPdate(user._id, form.now, function (err) {
+							var photo = {
+								_id: id,
+								uid: user._id,
+								hit: 0,
+								fname: form.file.oname,
+								format: meta.format,
+								width: meta.width,
+								height: meta.height,
+								vers: vers,
+								cdate: form.now,
+								comment: form.comment
+							};
+							mongo.insertPhoto(photo, function (err) {
 								if (err) return next(err);
-								next(null, id);
+								mongo.updateUserPdate(user._id, form.now, function (err) {
+									if (err) return next(err);
+									next(null, id);
+								});
 							});
 						});
 					});
@@ -95,20 +97,19 @@ init.add(function (next) {
 	exports.updatePhoto = function(user, form, _next) {
 		var next = upload.tmpDeleter(form.files, _next);
 		if (form.file) {
-			checkPhotoFeature(form, function (err, feature) {
+			checkPhotoMeta(form, function (err, meta) {
 				if (err) return next(err);
 				var id = mongo.newPhotoId();
-				makeVersions(id, form, feature, function (err, vers) {
+				makeVersions(id, form, meta, function (err, vers) {
 					if (err) return next(err);
 					var photo = {
 						_id: id,
 						uid: user._id,
 						hit: 0,
-						favCnt: 0,
 						fname: form.file.oname,
-						format: feature.format,
-						width: feature.width,
-						height: feature.height,
+						format: meta.format,
+						width: meta.width,
+						height: meta.height,
 						vers: vers,
 						cdate: form.now,
 						comment: form.comment
@@ -135,20 +136,19 @@ init.add(function (next) {
 		next();
 	}
 
-	function checkPhotoFeature(form, next) {
-		img.identify(form.file.tpath, function (err, feature) {
+	function checkPhotoMeta(form, next) {
+		magick.identify([form.file.tpath], function (err, meta) {
 			if (err) {
 				return next(error(ecode.PHOTO_TYPE))
 			}
-			if (feature.height < 2160) {
-				return next(error(ecode.PHOTO_HEIGHT));
+			if (meta.width < 3840 - 15) {
+				return next(error(ecode.PHOTO_SIZE));
 			}
-			var ratio = feature.width / feature.height;
-			if (ratio < 1.75 || ratio > 1.79) {
-				return next(error(ecode.PHOTO_RATIO));
-			}
-			feature.formatLowerCase = feature.format.toLowerCase();
-			next(null, feature);
+//			var ratio = meta.width / meta.height;
+//			if (ratio < 1.75 || ratio > 1.79) {
+//				return next(error(ecode.PHOTO_RATIO));
+//			}
+			next(null, meta);
 		});
 	}
 
@@ -159,43 +159,14 @@ init.add(function (next) {
 		return fs2.makeDeepPath(upload.photoDir, id, 3);
 	}
 
-	var _vers = [ 2160, 1440, 1080, 720, 480, 320 ];
-
-	function makeVersions(id, form, feature, next) {
-		var file = form.file;
-		fs2.makeDirs(exports.getPhotoPath(id), function (err, ppath) {
+	function moveOriginal(tpath, id, format, next) {
+		fs2.makeDirs(exports.getPhotoPath(id), function (err, dir) {
 			if (err) return next(err);
-			var vers = [];
-			var i = 0;
-			function makeVersion() {
-				if (i == _vers.length) {
-					var org = ppath + '/' + id + '-org.' + feature.formatLowerCase;
-					fs.rename(file.tpath, org, function (err) {
-						if (err) return next(err);
-						next(null, vers);
-					});
-					return;
-				}
-				var v = _vers[i++];
-				if (v > feature.height) {
-					setImmediate(makeVersion);
-					return;
-				}
-				var opt = {
-					srcPath: file.tpath,
-					dstPath: ppath + '/' + id + '-' + v + '.jpg',
-					quality: feature.format === 'JPEG' ? 0.92 : feature.format === 'PNG' ? 0.89 : 0.8,
-					sharpening: 0,
-					height: v,
-					format: 'jpg'
-				};
-				img.resize(opt, function (err) {
-					if (err) return next(err);
-					vers.push(v);
-					setImmediate(makeVersion);
-				});
-			}
-			makeVersion();
+			var org = dir + '/' + id + '-org.' + format;
+			fs.rename(tpath, org, function (err) {
+				if (err) return next(err);
+				next(null, dir, org);
+			});
 		});
 	}
 

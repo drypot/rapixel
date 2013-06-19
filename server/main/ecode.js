@@ -52,7 +52,7 @@ module.exports = {
 	PHOTO_NO_FILE: mkf('files', '사진을 첨부해 주십시오.'),
 	PHOTO_NOT_ONE: mkf('files', '사진은 한장만 등록하실 수 있습니다.'),
 	PHOTO_RATIO: mkf('files', '사진의 가로 세로 비율은 16:9 여야합니다.'),
-	PHOTO_HEIGHT: mkf('files', '사진의 세로 크기는 2160 픽셀 이상이어야 합니다.'),
+	PHOTO_SIZE: mkf('files', '사진의 가로 크기는 3840 픽셀 이상이어야 합니다.'),
 	PHOTO_TYPE: mkf('files', '사진 파일 타입을 확인할 수 없습니다.'),
 
 	// request reset
