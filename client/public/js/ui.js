@@ -128,7 +128,10 @@ init.add(function() {
 				formty.clearAlerts($form);
 				formty.showSending($form);
 				formty.sendFiles($form, function (err, res) {
-					if (err) return next(err);
+					if (err) {
+						formty.hideSending($form);
+						return next(err);
+					}
 					for (var key in res.body) {
 						form[key] = res.body[key];
 					}
