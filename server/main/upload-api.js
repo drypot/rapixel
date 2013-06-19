@@ -20,7 +20,7 @@ init.add(function () {
 			if (err) return res.jsonErr(err);
 			upload.deleteTmpFiles(req.body.files, function (err) {
 				if (err) return res.jsonErr(err);
-				res.json();
+				res.json({});
 			});
 		});
 	});

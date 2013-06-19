@@ -39,7 +39,7 @@ init.add(function () {
 			var form = userl.makeForm(req);
 			userl.updateUser(id, user, form, function (err) {
 				if (err) return res.jsonErr(err);
-				res.json();
+				res.json({});
 			})
 		});
 	});
@@ -51,7 +51,7 @@ init.add(function () {
 			userl.deactivateUser(id, user, function (err) {
 				if (err) return res.jsonErr(err);
 				session.delSession(req, res);
-				res.json();
+				res.json({});
 			});
 		});
 	});
@@ -60,7 +60,7 @@ init.add(function () {
 		var form = userl.makeResetReqForm(req);
 		userl.createResetReq(form, function (err) {
 			if (err) return res.jsonErr(err);
-			res.json();
+			res.json({});
 		});
 	});
 
@@ -68,7 +68,7 @@ init.add(function () {
 		var form = userl.makeResetForm(req);
 		userl.reset(form, function (err) {
 			if (err) return res.jsonErr(err);
-			res.json();
+			res.json({});
 		});
 	});
 

@@ -22,7 +22,7 @@ init.add(function () {
 
 	app.del('/api/sessions', function (req, res) {
 		session.delSession(req, res);
-		res.json();
+		res.json({});
 	});
 
 });

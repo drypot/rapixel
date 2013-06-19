@@ -28,11 +28,11 @@ before(function(next) {
 	});
 
 	app.get('/api/send-empty', function (req, res) {
-		res.json();
+		res.json({});
 	});
 
 	app.get('/api/send-null', function (req, res) {
-		res.json();
+		res.json({});
 	});
 
 	express.listen();

@@ -50,7 +50,7 @@ init.add(function () {
 			form._id = parseInt(req.params.id) || 0;
 			photol.updatePhoto(user, form, function (err) {
 				if (err) return res.jsonErr(err);
-				res.json();
+				res.json({});
 			});
 		});
 	});
@@ -62,7 +62,7 @@ init.add(function () {
 			var id = parseInt(req.params.id) || 0;
 			photol.delPhoto(id, user, function (err) {
 				if (err) return res.jsonErr(err);
-				res.json();
+				res.json({});
 			});
 		});
 	});
