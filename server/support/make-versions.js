@@ -18,7 +18,7 @@ init.add(function (next) {
 				photol.removeVersions(dir, function (err) {
 					if (err) return next(err);
 					var org = photol.getOrginalPath(dir, id, photo.format);
-					console.log('rendering ' + id);
+					process.stdout.write(id + ' ');
 					photol.makeVersions(org, photo.width, dir, id, function (err, vers) {
 						if (err) return next(err);
 						var fields = {
