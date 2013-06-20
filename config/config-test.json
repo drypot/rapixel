@@ -1,11 +1,12 @@
 {
+	"appUrl": "http://localhost:8002",
+	"uploadUrl": "http://localhost:8003",
+
 	"appName": "Rapixel Test",
-	"appPort": 8140,
-	"appUrl": "http://rapixel:8080",
+	"appPort": 8803,
 
 	"cookieSecret": "o;iejf832ndvs",
 
-	"uploadUrl": "http://rapixelfile:8080",
 	"uploadDir": "tmp/upload",
 	"uploadMax": 10,
 
