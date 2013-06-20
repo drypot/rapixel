@@ -4,7 +4,6 @@
 
 	"appName": "Rapixel Test",
 	"appPort": 8803,
-
 	"cookieSecret": "o;iejf832ndvs",
 
 	"uploadDir": "tmp/upload",

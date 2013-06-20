@@ -4,7 +4,6 @@
 
 	"appName": "Rapixel Dev",
 	"appPort": 8802,
-
 	"cookieSecret": "o;iejf832ndvs",
 
 	"uploadDir": "upload",
