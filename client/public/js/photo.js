@@ -5,6 +5,10 @@ init.add(function () {
 
 	photol.initPhotoView = function (photo) {
 		renderPhoto(photo);
+		$('#update-btn').click(function () {
+			location = '/photos/' + photo._id + '/update';
+			return false;
+		});
 		$('#del-btn').click(function () {
 			$('#del-confirm-btn').removeClass('hide');
 			return false;
@@ -58,6 +62,18 @@ init.add(function () {
 			formty.post('/api/photos', $form, function (err) {
 				if (err) return showError(err);
 				location = '/';
+			});
+			return false;
+		});
+	};
+
+	photol.initUpdateForm = function (photo) {
+		var $form = formty.getForm('#form');
+		formty.initFileGroup($form, 'files');
+		$form.$send.click(function (err, res) {
+			formty.put('/api/photos/' + photo._id, $form, function (err) {
+				if (err) return showError(err);
+				location = '/photos/' + photo._id;
 			});
 			return false;
 		});

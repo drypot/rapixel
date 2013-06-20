@@ -203,7 +203,7 @@ init.add(function (next) {
 					if (err) return next(err);
 					checkPhotoMeta(form, function (err, meta) {
 						if (err) return next(err);
-						var dir = photol.getPhotoDir(id);
+						var dir = exports.getPhotoDir(id);
 						fs2.removeDirs(dir, function (err) {
 							if (err) return next(err);
 							fs2.makeDirs(dir, function (err) {

@@ -4,7 +4,6 @@ var fs = require('fs');
 var init = require('../main/init');
 var config = require('../main/config')({ test: true });
 var mongo = require('../main/mongo')({ dropDatabase: true });
-var upload = require('../main/upload');
 var express = require('../main/express');
 var photol = require('../main/photo');
 var error = require('../main/error');

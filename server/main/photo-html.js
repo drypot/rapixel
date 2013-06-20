@@ -11,13 +11,23 @@ init.add(function () {
 
 	var app = express.app;
 
-	app.get('/photos/:pid([0-9]+)', function (req, res) {
-		var pid = parseInt(req.params.pid) || 0;
-		photol.findPhoto(pid, function (err, photo) {
+	app.get('/photos/:id([0-9]+)', function (req, res) {
+		var id = parseInt(req.params.id) || 0;
+		photol.findPhoto(id, function (err, photo) {
 			if (err) return res.renderErr(err);
 			res.render('photo-view', {
 				photo: photo,
 				photoView: true
+			});
+		});
+	});
+
+	app.get('/photos/:id([0-9]+)/update', function (req, res) {
+		var id = parseInt(req.params.id) || 0;
+		photol.findPhoto(id, function (err, photo) {
+			if (err) return res.renderErr(err);
+			res.render('photo-update', {
+				photo: photo
 			});
 		});
 	});

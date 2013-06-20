@@ -102,6 +102,9 @@ body.photo-view .extra .footer {
 body.photo-view .extra .action {
   margin: 45px 10px 24px 12px;
 }
+body.photo-view .extra .action button#del-btn {
+  margin-left: 15px;
+}
 body.photo-view .extra .home {
   margin: 55px 10px 8px 12px;
 }
