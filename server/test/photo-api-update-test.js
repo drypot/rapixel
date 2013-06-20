@@ -189,6 +189,21 @@ describe("updating a photo", function () {
 			});
 		});
 	});
+	describe("by other user", function () {
+		before(function (next) {
+			ufix.loginUser2(next);
+		});
+		it("should fail", function (next) {
+			var form = { comment: 'xxxx' };
+			express.put('/api/photos/' + _id).send(form).end(function (err, res) {
+				should(!err);
+				should(!res.error);
+				should(res.body.err);
+				should(error.find(res.body.err, ecode.NOT_AUTHORIZED));
+				next();
+			});
+		});
+	});
 });
 
 
