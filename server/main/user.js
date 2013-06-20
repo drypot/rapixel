@@ -297,7 +297,7 @@ init.add(function (next) {
 		});
 	}
 
-	exports.findUserForEdit = function (id, user, next) {
+	exports.findUserForUpdate = function (id, user, next) {
 		checkUpdatable(id, user, function (err) {
 			if (err) return next(err);
 			exports.findCachedUser(id, function (err, _tuser) {

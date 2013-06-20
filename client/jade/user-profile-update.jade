@@ -1,17 +1,17 @@
 extends layout
 
 block title
-	title Edit Profile - #{appName}
+	title Update Profile - #{appName}
 
 block content
 	script
 		init.add(function () {
-			userl.initEditProfile();
+			userl.initUpdateProfileForm();
 		});
 
 	.side-space
 		.page-header
-			h1 Edit Profile
+			h1 Update Profile
 
 		form#form
 			.form-row
@@ -29,7 +29,7 @@ block content
 			.form-row
 				label.control-label Photo Footer
 				textarea(name="footer", rows=5) #{tuser.footer}
-				p.help-block shows with every photos.
+				p.help-block shows on every photo.
 			.form-btns
 				.send-panel
 					button.btn.btn-primary(name='send') Send

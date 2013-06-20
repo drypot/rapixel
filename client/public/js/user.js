@@ -67,7 +67,7 @@ init.add(function () {
 		$profile.html(tagUpText($profile.html()));
 	};
 
-	userl.initEditProfile = function () {
+	userl.initUpdateProfileForm = function () {
 		var $form = formty.getForm('#form');
 		var uid = url.pathnames[1];
 		$form.$send.click(function () {

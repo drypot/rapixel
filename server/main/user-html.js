@@ -55,13 +55,13 @@ init.add(function () {
 		next(prevUrl, nextUrl);
 	}
 
-	app.get('/users/:id([0-9]+)/edit', function (req, res) {
+	app.get('/users/:id([0-9]+)/update', function (req, res) {
 		req.findUser(function (err, user) {
 			if (err) return res.renderErr(err);
 			var id = parseInt(req.params.id) || 0;
-			userl.findUserForEdit(id, user, function (err, tuser) {
+			userl.findUserForUpdate(id, user, function (err, tuser) {
 				if (err) return res.renderErr(err);
-				res.render('user-profile-edit', {
+				res.render('user-profile-update', {
 					tuser: tuser
 				});
 			});
