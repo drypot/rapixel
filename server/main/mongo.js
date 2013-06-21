@@ -77,8 +77,12 @@ init.add(function (next) {
 		users.update({ _id: id }, { $set: fields}, next);
 	};
 
-	exports.updateUserHash = function (email, hash, next) {
-		users.update({ email: email }, { $set: { hash: hash } }, next)
+	exports.updateUserHash = function (email, hash, excludeAdmin, next) {
+		var query = { email: email };
+		if (excludeAdmin) {
+			query.admin = { $exists: false };
+		}
+		users.update(query, { $set: { hash: hash } }, next)
 	}
 
 	users = exports.users = exports.db.collection("users");

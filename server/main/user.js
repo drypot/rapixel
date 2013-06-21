@@ -388,7 +388,7 @@ init.add(function (next) {
 			if (Date.now() - reset._id.getTimestamp().getTime() > 15 * 60 * 1000) {
 				return next(error(ecode.RESET_TIMEOUT));
 			}
-			mongo.updateUserHash(reset.email, makeHash(form.password), function (err) {
+			mongo.updateUserHash(reset.email, makeHash(form.password), true, function (err) {
 				if (err) return next(err);
 				mongo.delReset(form.email, next);
 				// user cache 를 찾아 지울 필요는 없다.
