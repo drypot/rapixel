@@ -37,36 +37,16 @@ init.add(function () {
 	});
 
 	app.get('/', function (req, res) {
-		var pg = photol.getPage(req.query.pg);
-		var ps = photol.getPageSize(req.query.ps);
-		photol.findPhotos(pg, ps, function (err, photos, last) {
+		var params = photol.makeListParams(req, {});
+		photol.findPhotos(params, function (err, photos, gt, lt) {
 			if (err) return res.renderErr(err);
-			prevNext(pg, last, function (prevUrl, nextUrl) {
-				res.render('photo-list', {
-					photos: photos,
-					prevUrl: prevUrl,
-					nextUrl: nextUrl,
-					firstPage: pg == 1
-				});
+			res.render('photo-list', {
+				photos: photos,
+				gtUrl: gt ? new UrlMaker('/').add('gt', gt, 0).toString() : undefined,
+				ltUrl: lt ? new UrlMaker('/').add('lt', lt, 0).toString() : undefined
 			});
 		});
 	});
-
-	function prevNext(pg, last, next) {
-		var prevUrl, nextUrl;
-		var u;
-		if (pg > 1) {
-			u = new UrlMaker('/')
-			u.add('pg', pg - 1, 1);
-			prevUrl = u.toString();
-		}
-		if (!last) {
-			u = new UrlMaker('/');
-			u.add('pg', pg + 1, 1);
-			nextUrl = u.toString();
-		}
-		next(prevUrl, nextUrl);
-	}
 
 	app.get('/photos/new', function (req, res) {
 		req.findUser(function (err, user) {

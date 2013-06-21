@@ -255,7 +255,7 @@ init.add(function (next) {
 		});
 	};
 
-	exports.findUserForView = function (id, user, next) {
+	exports.findUserForView = function (user, id, next) {
 		exports.findCachedUser(id, function (err, _tuser) {
 			if (err) return next(err);
 			var tuesr;
@@ -352,9 +352,9 @@ init.add(function (next) {
 							subject: 'Reset Password - ' + config.data.appName,
 							text:
 								'\n' +
-									'Open the following URL to reset password.\n\n' +
-									config.data.appUrl + '/users/reset?id=' + reset._id + '&t=' + reset.token + '\n\n' +
-									config.data.appName
+								'Open the following URL to reset password.\n\n' +
+								config.data.appUrl + '/users/reset?id=' + reset._id + '&t=' + reset.token + '\n\n' +
+								config.data.appName
 						};
 						mailer.send(mail, next);
 					});

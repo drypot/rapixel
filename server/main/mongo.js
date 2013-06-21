@@ -139,24 +139,6 @@ init.add(function (next) {
 		photos.findOne({ uid: uid }, opt, next);
 	}
 
-	exports.findPhotos = function (pg, pgsize) {
-		var opt = {
-			sort: { _id: -1 },
-			skip: (Math.abs(pg) - 1) * pgsize,
-			limit: pgsize
-		};
-		return photos.find({}, opt);
-	};
-
-	exports.findPhotosByUser = function (uid, pg, pgsize) {
-		var opt = {
-			sort: { _id: -1 },
-			skip: (Math.abs(pg) - 1) * pgsize,
-			limit: pgsize
-		};
-		return photos.find({ uid: uid }, opt);
-	};
-
 	photos = exports.photos = exports.db.collection("photos");
 	photos.ensureIndex({ uid: 1, _id: -1 }, function (err) {
 		if (err) return next(err);
@@ -197,4 +179,82 @@ init.add(function (next) {
 		next();
 	});
 
+});
+
+init.add(function (next) {
+
+	exports.findPaged = function (collection, query, gt, lt, ps, filter, next) {
+		var opt;
+		if (lt) {
+			query._id = { $lt: lt };
+			opt = {
+				sort: { _id: -1 },
+				limit: ps + 1
+			};
+		} else if (gt) {
+			query._id = { $gt: gt };
+			opt = {
+				sort: { _id: 1 },
+				limit: ps + 1
+			};
+		} else {
+			opt = {
+				sort: { _id: -1 },
+				limit: ps + 1
+			};
+		}
+		var cursor = collection.find(query, opt);
+		var results = [];
+		var count = 0, first = 0, last = 0;
+		function read() {
+			cursor.nextObject(function (err, result) {
+				if (err) return next(err);
+				if (result) {
+					count++;
+					if (count > ps) {
+						setImmediate(read);
+						return;
+					}
+					if (!first) first = result._id;
+					last = result._id;
+					if (filter) {
+						filter(result, function (err, result) {
+							if (err) return next(err);
+							if (result) {
+								if (gt) {
+									results.unshift(result);
+								} else {
+									results.push(result);
+								}
+							}
+							setImmediate(read);
+						});
+					} else {
+						if (gt) {
+							results.unshift(result);
+						} else {
+							results.push(result);
+						}
+						setImmediate(read);
+					}
+					return;
+				}
+				var more = count > ps;
+				if (gt) {
+					gt = more ? last : 0;
+					lt = first;
+				} else if (lt) {
+					gt = first;
+					lt = more ? last : 0;
+				} else {
+					gt = 0;
+					lt = more ? last : 0;
+				}
+				next(null, results, gt, lt);
+			});
+		}
+		read();
+	};
+
+	next();
 });

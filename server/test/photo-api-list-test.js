@@ -29,25 +29,24 @@ before(function (next) {
 });
 
 before(function (next) {
-	var uid = ufix.user1._id;
 	var i = 0;
-	function insertPhoto() {
+	function insert() {
 		if (i == 10) {
 			return next();
 		}
 		var p = {
 			_id: mongo.newPhotoId(),
-			uid: uid,
+			uid: ufix.user1._id,
 			cdate: new Date(),
 			comment: '' + i
 		};
 		i++;
 		mongo.insertPhoto(p, function (err) {
 			if (err) return next(err);
-			setImmediate(insertPhoto);
+			setImmediate(insert);
 		});
 	}
-	insertPhoto();
+	insert();
 });
 
 describe("counting", function () {
@@ -60,22 +59,21 @@ describe("counting", function () {
 	});
 });
 
-var _photos;
-
 describe("listing all", function () {
 	it("should success", function (next) {
 		var query = {
-			pg: 1, ps: 99
+			ps: 99
 		}
 		express.get('/api/photos').query(query).end(function (err, res) {
 			should(!res.error);
 			should(!res.body.err);
-			res.body.last.should.true;
-			_photos = res.body.photos;
-			_photos.length.should.equal(10);
-			_photos[0]._id.should.above(_photos[1]._id);
-			_photos[1]._id.should.above(_photos[2]._id);
-			_photos[2]._id.should.above(_photos[3]._id);
+			res.body.gt.should.equal(0);
+			res.body.lt.should.equal(0);
+			res.body.photos.length.should.equal(10);
+			res.body.photos[0]._id.should.equal(10);
+			res.body.photos[1]._id.should.equal(9);
+			res.body.photos[2]._id.should.equal(8);
+			res.body.photos[9]._id.should.equal(1);
 			next();
 		});
 	});
@@ -84,52 +82,90 @@ describe("listing all", function () {
 describe("listing page 1", function () {
 	it("should success", function (next) {
 		var query = {
-			pg: 1, ps: 4
-		}
+			ps: 4
+		};
 		express.get('/api/photos').query(query).end(function (err, res) {
 			should(!res.error);
 			should(!res.body.err);
-			res.body.last.should.false;
+			res.body.gt.should.equal(0);
+			res.body.lt.should.equal(7);
 			res.body.photos.should.length(4);
-			res.body.photos[0]._id.should.equal(_photos[0]._id);
-			res.body.photos[3]._id.should.equal(_photos[3]._id);
+			res.body.photos[0]._id.should.equal(10);
+			res.body.photos[3]._id.should.equal(7);
 			next();
 		});
 	});
 });
 
-describe("listing page 2", function () {
+describe("listing page 2 with lt", function () {
 	it("should success", function (next) {
 		var query = {
-			pg: 2, ps: 4
+			lt:7, ps: 4
 		}
 		express.get('/api/photos').query(query).end(function (err, res) {
 			should(!res.error);
 			should(!res.body.err);
-			res.body.last.should.false;
+			res.body.gt.should.equal(6);
+			res.body.lt.should.equal(3);
 			res.body.photos.should.length(4);
-			res.body.photos[0]._id.should.equal(_photos[4]._id);
-			res.body.photos[3]._id.should.equal(_photos[7]._id);
+			res.body.photos[0]._id.should.equal(6);
+			res.body.photos[3]._id.should.equal(3);
 			next();
 		});
 	});
 });
 
-describe("listing last page", function () {
+describe("listing last page with lt", function () {
 	it("should success", function (next) {
 		var query = {
-			pg: 3, ps: 4
+			lt: 3, ps: 4
 		}
 		express.get('/api/photos').query(query).end(function (err, res) {
 			should(!res.error);
 			should(!res.body.err);
-			res.body.last.should.true;
+			res.body.gt.should.equal(2);
+			res.body.lt.should.equal(0);
 			res.body.photos.should.length(2);
-			res.body.photos[0]._id.should.equal(_photos[8]._id);
-			res.body.photos[1]._id.should.equal(_photos[9]._id);
+			res.body.photos[0]._id.should.equal(2);
+			res.body.photos[1]._id.should.equal(1);
 			next();
 		});
 	});
 });
 
-// TODO: find photos by user
+
+describe("listing page 2 with gt", function () {
+	it("should success", function (next) {
+		var query = {
+			gt:2, ps: 4
+		}
+		express.get('/api/photos').query(query).end(function (err, res) {
+			should(!res.error);
+			should(!res.body.err);
+			res.body.gt.should.equal(6);
+			res.body.lt.should.equal(3);
+			res.body.photos.should.length(4);
+			res.body.photos[0]._id.should.equal(6);
+			res.body.photos[3]._id.should.equal(3);
+			next();
+		});
+	});
+});
+
+describe("listing page 1 with gt", function () {
+	it("should success", function (next) {
+		var query = {
+			gt: 6, ps: 4
+		};
+		express.get('/api/photos').query(query).end(function (err, res) {
+			should(!res.error);
+			should(!res.body.err);
+			res.body.gt.should.equal(0);
+			res.body.lt.should.equal(7);
+			res.body.photos.should.length(4);
+			res.body.photos[0]._id.should.equal(10);
+			res.body.photos[3]._id.should.equal(7);
+			next();
+		});
+	});
+});

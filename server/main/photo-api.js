@@ -17,13 +17,14 @@ init.add(function () {
 	});
 
 	app.get('/api/photos', function (req, res) {
-		var pg = photol.getPage(req.query.pg);
-		var ps = photol.getPageSize(req.query.ps);
-		photol.findPhotos(pg, ps, function (err, photos, last) {
+		var params = photol.makeListParams(req);
+		params.query = {};
+		photol.findPhotos(params, function (err, photos, gt, lt) {
 			if (err) return res.jsonErr(err);
 			res.json({
 				photos: photos,
-				last: last
+				gt: gt,
+				lt: lt
 			});
 		});
 	});

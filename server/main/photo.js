@@ -34,16 +34,6 @@ init.add(function (next) {
 
 	console.log('photo:');
 
-	exports.getPage = function(_pg) {
-		var pg = parseInt(_pg) || 1;
-		return pg < 1 ? 1 : pg;
-	};
-
-	exports.getPageSize = function (ps) {
-		var pgsize = parseInt(ps) || 16;
-		return pgsize > 64 ? 64 : pgsize < 1 ? 1 : pgsize;
-	};
-
 	exports.getPhotoDir = function (id) {
 		return fs2.makeDeepPath(upload.photoDir, id, 3);
 	};
@@ -313,54 +303,29 @@ init.add(function (next) {
 		});
 	};
 
-	exports.findPhotos = function (pg, ps, next) {
-		var cursor = mongo.findPhotos(pg, ps);
-		var photos = [];
-		var count = 0;
-		function read() {
-			cursor.nextObject(function (err, photo) {
-				if (err) return next(err);
-				if (photo) {
-					userl.findCachedUser(photo.uid, function (next, user) {
-						if (err) return next(err);
-						photo.user = {
-							_id: user._id,
-							name: user.name
-						};
-						photo.dir = fs2.makeDeepPath(photoUrl, photo._id, 3);
-						photo.cdateStr = dt.format(photo.cdate);
-						photos.push(photo);
-						count++;
-						setImmediate(read);
-					});
-					return;
-				}
-				next(null, photos, count !== ps);
-			});
-		}
-		read();
-	};
+	exports.makeListParams = function (req, query) {
+		var params = {};
+		params.query = query;
+		params.lt = parseInt(req.query.lt) || 0;
+		params.gt = params.lt ? 0 : parseInt(req.query.gt) || 0;
+		params.ps = parseInt(req.query.ps) || 16;
+		return params;
+	}
 
-	exports.findPhotosByUser = function (uid, pg, ps, next) {
-		var cursor = mongo.findPhotosByUser(uid, pg, ps);
-		var photos = [];
-		var count = 0;
-		function read() {
-			cursor.nextObject(function (err, photo) {
+	exports.findPhotos = function (params, next) {
+		mongo.findPaged(mongo.photos, params.query, params.gt, params.lt, params.ps, function (photo, next) {
+			userl.findCachedUser(photo.uid, function (err, user) {
 				if (err) return next(err);
-				if (photo) {
-					photo.dir = fs2.makeDeepPath(photoUrl, photo._id, 3);
-					photo.cdateStr = dt.format(photo.cdate);
-					photos.push(photo);
-					count++;
-					setImmediate(read);
-					return;
-				}
-				next(null, photos, count !== ps);
+				photo.user = {
+					_id: user._id,
+					name: user.name
+				};
+				photo.dir = fs2.makeDeepPath(photoUrl, photo._id, 3);
+				photo.cdateStr = dt.format(photo.cdate);
+				next(null, photo);
 			});
-		}
-		read();
-	};
+		}, next);
+	}
 
 	next();
 });
