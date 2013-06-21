@@ -1,5 +1,5 @@
 var init = require('../main/init');
-var config = require('../main/config')({ parseArgv: true });
+var config = require('../main/config')({ argv: true });
 var express = require('../main/express');
 
 require('../main/photo-api');

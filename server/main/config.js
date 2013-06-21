@@ -9,13 +9,17 @@ exports = module.exports = function (_opt) {
 		opt = {};
 		delete exports.data;
 	}
-	if (_opt.parseArgv) {
+	if (_opt.argv) {
 		for (var i = 2; i < process.argv.length; i++) {
 			var arg = process.argv[i];
-			if (arg.indexOf('--') === 0) {
+			if (~arg.indexOf('--')) {
 				//
 			} else {
-				_opt.path = arg;
+				if (_opt.path) {
+					exports.argv.push(arg);
+				} else {
+					_opt.path = arg;
+				}
 			}
 		}
 	}
@@ -27,6 +31,8 @@ exports = module.exports = function (_opt) {
 	}
 	return exports;
 };
+
+exports.argv = [];
 
 init.add(function (next) {
 
