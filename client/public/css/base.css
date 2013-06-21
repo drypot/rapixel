@@ -70,9 +70,6 @@ p.card {
 .photos .photo a {
   color: inherit;
 }
-body.photo-view {
-  background-color: #222222;
-}
 body.photo-view .photo {
   margin: 0px;
   margin-bottom: 8px;
@@ -80,33 +77,29 @@ body.photo-view .photo {
 body.photo-view .photo img {
   max-width: none;
 }
-body.photo-view .extra {
-  color: #888;
-}
 body.photo-view .extra a {
-  font-size: 18px;
-  color: #e0e0e0;
+  color: inherit;
 }
 body.photo-view .extra .name {
-  margin: 0px 10px 24px 12px;
+  margin: 0px 10px 22px 12px;
 }
 body.photo-view .extra .name span {
   margin-right: 15px;
 }
 body.photo-view .extra .comment {
-  margin: 0px 10px 24px 12px;
+  margin: 0px 10px 22px 12px;
 }
 body.photo-view .extra .footer {
-  margin: 0px 10px 24px 12px;
+  margin: 0px 10px 22px 12px;
 }
 body.photo-view .extra .action {
-  margin: 45px 10px 24px 12px;
+  margin: 30px 10px 22px 12px;
 }
 body.photo-view .extra .action button#del-btn {
   margin-left: 15px;
 }
 body.photo-view .extra .home {
-  margin: 55px 10px 8px 12px;
+  margin: 35px 10px 8px 12px;
 }
 body.photo-view .extra .home a,
 body.photo-view .extra .home a.hover {
