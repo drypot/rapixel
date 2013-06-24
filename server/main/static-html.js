@@ -16,6 +16,10 @@ init.add(function () {
 		res.render('about-company');
 	});
 
+	app.get('/services', function (req, res) {
+		res.render('about-services');
+	});
+
 	app.get('/privacy', function (req, res) {
 		res.render('about-privacy');
 	});

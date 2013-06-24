@@ -1,6 +1,6 @@
 # Rapixel
 
-큰 사진을 웹으로 보여주고 싶은데 마땅한 사이트가 없는 것 같아 만들어 보았다.
+4K Images.
 
 [https://rapixel.com](https://rapixel.com)
 

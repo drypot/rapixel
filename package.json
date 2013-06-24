@@ -1,7 +1,7 @@
 {
   "name": "Rapixel",
   "version": "0.1.1",
-  "description": "Rapixel Photo Gallery",
+  "description": "4K Images.",
   "main": "app.js",
   "directories": {
     "test": "server/test"
