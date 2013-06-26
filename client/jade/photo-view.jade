@@ -15,7 +15,7 @@ block content
 		.name
 			span
 				a(href='/' + encodeURIComponent(photo.user.name)) #{photo.user.name}
-			span hit !{photo.hit}
+			//-span hit !{photo.hit}
 			span !{photo.cdateStr}
 
 		#comment.comment !{jade.escape(photo.comment).replace(/\n/g, '<br>')}
