@@ -16,14 +16,14 @@ block content
 		form#form
 			.form-row
 				label.control-label Name
-				input.input-with-feedback.col-lg-5(name="name", type="text", maxlength=32)
+				input.input-with-feedback(name="name", type="text", maxlength=32)
 			.form-row
 				label.control-label Email
-				input.input-with-feedback.col-lg-5(name="email", type="text", maxlength=64)
+				input.input-with-feedback(name="email", type="text", maxlength=64)
 			.form-row
 				label.control-label Password
-				input.input-with-feedback.col-lg-5(name="password", type="password", maxlength=64)
-			.form-btns
+				input.input-with-feedback(name="password", type="password", maxlength=64)
+			.btns
 				.send-panel
 					button.btn.btn-primary(name='send') Send
 				.sending-panel.hide

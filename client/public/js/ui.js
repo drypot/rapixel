@@ -53,7 +53,6 @@ init.add(function() {
 		var $fileTemplIE = $('#file-input-templ-msie').children(0);
 		var $files = $form.find('.file-group .files');
 		var $adder = $form.find('.file-group .glyphicon-plus');
-		var basename = /[^\\]+$/;
 
 		function addFileInput() {
 			var $set = msie ? $fileTemplIE.clone(): $fileTempl.clone();
@@ -62,7 +61,6 @@ init.add(function() {
 			$file.attr('name', name);
 
 			if (!msie) {
-				var $text = $set.find('input[type="text"]');
 				var $btn = $set.find('button');
 				$btn.click(function () {
 					$file.click();
@@ -70,13 +68,8 @@ init.add(function() {
 				});
 				$file.on('change', function () {
 					var files = $file[0].files;
-					var text;
-					if (files && files.length > 1) {
-						text = files.length + ' files';
-					} else {
-						text = basename.exec($file.val())[0];
-					}
-					$text.val(text);
+					var text = files.length + ' files selected';
+					$btn.text(text);
 				});
 			}
 			$files.append($set);

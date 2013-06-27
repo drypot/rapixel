@@ -16,13 +16,13 @@ block content
 		form#form
 			.form-row
 				label.control-label Name
-				input.input-with-feedback.col-lg-5(name="name", type="text", maxlength=32, value=tuser.name)
+				input.input-with-feedback(name="name", type="text", maxlength=32, value=tuser.name)
 			.form-row
 				label.control-label Email
-				input.input-with-feedback.col-lg-5(name="email", type="text", maxlength=64, value=tuser.email)
+				input.input-with-feedback(name="email", type="text", maxlength=64, value=tuser.email)
 			.form-row
 				label.control-label Password
-				input.input-with-feedback.col-lg-5(name="password", type="password", maxlength=64)
+				input.input-with-feedback(name="password", type="password", maxlength=64)
 			.form-row
 				label.control-label Profile
 				textarea(name="profile", rows=5) #{tuser.profile}
@@ -30,7 +30,7 @@ block content
 				label.control-label Photo Footer
 				textarea(name="footer", rows=5) #{tuser.footer}
 				p.help-block shows on every photo.
-			.form-btns
+			.btns
 				.send-panel
 					button.btn.btn-primary(name='send') Send
 				.sending-panel.hide

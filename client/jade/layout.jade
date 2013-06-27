@@ -30,37 +30,13 @@ html
 		script(src="/js/photo.js")
 
 	body(class= locals.photoView ? 'photo-view' : '')
-		if !locals.photoView
-			.container
-				.limit-width
-					.navbar
-						button.navbar-toggle(type="button", data-toggle="collapse", data-target=".navbar-responsive-collapse")
-							span.icon-bar
-							span.icon-bar
-							span.icon-bar
-						a.navbar-brand(href="/") #{appName}
-						.nav-collapse.collapse.navbar-responsive-collapse
-							ul.nav.navbar-nav.pull-right
-								if locals.user
-									li: a(href="/photos/new") Upload
-									li: a(href="/users/" + user._id) Profile
-									li: a#logout-btn(href="/users/logout") Logout
-								else
-									li: a(href="/users/login") Login
-									li: a(href="/users/register") Register
 
-					block content
-
-					.page-footer
-						.side-space
-							ul.list-inline
-								li: a(href="/company") Company
-								li: a(href="/services") Services
-								li: a(href="/privacy") Privacy
-								li: a(href="/help") Help
-
-		else
+		if locals.photoView
 			block content
+		else
+			.container
+				block content
+				include layout-footer
 
 		#error-modal.modal
 				.modal-dialog
@@ -73,13 +49,10 @@ html
 							button.btn.btn-default(data-dismiss="modal") Close
 
 		#file-input-templ.hide
-			.file
-				div(style='width: 0px; height: 0px;')
+			.file.btns
+				.hidden-input
 					input(type='file', multiple='multiple')
-				.input-group
-					input(type='text', disabled)
-					span.input-group-btn
-						button.btn.btn-default File
+				button.btn.btn-default Select Photo
 
 		#file-input-templ-msie.hide
 			.file

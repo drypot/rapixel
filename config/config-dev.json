@@ -2,7 +2,7 @@
 	"appUrl": "http://localhost:8002",
 	"uploadUrl": "http://localhost:8003",
 
-	"appName": "Rapixel Dev",
+	"appName": "Rapixel",
 	"appPort": 8802,
 	"cookieSecret": "o;iejf832ndvs",
 

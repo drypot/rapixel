@@ -1,8 +1,6 @@
-body {
-  padding-bottom: 40px;
-}
-.limit-width {
+.container {
   max-width: 640px;
+  text-align: center;
 }
 .side-space {
   margin-left: 1px;
@@ -10,14 +8,37 @@ body {
   padding-left: 8px;
   padding-right: 8px;
 }
+.top-space {
+  margin-top: 30px;
+}
 .bottom-space {
   margin-bottom: 30px;
 }
+.page-header {
+  margin-top: 60px;
+  margin-bottom: 55px;
+  border: 0px;
+  padding: 0px;
+}
+.page-header a {
+  color: inherit;
+}
+.page-header a:hover {
+  text-decoration: none;
+}
+.site-title h1 {
+  margin-bottom: 10px;
+  font-size: 53px;
+}
+.site-title p {
+  font-size: 21px;
+}
+.update {
+  margin-bottom: 22px;
+}
 .page-footer {
-  margin-top: 45px;
-  border-top: 1px solid #eeeeee;
-  padding-top: 10px;
-  color: #888;
+  margin-top: 55px;
+  margin-bottom: 70px;
 }
 .page-footer a {
   color: inherit;
@@ -29,46 +50,51 @@ body {
   padding-left: 0px;
   padding-right: 9px;
 }
-.page-header {
-  border: 0;
-  margin-bottom: 10px;
+.page-footer .home {
+  margin: 15px;
 }
-.site-title {
-  margin-top: 60px;
-  margin-bottom: 51px;
-}
-.site-title h1 {
-  margin-bottom: 10px;
-  font-size: 63px;
-}
-.site-title p {
-  font-size: 21px;
-}
-.update {
-  margin-bottom: 22px;
+.page-footer .home a,
+.page-footer .home a.hover {
+  font-size: 28px;
+  font-weight: 500;
 }
 p.card {
   font-size: 18px;
   line-height: 1.5;
 }
+.link-set a {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.pager-prev {
+  margin-top: 65px;
+  font-size: 18px;
+  line-height: 1;
+}
 .photos {
-  margin: 35px 0px 25px 0px;
+  margin: 65px 0px 65px 0px;
 }
 .photos .photo {
-  color: #888;
-  margin-bottom: 15px;
+  margin-bottom: 45px;
 }
 .photos .photo img {
-  margin-bottom: 0px;
+  margin-bottom: 2px;
 }
-.photos .photo .info {
-  margin-left: 8px;
-}
-.photos .photo .info span {
-  margin-right: 15px;
-}
-.photos .photo a {
+.photos .photo .info a {
   color: inherit;
+}
+@media (max-width: 768px) {
+  .photos .photo {
+    margin-bottom: 25px;
+  }
+}
+.pager-next {
+  margin-bottom: 65px;
+  font-size: 18px;
+  line-height: 1;
+}
+body.photo-view {
+  text-align: center;
 }
 body.photo-view .photo {
   margin: 0px;
@@ -77,34 +103,28 @@ body.photo-view .photo {
 body.photo-view .photo img {
   max-width: none;
 }
-body.photo-view .extra a {
+body.photo-view .photo-info a {
   color: inherit;
 }
-body.photo-view .extra .name {
+body.photo-view .photo-info .name {
   margin: 0px 10px 22px 12px;
 }
-body.photo-view .extra .name span {
+body.photo-view .photo-info .name span {
   margin-right: 15px;
 }
-body.photo-view .extra .comment {
-  margin: 0px 10px 22px 12px;
+body.photo-view .photo-info .name-and span {
+  margin-right: 15px;
 }
-body.photo-view .extra .footer {
-  margin: 0px 10px 22px 12px;
+body.photo-view .photo-info .comment {
+  margin-top: 26px;
 }
-body.photo-view .extra .action {
-  margin: 30px 10px 22px 12px;
+body.photo-view .photo-info .footer {
+  margin-top: 26px;
 }
-body.photo-view .extra .action button#del-btn {
-  margin-left: 15px;
-}
-body.photo-view .extra .home {
-  margin: 35px 10px 8px 12px;
-}
-body.photo-view .extra .home a,
-body.photo-view .extra .home a.hover {
-  font-size: 28px;
-  font-weight: 500;
+form {
+  width: 60%;
+  margin-left: 20%;
+  margin-bottom: 50px;
 }
 form .form-row {
   margin-bottom: 10px;
@@ -112,18 +132,13 @@ form .form-row {
 form .form-row label {
   display: block;
 }
-form .form-btns {
-  margin-top: 25px;
-  margin-bottom: 20px;
+form .file-group .files .file .hidden-input {
+  position: absolute;
+  top: -999px;
+  width: 0px;
+  height: 0px;
 }
-form .file-group .col {
-  padding: 0px;
-  margin-right: 5px;
-}
-form .file-group .files .file {
-  margin-bottom: 5px;
-}
-form .file-group .files .file input[type=file] {
+form .file-group .files .file button {
   width: 100%;
 }
 form p.error {
@@ -137,24 +152,19 @@ form .alert {
 form textarea {
   font-family: monospace;
 }
-form .form-comments {
-  margin-top: 50px;
-}
-.pager {
-  margin-left: -6px;
-  text-align: left;
-}
-.pagination {
-  margin: 0px;
-  margin-left: -1px;
+@media (max-width: 480px) {
+  form {
+    width: 100%;
+    margin-left: 0%;
+  }
 }
 .btn-mini {
   padding: 2px 6px;
-  font-size: 12px;
+  font-size: 14px;
 }
 .btns {
-  margin-top: 25px;
-  margin-bottom: 30px;
+  margin-top: 36px;
+  margin-bottom: 36px;
 }
 pre.error-report {
   margin: 0px;

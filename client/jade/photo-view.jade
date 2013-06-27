@@ -11,22 +11,22 @@ block content
 
 	.photo
 
-	.extra.side-space
-		.name
-			span
-				a(href='/' + encodeURIComponent(photo.user.name)) #{photo.user.name}
-			//-span hit !{photo.hit}
-			span !{photo.cdateStr}
+	.container
+		.photo-info
+			.name
+				span
+					a(href='/' + encodeURIComponent(photo.user.name)) #{photo.user.name}
+				//-span hit !{photo.hit}
+				span !{photo.cdateStr}
 
-		#comment.comment !{jade.escape(photo.comment).replace(/\n/g, '<br>')}
+			#comment.comment !{jade.escape(photo.comment).replace(/\n/g, '<br>')}
 
-		#footer.footer !{jade.escape(photo.user.footer).replace(/\n/g, '<br>')}
+			#footer.footer !{jade.escape(photo.user.footer).replace(/\n/g, '<br>')}
 
-		.action
-			if locals.user && (photo.user._id == user._id || user.admin)
-				button#update-btn.btn.btn-primary.btn-mini Update
-				button#del-btn.btn.btn-danger.btn-mini Delete
-				button#del-confirm-btn.btn.btn-danger.btn-mini.hide Yes, Delete
+			.btns
+				if locals.user && (photo.user._id == user._id || user.admin)
+					button#update-btn.btn.btn-primary.btn-mini Update
+					button#del-btn.btn.btn-danger.btn-mini Delete
+					button#del-confirm-btn.btn.btn-danger.btn-mini.hide Yes, Delete
 
-		.home
-			a(href='/') #{appName}
+		include layout-footer

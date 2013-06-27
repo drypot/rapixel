@@ -5,14 +5,28 @@ block title
 
 block content
 
-	.side-space
-		if !gtUrl
-			.page-header.site-title
-				h1 Rapixel
-				p 4K Images
-			//.update
+	.page-header.site-title
+		h1
+			a(href="/") #{appName}
+		p 4K Images
+
+	if !gtUrl
+		if locals.user
+			p.card.link-set
+				a(href="/photos/new") Upload
+				a(href="/users/" + user._id) Profile
+				a#logout-btn(href="/users/logout") Logout
+		else
+			p.card.link-set
+				a(href="/users/login") Login
+				a(href="/users/register") Register
+
+		//-.update
 				p.card
 					| Update: Images will be cropped to 16:9 automatically.
+	if locals.gtUrl
+		.pager-prev
+			a(href=gtUrl) Previous
 
 	.photos
 		for photo in photos
@@ -25,6 +39,7 @@ block content
 						a(href='/' + encodeURIComponent(photo.user.name)) #{photo.user.name}
 					//-span hit !{photo.hit}
 					//-span !{photo.cdateStr}
-	.side-space
-		include pager
+	if locals.ltUrl
+		.pager-next
+			a(href=ltUrl) Next
 

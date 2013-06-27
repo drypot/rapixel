@@ -9,30 +9,35 @@ block content
 			userl.initProfile();
 		});
 
-	.side-space
-		if !gtUrl
-			.page-header
-				h1 #{tuser.name}
+	.page-header
+		h1
+			a(href='/' + encodeURIComponent(tuser.name)) #{tuser.name}
 
-			p#profile-text.card
-				| !{jade.escape(tuser.profile).replace(/\n/g, "<br>")}
+	if !gtUrl
+		p#profile-text.card.profile
+			| !{jade.escape(tuser.profile).replace(/\n/g, "<br>")}
 
-			if showBtns
-				.btns
-					a.btn.btn-mini.btn-primary(href='/users/' + tuser._id + '/update') Update Profile
+		if showBtns
+			p.card.link-set.top-space
+				a(href='/users/' + tuser._id + '/update') Update Profile
 
 	if photos.length
+		if locals.gtUrl
+			.pager-prev
+				a(href=gtUrl) Previous
+
 		.photos
 			for photo in photos
 				.photo
 					.img
 						a(href='/photos/' + photo._id)
 							img(src=photo.dir + '/' + photo._id + '-640.jpg')
-					.info
+					//-.info
 						span
 							a(href='/' + encodeURIComponent(tuser.name)) #{tuser.name}
 						//-span hit !{photo.hit}
 						//-span !{photo.cdateStr}
 
-		.side-space
-			include pager
+		if locals.ltUrl
+			.pager-next
+				a(href=ltUrl) Next

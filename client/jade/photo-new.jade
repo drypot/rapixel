@@ -23,25 +23,23 @@ block content
 
 			form#form
 				.form-row.file-group
-					label.control-label Photo
-					.files.col-lg-7
+					.files
 				.form-row
 					label Comment
 					textarea(name='comment', rows=7)
-				.form-btns
+				.btns
 					.send-panel
 						button.btn.btn-primary(name='send') Send
 					.sending-panel.hide
 						button.btn.btn-default.disabled(name='sending') Sending
 
-				.form-comments
-					p.card
-						| Image must be larger than 3840x2160 pixels.
-						br
-						| Image will be cropped to 16:9 automatically.
-						br
-						| Recommended sizes are 5120x2880 or 3840x2160.
-						br
-						| Max file size is 10MB.
-						br
-						| You must be copyright owner.
+			p.card
+				| Image must be larger than 3840x2160 pixels.
+				br
+				| Image will be cropped to 16:9 automatically.
+				br
+				| Recommended sizes are 5120x2880 or 3840x2160.
+				br
+				| Max file size is 10MB.
+				br
+				| You must be copyright owner.

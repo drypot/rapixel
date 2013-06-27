@@ -25,18 +25,18 @@ block content
 		form#form
 			.form-row
 				label.control-label Email
-				input.input-with-feedback.col-lg-5(name="email", type="text")
+				input.input-with-feedback(name="email", type="text")
 			.form-row
 				label.control-label Password
-				input.input-with-feedback.col-lg-5(name="password", type="password")
-			.checkbox
+				input.input-with-feedback(name="password", type="password")
+			.form-row
 				label Remember
 				input(name="remember", type="checkbox")
-			.form-btns
+			.btns
 				.send-panel
 					button.btn.btn-primary(name='send') Send
 				.sending-panel.hide
 					button.btn.btn-default.disabled(name='sending') Sending
 
-			.form-comments
-				a(href='/users/reset-req') Reset Password
+		p.card.link-set
+			a(href='/users/reset-req') Reset Password
