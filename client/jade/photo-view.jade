@@ -13,11 +13,12 @@ block content
 
 	.container
 		.photo-info
-			.name
+			.name-and
 				span
 					a(href='/' + encodeURIComponent(photo.user.name)) #{photo.user.name}
 				//-span hit !{photo.hit}
-				span !{photo.cdateStr}
+				span !{photo.cdateStr.slice(0,16)}
+				span #{photo.fname}
 
 			#comment.comment !{jade.escape(photo.comment).replace(/\n/g, '<br>')}
 

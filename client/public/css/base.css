@@ -106,14 +106,9 @@ body.photo-view .photo img {
 body.photo-view .photo-info a {
   color: inherit;
 }
-body.photo-view .photo-info .name {
-  margin: 0px 10px 22px 12px;
-}
-body.photo-view .photo-info .name span {
-  margin-right: 15px;
-}
 body.photo-view .photo-info .name-and span {
-  margin-right: 15px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 body.photo-view .photo-info .comment {
   margin-top: 26px;
