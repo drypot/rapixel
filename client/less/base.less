@@ -126,9 +126,18 @@ body.photo-view {
 
 	text-align: center;
 
-	.photo {
+	.photo-low {
 		margin: 0px;
 		margin-bottom: 8px;
+		img {
+			max-width: none;
+		}
+	}
+	.photo-hi {
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		z-index: 10;
 		img {
 			max-width: none;
 		}

@@ -96,11 +96,20 @@ p.card {
 body.photo-view {
   text-align: center;
 }
-body.photo-view .photo {
+body.photo-view .photo-low {
   margin: 0px;
   margin-bottom: 8px;
 }
-body.photo-view .photo img {
+body.photo-view .photo-low img {
+  max-width: none;
+}
+body.photo-view .photo-hi {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 10;
+}
+body.photo-view .photo-hi img {
   max-width: none;
 }
 body.photo-view .photo-info a {

@@ -31,7 +31,8 @@ init.add(function () {
 	};
 
 	function renderPhoto(photo) {
-		var $photo = $('.photo');
+		var $photoHi = $('.photo-hi');
+		var $photoLow = $('.photo-low');
 		var screenWidth = screen.width > screen.height ? screen.width : screen.height;
 		if (window.devicePixelRatio > 1) {
 			screenWidth *= 2;
@@ -44,21 +45,25 @@ init.add(function () {
 			}
 		}
 
-		var $img = $('<img>', {
+		var $imgHi = $('<img>', {
 			src: photo.dir + '/' + photo._id + '-' + ver + '.jpg'
 		});
+
+		var $imgLow = $photoLow.find('img');
 
 		$window.on('resize', function () {
 			var windowWidth = $(window).width();
 			var diff = Math.abs(ver - windowWidth) / ver;
 			if (diff > 0.02) {
-				$img.css('width', '100%');
+				$imgHi.width('100%');
 			} else {
-				$img.css('width', '');
+				$imgHi.width('');
 			}
+			$imgLow.width(windowWidth);
+			$imgLow.height(windowWidth * 9 / 16);
 		});
 
-		$photo.append($img);
+		$photoHi.append($imgHi);
 		$window.trigger('resize');
 	}
 
