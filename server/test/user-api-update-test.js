@@ -358,7 +358,7 @@ describe("updating user password", function () {
 
 describe("updating user profile", function () {
 	describe("given new user", function () {
-		var _user = { name: 'testprofile', email: 'testprofile@def.com', password: '1234', profile: 'profile', footer: 'footer' };
+		var _user = { name: 'testprofile', email: 'testprofile@def.com', password: '1234', profile: 'profile' };
 		before(function (next) {
 			express.post('/api/users').send(_user).end(function (err,res) {
 				should(!res.error);
@@ -376,7 +376,7 @@ describe("updating user profile", function () {
 			});
 		});
 		it("should success", function (next) {
-			var form = { name: 'testprofile', email: 'testprofile@def.com', profile: 'profile2', footer: 'footer2' };
+			var form = { name: 'testprofile', email: 'testprofile@def.com', profile: 'profile2' };
 			express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
 				should(!res.error);
 				should(!res.body.err);
@@ -389,7 +389,6 @@ describe("updating user profile", function () {
 					should(!err);
 					should(user);
 					user.profile.should.equal('profile2');
-					user.footer.should.equal('footer2');
 					next();
 				});
 			});

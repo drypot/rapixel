@@ -33,7 +33,6 @@ init.add(function (next) {
 		form.email = String(req.body.email || '').trim();
 		form.password = String(req.body.password || '').trim();
 		form.profile = String(req.body.profile || '').trim();
-		form.footer = String(req.body.footer || '').trim();
 		return form;
 	}
 
@@ -52,8 +51,7 @@ init.add(function (next) {
 					cdate: now,
 					adate: now,
 					pdate: null,
-					profile: form.profile,
-					footer: form.footer
+					profile: form.profile
 				};
 				if (form.admin) {
 					user.admin = true;
@@ -76,8 +74,7 @@ init.add(function (next) {
 					var fields = {
 						name: form.name,
 						email: form.email,
-						profile: form.profile,
-						footer: form.footer
+						profile: form.profile
 					};
 					if (form.password.length > 0) {
 						fields.hash = makeHash(form.password);
@@ -267,8 +264,7 @@ init.add(function (next) {
 					status: _tuser.status,
 					cdate: _tuser.cdate.getTime(),
 					adate: _tuser.adate.getTime(),
-					profile: _tuser.profile,
-					footer: _tuser.footer
+					profile: _tuser.profile
 				};
 			} else if (user && user._id == _tuser._id) {
 				tuesr = {
@@ -278,8 +274,7 @@ init.add(function (next) {
 					status: _tuser.status,
 					cdate: _tuser.cdate.getTime(),
 					adate: _tuser.adate.getTime(),
-					profile: _tuser.profile,
-					footer: _tuser.footer
+					profile: _tuser.profile
 				};
 			} else {
 				tuesr = {
@@ -289,8 +284,7 @@ init.add(function (next) {
 					status: _tuser.status,
 					cdate: _tuser.cdate.getTime(),
 					//adate: _tuser.adate.getTime(),
-					profile: _tuser.profile,
-					footer: _tuser.footer
+					profile: _tuser.profile
 				};
 			}
 			next(null, tuesr);
@@ -306,8 +300,7 @@ init.add(function (next) {
 					_id: _tuser._id,
 					name: _tuser.name,
 					email: _tuser.email,
-					profile: _tuser.profile,
-					footer: _tuser.footer
+					profile: _tuser.profile
 				});
 			});
 		});

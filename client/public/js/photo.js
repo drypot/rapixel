@@ -7,10 +7,8 @@ init.add(function () {
 		renderPhoto(photo);
 
 		var $comment = $('#comment');
-		var $footer = $('#footer');
 
 		$comment.html(tagUpText($comment.html()));
-		$footer.html(tagUpText($footer.html()));
 
 		$('#update-btn').click(function () {
 			location = '/photos/' + photo._id + '/update';

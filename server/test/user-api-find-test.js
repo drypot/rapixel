@@ -53,7 +53,6 @@ describe("finding user", function () {
 					res.body.user._id.should.equal(_user._id);
 					res.body.user.name.should.equal(_user.name);
 					res.body.user.profile.should.equal('');
-					res.body.user.footer.should.equal('');
 					should(!res.body.user.email);
 					next();
 				});

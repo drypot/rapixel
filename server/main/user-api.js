@@ -12,7 +12,7 @@ init.add(function () {
 
 	app.get('/api/users/:id([0-9]+)', function (req, res) {
 		var id = parseInt(req.params.id) || 0;
-		userl.findUserForView(id, res.locals.user, function (err, tuser) {
+		userl.findUserForView(res.locals.user, id, function (err, tuser) {
 			if (err) return res.jsonErr(err);
 			res.json({
 				user: tuser
