@@ -61,6 +61,11 @@ init.add(function () {
 			$imgLow.height(windowWidth * 9 / 16);
 		});
 
+		$imgHi.click(function () {
+			history.back();
+			return false;
+		});
+
 		$photoHi.append($imgHi);
 		$window.trigger('resize');
 	}
