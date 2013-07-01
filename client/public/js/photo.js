@@ -47,6 +47,11 @@ init.add(function () {
 			src: photo.dir + '/' + photo._id + '-' + ver + '.jpg'
 		});
 
+		$imgHi.click(function () {
+			history.back();
+			return false;
+		});
+
 		var $imgLow = $photoLow.find('img');
 
 		$window.on('resize', function () {
@@ -59,11 +64,6 @@ init.add(function () {
 			}
 			$imgLow.width(windowWidth);
 			$imgLow.height(windowWidth * 9 / 16);
-		});
-
-		$imgHi.click(function () {
-			history.back();
-			return false;
 		});
 
 		$photoHi.append($imgHi);

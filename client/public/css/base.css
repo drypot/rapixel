@@ -110,6 +110,7 @@ body.photo-view .photo-hi {
   z-index: 10;
 }
 body.photo-view .photo-hi img {
+  cursor: pointer;
   max-width: none;
 }
 body.photo-view .photo-info a {
