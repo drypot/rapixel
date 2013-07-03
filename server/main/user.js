@@ -50,7 +50,6 @@ init.add(function (next) {
 					status: 'v',
 					cdate: now,
 					adate: now,
-					pdate: null,
 					profile: form.profile
 				};
 				if (form.admin) {

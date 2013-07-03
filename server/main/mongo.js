@@ -65,10 +65,6 @@ init.add(function (next) {
 		users.update({ _id: id }, { $set: { adate: now } }, next);
 	};
 
-	exports.updateUserPdate = function (id, now, next) {
-		users.update({ _id: id }, { $set: { pdate: now } }, next);
-	};
-
 	exports.updateUserStatus = function (id, status, next) {
 		users.update({ _id: id }, { $set: { status: status } }, next);
 	};

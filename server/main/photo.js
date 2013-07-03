@@ -113,10 +113,6 @@ init.add(function (next) {
 	}
 
 	exports.findHours = function(user, now, next) {
-//		사진을 삭제하고 다시 업하는 경우를 허용하도록 한다.
-//		if (user.pdate && ((Date.now() - user.pdate.getTime()) / (18 * 60 * 60 * 1000) < 1 )) {
-//			return next(error(ecode.PHOTO_CYCLE));
-//		}
 		mongo.findLastPhoto(user._id, function (err, photo) {
 			if (err) return next(err);
 			var hours = 0;
@@ -166,15 +162,12 @@ init.add(function (next) {
 									width: meta.width,
 									height: meta.height,
 									vers: vers,
-									cdate: form.now,
-									comment: form.comment
+									comment: form.comment,
+									cdate: form.now
 								};
 								mongo.insertPhoto(photo, function (err) {
 									if (err) return next(err);
-									mongo.updateUserPdate(user._id, form.now, function (err) {
-										if (err) return next(err);
-										next(null, id);
-									});
+									next(null, id);
 								});
 							});
 						});
