@@ -33,11 +33,6 @@ block content
 					.img
 						a(href='/photos/' + photo._id)
 							img(src=photo.dir + '/' + photo._id + '-640.jpg')
-					//-.info
-						span
-							a(href='/' + encodeURIComponent(tuser.name)) #{tuser.name}
-						//-span hit !{photo.hit}
-						//-span !{photo.cdateStr}
 
 		if locals.ltUrl
 			.section.pager-next

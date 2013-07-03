@@ -9,10 +9,9 @@ block content
 			photol.initPhotoView(!{JSON.stringify(photo)});
 		});
 
-	.photo-low
-		img(src=photo.dir + '/' + photo._id + '-640.jpg')
+	img.low-res(src=photo.dir + '/' + photo._id + '-640.jpg')
 
-	.photo-hi
+	img.hi-res
 
 	.container
 		.section.photo-info

@@ -24,23 +24,21 @@ block content
 		//-.section.update
 				.card
 					| Update: Click photos to go back.
-	.section
-		if locals.gtUrl
-			.section.pager-prev
-				a(href=gtUrl) Previous
+	if locals.gtUrl
+		.section.pager-prev
+			a(href=gtUrl) Previous
 
-		.section.photos
-			for photo in photos
-				.photo
-					.img
-						a(href='/photos/' + photo._id)
-							img(src=photo.dir + '/' + photo._id + '-640.jpg')
-					.info
-						span
-							a(href='/' + encodeURIComponent(photo.user.name)) #{photo.user.name}
-						//-span hit !{photo.hit}
-						//-span !{photo.cdateStr}
-		if locals.ltUrl
-			.section.pager-next
-				a(href=ltUrl) Next
+	.section.photos
+		for photo in photos
+			.photo
+				.img
+					a(href='/photos/' + photo._id)
+						img(src=photo.dir + '/' + photo._id + '-640.jpg')
+				.info
+					span
+						a(href='/' + encodeURIComponent(photo.user.name)) #{photo.user.name}
+
+	if locals.ltUrl
+		.section.pager-next
+			a(href=ltUrl) Next
 

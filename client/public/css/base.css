@@ -91,19 +91,14 @@
 body.photo-view {
   text-align: center;
 }
-body.photo-view .photo-low {
-  margin: 0px;
-}
-body.photo-view .photo-low img {
+body.photo-view img.low-res {
+  cursor: pointer;
   max-width: none;
 }
-body.photo-view .photo-hi {
+body.photo-view img.hi-res {
+  display: block;
   position: absolute;
-  top: 0px;
-  left: 0px;
   z-index: 10;
-}
-body.photo-view .photo-hi img {
   cursor: pointer;
   max-width: none;
 }

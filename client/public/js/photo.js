@@ -29,44 +29,40 @@ init.add(function () {
 	};
 
 	function renderPhoto(photo) {
-		var $photoHi = $('.photo-hi');
-		var $photoLow = $('.photo-low');
-		var screenWidth = screen.width > screen.height ? screen.width : screen.height;
+		var windowWidth = $window.width()
 		if (window.devicePixelRatio > 1) {
-			screenWidth *= 2;
+			windowWidth *= window.devicePixelRatio;
 		}
+
 		var ver;
 		for (var i = 0; i < photo.vers.length; i++) {
 			ver = photo.vers[i]
-			if (photo.vers[i+1] < screenWidth ) {
+			if (ver == 640 || photo.vers[i+1] < windowWidth ) {
 				break;
 			}
 		}
 
-		var $imgHi = $('<img>', {
-			src: photo.dir + '/' + photo._id + '-' + ver + '.jpg'
+		var $imgLow = $('img.low-res');
+		$imgLow.click(function () {
+			history.back();
+			return false;
 		});
 
+		var $imgHi = $('img.hi-res');
+		$imgHi.attr('src', photo.dir + '/' + photo._id + '-' + ver + '.jpg');
 		$imgHi.click(function () {
 			history.back();
 			return false;
 		});
 
-		var $imgLow = $photoLow.find('img');
-
 		$window.on('resize', function () {
-			var windowWidth = $(window).width();
-			var diff = Math.abs(ver - windowWidth) / ver;
-			if (diff > 0.02) {
-				$imgHi.width('100%');
-			} else {
-				$imgHi.width('');
-			}
-			$imgLow.width(windowWidth);
-			$imgLow.height(windowWidth * 9 / 16);
+			var windowWidth = $window.width();
+			var imgWidth = windowWidth + 8 > ver ? ver : windowWidth;
+			$imgHi.width(imgWidth);
+			$imgLow.width(imgWidth);
+			$imgHi.offset({ top: 0, left: (windowWidth - imgWidth) / 2});
 		});
 
-		$photoHi.append($imgHi);
 		$window.trigger('resize');
 	}
 

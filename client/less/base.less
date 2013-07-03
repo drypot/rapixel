@@ -64,7 +64,6 @@ body {
 	margin-top: 20px;
 }
 
-
 .page-footer {
 	margin-bottom: 60px;
 	a {
@@ -126,21 +125,16 @@ body.photo-view {
 
 	text-align: center;
 
-	.photo-low {
-		margin: 0px;
-		img {
-			max-width: none;
-		}
+	img.low-res {
+		cursor: pointer;
+		max-width: none;
 	}
-	.photo-hi {
+	img.hi-res {
+		display: block;
 		position: absolute;
-		top: 0px;
-		left: 0px;
 		z-index: 10;
-		img {
-			cursor:pointer;
-			max-width: none;
-		}
+		cursor:pointer;
+		max-width: none;
 	}
 	.photo-info {
 		margin-top: 3px;
