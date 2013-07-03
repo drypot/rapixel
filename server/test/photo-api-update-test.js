@@ -92,21 +92,6 @@ describe("updating a photo", function () {
 			});
 		});
 	});
-	describe("with two file", function () {
-		it("should fail", function (next) {
-			var form = { files: [
-				{ oname: 'dummy1.jpg', tname: 'xxxxx1' },
-				{ oname: 'dummy2.jpg', tname: 'xxxxx2' }
-			]};
-			express.put('/api/photos/' + _id).send(form).end(function (err, res) {
-				should(!err);
-				should(!res.error);
-				should(res.body.err);
-				should(error.find(res.body.err, ecode.PHOTO_NOT_ONE));
-				next();
-			});
-		});
-	});
 	describe("with small", function () {
 		var _f1 = 'samples/c-169-2560.jpg';
 		before(function (next) {

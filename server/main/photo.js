@@ -135,40 +135,40 @@ init.add(function (next) {
 
 	exports.createPhoto = function(user, form, _next) {
 		var next = upload.tmpDeleter(form.files, _next);
+		if (!form.file) {
+			return next(error(ecode.PHOTO_NO_FILE));
+		}
 		exports.findHours(user, form.now, function (err, hours) {
 			if (err) return next(err);
 			if (hours > 0) {
 				return next(error(ecode.PHOTO_CYCLE));
 			}
-			checkPhotoFile(form, function (err) {
+			checkPhotoMeta(form, function (err, meta) {
 				if (err) return next(err);
-				checkPhotoMeta(form, function (err, meta) {
+				var id = mongo.newPhotoId();
+				var dir = exports.getPhotoDir(id);
+				fs2.makeDirs(dir, function (err) {
 					if (err) return next(err);
-					var id = mongo.newPhotoId();
-					var dir = exports.getPhotoDir(id);
-					fs2.makeDirs(dir, function (err) {
+					var org = exports.getOrginalPath(dir, id, meta.format);
+					fs.rename(form.file.tpath, org, function (err) {
 						if (err) return next(err);
-						var org = exports.getOrginalPath(dir, id, meta.format);
-						fs.rename(form.file.tpath, org, function (err) {
+						exports.makeVersions(org, meta.width, dir, id, function (err, vers) {
 							if (err) return next(err);
-							exports.makeVersions(org, meta.width, dir, id, function (err, vers) {
+							var photo = {
+								_id: id,
+								uid: user._id,
+								hit: 0,
+								fname: form.file.oname,
+								format: meta.format,
+								width: meta.width,
+								height: meta.height,
+								vers: vers,
+								comment: form.comment,
+								cdate: form.now
+							};
+							mongo.insertPhoto(photo, function (err) {
 								if (err) return next(err);
-								var photo = {
-									_id: id,
-									uid: user._id,
-									hit: 0,
-									fname: form.file.oname,
-									format: meta.format,
-									width: meta.width,
-									height: meta.height,
-									vers: vers,
-									comment: form.comment,
-									cdate: form.now
-								};
-								mongo.insertPhoto(photo, function (err) {
-									if (err) return next(err);
-									next(null, id);
-								});
+								next(null, id);
 							});
 						});
 					});
@@ -176,16 +176,6 @@ init.add(function (next) {
 			});
 		});
 	};
-
-	function checkPhotoFile(form, next) {
-		if (!form.file) {
-			return next(error(ecode.PHOTO_NO_FILE));
-		}
-		if (form.files.length > 1) {
-			return next(error(ecode.PHOTO_NOT_ONE));
-		}
-		next();
-	}
 
 	function checkPhotoMeta(form, next) {
 		exports.identify([form.file.tpath], function (err, meta) {
@@ -219,30 +209,27 @@ init.add(function (next) {
 	exports.updatePhoto = function(id, form, _next) {
 		var next = upload.tmpDeleter(form.files, _next);
 		if (form.file) {
-			checkPhotoFile(form, function (err) {
+			checkPhotoMeta(form, function (err, meta) {
 				if (err) return next(err);
-				checkPhotoMeta(form, function (err, meta) {
+				var dir = exports.getPhotoDir(id);
+				fs2.removeDirs(dir, function (err) {
 					if (err) return next(err);
-					var dir = exports.getPhotoDir(id);
-					fs2.removeDirs(dir, function (err) {
+					fs2.makeDirs(dir, function (err) {
 						if (err) return next(err);
-						fs2.makeDirs(dir, function (err) {
+						var org = exports.getOrginalPath(dir, id, meta.format);
+						fs.rename(form.file.tpath, org, function (err) {
 							if (err) return next(err);
-							var org = exports.getOrginalPath(dir, id, meta.format);
-							fs.rename(form.file.tpath, org, function (err) {
+							exports.makeVersions(org, meta.width, dir, id, function (err, vers) {
 								if (err) return next(err);
-								exports.makeVersions(org, meta.width, dir, id, function (err, vers) {
-									if (err) return next(err);
-									var fields = {
-										fname: form.file.oname,
-										format: meta.format,
-										width: meta.width,
-										height: meta.height,
-										vers: vers,
-										comment: form.comment
-									}
-									mongo.updatePhotoFields(id, fields, next);
-								});
+								var fields = {
+									fname: form.file.oname,
+									format: meta.format,
+									width: meta.width,
+									height: meta.height,
+									vers: vers,
+									comment: form.comment
+								}
+								mongo.updatePhotoFields(id, fields, next);
 							});
 						});
 					});
