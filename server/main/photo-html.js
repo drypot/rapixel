@@ -13,21 +13,27 @@ init.add(function () {
 
 	app.get('/photos/:id([0-9]+)', function (req, res) {
 		var id = parseInt(req.params.id) || 0;
-		photol.findPhoto(id, function (err, photo) {
-			if (err) return res.renderErr(err);
-			res.render('photo-view', {
-				photo: photo,
-				photoView: true
+		photol.incHit(id, function (err) {
+			if (err) return res.jsonErr(err);
+			photol.findPhoto(id, function (err, photo) {
+				if (err) return res.renderErr(err);
+				res.render('photo-view', {
+					photo: photo,
+					photoView: true
+				});
 			});
 		});
 	});
 
 	app.get('/photos/:id([0-9]+)/update', function (req, res) {
-		var id = parseInt(req.params.id) || 0;
-		photol.findPhoto(id, function (err, photo) {
+		req.findUser(function (err, user) {
 			if (err) return res.renderErr(err);
-			res.render('photo-update', {
-				photo: photo
+			var id = parseInt(req.params.id) || 0;
+			photol.checkUpdatable(user, id, function (err, photo) {
+				if (err) return res.renderErr(err);
+				res.render('photo-update', {
+					photo: photo
+				});
 			});
 		});
 	});

@@ -202,7 +202,7 @@ init.add(function (next) {
 			if (!user.admin && photo.uid != user._id) {
 				return next(error(ecode.NOT_AUTHORIZED));
 			}
-			next(null);
+			next(null, photo);
 		});
 	}
 
@@ -255,23 +255,24 @@ init.add(function (next) {
 
 	var photoUrl = config.data.uploadUrl + '/photo';
 
+	exports.incHit = function (id, next) {
+		mongo.updatePhotoHit(id, next);
+	}
+
 	exports.findPhoto = function (id, next) {
-		mongo.updatePhotoHit(id, function (err) {
+		mongo.findPhoto(id, function (err, photo) {
 			if (err) return next(err);
-			mongo.findPhoto(id, function (err, photo) {
+			if (!photo) return next(error(ecode.PHOTO_NOT_EXIST));
+			userl.findCachedUser(photo.uid, function (err, user) {
 				if (err) return next(err);
-				if (!photo) return next(error(ecode.PHOTO_NOT_EXIST));
-				userl.findCachedUser(photo.uid, function (err, user) {
-					if (err) return next(err);
-					photo.user = {
-						_id: user._id,
-						name: user.name
-					};
-					photo.dir = fs2.makeDeepPath(photoUrl, photo._id, 3);
-					photo.cdateStr = dt.format(photo.cdate);
-					photo.cdate = photo.cdate.getTime();
-					next(null, photo);
-				});
+				photo.user = {
+					_id: user._id,
+					name: user.name
+				};
+				photo.dir = fs2.makeDeepPath(photoUrl, photo._id, 3);
+				photo.cdateStr = dt.format(photo.cdate);
+				photo.cdate = photo.cdate.getTime();
+				next(null, photo);
 			});
 		});
 	};

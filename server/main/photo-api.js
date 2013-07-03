@@ -10,9 +10,12 @@ init.add(function () {
 
 	app.get('/api/photos/:id([0-9]+)', function (req, res) {
 		var id = parseInt(req.params.id) || 0;
-		photol.findPhoto(id, function (err, photo) {
+		photol.incHit(id, function (err) {
 			if (err) return res.jsonErr(err);
-			res.json(photo);
+			photol.findPhoto(id, function (err, photo) {
+				if (err) return res.jsonErr(err);
+				res.json(photo);
+			});
 		});
 	});
 
