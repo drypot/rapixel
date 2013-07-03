@@ -49,9 +49,12 @@ init.add(function () {
 			if (err) return res.jsonErr(err);
 			var id = parseInt(req.params.id) || 0;
 			var form = photol.makeForm(req);
-			photol.updatePhoto(user, id, form, function (err) {
+			photol.checkUpdatable(user, id, function (err) {
 				if (err) return res.jsonErr(err);
-				res.json({});
+				photol.updatePhoto(id, form, function (err) {
+					if (err) return res.jsonErr(err);
+					res.json({});
+				});
 			});
 		});
 	});
@@ -61,9 +64,12 @@ init.add(function () {
 		req.findUser(function (err, user) {
 			if (err) return res.jsonErr(err);
 			var id = parseInt(req.params.id) || 0;
-			photol.delPhoto(user, id, function (err) {
+			photol.checkUpdatable(user, id, function (err) {
 				if (err) return res.jsonErr(err);
-				res.json({});
+				photol.delPhoto(id, function (err) {
+					if (err) return res.jsonErr(err);
+					res.json({});
+				});
 			});
 		});
 	});
