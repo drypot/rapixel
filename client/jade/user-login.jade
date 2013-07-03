@@ -11,32 +11,33 @@ block content
 
 	.side-space
 		if query.hasOwnProperty('newuser')
-			.page-header
+			.section.page-title
 				h1 Thank you
 
-			p.card
+			.section.card
 				| 회원으로 가입되셨습니다.
 				br
 				| 등록하신 이메일과 비밀번호로 로그인하실 수 있습니다.
 
-		.page-header
+		.section.page-title
 			h1 Login
 
-		form#form
-			.form-row
-				label.control-label Email
-				input.input-with-feedback(name="email", type="text")
-			.form-row
-				label.control-label Password
-				input.input-with-feedback(name="password", type="password")
-			.form-row
-				label Remember
-				input(name="remember", type="checkbox")
-			.btns
+		form#form.section
+			.sub-section
+				.form-row
+					label.control-label Email
+					input.input-with-feedback(name="email", type="text")
+				.form-row
+					label.control-label Password
+					input.input-with-feedback(name="password", type="password")
+				.form-row
+					label Remember
+					input(name="remember", type="checkbox")
+			.sub-section
 				.send-panel
 					button.btn.btn-primary(name='send') Send
 				.sending-panel.hide
 					button.btn.btn-default.disabled(name='sending') Sending
 
-		p.card.link-set
-			a(href='/users/reset-req') Reset Password
+		.section
+			a.btn.btn-success(href='/users/reset-req') Reset Password

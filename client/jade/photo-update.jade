@@ -6,7 +6,7 @@ block title
 block content
 
 	.side-space
-		.page-header
+		.section.page-title
 			h1 Update Photo
 
 		script
@@ -14,19 +14,21 @@ block content
 				photol.initUpdateForm(!{JSON.stringify(photo)});
 			});
 
-		form#form
-			.form-row.file-group
-				.files
-			.form-row
-				label Comment
-				textarea(name='comment', rows=7) #{photo.comment}
-			.btns
+		form#form.section
+			.sub-section
+				.form-row.file-group
+					.files
+			.sub-section
+				.form-row
+					label Comment
+					textarea(name='comment', rows=7) #{photo.comment}
+			.sub-section
 				.send-panel
 					button.btn.btn-primary(name='send') Send
 				.sending-panel.hide
 					button.btn.btn-default.disabled(name='sending') Sending
 
-		p.card
+		.section.card
 			| Image must be larger than 3840x2160 pixels.
 			br
 			| Image will be cropped to 16:9 automatically.

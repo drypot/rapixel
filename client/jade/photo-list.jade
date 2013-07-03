@@ -5,41 +5,42 @@ block title
 
 block content
 
-	.page-header.site-title
+	.section.page-title.site-title
 		h1
 			a(href="/") #{appName}
 		p 4K Images
 
 	if !gtUrl
 		if locals.user
-			p.card.link-set
+			.section.card.link-set
 				a(href="/photos/new") Upload
 				a(href="/users/" + user._id) Profile
 				a#logout-btn(href="/users/logout") Logout
 		else
-			p.card.link-set
+			.section.card.link-set
 				a(href="/users/login") Login
 				a(href="/users/register") Register
 
-		.update
-				p.card
+		//-.section.update
+				.card
 					| Update: Click photos to go back.
-	if locals.gtUrl
-		.pager-prev
-			a(href=gtUrl) Previous
+	.section
+		if locals.gtUrl
+			.section.pager-prev
+				a(href=gtUrl) Previous
 
-	.photos
-		for photo in photos
-			.photo
-				.img
-					a(href='/photos/' + photo._id)
-						img(src=photo.dir + '/' + photo._id + '-640.jpg')
-				.info
-					span
-						a(href='/' + encodeURIComponent(photo.user.name)) #{photo.user.name}
-					//-span hit !{photo.hit}
-					//-span !{photo.cdateStr}
-	if locals.ltUrl
-		.pager-next
-			a(href=ltUrl) Next
+		.section.photos
+			for photo in photos
+				.photo
+					.img
+						a(href='/photos/' + photo._id)
+							img(src=photo.dir + '/' + photo._id + '-640.jpg')
+					.info
+						span
+							a(href='/' + encodeURIComponent(photo.user.name)) #{photo.user.name}
+						//-span hit !{photo.hit}
+						//-span !{photo.cdateStr}
+		if locals.ltUrl
+			.section.pager-next
+				a(href=ltUrl) Next
 

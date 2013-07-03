@@ -15,19 +15,20 @@ block content
 	.photo-hi
 
 	.container
-		.photo-info
-			.name-and
+		.section.photo-info
+			.sub-section
 				span
 					a(href='/' + encodeURIComponent(photo.user.name)) #{photo.user.name}
 				//-span hit !{photo.hit}
 				span !{photo.cdateStr.slice(0,16)}
 				span #{photo.fname}
 
-			#comment.comment !{jade.escape(photo.comment).replace(/\n/g, '<br>')}
+			#comment.sub-section
+				| !{jade.escape(photo.comment).replace(/\n/g, '<br>')}
 
-			.btns
+			.sub-section
 				if locals.user && (photo.user._id == user._id || user.admin)
-					button#update-btn.btn.btn-primary.btn-mini Update
+					button#update-btn.btn.btn-success.btn-mini Update
 					button#del-btn.btn.btn-danger.btn-mini Delete
 					button#del-confirm-btn.btn.btn-danger.btn-mini.hide Yes, Delete
 

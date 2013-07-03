@@ -10,20 +10,20 @@ block content
 		});
 
 	.side-space
-		.page-header
+		.section.page-title
 			h1 Reset Password
 
 		if query.hasOwnProperty('done')
-			p.card
+			.section.card
 				| Check your mailbox.
 		else
-			#form-panel
-				form#form
+			form#form.section
+				.sub-section
 					.form-row
 						label.control-label Email
 						input.input-with-feedback(name="email", type="text")
-					.btns
-						.send-panel
-							button.btn.btn-primary(name='send') Send
-						.sending-panel.hide
-							button.btn.btn-default.disabled(name='sending') Sending
+				.sub-section
+					.send-panel
+						button.btn.btn-primary(name='send') Send
+					.sending-panel.hide
+						button.btn.btn-default.disabled(name='sending') Sending

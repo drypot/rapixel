@@ -13,19 +13,35 @@ body {
 	padding-right: 8px;
 }
 
-.top-space {
-	margin-top: 30px;
+.card {
+	font-size: 18px;
+	//font-weight: 500;
+	line-height: 1.5;
 }
 
-.bottom-space {
-	margin-bottom: 30px;
+.link-set {
+	a {
+		padding-left:10px;
+		padding-right:10px;
+	}
 }
 
-.page-header {
+.btn-mini {
+	padding: 2px 6px;
+	font-size: 14px;
+}
+
+.section {
+	margin-bottom: 50px;
+}
+
+.sub-section {
+	margin-bottom: 35px;
+}
+
+.page-title {
 	margin-top: 60px;
-	margin-bottom: 40px;
-	border: 0px;
-	padding: 0px;
+
 	a {
 		color: inherit;
 	}
@@ -48,9 +64,9 @@ body {
 	margin-top: 20px;
 }
 
+
 .page-footer {
-	margin-top: 55px;
-	margin-bottom: 70px;
+	margin-bottom: 60px;
 	a {
 		color: inherit;
 	}
@@ -70,29 +86,14 @@ body {
 	}
 }
 
-p.card {
-	font-size: 18px;
-	//font-weight: 500;
-	line-height: 1.5;
-}
-
-.link-set {
-	a {
-		padding-left:10px;
-		padding-right:10px;
-	}
-}
-
 .pager-prev {
-	margin-top: 65px;
 	font-size: 18px;
 	line-height: 1;
 }
 
 .photos {
-	margin:65px 0px 65px 0px;
 	.photo {
-		margin-bottom: 45px;
+		margin-bottom: 30px;
 		img {
 			margin-bottom: 2px;
 		}
@@ -116,7 +117,6 @@ p.card {
 }
 
 .pager-next {
-	margin-bottom: 65px;
 	font-size: 18px;
 	line-height: 1;
 }
@@ -128,7 +128,6 @@ body.photo-view {
 
 	.photo-low {
 		margin: 0px;
-		margin-bottom: 8px;
 		img {
 			max-width: none;
 		}
@@ -144,17 +143,13 @@ body.photo-view {
 		}
 	}
 	.photo-info {
+		margin-top: 3px;
+		span {
+			padding-left: 10px;
+			padding-right: 10px;
+		}
 		a {
 			color: inherit;
-		}
-		.name-and {
-			span {
-				padding-left: 10px;
-				padding-right: 10px;
-			}
-		}
-		.comment {
-			margin-top: 26px;
 		}
 	}
 }
@@ -179,7 +174,7 @@ form {
 					height: 0px;
 				}
 				button {
-					width:100%;
+					width:60%;
 				}
 			}
 		}
@@ -204,20 +199,8 @@ form {
 	}
 }
 
-.btn-mini {
-	padding: 2px 6px;
-	font-size: 14px;
-}
-
-.btns {
-	margin-top: 36px;
-	margin-bottom: 36px;
-}
-
 pre.error-report {
 	margin: 0px;
-	margin-top:50px;
-	margin-bottom:60px;
 
 	padding: 0px;
 	padding-top: 5px;
@@ -225,6 +208,7 @@ pre.error-report {
 	border: 0;
 	border-top: 1px solid #eeeeee;
 
+	text-align: left;
 	font-family: monospace;
 	font-size: 14px;
 	background-color: white;

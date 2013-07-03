@@ -6,18 +6,20 @@ block title
 block content
 
 	.side-space
-		.page-header
+		.section.page-title
 			h1 Error
 
-		p.card
-			if err.message
-				| #{err.message}
-			else
-				| Unknown Error
+		.section
+			.sub-section.card
+				if err.message
+					| #{err.message}
+				else
+					| Unknown Error
 
-		pre.error-report
-			if err.rc
-				| #{'Code: ' + err.rc}
-				br
-			if err.stack
-				| !{err.stack.replace(/\n/g, '<br>')}
+			.sub-section
+				pre.error-report
+					if err.rc
+						| #{'Code: ' + err.rc}
+						br
+					if err.stack
+						| !{err.stack.replace(/\n/g, '<br>')}

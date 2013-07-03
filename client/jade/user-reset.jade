@@ -10,14 +10,15 @@ block content
 		});
 
 	.side-space
-		.page-header
+		.section.page-title
 			h1 Password Reset
 
-		form#form
-			.form-row
-				label.control-label Password
-				input.input-with-feedback(name="password", type="password")
-			.btns
+		form#form.section
+			.sub-section
+				.form-row
+					label.control-label Password
+					input.input-with-feedback(name="password", type="password")
+			.sub-section
 				.send-panel
 					button.btn.btn-primary(name='send') Send
 				.sending-panel.hide

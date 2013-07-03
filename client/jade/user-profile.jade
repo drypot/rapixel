@@ -9,24 +9,25 @@ block content
 			userl.initProfile();
 		});
 
-	.page-header
+	.section.page-title
 		h1
 			a(href='/' + encodeURIComponent(tuser.name)) #{tuser.name}
 
-	if !gtUrl
-		p#profile-text.card.profile
-			| !{jade.escape(tuser.profile).replace(/\n/g, "<br>")}
+	.section
+		if !gtUrl
+			#profile-text.sub-section.card
+				| !{jade.escape(tuser.profile).replace(/\n/g, "<br>")}
 
-		if showBtns
-			p.card.link-set.top-space
-				a(href='/users/' + tuser._id + '/update') Update Profile
+			if showBtns
+				.sub-section.card.link-set
+					a(href='/users/' + tuser._id + '/update') Update Profile
 
 	if photos.length
 		if locals.gtUrl
-			.pager-prev
+			.section.pager-prev
 				a(href=gtUrl) Previous
 
-		.photos
+		.section.photos
 			for photo in photos
 				.photo
 					.img
@@ -39,5 +40,5 @@ block content
 						//-span !{photo.cdateStr}
 
 		if locals.ltUrl
-			.pager-next
+			.section.pager-next
 				a(href=ltUrl) Next
