@@ -18,8 +18,8 @@ describe("config with test: true", function () {
 	it("should success", function (next) {
 		config({ reset: true, test: true });
 		init.run(function (err) {
-			should.not.exists(err);
-			config.data.appName.should.equal("Rapixel Test");
+			should(!err);
+			should(config.data.appName);
 			next();
 		});
 	});
@@ -29,8 +29,8 @@ describe("config with valid path", function () {
 	it("should success", function (next) {
 		config({ reset: true, path: 'config/config-test.json' });
 		init.run(function (err) {
-			should.not.exists(err);
-			config.data.appName.should.equal("Rapixel Test");
+			should(!err);
+			should(config.data.appName);
 			next();
 		});
 	});
