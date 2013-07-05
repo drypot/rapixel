@@ -71,7 +71,10 @@ init.add(function () {
 	exports.setLocals = function (req, res, next) {
 		if (req.session.uid) {
 			userl.findCachedUser(req.session.uid, function (err, user) {
-				if (err) return next(err);
+				if (err) {
+					req.session.destroy();
+					return next(err);
+				}
 				res.locals.user = user;
 				next();
 			});
