@@ -182,13 +182,9 @@ init.add(function (next) {
 			if (err) {
 				return next(error(ecode.PHOTO_TYPE))
 			}
-			if (meta.width < 3840 - 15) {
+			if (meta.width < 3840 - 15 || meta.height < 2160 - 15 ) {
 				return next(error(ecode.PHOTO_SIZE));
 			}
-//			var ratio = meta.width / meta.height;
-//			if (ratio < 1.75 || ratio > 1.79) {
-//				return next(error(ecode.PHOTO_RATIO));
-//			}
 			next(null, meta);
 		});
 	}
