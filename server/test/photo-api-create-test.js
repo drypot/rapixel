@@ -97,33 +97,6 @@ describe("uploading small", function () {
 	});
 });
 
-//describe("uploading invalid ratio", function () {
-//	var _f1 = 'samples/c-1610-3840.jpg';
-//	var _files;
-//	describe("given tmp file", function () {
-//		before(function (next) {
-//			express.post('/api/upload').attach('files', _f1).end(function (err, res) {
-//				should(!err);
-//				should(!res.error);
-//				should(!res.body.err);
-//				_files = res.body.files;
-//				next();
-//			});
-//		});
-//		it("should fail", function (next) {
-//			var form = { files: _files };
-//			this.timeout(10000);
-//			express.post('/api/photos').send(form).end(function (err, res) {
-//				should(!err);
-//				should(!res.error);
-//				should(res.body.err);
-//				should(error.find(res.body.err, ecode.PHOTO_RATIO));
-//				next();
-//			});
-//		});
-//	});
-//});
-
 describe("uploading text file", function () {
 	var _f1 = 'server/test/fixture/dummy1.txt';
 	var _files;

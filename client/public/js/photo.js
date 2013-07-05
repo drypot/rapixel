@@ -7,7 +7,6 @@ init.add(function () {
 		renderPhoto(photo);
 
 		var $comment = $('#comment');
-
 		$comment.html(tagUpText($comment.html()));
 
 		$('#update-btn').click(function () {
