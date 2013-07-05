@@ -234,17 +234,11 @@ init.add(function (next) {
 		});
 	};
 
-	exports.findUserByEmailAndCache = function (email, password, next) {
+	exports.findUserByEmailAndCache = function (email, next) {
 		mongo.findUserByEmail(email, function (err, user) {
 			if (err) return next(err);
 			if (!user) {
-				return next(error(ecode.EMAIL_NOT_FOUND));
-			}
-			if (user.status == 'd') {
-				return next(error(ecode.ACCOUNT_DEACTIVATED));
-			}
-			if (!exports.validatePassword(password, user.hash)) {
-				return next(error(ecode.PASSWORD_WRONG));
+				return next();
 			}
 			addCache(user);
 			next(null, user);

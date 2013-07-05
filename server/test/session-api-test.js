@@ -29,6 +29,13 @@ init.add(function () {
 		});
 	});
 
+	app.get('/test/cookies', function (req, res) {
+		res.json({
+			email: req.cookies.email,
+			password: req.cookies.password
+		});
+	});
+
 	app.del('/test/del-session', function (req, res) {
 		req.session.destroy();
 		res.json({});
@@ -80,83 +87,73 @@ describe("login", function () {
 });
 
 describe("accessing user resource", function () {
-	describe("given no session", function () {
-		before(function (next) {
-			ufix.logout(next);
-		});
-		it("should fail", function (next) {
-			express.get('/test/user').end(function (err, res) {
-				should(!err);
-				should(!res.error);
-				should(res.body.err);
-				should(error.find(res.body.err, ecode.NOT_AUTHENTICATED))
-				next();
-			})
-		});
+	it("given no session", function (next) {
+		ufix.logout(next);
 	});
-	describe("given user session", function () {
-		before(function (next) {
-			ufix.loginUser1(next);
-		});
-		it("should success", function (next) {
-			express.get('/test/user').end(function (err, res) {
-				should(!err);
-				should(!res.error);
-				should(!res.body.err);
-				next();
-			})
-		});
+	it("should fail", function (next) {
+		express.get('/test/user').end(function (err, res) {
+			should(!err);
+			should(!res.error);
+			should(res.body.err);
+			should(error.find(res.body.err, ecode.NOT_AUTHENTICATED))
+			next();
+		})
+	});
+	it("given user session", function (next) {
+		ufix.loginUser1(next);
+	});
+	it("should success", function (next) {
+		express.get('/test/user').end(function (err, res) {
+			should(!err);
+			should(!res.error);
+			should(!res.body.err);
+			next();
+		})
 	});
 });
 
 describe("accessing admin resource", function () {
-	describe("given no session", function () {
-		before(function (next) {
-			ufix.logout(next);
-		});
-		it("should fail", function (next) {
-			express.get('/test/admin').end(function (err, res) {
-				should(!err);
-				should(!res.error);
-				should(res.body.err);
-				should(error.find(res.body.err, ecode.NOT_AUTHENTICATED))
-				next();
-			});
+	it("given no session", function (next) {
+		ufix.logout(next);
+	});
+	it("should fail", function (next) {
+		express.get('/test/admin').end(function (err, res) {
+			should(!err);
+			should(!res.error);
+			should(res.body.err);
+			should(error.find(res.body.err, ecode.NOT_AUTHENTICATED))
+			next();
 		});
 	});
-	describe("given user session", function () {
-		before(function (next) {
-			ufix.loginUser1(next);
-		});
-		it("should fail", function (next) {
-			express.get('/test/admin').end(function (err, res) {
-				should(!err);
-				should(!res.error);
-				should(res.body.err);
-				should(error.find(res.body.err, ecode.NOT_AUTHORIZED))
-				next();
-			});
+	it("given user session", function (next) {
+		ufix.loginUser1(next);
+	});
+	it("should fail", function (next) {
+		express.get('/test/admin').end(function (err, res) {
+			should(!err);
+			should(!res.error);
+			should(res.body.err);
+			should(error.find(res.body.err, ecode.NOT_AUTHORIZED))
+			next();
 		});
 	});
-	describe("given admin session", function () {
-		before(function (next) {
-			ufix.loginAdmin(next);
-		});
-		it("should fail", function (next) {
-			express.get('/test/admin').end(function (err, res) {
-				should(!err);
-				should(!res.error);
-				should(!res.body.err);
-				next();
-			})
-		});
+	it("given admin session", function (next) {
+		ufix.loginAdmin(next);
+	});
+	it("should fail", function (next) {
+		express.get('/test/admin').end(function (err, res) {
+			should(!err);
+			should(!res.error);
+			should(!res.body.err);
+			next();
+		})
 	});
 });
 
-describe("accessing /test/user with auto login", function () {
-	describe("given new test session", function () {
-		before(function (next) {
-			express.newTestSession();
+describe("accessing user resouce ", function () {
+	describe("with out auto login", function () {
+		it("given new test session", function (next) {
+			express.resetSuperAgent();
 			next();
 		});
 		it("should fail", function (next) {
@@ -167,9 +164,7 @@ describe("accessing /test/user with auto login", function () {
 				next();
 			});
 		});
-	});
-	describe("given user session", function () {
-		before(function (next) {
+		it("given user session", function (next) {
 			ufix.loginUser1(next);
 		});
 		it("should success", function (next) {
@@ -178,12 +173,28 @@ describe("accessing /test/user with auto login", function () {
 				should(!res.error);
 				should(!res.body.err);
 				next();
-			})
+			});
+		});
+		it("given new session", function (next) {
+			express.del('/test/del-session').end(function (err, res) {
+				should(!err);
+				should(!res.error);
+				should(!res.body.err);
+				next();
+			});
+		});
+		it("should fail", function (next) {
+			express.get('/test/user').end(function (err, res) {
+				should(!err);
+				should(!res.error);
+				should(res.body.err);
+				next();
+			});
 		});
 	});
-	describe("given new test sesssion", function () {
-		before(function (next) {
-			express.newTestSession();
+	describe("with auto login", function () {
+		it("given new test sesssion",function (next) {
+			express.resetSuperAgent();
 			next();
 		});
 		it("should fail", function (next) {
@@ -192,12 +203,10 @@ describe("accessing /test/user with auto login", function () {
 				should(!res.error);
 				should(res.body.err);
 				next();
-			})
+			});
 		});
-	});
-	describe("given user session with auto login", function () {
-		before(function (next) {
-			ufix.loginUser1WithRemember(next)
+		it("given user session with auto login", function (next) {
+			ufix.loginUser1WithRemember(next);
 		});
 		it("should success", function (next) {
 			express.get('/test/user').end(function (err, res) {
@@ -207,9 +216,7 @@ describe("accessing /test/user with auto login", function () {
 				next();
 			});
 		});
-	});
-	describe("given new session", function () {
-		before(function (next) {
+		it("given new session", function (next) {
 			express.del('/test/del-session').end(function (err, res) {
 				should(!err);
 				should(!res.error);
@@ -225,9 +232,7 @@ describe("accessing /test/user with auto login", function () {
 				next();
 			});
 		});
-	});
-	describe("given logged out", function () {
-		before(function (next) {
+		it("given logged out", function (next) {
 			ufix.logout(next);
 		});
 		it("should fail", function (next) {
@@ -237,6 +242,75 @@ describe("accessing /test/user with auto login", function () {
 				should(res.body.err);
 				next();
 			})
+		});
+	});
+	describe("with auto login with invalid email", function () {
+		it("given new test sesssion",function (next) {
+			express.resetSuperAgent();
+			next();
+		});
+		it("should fail", function (next) {
+			express.get('/test/user').end(function (err, res) {
+				should(!err);
+				should(!res.error);
+				should(res.body.err);
+				next();
+			});
+		});
+		it("given user session with auto login", function (next) {
+			ufix.loginUser1WithRemember(next);
+		});
+		it("should success", function (next) {
+			express.get('/test/user').end(function (err, res) {
+				should(!err);
+				should(!res.error);
+				should(!res.body.err);
+				next();
+			});
+		});
+		it("checking email cookie", function (next) {
+			express.get('/test/cookies').end(function (err, res) {
+				should(!err);
+				should(!res.error);
+				should(!res.body.err);
+				res.body.email.should.equal(ufix.user1.email);
+				next();
+			});
+		});
+		it("given email changed", function (next) {
+			var fields = {
+				email: "new@def.com"
+			};
+			mongo.updateUser(ufix.user1._id, fields, function (err, cnt) {
+				should(!err);
+				should(cnt);
+				next();
+			});
+		});
+		it("given new session", function (next) {
+			express.del('/test/del-session').end(function (err, res) {
+				should(!err);
+				should(!res.error);
+				should(!res.body.err);
+				next();
+			});
+		});
+		it("should fail", function (next) {
+			express.get('/test/user').end(function (err, res) {
+				should(!err);
+				should(!res.error);
+				should(res.body.err);
+				next();
+			});
+		});
+		it("checking email cookie is null", function (next) {
+			express.get('/test/cookies').end(function (err, res) {
+				should(!err);
+				should(!res.error);
+				should(!res.body.err);
+				should(!res.body.email);
+				next();
+			});
 		});
 	});
 });

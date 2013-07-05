@@ -29,7 +29,7 @@ init.add(function () {
 		req.findUser(function (err, user) {
 			if (err) return res.renderErr(err);
 			var id = parseInt(req.params.id) || 0;
-			photol.checkUpdatable(user, id, function (err, photo) {
+			photol.checkUpdatable(id, user, function (err, photo) {
 				if (err) return res.renderErr(err);
 				res.render('photo-update', {
 					photo: photo

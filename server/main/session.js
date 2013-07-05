@@ -1,6 +1,8 @@
 var init = require('../main/init');
 var userl = require('../main/user');
 var mongo = require('../main/mongo');
+var error = require('../main/error');
+var ecode = require('../main/ecode');
 
 init.add(function () {
 
@@ -15,21 +17,37 @@ init.add(function () {
 	};
 
 	exports.createSession = function (req, res, form, next) {
-		userl.findUserByEmailAndCache(form.email, form.password, function (err, user) {
+		userl.findUserByEmailAndCache(form.email, function (err, user) {
 			if (err) return next(err);
-			if (form.remember) {
-				res.cookie('email', form.email, {
-					maxAge: 30 * 24 * 60 * 60 * 1000,
-					httpOnly: true
-				});
-				res.cookie('password', form.password, {
-					maxAge: 30 * 24 * 60 * 60 * 1000,
-					httpOnly: true
-				});
-			}
-			createSession(req, user, next);
+			validateUser(user, form.password, function (err) {
+				if (err) return next(err);
+				if (form.remember) {
+					res.cookie('email', form.email, {
+						maxAge: 30 * 24 * 60 * 60 * 1000,
+						httpOnly: true
+					});
+					res.cookie('password', form.password, {
+						maxAge: 30 * 24 * 60 * 60 * 1000,
+						httpOnly: true
+					});
+				}
+				createSession(req, user, next);
+			})
 		});
 	};
+
+	function validateUser(user, password, next) {
+		if (!user) {
+			return next(error(ecode.EMAIL_NOT_FOUND));
+		}
+		if (user.status == 'd') {
+			return next(error(ecode.ACCOUNT_DEACTIVATED));
+		}
+		if (!userl.validatePassword(password, user.hash)) {
+			return next(error(ecode.PASSWORD_WRONG));
+		}
+		next();
+	}
 
 	function createSession(req, user, next) {
 		req.session.regenerate(function (err) {
@@ -67,15 +85,17 @@ init.add(function () {
 		if (!email || !password) {
 			return next();
 		}
-		userl.findUserByEmailAndCache(email, password, function (err, user) {
+		userl.findUserByEmailAndCache(email, function (err, user) {
 			if (err) return next(err);
-			if (!user) {
-				res.clearCookie(email);
-				res.clearCookie(password);
-				return next();
-			}
-			res.locals.user = user;
-			createSession(req, user, next);
+			validateUser(user, password, function (err) {
+				if (err) {
+					res.clearCookie('email');
+					res.clearCookie('password');
+					return next();
+				}
+				res.locals.user = user;
+				createSession(req, user, next);
+			});
 		});
 	};
 

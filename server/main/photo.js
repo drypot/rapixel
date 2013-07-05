@@ -189,7 +189,7 @@ init.add(function (next) {
 		});
 	}
 
-	exports.checkUpdatable = function (user, id, next) {
+	exports.checkUpdatable = function (id, user, next) {
 		mongo.findPhoto(id, function (err, photo) {
 			if (err) return next(err);
 			if (!photo) {

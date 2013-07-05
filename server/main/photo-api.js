@@ -52,7 +52,7 @@ init.add(function () {
 			if (err) return res.jsonErr(err);
 			var id = parseInt(req.params.id) || 0;
 			var form = photol.makeForm(req);
-			photol.checkUpdatable(user, id, function (err) {
+			photol.checkUpdatable(id, user, function (err) {
 				if (err) return res.jsonErr(err);
 				photol.updatePhoto(id, form, function (err) {
 					if (err) return res.jsonErr(err);
@@ -67,7 +67,7 @@ init.add(function () {
 		req.findUser(function (err, user) {
 			if (err) return res.jsonErr(err);
 			var id = parseInt(req.params.id) || 0;
-			photol.checkUpdatable(user, id, function (err) {
+			photol.checkUpdatable(id, user, function (err) {
 				if (err) return res.jsonErr(err);
 				photol.delPhoto(id, function (err) {
 					if (err) return res.jsonErr(err);

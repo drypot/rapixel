@@ -137,8 +137,8 @@ init.add(function () {
 		})(method)
 	}
 
-	exports.newTestSession = function () {
+	exports.resetSuperAgent = function () {
 		request = require('superagent').agent();
-	}
+	};
 
 });
