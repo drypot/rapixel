@@ -36,7 +36,7 @@ init.add(function () {
 	};
 
 	app.get('/users/:id([0-9]+)/update', function (req, res) {
-		req.findUser(function (err, user) {
+		req.checkUser(function (err, user) {
 			if (err) return res.renderErr(err);
 			var id = parseInt(req.params.id) || 0;
 			userl.findUserForUpdate(id, user, function (err, tuser) {
@@ -65,7 +65,7 @@ init.add(function () {
 	});
 
 	app.get('/users/deactivate', function (req, res) {
-		req.findUser(function (err, user) {
+		req.checkUser(function (err, user) {
 			if (err) return res.renderErr(err);
 			res.render('user-deactivate');
 		});

@@ -16,14 +16,14 @@ init.add(function () {
 	var app = express.app;
 
 	app.get('/test/user', function (req, res) {
-		req.findUser(function (err) {
+		req.checkUser(function (err) {
 			if (err) return res.jsonErr(err);
 			res.json({});
 		});
 	});
 
 	app.get('/test/admin', function (req, res) {
-		req.findAdmin(function (err) {
+		req.checkAdmin(function (err) {
 			if (err) return res.jsonErr(err);
 			res.json({});
 		});

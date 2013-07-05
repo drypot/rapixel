@@ -33,7 +33,7 @@ init.add(function () {
 	});
 
 	app.put('/api/users/:id([0-9]+)', function (req, res) {
-		req.findUser(function (err, user) {
+		req.checkUser(function (err, user) {
 			if (err) return res.jsonErr(err);
 			var id = parseInt(req.params.id) || 0;
 			var form = userl.makeForm(req);
@@ -45,7 +45,7 @@ init.add(function () {
 	});
 
 	app.del('/api/users/:id([0-9]+)', function (req, res) {
-		req.findUser(function (err, user) {
+		req.checkUser(function (err, user) {
 			if (err) return res.jsonErr(err);
 			var id = parseInt(req.params.id) || 0;
 			userl.deactivateUser(id, user, function (err) {

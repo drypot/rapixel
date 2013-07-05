@@ -26,7 +26,7 @@ init.add(function () {
 	});
 
 	app.get('/photos/:id([0-9]+)/update', function (req, res) {
-		req.findUser(function (err, user) {
+		req.checkUser(function (err, user) {
 			if (err) return res.renderErr(err);
 			var id = parseInt(req.params.id) || 0;
 			photol.checkUpdatable(id, user, function (err, photo) {
@@ -55,7 +55,7 @@ init.add(function () {
 	});
 
 	app.get('/photos/new', function (req, res) {
-		req.findUser(function (err, user) {
+		req.checkUser(function (err, user) {
 			if (err) return res.renderErr(err);
 			var now = new Date();
 			photol.findHours(user, now, function (err, hours) {

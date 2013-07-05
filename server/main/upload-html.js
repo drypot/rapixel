@@ -9,7 +9,7 @@ init.add(function () {
 	console.log('upload-html:');
 
 	app.post('/upload', function (req, res) {
-		req.findUser(function (err) {
+		req.checkUser(function (err) {
 			if (err) return res.send(JSON.stringify(err));
 			res.send(JSON.stringify(upload.makeFiles(req)));
 		});

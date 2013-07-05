@@ -66,7 +66,7 @@ init.add(function () {
 	// res.locals.api 로 확인할 수 없다.
 	// /upload 같은 경우 html url 이지만 json 을 리턴해야 한다.
 
-	app.request.findUser = function (next) {
+	app.request.checkUser = function (next) {
 		var req = this;
 		var res = this.res;
 		var user = res.locals.user;
@@ -76,7 +76,7 @@ init.add(function () {
 		next(null, user);
 	};
 
-	app.request.findAdmin = function (next) {
+	app.request.checkAdmin = function (next) {
 		var req = this;
 		var res = this.res;
 		var user = res.locals.user;
