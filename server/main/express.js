@@ -46,7 +46,7 @@ init.add(function () {
 	app.use(function (req, res, next) {
 		res.locals.query = req.query;
 		var api = res.locals.api = apiRe.test(req.path);
-		if (api && req.method == 'GET') {
+		if (api) {
 			// solve IE ajax caching problem.
 			res.set('Cache-Control', 'no-cache');
 		} else {
