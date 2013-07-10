@@ -24,7 +24,7 @@ exports = module.exports = function (_opt) {
 		}
 	}
 	if (_opt.test) {
-		_opt.path = 'config/config-test.json';
+		_opt.path = 'config/test.json';
 	}
 	for(var p in _opt) {
 		opt[p] = _opt[p];

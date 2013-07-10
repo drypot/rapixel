@@ -2,7 +2,7 @@
 /.idea/
 /projectFilesBackup/
 /node_modules/
-/config-live/
+/config/live.json
 /tmp/
 /upload/
 /samples/untracked
