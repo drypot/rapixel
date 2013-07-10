@@ -119,21 +119,10 @@ init.add(function (next) {
 			errors.push(ecode.HOME_RANGE);
 		}
 
-		if (!form.email.length) {
-			errors.push(ecode.EMAIL_EMPTY);
-		} else if (form.email.length > 64 || form.email.length < 8) {
-			errors.push(ecode.EMAIL_RANGE);
-		} else if (!l.emailSn.test(form.email)) {
-			errors.push(ecode.EMAIL_PATTERN);
-		}
+		checkFormEmail(form, errors);
 
-		if (creating && !form.password.length) {
-			errors.push(ecode.PASSWORD_EMPTY);
-		}
 		if (creating || form.password.length) {
-			if (form.password.length > 32 || form.password.length < 4) {
-				errors.push(ecode.PASSWORD_RANGE);
-			}
+			checkFormPassword(form, errors);
 		}
 
 		mongo.countUsersByName(form.name, id, function (err, cnt) {
@@ -158,6 +147,24 @@ init.add(function (next) {
 				});
 			});
 		});
+	}
+
+	function checkFormEmail(form, errors) {
+		if (!form.email.length) {
+			errors.push(ecode.EMAIL_EMPTY);
+		} else if (form.email.length > 64 || form.email.length < 8) {
+			errors.push(ecode.EMAIL_RANGE);
+		} else if (!l.emailSn.test(form.email)) {
+			errors.push(ecode.EMAIL_PATTERN);
+		}
+	}
+
+	function checkFormPassword(form, errors) {
+		if (!form.password.length) {
+			errors.push(ecode.PASSWORD_EMPTY);
+		} else if (form.password.length > 32 || form.password.length < 4) {
+			errors.push(ecode.PASSWORD_RANGE);
+		}
 	}
 
 	function checkUpdatable(id, user, next) {
