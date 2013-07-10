@@ -263,7 +263,8 @@ init.add(function (next) {
 				if (err) return next(err);
 				photo.user = {
 					_id: user._id,
-					name: user.name
+					name: user.name,
+					home: user.home
 				};
 				photo.dir = fs2.makeDeepPath(photoUrl, photo._id, 3);
 				photo.cdateStr = dt.format(photo.cdate);
@@ -288,7 +289,8 @@ init.add(function (next) {
 				if (err) return next(err);
 				photo.user = {
 					_id: user._id,
-					name: user.name
+					name: user.name,
+					home: user.home
 				};
 				photo.dir = fs2.makeDeepPath(photoUrl, photo._id, 3);
 				photo.cdateStr = dt.format(photo.cdate);

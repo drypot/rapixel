@@ -26,372 +26,486 @@ before(function (next) {
 	ufix.createFixtures(next);
 });
 
-describe("updating and permission", function () {
-	describe("given new user", function () {
-		var _user = { name: 'testauth', email: 'testauth@def.com', password: '1234' };
-		before(function (next) {
-			express.post('/api/users').send(_user).end(function (err,res) {
-				should(!res.error);
-				should(!res.body.err);
-				_user._id = res.body.user._id;
-				next();
-			});
+describe("updating user / permission", function () {
+	var _user = { name: 'testauth', email: 'testauth@def.com', password: '1234' };
+	it("given new user", function (next) {
+		express.post('/api/users').send(_user).end(function (err,res) {
+			should(!res.error);
+			should(!res.body.err);
+			_user._id = res.body.user._id;
+			next();
 		});
-		before(function (next) {
-			var form = { email: _user.email, password: _user.password };
-			express.post('/api/sessions').send(form).end(function (err, res) {
-				should(!res.error);
-				should(!res.body.err);
-				next();
-			});
+	});
+	it("given new user login", function (next) {
+		var form = { email: _user.email, password: _user.password };
+		express.post('/api/sessions').send(form).end(function (err, res) {
+			should(!res.error);
+			should(!res.body.err);
+			next();
 		});
-		describe("updating own profile", function () {
-			it("should success", function (next) {
-				var form = { name: 'testauth2', email: 'testauth2@def.com' };
-				express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-					should(!res.error);
-					should(!res.body.err);
-					next();
-				});
-			});
+	});
+	it("should success updating own profile", function (next) {
+		var form = { name: 'testauth2', home: 'testauth', email: 'testauth2@def.com' };
+		express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
+			should(!res.error);
+			should(!res.body.err);
+			next();
 		});
-		describe("updating other's profile", function () {
-			before(function (next) {
-				ufix.loginUser1(next);
-			});
-			it("should fail", function (next) {
-				var form = { name: 'testauth2', email: 'testauth2@def.com' };
-				express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-					should(!res.error);
-					should(res.body.err);
-					should(error.find(res.body.err, ecode.NOT_AUTHORIZED));
-					next();
-				});
-			});
+	});
+	it("given user1 login", function (next) {
+		ufix.loginUser1(next);
+	});
+	it("should fail updating new user's profile", function (next) {
+		var form = { name: 'testauth2', home: 'testauth', email: 'testauth2@def.com' };
+		express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
+			should(!res.error);
+			should(res.body.err);
+			should(error.find(res.body.err, ecode.NOT_AUTHORIZED));
+			next();
 		});
-		describe("updating by admin", function () {
-			before(function (next) {
-				ufix.loginAdmin(next);
-			});
-			it("should success", function (next) {
-				var form = { name: 'testauth2', email: 'testauth2@def.com' };
-				express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-					should(!res.error);
-					should(!res.body.err);
-					next();
-				});
-			});
-			it("should fail for invalid id", function (next) {
-				var form = { name: 'testauth3', email: 'testauth3@def.com' };
-				express.put('/api/users/' + 999).send(form).end(function (err,res) {
-					should(!res.error);
-					should(error.find(res.body.err, ecode.USER_NOT_FOUND));
-					next();
-				});
-			});
+	});
+	it("given admin login", function (next) {
+		ufix.loginAdmin(next);
+	});
+	it("should success updating anybody", function (next) {
+		var form = { name: 'testauth2', home: 'testauth', email: 'testauth2@def.com' };
+		express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
+			should(!res.error);
+			should(!res.body.err);
+			next();
+		});
+	});
+	it("should fail for invalid id", function (next) {
+		var form = { name: 'testauth3', home: 'testauth3', email: 'testauth3@def.com' };
+		express.put('/api/users/' + 999).send(form).end(function (err,res) {
+			should(!res.error);
+			should(error.find(res.body.err, ecode.USER_NOT_FOUND));
+			next();
 		});
 	});
 });
 
-describe("updating and cache", function () {
-	describe("given new user", function () {
-		var _user = { name: 'testcache', email: 'testcache@def.com', password: '1234' };
-		before(function (next) {
-			express.post('/api/users').send(_user).end(function (err,res) {
-				should(!res.error);
-				should(!res.body.err);
-				_user._id = res.body.user._id;
-				next();
-			});
+describe("updating user / name", function () {
+	var _user = { name: 'testname', email: 'testname@def.com', password: '1234' };
+	it("given new user", function (next) {
+		express.post('/api/users').send(_user).end(function (err,res) {
+			should(!res.error);
+			should(!res.body.err);
+			_user._id = res.body.user._id;
+			next();
 		});
-		before(function (next) {
-			var form = { email: _user.email, password: _user.password };
-			express.post('/api/sessions').send(form).end(function (err, res) {
-				should(!res.error);
-				should(!res.body.err);
-				next();
-			});
+	});
+	it("given login", function (next) {
+		var form = { email: _user.email, password: _user.password };
+		express.post('/api/sessions').send(form).end(function (err, res) {
+			should(!res.error);
+			should(!res.body.err);
+			next();
 		});
-		describe("checking cache before update", function () {
-			it("should success", function (next) {
-				userl.findCachedUser(_user._id, function (err, user) {
-					should(!err);
-					user.name.should.equal('testcache');
-					user.email.should.equal('testcache@def.com');
-					next();
-				});
-			});
+	});
+	it("should success", function (next) {
+		var form = { name: 'testname2', home: 'testname', email: 'testname@def.com', password: '1234' };
+		express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
+			should(!res.error);
+			should(!res.body.err);
+			next();
 		});
-		describe("checking cache after update", function () {
-			before(function (next) {
-				var form = { name: 'testcache2', email: 'testcache2@def.com' };
-				express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-					should(!res.error);
-					should(!res.body.err);
-					next();
-				});
-			});
-			it("should success", function (next) {
-				userl.findCachedUser(_user._id, function (err, user) {
-					should(!err);
-					user.name.should.equal('testcache2');
-					user.email.should.equal('testcache2@def.com');
-					next();
-				});
-			});
+	});
+	it("check by reading", function (next) {
+		mongo.findUser(_user._id, function (err, user) {
+			should(!err);
+			should(user);
+			user.name.should.equal('testname2');
+			next();
+		});
+	});
+	it("should fail when already exists", function (next) {
+		var form = { name: ufix.user1.name, home: 'testname', email: 'testname@def.com', password: '1234' };
+		express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
+			should(!res.error);
+			should(error.find(res.body.err, ecode.NAME_DUPE));
+			next();
+		});
+	});
+	it("should fail when name empty", function (next) {
+		var form = { name: '', home: 'testname', email: 'testname@def.com', password: '1234' };
+		express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
+			should(!res.error);
+			should(error.find(res.body.err, ecode.NAME_EMPTY));
+			next();
+		});
+	});
+	it("should fail when name short", function (next) {
+		var form = { name: 'u', home: 'testname', email: 'testname@def.com', password: '1234' };
+		express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
+			should(!res.error);
+			should(error.find(res.body.err, ecode.NAME_RANGE));
+			next();
+
+		});
+	});
+	it("should success when name length 2", function (next) {
+		var form = { name: 'uu', home: 'testname', email: 'testname@def.com', password: '1234' };
+		express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
+			should(!res.error);
+			should(!res.body.err);
+			next();
+		});
+	});
+	it("should fail when name long", function (next) {
+		var form = { name: '123456789012345678901234567890123', home: 'testname', email: 'testname@def.com', password: '1234' };
+		express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
+			should(!res.error);
+			should(error.find(res.body.err, ecode.NAME_RANGE));
+			next();
+		});
+	});
+	it("should success when name length 32", function (next) {
+		var form = { name: '12345678901234567890123456789012', home: 'testname', email: 'testname@def.com', password: '1234' };
+		express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
+			should(!res.error);
+			should(!res.body.err);
+			next();
 		});
 	});
 });
 
-describe("updating user name", function () {
-	describe("given new user", function () {
-		var _user = { name: 'testname', email: 'testname@def.com', password: '1234' };
-		before(function (next) {
-			express.post('/api/users').send(_user).end(function (err,res) {
-				should(!res.error);
-				should(!res.body.err);
-				_user._id = res.body.user._id;
-				next();
-			});
+describe("updating user / home", function () {
+	var _user = { name: 'testhome', email: 'testhome@def.com', password: '1234' };
+	var _user2 = { name: 'testtown', email: 'testtown@def.com', password: '5678' };
+	it("given new user", function (next) {
+		express.post('/api/users').send(_user).end(function (err,res) {
+			should(!res.error);
+			should(!res.body.err);
+			_user._id = res.body.user._id;
+			next();
 		});
-		before(function (next) {
-			var form = { email: _user.email, password: _user.password };
-			express.post('/api/sessions').send(form).end(function (err, res) {
-				should(!res.error);
-				should(!res.body.err);
-				next();
-			});
+	});
+	it("given another user", function (next) {
+		express.post('/api/users').send(_user2).end(function (err,res) {
+			should(!res.error);
+			should(!res.body.err);
+			_user2._id = res.body.user._id;
+			next();
 		});
-		it("should fail when already exists", function (next) {
-			var form = { name: ufix.user1.name, email: 'testname@def.com', password: '1234' };
-			express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-				should(!res.error);
-				should(error.find(res.body.err, ecode.NAME_DUPE));
-				next();
-			});
+	});
+	it("given another user login", function (next) {
+		var form = { email: _user2.email, password: _user2.password };
+		express.post('/api/sessions').send(form).end(function (err, res) {
+			should(!res.error);
+			should(!res.body.err);
+			next();
 		});
-		it("should fail when name empty", function (next) {
-			var form = { name: '', email: 'testname@def.com', password: '1234' };
-			express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-				should(!res.error);
-				should(error.find(res.body.err, ecode.NAME_EMPTY));
-				next();
-			});
+	});
+	it("given another user name changed", function (next) {
+		var form = { name: 'testcity', home: 'testtown', email: 'testtown@def.com', password: '5678' };
+		express.put('/api/users/' + _user2._id).send(form).end(function (err,res) {
+			should(!res.error);
+			should(!res.body.err);
+			next();
 		});
-		it("should fail when name short", function (next) {
-			var form = { name: 'u', email: 'testname@def.com', password: '1234' };
-			express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-				should(!res.error);
-				should(error.find(res.body.err, ecode.NAME_RANGE));
-				next();
+	});
+	it("check by reading", function (next) {
+		mongo.findUser(_user2._id, function (err, user) {
+			should(!err);
+			should(user);
+			user.name.should.equal('testcity');
+			user.home.should.equal('testtown');
+			next();
+		});
+	});
+	it("given login", function (next) {
+		var form = { email: _user.email, password: _user.password };
+		express.post('/api/sessions').send(form).end(function (err, res) {
+			should(!res.error);
+			should(!res.body.err);
+			next();
+		});
+	});
+	it("should success", function (next) {
+		var form = { name: 'testhome', home: 'testhome2', email: 'testhome@def.com', password: '1234' };
+		express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
+			should(!res.error);
+			should(!res.body.err);
+			next();
+		});
+	});
+	it("check by reading", function (next) {
+		mongo.findUser(_user._id, function (err, user) {
+			should(!err);
+			should(user);
+			user.home.should.equal('testhome2');
+			next();
+		});
+	});
+	it("should fail when new home already exists in home", function (next) {
+		var form = { name: 'testhome', home: 'testtown', email: 'testhome@def.com', password: '1234' };
+		express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
+			should(!res.error);
+			should(error.find(res.body.err, ecode.HOME_DUPE));
+			next();
+		});
+	});
+	it("should fail when new home already exists in name", function (next) {
+		var form = { name: 'testhome', home: 'testcity', email: 'testhome@def.com', password: '1234' };
+		express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
+			should(!res.error);
+			should(error.find(res.body.err, ecode.HOME_DUPE));
+			next();
+		});
+	});
+	it("should fail when home empty", function (next) {
+		var form = { name: 'testhome', home: '', email: 'testhome@def.com', password: '1234' };
+		express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
+			should(!res.error);
+			should(error.find(res.body.err, ecode.HOME_EMPTY));
+			next();
+		});
+	});
+	it("should fail when home short", function (next) {
+		var form = { name: 'testhome', home: 'h', email: 'testhome@def.com', password: '1234' };
+		express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
+			should(!res.error);
+			should(error.find(res.body.err, ecode.HOME_RANGE));
+			next();
 
-			});
 		});
-		it("should success when name length 2", function (next) {
-			var form = { name: 'uu', email: 'testname@def.com', password: '1234' };
-			express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-				should(!res.error);
-				should(!res.body.err);
-				next();
-			});
+	});
+	it("should success when home length 2", function (next) {
+		var form = { name: 'testhome', home: 'hh', email: 'testhome@def.com', password: '1234' };
+		express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
+			should(!res.error);
+			should(!res.body.err);
+			next();
 		});
-		it("should fail when name long", function (next) {
-			var form = { name: '123456789012345678901234567890123', email: 'testname@def.com', password: '1234' };
-			express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-				should(!res.error);
-				should(error.find(res.body.err, ecode.NAME_RANGE));
-				next();
-			});
+	});
+	it("should fail when home long", function (next) {
+		var form = { name: 'testhome', home: '123456789012345678901234567890123', email: 'testhome@def.com', password: '1234' };
+		express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
+			should(!res.error);
+			should(error.find(res.body.err, ecode.HOME_RANGE));
+			next();
 		});
-		it("should success when name length 32", function (next) {
-			var form = { name: '12345678901234567890123456789012', email: 'testname@def.com', password: '1234' };
-			express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-				should(!res.error);
-				should(!res.body.err);
-				next();
-			});
-		});
-		describe("check by reading", function () {
-			it("should success", function (next) {
-				mongo.findUser(_user._id, function (err, user) {
-					should(!err);
-					should(user);
-					user.name.should.equal('12345678901234567890123456789012');
-					next();
-				});
-			});
+	});
+	it("should success when home length 32", function (next) {
+		var form = { name: 'testhome', home: '1234567890123456789012345678901H', email: 'testhome@def.com', password: '1234' };
+		express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
+			should(!res.error);
+			should(!res.body.err);
+			next();
 		});
 	});
 });
 
-describe("updating user email", function () {
-	describe("given new user", function () {
-		var _user = { name: 'testemail', email: 'testemail@def.com', password: '1234' };
-		before(function (next) {
-			express.post('/api/users').send(_user).end(function (err,res) {
-				should(!err);
-				should(!res.error);
-				should(!res.body.err);
-				_user._id = res.body.user._id;
-				next();
-			});
+describe("updating user / email", function () {
+	var _user = { name: 'testemail', email: 'testemail@def.com', password: '1234' };
+	it("given new user", function (next) {
+		express.post('/api/users').send(_user).end(function (err,res) {
+			should(!err);
+			should(!res.error);
+			should(!res.body.err);
+			_user._id = res.body.user._id;
+			next();
 		});
-		before(function (next) {
-			var form = { email: _user.email, password: _user.password };
-			express.post('/api/sessions').send(form).end(function (err, res) {
-				should(!err);
-				should(!res.error);
-				should(!res.body.err);
-				next();
-			});
+	});
+	it("given login", function (next) {
+		var form = { email: _user.email, password: _user.password };
+		express.post('/api/sessions').send(form).end(function (err, res) {
+			should(!err);
+			should(!res.error);
+			should(!res.body.err);
+			next();
 		});
-		it("should fail when already exists", function (next) {
-			var form = { name: 'testemail', email: ufix.user1.email, password: '1234' };
-			express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-				should(!res.error);
-				should(error.find(res.body.err, ecode.EMAIL_DUPE));
-				next();
-			});
+	});
+	it("should success", function (next) {
+		var form = { name: 'testemail', home: 'testmail', email: 'testemail2@def.com', password: '1234' };
+		express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
+			should(!res.error);
+			should(!res.body.err);
+			next();
 		});
-		it("should fail when email invalid", function (next) {
-			var form = { name: 'testemail', email: 'abc.def.com', password: '1234' };
-			express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-				should(!res.error);
-				should(error.find(res.body.err, ecode.EMAIL_PATTERN));
-				next();
-			});
+	});
+	it("check by reading", function (next) {
+		mongo.findUser(_user._id, function (err, user) {
+			should(!err);
+			should(user);
+			user.email.should.equal('testemail2@def.com');
+			next();
 		});
-		it("should success", function (next) {
-			var form = { name: 'testemail', email: 'testemail2@def.com', password: '1234' };
-			express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-				should(!res.error);
-				should(!res.body.err);
-				next();
-			});
+	});
+	it("should fail when already exists", function (next) {
+		var form = { name: 'testemail', home: 'testmail', email: ufix.user1.email, password: '1234' };
+		express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
+			should(!res.error);
+			should(error.find(res.body.err, ecode.EMAIL_DUPE));
+			next();
 		});
-		describe("check by reading", function () {
-			it("should success", function (next) {
-				mongo.findUser(_user._id, function (err, user) {
-					should(!err);
-					should(user);
-					user.email.should.equal('testemail2@def.com');
-					next();
-				});
-			});
+	});
+	it("should fail when email invalid", function (next) {
+		var form = { name: 'testemail', home: 'testmail', email: 'abc.def.com', password: '1234' };
+		express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
+			should(!res.error);
+			should(error.find(res.body.err, ecode.EMAIL_PATTERN));
+			next();
 		});
 	});
 });
 
-describe("updating user password", function () {
-	describe("given new user", function () {
-		var _user = { name: 'testpw', email: 'testpw@def.com', password: '1234' };
-		before(function (next) {
-			express.post('/api/users').send(_user).end(function (err,res) {
-				should(!res.error);
-				should(!res.body.err);
-				_user._id = res.body.user._id;
-				next();
-			});
+describe("updating user / password", function () {
+	var _user = { name: 'testpw', email: 'testpw@def.com', password: '1234' };
+	it("given new user", function (next) {
+		express.post('/api/users').send(_user).end(function (err,res) {
+			should(!res.error);
+			should(!res.body.err);
+			_user._id = res.body.user._id;
+			next();
 		});
-		before(function (next) {
-			var form = { email: _user.email, password: _user.password };
-			express.post('/api/sessions').send(form).end(function (err, res) {
-				should(!res.error);
-				should(!res.body.err);
-				next();
-			});
+	});
+	it("given login", function (next) {
+		var form = { email: _user.email, password: _user.password };
+		express.post('/api/sessions').send(form).end(function (err, res) {
+			should(!res.error);
+			should(!res.body.err);
+			next();
 		});
-		it("should fail when password short", function (next) {
-			var form = { name: 'testpw', email: 'testpw@def.com', password: '123' };
-			express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-				should(!res.error);
-				should(error.find(res.body.err, ecode.PASSWORD_RANGE));
-				next();
-			});
+	});
+	it("should success", function (next) {
+		var form = { name: 'testpw', home: 'testpw', email: 'testpw@def.com', password: '5678' };
+		express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
+			should(!res.error);
+			should(!res.body.err);
+			next();
 		});
-		it("should fail when password long", function (next) {
-			var form = { name: 'testpw', email: 'testpw@def.com', password: '123456789012345678901234567890123' };
-			express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-				should(!res.error);
-				should(error.find(res.body.err, ecode.PASSWORD_RANGE));
-				next();
-			});
+	});
+	it("check by reading", function (next) {
+		mongo.findUser(_user._id, function (err, user) {
+			should(!err);
+			should(user);
+			bcrypt.compareSync('5678', user.hash).should.true;
+			next();
 		});
-		it("should success when password 32", function (next) {
-			var form = { name: 'testpw', email: 'testpw@def.com', password: '12345678901234567890123456789012' };
-			express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-				should(!res.error);
-				should(!res.body.err);
-				next();
-			});
+	});
+	it("should success when password emtpy", function (next) {
+		var form = { name: 'testpw', home: 'testpw', email: 'testpw@def.com' };
+		express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
+			should(!res.error);
+			should(!res.body.err);
+			next();
 		});
-		describe("check by reading", function () {
-			it("should success", function (next) {
-				mongo.findUser(_user._id, function (err, user) {
-					should(!err);
-					should(user);
-					bcrypt.compareSync('12345678901234567890123456789012', user.hash).should.true;
-					next();
-				});
-			});
+	});
+	it("check by reading", function (next) {
+		mongo.findUser(_user._id, function (err, user) {
+			should(!err);
+			should(user);
+			bcrypt.compareSync('5678', user.hash).should.true;
+			next();
 		});
-		it("should success when password emtpy", function (next) {
-			var form = { name: 'testpw', email: 'testpw@def.com' };
-			express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-				should(!res.error);
-				should(!res.body.err);
-				next();
-			});
+	});
+	it("should fail when password short", function (next) {
+		var form = { name: 'testpw', home: 'testpw', email: 'testpw@def.com', password: '123' };
+		express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
+			should(!res.error);
+			should(error.find(res.body.err, ecode.PASSWORD_RANGE));
+			next();
 		});
-		describe("check by reading", function () {
-			it("should success", function (next) {
-				mongo.findUser(_user._id, function (err, user) {
-					should(!err);
-					should(user);
-					bcrypt.compareSync('12345678901234567890123456789012', user.hash).should.true;
-					next();
-				});
-			});
+	});
+	it("should fail when password long", function (next) {
+		var form = { name: 'testpw', home: 'testpw', email: 'testpw@def.com', password: '123456789012345678901234567890123' };
+		express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
+			should(!res.error);
+			should(error.find(res.body.err, ecode.PASSWORD_RANGE));
+			next();
+		});
+	});
+	it("should success when password 32", function (next) {
+		var form = { name: 'testpw', home: 'testpw', email: 'testpw@def.com', password: '12345678901234567890123456789012' };
+		express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
+			should(!res.error);
+			should(!res.body.err);
+			next();
 		});
 	});
 });
 
-describe("updating user profile", function () {
-	describe("given new user", function () {
-		var _user = { name: 'testprofile', email: 'testprofile@def.com', password: '1234', profile: 'profile' };
-		before(function (next) {
-			express.post('/api/users').send(_user).end(function (err,res) {
-				should(!res.error);
-				should(!res.body.err);
-				_user._id = res.body.user._id;
-				next();
-			});
+describe("updating user / profile", function () {
+	var _user = { name: 'testprofile', email: 'testprofile@def.com', password: '1234', profile: 'profile' };
+	it("given new user", function (next) {
+		express.post('/api/users').send(_user).end(function (err,res) {
+			should(!res.error);
+			should(!res.body.err);
+			_user._id = res.body.user._id;
+			next();
 		});
-		before(function (next) {
-			var form = { email: _user.email, password: _user.password };
-			express.post('/api/sessions').send(form).end(function (err, res) {
-				should(!res.error);
-				should(!res.body.err);
-				next();
-			});
+	});
+	it("given login", function (next) {
+		var form = { email: _user.email, password: _user.password };
+		express.post('/api/sessions').send(form).end(function (err, res) {
+			should(!res.error);
+			should(!res.body.err);
+			next();
 		});
-		it("should success", function (next) {
-			var form = { name: 'testprofile', email: 'testprofile@def.com', profile: 'profile2' };
-			express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-				should(!res.error);
-				should(!res.body.err);
-				next();
-			});
+	});
+	it("should success", function (next) {
+		var form = { name: 'testprofile', home: 'testprofile', email: 'testprofile@def.com', profile: 'profile2' };
+		express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
+			should(!res.error);
+			should(!res.body.err);
+			next();
 		});
-		describe("check by reading", function () {
-			it("should success", function (next) {
-				mongo.findUser(_user._id, function (err, user) {
-					should(!err);
-					should(user);
-					user.profile.should.equal('profile2');
-					next();
-				});
-			});
+	});
+	it("check by reading", function (next) {
+		mongo.findUser(_user._id, function (err, user) {
+			should(!err);
+			should(user);
+			user.profile.should.equal('profile2');
+			next();
 		});
 	});
 });
+
+describe("updating user / cache", function () {
+	var _user = { name: 'testcache', email: 'testcache@def.com', password: '1234' };
+	it("given new user", function (next) {
+		express.post('/api/users').send(_user).end(function (err,res) {
+			should(!res.error);
+			should(!res.body.err);
+			_user._id = res.body.user._id;
+			next();
+		});
+	});
+	it("given login", function (next) {
+		var form = { email: _user.email, password: _user.password };
+		express.post('/api/sessions').send(form).end(function (err, res) {
+			should(!res.error);
+			should(!res.body.err);
+			next();
+		});
+	});
+	it("check cache before update", function (next) {
+		userl.findCachedUser(_user._id, function (err, user) {
+			should(!err);
+			user.name.should.equal('testcache');
+			user.home.should.equal('testcache');
+			user.email.should.equal('testcache@def.com');
+			next();
+		});
+	});
+	it("should success", function (next) {
+		var form = { name: 'testcache2', home: 'home2', email: 'testcache2@def.com' };
+		express.put('/api/users/' + _user._id).send(form).end(function (err,res) {
+			should(!res.error);
+			should(!res.body.err);
+			next();
+		});
+	});
+	it("check cache after update", function (next) {
+		userl.findCachedUser(_user._id, function (err, user) {
+			should(!err);
+			user.name.should.equal('testcache2');
+			user.home.should.equal('home2');
+			user.email.should.equal('testcache2@def.com');
+			next();
+		});
+	});
+});
+

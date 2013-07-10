@@ -31,6 +31,10 @@ module.exports = {
 	NAME_RANGE: mkf('name', '이름 길이는 2 ~ 32 글자입니다.'),
 	NAME_DUPE: mkf('name', '이미 등록되어 있는 이름입니다.'),
 
+	HOME_EMPTY: mkf('home', '개인 주소를 입력해 주십시오.'),
+	HOME_RANGE: mkf('home', '개인 주소 길이는 2 ~ 32 글자입니다.'),
+	HOME_DUPE: mkf('home', '이미 등록되어 있는 개인 주소입니다.'),
+
 	EMAIL_EMPTY: mkf('email', '이메일 주소를 입력해 주십시오.'),
 	EMAIL_RANGE: mkf('email', '이메일 주소 길이는 8 ~ 64 글자입니다.'),
 	EMAIL_PATTERN: mkf('email', '이메일 형식이 잘못되었습니다.'),

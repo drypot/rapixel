@@ -70,6 +70,7 @@ init.add(function () {
 	userl.initUpdateProfileForm = function () {
 		var $form = formty.getForm('#form');
 		var uid = url.pathnames[1];
+		$('#domain-url').text(location.origin + '/');
 		$form.$send.click(function () {
 			formty.put('/api/users/' + uid, $form, function (err, res) {
 				location = '/users/' + uid;

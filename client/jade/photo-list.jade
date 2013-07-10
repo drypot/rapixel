@@ -21,9 +21,10 @@ block content
 				a(href="/users/login") Login
 				a(href="/users/register") Register
 
-		//-.section.update
-				.card
-					| Update: Click photos to go back.
+		.section.update
+			.card
+				| Update: Can change user address at profile.
+	
 	if locals.gtUrl
 		.section.pager-prev
 			a(href=gtUrl) Previous
@@ -36,7 +37,7 @@ block content
 						img(src=photo.dir + '/' + photo._id + '-640.jpg')
 				.info
 					span
-						a(href='/' + encodeURIComponent(photo.user.name)) #{photo.user.name}
+						a(href='/' + encodeURIComponent(photo.user.home)) #{photo.user.name}
 
 	if locals.ltUrl
 		.section.pager-next

@@ -11,7 +11,7 @@ init.add(function () {
 
 	app.get('/:name([^/]+)', function (req, res, next) {
 		var name = decodeURIComponent(req.params.name);
-		userl.findCachedUserByName(name, function (err, user) {
+		userl.findCachedUserByHome(name, function (err, user) {
 			if (user) {
 				return userHtml.renderProfile(req, res, user._id);
 			}

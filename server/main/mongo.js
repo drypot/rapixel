@@ -57,8 +57,33 @@ init.add(function (next) {
 		users.findOne({ name: name }, next);
 	};
 
+	exports.findUserByHome = function (home, next) {
+		users.findOne({ home: home }, next);
+	};
+
 	exports.findUserByEmail = function (email, next) {
 		users.findOne({ email: email }, next);
+	};
+
+	exports.countUsersByName = function (name, exid, next) {
+		var q = { $or: [
+			{ name: name, _id : { $ne: exid } },
+			{ home: name, _id : { $ne: exid } }
+		]};
+		users.count(q, next);
+	};
+
+	exports.countUsersByHome = function (name, exid, next) {
+		// countUserByName 과 평션정의가 같은 것은 의도된 것
+		var q = { $or: [
+			{ name: name, _id : { $ne: exid } },
+			{ home: name, _id : { $ne: exid } }
+		]};
+		users.count(q, next);
+	};
+
+	exports.countUsersByEmail = function (email, exid, next) {
+		users.count({ email: email, _id: { $ne: exid } }, next);
 	};
 
 	exports.updateUserAdate = function (id, now, next) {
@@ -86,16 +111,19 @@ init.add(function (next) {
 		if (err) return next(err);
 		users.ensureIndex({ name: 1 }, function (err) {
 			if (err) return next(err);
-			var opt = {
-				fields: { _id: 1 },
-				sort: { _id: -1 },
-				limit: 1
-			}
-			users.find({}, opt).nextObject(function (err, obj) {
+			users.ensureIndex({ home: 1 }, function (err) {
 				if (err) return next(err);
-				userIdSeed = obj ? obj._id : 0;
-				console.log('mongo: user id seed = ' + userIdSeed);
-				next();
+				var opt = {
+					fields: { _id: 1 },
+					sort: { _id: -1 },
+					limit: 1
+				}
+				users.find({}, opt).nextObject(function (err, obj) {
+					if (err) return next(err);
+					userIdSeed = obj ? obj._id : 0;
+					console.log('mongo: user id seed = ' + userIdSeed);
+					next();
+				});
 			});
 		});
 	});

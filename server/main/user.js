@@ -12,24 +12,25 @@ var ecode = require('../main/ecode');
 init.add(function (next) {
 
 	var users = [];
-	var usersByName = {};
+	var usersByHome = {};
 
 	function deleteCache(id) {
 		var user = users[id];
 		if (user) {
 			delete users[id];
-			delete usersByName[user.name];
+			delete usersByHome[user.home];
 		}
 	}
 
 	function addCache(user) {
 		users[user._id] = user;
-		usersByName[user.name] = user;
+		usersByHome[user.home] = user;
 	}
 
 	exports.makeForm = function (req) {
 		var form = {};
 		form.name = String(req.body.name || '').trim();
+		form.home = String(req.body.home || '').trim();
 		form.email = String(req.body.email || '').trim();
 		form.password = String(req.body.password || '').trim();
 		form.profile = String(req.body.profile || '').trim();
@@ -37,28 +38,27 @@ init.add(function (next) {
 	}
 
 	exports.createUser = function (form, next) {
-		checkForm(form, function (err) {
+		form.home = form.name;
+		checkForm(form, 0, function (err) {
 			if (err) return next(err);
-			checkDupe(form, function (err) {
+			var now = new Date();
+			var user = {
+				_id: mongo.getNewUserId(),
+				name: form.name,
+				home: form.home,
+				email: form.email,
+				hash: makeHash(form.password),
+				status: 'v',
+				cdate: now,
+				adate: now,
+				profile: form.profile
+			};
+			if (form.admin) {
+				user.admin = true;
+			}
+			mongo.insertUser(user, function (err) {
 				if (err) return next(err);
-				var now = new Date();
-				var user = {
-					_id: mongo.getNewUserId(),
-					name: form.name,
-					email: form.email,
-					hash: makeHash(form.password),
-					status: 'v',
-					cdate: now,
-					adate: now,
-					profile: form.profile
-				};
-				if (form.admin) {
-					user.admin = true;
-				}
-				mongo.insertUser(user, function (err) {
-					if (err) return next(err);
-					next(null, user);
-				});
+				next(null, user);
 			});
 		});
 	};
@@ -66,26 +66,24 @@ init.add(function (next) {
 	exports.updateUser = function (id, user, form, next) {
 		checkUpdatable(id, user, function (err) {
 			if (err) return next(err);
-			checkFormForUpdate(form, function (err) {
+			checkForm(form, id, function (err) {
 				if (err) return next(err);
-				checkDupeForUpdate(form, id, function (err) {
+				var fields = {
+					name: form.name,
+					home: form.home,
+					email: form.email,
+					profile: form.profile
+				};
+				if (form.password.length > 0) {
+					fields.hash = makeHash(form.password);
+				}
+				mongo.updateUser(id, fields, function (err, cnt) {
 					if (err) return next(err);
-					var fields = {
-						name: form.name,
-						email: form.email,
-						profile: form.profile
-					};
-					if (form.password.length > 0) {
-						fields.hash = makeHash(form.password);
+					if (!cnt) {
+						return next(error(ecode.USER_NOT_FOUND));
 					}
-					mongo.updateUser(id, fields, function (err, cnt) {
-						if (err) return next(err);
-						if (!cnt) {
-							return next(error(ecode.USER_NOT_FOUND));
-						}
-						deleteCache(id);
-						next();
-					});
+					deleteCache(id);
+					next();
 				});
 			});
 		});
@@ -105,40 +103,22 @@ init.add(function (next) {
 		});
 	};
 
-	function checkForm(form, next) {
+	function checkForm(form, id, next) {
 		var errors = [];
-		checkFormName(form, errors);
-		checkFormEmail(form, errors);
-		checkFormPassword(form, errors);
-		if (errors.length) {
-			return next(error(errors));
-		}
-		next();
-	}
+		var creating = !id;
 
-	function checkFormForUpdate(form, next) {
-		var errors = [];
-		checkFormName(form, errors);
-		checkFormEmail(form, errors);
-		if (form.password.length) {
-			checkFormPassword(form, errors);
-		}
-		if (errors.length) {
-			return next(error(errors));
-		}
-		next();
-	}
-
-	function checkFormName(form, errors) {
 		if (!form.name.length) {
 			errors.push(ecode.NAME_EMPTY);
 		} else if (form.name.length > 32 || form.name.length < 2) {
 			errors.push(ecode.NAME_RANGE);
 		}
 
-	}
+		if (!form.home.length) {
+			errors.push(ecode.HOME_EMPTY);
+		} else if (form.home.length > 32 || form.home.length < 2) {
+			errors.push(ecode.HOME_RANGE);
+		}
 
-	function checkFormEmail(form, errors) {
 		if (!form.email.length) {
 			errors.push(ecode.EMAIL_EMPTY);
 		} else if (form.email.length > 64 || form.email.length < 8) {
@@ -147,45 +127,35 @@ init.add(function (next) {
 			errors.push(ecode.EMAIL_PATTERN);
 		}
 
-	}
-
-	function checkFormPassword(form, errors) {
-		if (!form.password.length) {
+		if (creating && !form.password.length) {
 			errors.push(ecode.PASSWORD_EMPTY);
-		} else if (form.password.length > 32 || form.password.length < 4) {
-			errors.push(ecode.PASSWORD_RANGE);
+		}
+		if (creating || form.password.length) {
+			if (form.password.length > 32 || form.password.length < 4) {
+				errors.push(ecode.PASSWORD_RANGE);
+			}
 		}
 
-	}
-
-	function checkDupe(form, next) {
-		mongo.findUserByName(form.name, function (err, user) {
+		mongo.countUsersByName(form.name, id, function (err, cnt) {
 			if (err) return next(err);
-			if (user) {
-				return next(error(ecode.NAME_DUPE));
+			if (cnt) {
+				errors.push(ecode.NAME_DUPE);
 			}
-			mongo.findUserByEmail(form.email, function (err, user) {
+			mongo.countUsersByHome(form.home, id, function (err, cnt) {
 				if (err) return next(err);
-				if (user) {
-					return next(error(ecode.EMAIL_DUPE));
+				if (cnt) {
+					errors.push(ecode.HOME_DUPE);
 				}
-				next();
-			});
-		});
-	}
-
-	function checkDupeForUpdate(form, id, next) {
-		mongo.findUserByName(form.name, function (err, user) {
-			if (err) return next(err);
-			if (user && user._id != id) {
-				return next(error(ecode.NAME_DUPE));
-			}
-			mongo.findUserByEmail(form.email, function (err, user) {
-				if (err) return next(err);
-				if (user && user._id != id) {
-					return next(error(ecode.EMAIL_DUPE));
-				}
-				next();
+				mongo.countUsersByEmail(form.email, id, function (err, cnt) {
+					if (err) return next(err);
+					if (cnt) {
+						errors.push(ecode.EMAIL_DUPE);
+					}
+					if (errors.length) {
+						return next(error(errors));
+					}
+					next();
+				});
 			});
 		});
 	}
@@ -218,12 +188,12 @@ init.add(function (next) {
 		});
 	};
 
-	exports.findCachedUserByName = function (name, next) {
-		var user = usersByName[name];
+	exports.findCachedUserByHome = function (home, next) {
+		var user = usersByHome[home];
 		if (user) {
 			return next(null, user);
 		}
-		mongo.findUserByName(name, function (err, user) {
+		mongo.findUserByHome(home, function (err, user) {
 			if (err) return next(err);
 			if (!user) {
 				// 사용자 프로필 URL 검색에 주로 사용되므로 error 생성은 패스한다.
@@ -253,6 +223,7 @@ init.add(function (next) {
 				tuesr = {
 					_id: _tuser._id,
 					name: _tuser.name,
+					home: _tuser.home,
 					email: _tuser.email,
 					status: _tuser.status,
 					cdate: _tuser.cdate.getTime(),
@@ -263,6 +234,7 @@ init.add(function (next) {
 				tuesr = {
 					_id: _tuser._id,
 					name: _tuser.name,
+					home: _tuser.home,
 					email: _tuser.email,
 					status: _tuser.status,
 					cdate: _tuser.cdate.getTime(),
@@ -273,6 +245,7 @@ init.add(function (next) {
 				tuesr = {
 					_id: _tuser._id,
 					name: _tuser.name,
+					home: _tuser.home,
 					//email: _tuser.email,
 					status: _tuser.status,
 					cdate: _tuser.cdate.getTime(),
@@ -292,6 +265,7 @@ init.add(function (next) {
 				next(null, {
 					_id: _tuser._id,
 					name: _tuser.name,
+					home: _tuser.home,
 					email: _tuser.email,
 					profile: _tuser.profile
 				});

@@ -19,6 +19,9 @@ block content
 					label.control-label Name
 					input.input-with-feedback(name="name", type="text", maxlength=32, value=tuser.name)
 				.form-row
+					label#domain-url.control-label
+					input.input-with-feedback(name="home", type="text", maxlength=32, value=tuser.home)
+				.form-row
 					label.control-label Email
 					input.input-with-feedback(name="email", type="text", maxlength=64, value=tuser.email)
 				.form-row
