@@ -1,7 +1,11 @@
 #
 /.idea/
 /projectFilesBackup/
+
+*.sublime-workspace
+
 /node_modules/
+
 /config/live.json
 /tmp/
 /upload/

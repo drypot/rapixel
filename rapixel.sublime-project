@@ -1,0 +1,33 @@
+{
+	"folders":
+	[
+		{
+			"path": ".",
+			"folder_exclude_patterns": [
+				"*"
+			]
+		},
+		{
+			"path": "bin"
+		},
+		{
+			"path": "config"
+		},
+		{
+			"path": "doc"
+		},
+		{
+			"path": "client"
+		},
+		{
+			"path": "lib"
+		},
+
+	],
+	"settings":
+    {
+    },
+    "build_systems":
+    [
+    ]
+}
