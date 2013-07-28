@@ -17,7 +17,7 @@
 			"path": "doc"
 		},
 		{
-			"path": "client"
+			"path": "public"
 		},
 		{
 			"path": "lib"

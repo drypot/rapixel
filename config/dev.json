@@ -3,8 +3,13 @@
 	"uploadUrl": "http://localhost:8003",
 
 	"appName": "Rapixel",
+	
 	"appPort": 8802,
 	"cookieSecret": "o;iejf832ndvs",
+	"serviceStatic": true,
+
+	"appFrontHost": "localhost",
+	"appFrontPort": 8802,
 
 	"uploadDir": "upload",
 	"uploadMax": 10,
