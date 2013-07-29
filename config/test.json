@@ -1,11 +1,11 @@
 {
-	"appUrl": "http://localhost:8002",
-	"uploadUrl": "http://localhost:8003",
-
 	"appName": "Rapixel Test",
-	"appPort": 8803,
+	"appPort": 8021,
 	"cookieSecret": "o;iejf832ndvs",
 
+	"frontUrl": "http://sleek:8080",
+
+	"uploadUrl": "http://sleek-file:8080",
 	"uploadDir": "tmp/upload",
 	"uploadMax": 10,
 
