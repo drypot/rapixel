@@ -4,7 +4,33 @@
 
 [https://rapixel.com](https://rapixel.com)
 
-# History
+## Nginx
+
+개발환경용 Nginx 설정 예
+
+	server {
+		listen 8080;
+		server_name rapixel;
+		root /Users/drypot/Projects/Rapixel/Website/public;
+
+		client_max_body_size 10m;
+
+		location / {
+			proxy_pass http://localhost:8802;
+			proxy_set_header Host $http_host;
+		}
+
+		location ~ /(?:css|image|js|lib)/ {
+		}
+	}
+
+	server {
+		listen 8080;
+		server_name rapixel-file;
+		root /Users/drypot/Project/Rapixel/Website/upload/public;
+	}
+
+## History
 
 2013.06.04 공식 오픈 공지
 
@@ -19,7 +45,7 @@
 2011.04.06 rapixel.com 도메인 구매. 사진 한 장 올려두고 2 년간 방치.
 
 
-# License
+## License
 
 The MIT License (MIT)
 
