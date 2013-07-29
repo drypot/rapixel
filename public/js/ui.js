@@ -88,7 +88,7 @@ init.add(function() {
 		});
 		if (files.length) {
 			console.log('sending ' + files.length + ' files.');
-			$.ajax('/upload', {
+			$.ajax('/api/upload?rtype=html', {
 				dataType: 'json',
 				method: 'POST',
 				files: files,
