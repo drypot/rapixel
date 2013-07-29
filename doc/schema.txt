@@ -1,12 +1,9 @@
-
-db.users.update({}, { $set: { footer: '' }}, { multi: true })
-
-
+db.users.dropIndexes();
 
 
 *
 
-done;;
+db.users.update({}, { $set: { footer: '' }}, { multi: true })
 
 db.photos.dropIndexes();
 
