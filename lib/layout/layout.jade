@@ -6,7 +6,7 @@ html
 		block title
 
 		meta(name="viewport", content="width=device-width, initial-scale=1.0")
-		meta(name="description", content="4K Images")
+		meta(name="description", content=appDesc)
 		meta(name="author", content="")
 
 		link(rel="icon", type="image/png", href="/image/favicon.png")
@@ -29,7 +29,7 @@ html
 		script(src="/js/user.js")
 		script(src="/js/photo.js")
 
-	body(class= locals.photoView ? 'photo-view' : '')
+	body
 
 		if locals.photoView
 			block photo
@@ -37,24 +37,24 @@ html
 		.container
 			block content
 
-		.section.page-footer
-			ul.list-inline
-				li: a(href="/company") Company
-				li: a(href="/services") Services
-				li: a(href="/privacy") Privacy
-				li: a(href="/help") Help
-			.home
-				a(href='/') #{appName}
+			.section.page-footer
+				ul.list-inline
+					li: a(href="/company") Company
+					li: a(href="/services") Services
+					li: a(href="/privacy") Privacy
+					li: a(href="/help") Help
+				.home
+					a(href='/') #{appName}
 
 		#error-modal.modal
-				.modal-dialog
-					.modal-content
-						.modal-header
-							button.close(type="button", data-dismiss="modal", aria-hidden="true") ×
-							h4.modal-title
-						.modal-body
-						.modal-footer
-							button.btn.btn-default(data-dismiss="modal") Close
+			.modal-dialog
+				.modal-content
+					.modal-header
+						button.close(type="button", data-dismiss="modal", aria-hidden="true") ×
+						h4.modal-title
+					.modal-body
+					.modal-footer
+						button.btn.btn-default(data-dismiss="modal") Close
 
 		#file-input-templ.hide
 			.file

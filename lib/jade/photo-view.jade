@@ -1,17 +1,19 @@
-extends layout
+extends ../layout/layout
 
 block title
 	title Photo !{photo._id} - #{appName}
 
 block photo
-	img.low-res(src=photo.dir + '/' + photo._id + '-640.jpg')
-	img.hi-res
-
-block content
 	script
 		init.add(function() {
 			photol.initPhotoView(!{JSON.stringify(photo)});
 		});
+
+	.photo-view
+		img.low-res(src=photo.dir + '/' + photo._id + '-640.jpg')
+		img.hi-res
+
+block content
 
 	.section.photo-info
 		.sub-section

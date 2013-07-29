@@ -1,17 +1,17 @@
-var init = require('../main/init');
-var config = require('../main/config');
-var express = require('../main/express');
+var init = require('./lib/lang/init');
+var config = require('./lib/config/config');
+var express = require('./lib/express/express');
 
-// require('../main/photo-api');
-// require('../main/photo-html');
-// require('../main/session-api');
-// require('../main/user-api');
-// require('../main/user-html');
-// require('../main/hello-api');
-// require('../main/static-html');
-// require('../main/upload-api');
-// require('../main/upload-html');
-// require('../main/user-profile-html');
+// require('./lib/photo/photo-api');
+// require('./lib/photo/photo-html');
+// require('./lib//session-api');
+// require('./lib//user-api');
+// require('./lib//user-html');
+// require('./lib//hello-api');
+// require('./lib/about/about-html');
+// require('./lib//upload-api');
+// require('./lib//upload-html');
+// require('./lib//user-profile-html');
 
 init.run(function (err) {
 	if (err) throw err;
