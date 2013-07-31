@@ -4,9 +4,9 @@
 	"appPort": 8021,
 	"cookieSecret": "o;iejf832ndvs",
 
-	"frontUrl": "http://sleek:8080",
+	"frontUrl": "http://rapixel:8080",
 
-	"uploadUrl": "http://sleek-file:8080",
+	"uploadUrl": "http://rapixel-file:8080",
 	"uploadDir": "tmp/upload",
 	"uploadMax": 10,
 

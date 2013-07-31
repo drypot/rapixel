@@ -1,5 +1,7 @@
 db.users.dropIndexes();
 
+run lib/user-script/add-namel.js
+
 
 *
 
