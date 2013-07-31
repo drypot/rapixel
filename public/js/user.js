@@ -49,7 +49,7 @@ init.add(function () {
 	userl.initReset = function () {
 		var $form = formty.getForm('#form');
 		$form.extra = {
-			_id: url.query.id,
+			id: url.query.id,
 			token: url.query.t
 		};
 		$form.$password.focus();
@@ -85,7 +85,7 @@ init.add(function () {
 			return false;
 		});
 		$('#dea-confirm-btn').click(function () {
-			request.del('/api/users/' + user._id).end(function (err, res) {
+			request.del('/api/users/' + user.id).end(function (err, res) {
 				err = err || res.error || res.body.err;
 				if (err) return showError(res.body.err);
 				location = '/';
