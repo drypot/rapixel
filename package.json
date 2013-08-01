@@ -12,7 +12,7 @@
     "should": "1.2.2",
     "superagent": "0.14.4",
     "jade": "0.29.0",
-    "bcrypt": "0.7.5",
+    "bcrypt": "~0.7.5",
     "express": "3.2.5",
     "nodemailer": "~0.4.4"
   },
