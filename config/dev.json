@@ -1,6 +1,7 @@
 {
 	"appName": "Rapixel",
 	"appDesc": "4K Images",
+	
 	"appPort": 8020,
 	"cookieSecret": "o;iejf832ndvs",
 	
@@ -12,6 +13,9 @@
 
 	"mongoDb": "rapixel",
 
-	"mailServer": ""
+	"mailServer": "",
+
+	"ticketGenInterval": 1,
+	"ticketMax" : 999
 }
 

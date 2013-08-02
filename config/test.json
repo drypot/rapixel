@@ -12,6 +12,9 @@
 
 	"mongoDb": "rapixel-test",
 
-	"mailServer": ""
+	"mailServer": "",
+
+	"ticketGenInterval": 18,
+	"ticketMax" : 1
 }
 
