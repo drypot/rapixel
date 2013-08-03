@@ -1,0 +1,32 @@
+extends ../layout/layout
+
+block title
+	title Photo !{image._id} - #{appName}
+
+block image
+	script
+		init.add(function() {
+			imagel.initPhotoView(!{JSON.stringify(image)});
+		});
+
+	.image-view
+		img.low-res(src=image.dir + '/' + image._id + '-640.jpg')
+		img.hi-res
+
+block content
+
+	.section.image-info
+		.sub-section
+			span
+				a(href='/' + encodeURIComponent(image.user.home)) #{image.user.name}
+			span !{image.cdateStr.slice(0,16)}
+			span #{image.fname}
+
+		#comment.sub-section
+			| !{jade.escape(image.comment).replace(/\n/g, '<br>')}
+
+		.sub-section
+			if locals.user && (image.user._id == user._id || user.admin)
+				button#update-btn.btn.btn-success.btn-mini Update
+				button#del-btn.btn.btn-danger.btn-mini Delete
+				button#del-confirm-btn.btn.btn-danger.btn-mini.hide Yes, Delete

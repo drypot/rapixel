@@ -2,8 +2,8 @@ var init = require('./lib/lang/init');
 var config = require('./lib/config/config');
 var express = require('./lib/express/express');
 
-// require('./lib/photo/photo-api');
-// require('./lib/photo/photo-html');
+// require('./lib/image/image-api');
+// require('./lib/image/image-html');
 // require('./lib//session-api');
 // require('./lib//user-api');
 // require('./lib//user-html');

@@ -13,7 +13,7 @@ block content
 	if !gtUrl
 		if locals.user
 			.section.card.link-set
-				a(href="/photos/new") Upload
+				a(href="/images/new") Upload
 				a(href="/users/" + user._id) Profile
 				a#logout-btn(href="/users/logout") Logout
 		else
@@ -29,15 +29,15 @@ block content
 		.section.pager-prev
 			a(href=gtUrl) Previous
 
-	.section.photos
-		for photo in photos
-			.photo
+	.section.images
+		for image in images
+			.image
 				.img
-					a(href='/photos/' + photo._id)
-						img(src=photo.dir + '/' + photo._id + '-640.jpg')
+					a(href='/images/' + image._id)
+						img(src=image.dir + '/' + image._id + '-640.jpg')
 				.info
 					span
-						a(href='/' + encodeURIComponent(photo.user.home)) #{photo.user.name}
+						a(href='/' + encodeURIComponent(image.user.home)) #{image.user.name}
 
 	if locals.ltUrl
 		.section.pager-next

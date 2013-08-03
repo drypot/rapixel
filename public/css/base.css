@@ -70,17 +70,17 @@
   font-size: 18px;
   line-height: 1;
 }
-.photos .photo {
+.images .image {
   margin-bottom: 30px;
 }
-.photos .photo img {
+.images .image img {
   margin-bottom: 2px;
 }
-.photos .photo .info a {
+.images .image .info a {
   color: inherit;
 }
 @media (max-width: 768px) {
-  .photos .photo {
+  .images .image {
     margin-bottom: 25px;
   }
 }
@@ -88,28 +88,28 @@
   font-size: 18px;
   line-height: 1;
 }
-body.photo-view {
+body.image-view {
   text-align: center;
 }
-body.photo-view img.low-res {
+body.image-view img.low-res {
   cursor: pointer;
   max-width: 100%;
 }
-body.photo-view img.hi-res {
+body.image-view img.hi-res {
   display: block;
   position: absolute;
   z-index: 10;
   cursor: pointer;
   max-width: none;
 }
-body.photo-view .photo-info {
+body.image-view .image-info {
   margin-top: 3px;
 }
-body.photo-view .photo-info span {
+body.image-view .image-info span {
   padding-left: 10px;
   padding-right: 10px;
 }
-body.photo-view .photo-info a {
+body.image-view .image-info a {
   color: inherit;
 }
 form {

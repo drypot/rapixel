@@ -22,17 +22,17 @@ block content
 				.sub-section.card.link-set
 					a(href='/users/' + tuser._id + '/update') Update Profile
 
-	if photos.length
+	if images.length
 		if locals.gtUrl
 			.section.pager-prev
 				a(href=gtUrl) Previous
 
-		.section.photos
-			for photo in photos
-				.photo
+		.section.images
+			for image in images
+				.image
 					.img
-						a(href='/photos/' + photo._id)
-							img(src=photo.dir + '/' + photo._id + '-640.jpg')
+						a(href='/images/' + image._id)
+							img(src=image.dir + '/' + image._id + '-640.jpg')
 
 		if locals.ltUrl
 			.section.pager-next

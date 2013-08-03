@@ -1,7 +1,10 @@
-db.users.dropIndexes();
+mongo: db.users.dropIndexes();
 
-run lib/user-script/add-namel.js
+shell: node lib/user-script/add-namel.js config/
 
+shell: rename upload/public/photo to images
+
+mongo: db.photos.renameCollection('images')
 
 *
 

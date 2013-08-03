@@ -11,7 +11,7 @@ block content
 
 		script
 			init.add(function() {
-				photol.initUpdateForm(!{JSON.stringify(photo)});
+				imagel.initUpdateForm(!{JSON.stringify(image)});
 			});
 
 		form#form.section
@@ -21,7 +21,7 @@ block content
 			.sub-section
 				.form-row
 					label Comment
-					textarea(name='comment', rows=7) #{photo.comment}
+					textarea(name='comment', rows=7) #{image.comment}
 			.sub-section
 				.send-panel
 					button.btn.btn-primary(name='send') Send

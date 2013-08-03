@@ -11,14 +11,14 @@ block content
 
 		if hours > 0
 			.section.card
-				| One photo a day.
+				| One image a day.
 				br
 				| You can upload after #{hours} hours.
 
 		else
 			script
 				init.add(function() {
-					photol.initNewForm();
+					imagel.initNewForm();
 				});
 
 			form#form.section

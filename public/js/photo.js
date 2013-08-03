@@ -1,16 +1,16 @@
 
 init.add(function () {
 
-	window.photol = {};
+	window.imagel = {};
 
-	photol.initPhotoView = function (photo) {
-		renderPhoto(photo);
+	imagel.initPhotoView = function (image) {
+		renderPhoto(image);
 
 		var $comment = $('#comment');
 		$comment.html(tagUpText($comment.html()));
 
 		$('#update-btn').click(function () {
-			location = '/photos/' + photo._id + '/update';
+			location = '/images/' + image._id + '/update';
 			return false;
 		});
 		$('#del-btn').click(function () {
@@ -18,7 +18,7 @@ init.add(function () {
 			return false;
 		});
 		$('#del-confirm-btn').click(function () {
-			request.del('/api/photos/' + photo._id).end(function (err, res) {
+			request.del('/api/images/' + image._id).end(function (err, res) {
 				err = err || res.error || res.body.err;
 				if (err) return showError(res.body.err);
 				location = '/';
@@ -27,16 +27,16 @@ init.add(function () {
 		});
 	};
 
-	function renderPhoto(photo) {
+	function renderPhoto(image) {
 		var windowWidth = $window.width()
 		if (window.devicePixelRatio > 1) {
 			windowWidth *= window.devicePixelRatio;
 		}
 
 		var ver;
-		for (var i = 0; i < photo.vers.length; i++) {
-			ver = photo.vers[i]
-			if (ver == 640 || photo.vers[i+1] < windowWidth ) {
+		for (var i = 0; i < image.vers.length; i++) {
+			ver = image.vers[i]
+			if (ver == 640 || image.vers[i+1] < windowWidth ) {
 				break;
 			}
 		}
@@ -48,7 +48,7 @@ init.add(function () {
 		});
 
 		var $imgHi = $('img.hi-res');
-		$imgHi.attr('src', photo.dir + '/' + photo._id + '-' + ver + '.jpg');
+		$imgHi.attr('src', image.dir + '/' + image._id + '-' + ver + '.jpg');
 		$imgHi.click(function () {
 			history.back();
 			return false;
@@ -65,11 +65,11 @@ init.add(function () {
 		$window.trigger('resize');
 	}
 
-	photol.initNewForm = function () {
+	imagel.initNewForm = function () {
 		var $form = formty.getForm('#form');
 		formty.initFileGroup($form, 'files');
 		$form.$send.click(function (err, res) {
-			formty.post('/api/photos', $form, function (err) {
+			formty.post('/api/images', $form, function (err) {
 				if (err) return showError(err);
 				location = '/';
 			});
@@ -77,13 +77,13 @@ init.add(function () {
 		});
 	};
 
-	photol.initUpdateForm = function (photo) {
+	imagel.initUpdateForm = function (image) {
 		var $form = formty.getForm('#form');
 		formty.initFileGroup($form, 'files');
 		$form.$send.click(function (err, res) {
-			formty.put('/api/photos/' + photo._id, $form, function (err) {
+			formty.put('/api/images/' + image._id, $form, function (err) {
 				if (err) return showError(err);
-				location = '/photos/' + photo._id;
+				location = '/images/' + image._id;
 			});
 			return false;
 		});
