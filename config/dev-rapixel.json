@@ -8,7 +8,7 @@
 	"frontUrl": "http://rapixel:8080",
 
 	"uploadUrl": "http://rapixel-file:8080",
-	"uploadDir": "upload",
+	"uploadDir": "upload-rapixel",
 	"uploadMax": 10,
 
 	"mongoDb": "rapixel",

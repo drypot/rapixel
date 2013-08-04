@@ -1,13 +1,14 @@
 {
 	"appName": "Rapixel Test",
 	"appDesc": "4K Images",
+
 	"appPort": 8021,
 	"cookieSecret": "o;iejf832ndvs",
 
 	"frontUrl": "http://rapixel:8080",
 
 	"uploadUrl": "http://rapixel-file:8080",
-	"uploadDir": "tmp/upload",
+	"uploadDir": "upload-test",
 	"uploadMax": 10,
 
 	"mongoDb": "rapixel-test",
@@ -15,6 +16,6 @@
 	"mailServer": "",
 
 	"ticketGenInterval": 18,
-	"ticketMax" : 1
+	"ticketMax" : 3
 }
 
