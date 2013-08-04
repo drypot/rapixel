@@ -18,8 +18,8 @@ block content
 
 			.sub-section
 				pre.error-report
-					if err.rc
-						| #{'Code: ' + err.rc}
+					if err.code
+						| #{'Code: ' + err.code}
 						br
 					if err.stack
 						| !{err.stack.replace(/\n/g, '<br>')}

@@ -52,10 +52,10 @@ var request = superagent;
 
 init.add(function () {
 
-	var exports = window.ecode = {};
+	var exports = window.econst = {};
 
-	function mke(rc, msg) {
-		return { rc: rc, msg: msg };
+	function mke(code, msg) {
+		return { code: code, msg: msg };
 	}
 
 	exports.INVALID_DATA = mke(100, '비정상적인 값이 입력되었습니다.');
