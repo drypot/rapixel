@@ -3,8 +3,8 @@ init.add(function () {
 
 	window.imagel = {};
 
-	imagel.initPhotoView = function (image) {
-		renderPhoto(image);
+	imagel.initImageView = function (image) {
+		renderImage(image);
 
 		var $comment = $('#comment');
 		$comment.html(tagUpText($comment.html()));
@@ -27,7 +27,7 @@ init.add(function () {
 		});
 	};
 
-	function renderPhoto(image) {
+	function renderImage(image) {
 		var windowWidth = $window.width()
 		if (window.devicePixelRatio > 1) {
 			windowWidth *= window.devicePixelRatio;

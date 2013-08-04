@@ -1,12 +1,12 @@
 extends ../layout/layout
 
 block title
-	title Photo !{image._id} - #{appName}
+	title Image !{image._id} - #{appName}
 
 block image
 	script
 		init.add(function() {
-			imagel.initPhotoView(!{JSON.stringify(image)});
+			imagel.initImageView(!{JSON.stringify(image)});
 		});
 
 	.image-view
