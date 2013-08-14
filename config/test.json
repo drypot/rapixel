@@ -1,6 +1,7 @@
 {
 	"appName": "Rapixel Test",
 	"appDesc": "4K Images",
+	"appType": "rapixel",
 
 	"appPort": 8021,
 	"cookieSecret": "o;iejf832ndvs",
@@ -16,6 +17,16 @@
 	"mailServer": "",
 
 	"ticketGenInterval": 18,
-	"ticketMax" : 3
+	"ticketMax" : 3,
+
+	"minWidth": 1280,
+	"minHeight": 720,
+	
+	"versions": [
+		{ "width":1440, "height": 810 },
+		{ "width":1280, "height": 720 },
+		{ "width":960 , "height": 540 },
+		{ "width":640 , "height": 360 }
+	]
 }
 
