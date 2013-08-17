@@ -17,16 +17,6 @@
 	"mailServer": "",
 
 	"ticketGenInterval": 18,
-	"ticketMax" : 3,
-
-	"minWidth": 1280,
-	"minHeight": 720,
-	
-	"versions": [
-		{ "width":1440, "height": 810 },
-		{ "width":1280, "height": 720 },
-		{ "width":960 , "height": 540 },
-		{ "width":640 , "height": 360 }
-	]
+	"ticketMax" : 3
 }
 
