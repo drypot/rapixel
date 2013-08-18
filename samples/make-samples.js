@@ -23,7 +23,10 @@ function makeVersions(next) {
 		var h = v.height;
 		var cmd = '';
 		cmd += 'gm convert -size ' + w + 'x' + h + ' xc:#c0c0c0';
-		cmd += ' -fill "#303030" -draw "line 0,0 ' + (w - 1) + ',' + (h - 1) + ' line 0,' + (h - 1) + ' ' + (w - 1) + ',0"';
+		cmd += ' -fill "#c0c0c0" -stroke "#303030" '
+		cmd += ' -draw "circle ' + w / 2 + ', ' + h / 2 + ', ' + w / 2 + ', 0"';
+		cmd += ' -draw "circle ' + w / 2 + ', ' + h / 2 + ', ' + w / 2 + ', ' + h / 4 + '"';
+		cmd += ' -draw "line 0,0 ' + (w - 1) + ',' + (h - 1) + ' line 0,' + (h - 1) + ' ' + (w - 1) + ',0"';
 		cmd += ' -quality 92 ' + w + 'x' + h + '-' + v.postfix + '.jpg';
 		console.log(cmd);
 		exec(cmd, function (err) {
