@@ -5,6 +5,7 @@ var _vers = [
 	{ width:5120, height: 2880, postfix: '169'},
 	{ width:3840, height: 2160, postfix: '169' },
 	{ width:3840, height: 2400, postfix: '1610' },
+	{ width:2880, height: 1620, postfix: '169' },
 	{ width:1440, height: 810, postfix: '169' },
 	{ width:1280, height: 720, postfix: '169' },
 	{ width:960 , height: 540, postfix: '169' },
