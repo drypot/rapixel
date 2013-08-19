@@ -135,7 +135,7 @@ init.add(function() {
 							return next(err);
 						}
 						if (res.body.err) {
-							if (res.body.err.code === error.ids.ERRORS.code) {
+							if (res.body.err.code === error.ERRORS.code) {
 								formty.addAlerts($form, res.body.err.errors);
 								formty.hideSending($form);
 								return;
