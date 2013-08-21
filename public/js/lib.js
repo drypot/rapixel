@@ -1,5 +1,118 @@
-init.add(function() {
+var request = superagent;
 
+(function () {
+	// for IE 7
+
+	if (!window.localStorage) {
+		window.localStorage = {
+			getItem: function () {},
+			setItem: function () {},
+			removeItem: function () {}
+		}
+		window.sessionStorage = {
+			getItem: function () {},
+			setItem: function () {},
+			removeItem: function () {}
+		}
+	}
+
+	if (!window.console) {
+		window.console = {
+			log: function () {}
+		}
+	}
+
+	window.msie = /msie/.test(navigator.userAgent.toLowerCase());
+})();
+
+(function () {
+	window.init = {};
+
+	var funcs = [];
+
+	window.init.add = function (func) {
+		funcs.push(func);
+	};
+
+	$(function () {
+		console.log('init:');
+
+		var i = 0;
+		var len = funcs.length;
+
+		for (i = 0; i < len; i++) {
+			funcs[i]();
+		}
+	});
+})();
+
+init.add(function () {
+	window.error = {};
+
+	function define(code, msg) {
+		exports[code] = {
+			code: code,
+			message: msg
+		}
+	}
+
+	define('INVALID_DATA', '비정상적인 값이 입력되었습니다.');
+	define('MULTIPLE', '*');
+
+	define('NOT_AUTHENTICATED', '먼저 로그인해 주십시오.');
+	define('NOT_AUTHORIZED', '사용 권한이 없습니다.');
+});
+
+init.add(function () {
+	window.$window = $(window);
+	window.$document = $(document);
+	window.$content = $('#content');
+
+	window.url = {};
+	window.url.pathnames = window.location.pathname.slice(1).split('/');
+	window.url.query = (function () {
+		var plusx = /\+/g;
+		var paramx = /([^&=]+)=?([^&]*)/g;
+		var search = window.location.search.slice(1);
+		var query = {};
+		var match;
+		while (match = paramx.exec(search)) {
+			query[match[1]] = decodeURIComponent(match[2].replace(plusx, ' '));
+		}
+		return query;
+	})();
+});
+
+init.add(function () {
+	var patterns = [
+		{	// url
+			pattern: /(https?:\/\/[^ "'><)\n\r]+)/g,
+			replace: '<a href="$1" target="_blank">$1</a>'
+		}
+	];
+
+	window.tagUpText = function (s, pi) {
+		if (pi == undefined) {
+			pi = 0;
+		}
+		if (pi == patterns.length) {
+			return s;
+		}
+		var p = patterns[pi];
+		var r = '';
+		var a = 0;
+		var match;
+		while(match = p.pattern.exec(s)) {
+			r += tagUpText(s.slice(a, match.index), pi + 1);
+			r += p.replace.replace(/\$1/g, match[1]);
+			a = match.index + match[0].length;
+		}
+		r += tagUpText(s.slice(a), pi + 1);
+		return r;
+	};
+});
+
+init.add(function() {
 	window.formty = {};
 
 	var nameRe = /[^\[]+/;
@@ -135,7 +248,7 @@ init.add(function() {
 							return next(err);
 						}
 						if (res.body.err) {
-							if (res.body.err.code === error.ERRORS.code) {
+							if (res.body.err.code === error.MULTIPLE.code) {
 								formty.addAlerts($form, res.body.err.errors);
 								formty.hideSending($form);
 								return;
@@ -190,11 +303,9 @@ init.add(function() {
 			formty.addAlert($form.find('[name="' + error.field + '"]'), error.message);
 		}
 	}
-
 });
 
 init.add(function() {
-
 	var $modal = $('#error-modal');
 	var $title = $modal.find('.modal-title');
 	var $body = $modal.find('.modal-body');
@@ -216,14 +327,11 @@ init.add(function() {
 		}
 		$modal.modal('show');
 	};
-
 });
 
 init.add(function () {
-
 	$('#logout-btn').click(function () {
 		userl.logout();
 		return false;
 	});
-
 });
