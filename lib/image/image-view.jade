@@ -4,7 +4,7 @@ block title
 	title Image !{image._id} - #{appName}
 
 block image
-	script
+	script.
 		init.add(function() {
 			imagel.initImageView(!{JSON.stringify(image)});
 		});
