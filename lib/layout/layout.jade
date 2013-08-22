@@ -20,9 +20,9 @@ html
 		script(src="/lib/bootstrap/js/bootstrap.min.js")
 		script(src="/lib/superagent.js")
 
-		if locals.user
-			script
-				window.user = !{JSON.stringify({ id: user._id, name: user.name })};
+		script.
+			window.appType = '!{appType}';
+			window.user = !{locals.user ? JSON.stringify({ id: user._id, name: user.name }) : 'undefined'};
 
 		script(src="/js/lib.js")
 		script(src="/js/user.js")
@@ -59,7 +59,7 @@ html
 			.file
 				.hidden-input
 					input(type='file', multiple='multiple')
-				button.btn.btn-success Select Image
+				button.btn.btn-success Select Files
 
 		#file-input-templ-msie.hide
 			.file

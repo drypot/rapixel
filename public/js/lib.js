@@ -50,7 +50,7 @@ init.add(function () {
 	window.error = {};
 
 	function define(code, msg) {
-		exports[code] = {
+		error[code] = {
 			code: code,
 			message: msg
 		}
@@ -112,16 +112,41 @@ init.add(function () {
 	};
 });
 
+
+init.add(function() {
+	var $modal = $('#error-modal');
+	var $title = $modal.find('.modal-title');
+	var $body = $modal.find('.modal-body');
+
+	window.showError = function (err, next) {
+		$title.text(err.message);
+		var body = '';
+		if (err.stack) {
+			body += '<p>System Error ' + err.stack.replace(/Error:.+\n/, '').replace(/\n/g, '<br>') + '</p>';
+		}
+		if (err.detail) {
+			body += '<pre>' + err.detail.replace(/\n/g, '<br>') + '</pre>';
+		}
+		console.log(body);
+		$body.html(body);
+		$modal.off('hidden.bs.modal');
+		if (next) {
+			$modal.on('hidden.bs.modal', next);
+		}
+		$modal.modal('show');
+	};
+});
+
 init.add(function() {
 	window.formty = {};
 
-	var nameRe = /[^\[]+/;
+	var namex = /[^\[]+/;
 
 	formty.getForm = function (sel) {
 		var $form = $(sel);
 		$form.find('input, textarea, select, button').each(function () {
 			if (this.name) {
-				var name = this.name.match(nameRe)[0];
+				var name = this.name.match(namex)[0];
 				$form['$' + name] = $(this);
 			}
 		});
@@ -133,7 +158,7 @@ init.add(function() {
 		$form.find('input, textarea, select').each(function () {
 			if (this.name && !this.disabled) {
 				var $this = $(this);
-				var name = this.name.match(nameRe)[0];
+				var name = this.name.match(namex)[0];
 				var braket = this.name.length != name.length;
 				if (this.type == 'checkbox') {
 					if (braket) {
@@ -161,7 +186,7 @@ init.add(function() {
 		return obj;
 	};
 
-	formty.initFileGroup = function ($form, name) {
+	formty.initFileGroup = function ($form, name, type) {
 		var $fileTempl = $('#file-input-templ').children(0);
 		var $fileTemplIE = $('#file-input-templ-msie').children(0);
 		var $files = $form.find('.file-group .files');
@@ -175,13 +200,14 @@ init.add(function() {
 
 			if (!msie) {
 				var $btn = $set.find('button');
+				$btn.text('Select ' + type);
 				$btn.click(function () {
 					$file.click();
 					return false;
 				});
 				$file.on('change', function () {
 					var files = $file[0].files;
-					var text = files.length + ' files selected';
+					var text = files.length + ' ' + type + ' selected';
 					$btn.text(text);
 				});
 			}
@@ -189,6 +215,7 @@ init.add(function() {
 		}
 
 		addFileInput();
+
 		$adder.click(function () {
 			addFileInput();
 			return false;
@@ -303,35 +330,4 @@ init.add(function() {
 			formty.addAlert($form.find('[name="' + error.field + '"]'), error.message);
 		}
 	}
-});
-
-init.add(function() {
-	var $modal = $('#error-modal');
-	var $title = $modal.find('.modal-title');
-	var $body = $modal.find('.modal-body');
-
-	window.showError = function (err, next) {
-		$title.text(err.message);
-		var body = '';
-		if (err.stack) {
-			body += '<p>System Error ' + err.stack.replace(/Error:.+\n/, '').replace(/\n/g, '<br>') + '</p>';
-		}
-		if (err.detail) {
-			body += '<pre>' + err.detail.replace(/\n/g, '<br>') + '</pre>';
-		}
-		console.log(body);
-		$body.html(body);
-		$modal.off('hidden.bs.modal');
-		if (next) {
-			$modal.on('hidden.bs.modal', next);
-		}
-		$modal.modal('show');
-	};
-});
-
-init.add(function () {
-	$('#logout-btn').click(function () {
-		userl.logout();
-		return false;
-	});
 });

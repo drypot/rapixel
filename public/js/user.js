@@ -1,6 +1,5 @@
 
 init.add(function () {
-
 	window.userl = {};
 
 	userl.initLogin = function () {
@@ -93,4 +92,11 @@ init.add(function () {
 			return false;
 		});
 	};
+});
+
+init.add(function () {
+	$('#logout-btn').click(function () {
+		userl.logout();
+		return false;
+	});
 });
