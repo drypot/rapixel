@@ -26,18 +26,20 @@ block content
 
 		form#form.section
 			.sub-section
-				.form-row
+				.form-group
 					label.control-label Email
-					input.input-with-feedback(name="email", type="text")
-				.form-row
+					input.form-control(name="email", type="text")
+				.form-group
 					label.control-label Password
-					input.input-with-feedback(name="password", type="password")
-				.form-row
-					label Remember
-					input(name="remember", type="checkbox")
+					input.form-control(name="password", type="password")
+				.form-group
+					.checkbox
+						label 
+							input(name="remember", type="checkbox") 
+							| Remember
 			.sub-section
 				.send-panel
-					button.btn.btn-primary(name='send') Send
+					button.btn.btn-default(name='send') Send
 				.sending-panel.hide
 					button.btn.btn-default.disabled(name='sending') Sending
 

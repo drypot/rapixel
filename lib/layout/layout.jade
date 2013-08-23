@@ -12,10 +12,15 @@ html
 		link(rel="icon", type="image/png", href="/image/favicon.png")
 
 		link(rel="stylesheet", href="/lib/bootstrap/css/bootstrap.min.css")
+		//-link(rel="stylesheet", href="/lib/bootstrap/css/bootstrap-theme.min.css")
 		link(rel="stylesheet", href="/css/base.css")
 
+		//if lt IE 9
+			script(src="/lib/html5shiv.js")
+			script(src="/lib/respond.min.js")
+
 		script(src="/lib/json2.js")
-		script(src="/lib/jquery-1.9.1.min.js")
+		script(src="/lib/jquery-1.10.2.min.js")
 		script(src='/lib/jquery.iframe-transport.js')
 		script(src="/lib/bootstrap/js/bootstrap.min.js")
 		script(src="/lib/superagent.js")

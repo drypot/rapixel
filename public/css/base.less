@@ -15,8 +15,6 @@ body {
 
 .card {
 	font-size: 18px;
-	//font-weight: 500;
-	line-height: 1.5;
 }
 
 .link-set {
@@ -24,11 +22,6 @@ body {
 		padding-left:10px;
 		padding-right:10px;
 	}
-}
-
-.btn-mini {
-	padding: 2px 6px;
-	font-size: 14px;
 }
 
 .section {
@@ -52,11 +45,7 @@ body {
 
 .site-title {
 	h1 {
-		margin-bottom: 10px;
 		font-size: 53px;
-	}
-	p {
-		font-size: 21px;
 	}
 }
 
@@ -89,6 +78,7 @@ body {
 	.image {
 		margin-bottom: 30px;
 		img {
+			max-width: 100%;
 			margin-bottom: 2px;
 		}
 		.info {
@@ -152,12 +142,13 @@ form {
 	width: 60%;
 	margin-left: 20%;
 	margin-bottom: 50px;
-	.form-row {
-		margin-bottom:10px;
-		label {
-			display:block;
-		}
+
+	// override bootstrap
+	.checkbox label {
+		display: inine-block;
+		font-weight: bold;
 	}
+
 	.file-group {
 		.files {
 			.file {
@@ -173,14 +164,7 @@ form {
 			}
 		}
 	}
-	p.error {
-		display: block;
-		margin-top: 5px;
-		margin-bottom: 10px;
-	}
-	.alert {
-		margin-bottom:5px;
-	}
+	
 	textarea {
 		font-family: monospace;
 	}

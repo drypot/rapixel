@@ -312,16 +312,14 @@ init.add(function() {
 	};
 
 	formty.clearAlerts = function ($form) {
-		$form.find('.alert').remove();
 		$form.find('.has-error').removeClass('has-error');
 		$form.find('.text-danger').remove();
 	};
 
 	formty.addAlert = function ($control, msg) {
-		var $group = $control.closest('.form-row');
+		var $group = $control.closest('.form-group');
 		$group.addClass('has-error');
-		//$control.before($('<div>').addClass('alert alert-danger').text(msg));
-		$group.append($('<p>').addClass('error text-danger').text(msg));
+		$group.append($('<p>').addClass('help-block').text(msg));
 	};
 
 	formty.addAlerts = function ($form, errors) {

@@ -15,15 +15,15 @@ block content
 
 		form#form.section
 			.sub-section
-				.form-row
+				.form-group
 					label.control-label Name
-					input.input-with-feedback(name="name", type="text", maxlength=32)
-				.form-row
+					input.form-control(name="name", type="text", maxlength=32)
+				.form-group
 					label.control-label Email
-					input.input-with-feedback(name="email", type="text", maxlength=64)
-				.form-row
+					input.form-control(name="email", type="text", maxlength=64)
+				.form-group
 					label.control-label Password
-					input.input-with-feedback(name="password", type="password", maxlength=64)
+					input.form-control(name="password", type="password", maxlength=64)
 			.sub-section
 				.send-panel
 					button.btn.btn-primary(name='send') Send

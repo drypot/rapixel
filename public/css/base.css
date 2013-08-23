@@ -10,15 +10,10 @@
 }
 .card {
   font-size: 18px;
-  line-height: 1.5;
 }
 .link-set a {
   padding-left: 10px;
   padding-right: 10px;
-}
-.btn-mini {
-  padding: 2px 6px;
-  font-size: 14px;
 }
 .section {
   margin-bottom: 50px;
@@ -36,11 +31,7 @@
   text-decoration: none;
 }
 .site-title h1 {
-  margin-bottom: 10px;
   font-size: 53px;
-}
-.site-title p {
-  font-size: 21px;
 }
 .update {
   margin-top: 20px;
@@ -66,14 +57,11 @@
   font-size: 28px;
   font-weight: 500;
 }
-.pager-prev {
-  font-size: 18px;
-  line-height: 1;
-}
 .images .image {
   margin-bottom: 30px;
 }
 .images .image img {
+  max-width: 100%;
   margin-bottom: 2px;
 }
 .images .image .info a {
@@ -84,32 +72,36 @@
     margin-bottom: 25px;
   }
 }
+.pager-prev {
+  font-size: 18px;
+  line-height: 1;
+}
 .pager-next {
   font-size: 18px;
   line-height: 1;
 }
-body.image-view {
+.image-view {
   text-align: center;
 }
-body.image-view img.low-res {
+.image-view img.low-res {
   cursor: pointer;
   max-width: 100%;
 }
-body.image-view img.hi-res {
+.image-view img.hi-res {
   display: block;
   position: absolute;
   z-index: 10;
   cursor: pointer;
   max-width: none;
 }
-body.image-view .image-info {
+.image-info {
   margin-top: 3px;
 }
-body.image-view .image-info span {
+.image-info span {
   padding-left: 10px;
   padding-right: 10px;
 }
-body.image-view .image-info a {
+.image-info a {
   color: inherit;
 }
 form {
@@ -117,11 +109,9 @@ form {
   margin-left: 20%;
   margin-bottom: 50px;
 }
-form .form-row {
-  margin-bottom: 10px;
-}
-form .form-row label {
-  display: block;
+form .checkbox label {
+  display: inine-block;
+  font-weight: bold;
 }
 form .file-group .files .file .hidden-input {
   position: absolute;
@@ -131,14 +121,6 @@ form .file-group .files .file .hidden-input {
 }
 form .file-group .files .file button {
   width: 60%;
-}
-form p.error {
-  display: block;
-  margin-top: 5px;
-  margin-bottom: 10px;
-}
-form .alert {
-  margin-bottom: 5px;
 }
 form textarea {
   font-family: monospace;
