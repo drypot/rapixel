@@ -11,7 +11,7 @@
 	server {
 		listen 8080;
 		server_name rapixel;
-		root /Users/drypot/Projects/Rapixel/Website/public;
+		root /Users/drypot/projects/rapixel/website/public;
 
 		client_max_body_size 10m;
 
@@ -27,7 +27,7 @@
 	server {
 		listen 8080;
 		server_name rapixel-file;
-		root /Users/drypot/Project/Rapixel/Website/upload/public;
+		root /Users/drypot/projects/rapixel/website/upload-rapixel/public;
 	}
 
 ## History
