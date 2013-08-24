@@ -16,17 +16,15 @@ block content
 
 		form#form.section
 			.sub-section
-				.form-group.file-group
-					.files
+				.form-group
+					label Image
+					.file-group
 			.sub-section
 				.form-group
 					label Comment
-					textarea(name='comment', rows=7) #{image.comment}
+					textarea.form-control(name='comment', rows=7) #{image.comment}
 			.sub-section
-				.send-panel
-					button.btn.btn-primary(name='send') Send
-				.sending-panel.hide
-					button.btn.btn-default.disabled(name='sending') Sending
+				button.btn.btn-primary(name='send', data-loading-text='Sending') Send
 
 		.section.card
 			| Image must be larger than 3840x2160 pixels.

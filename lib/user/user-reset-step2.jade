@@ -19,7 +19,4 @@ block content
 					label.control-label Password
 					input.form-control(name="password", type="password")
 			.sub-section
-				.send-panel
-					button.btn.btn-primary(name='send') Send
-				.sending-panel.hide
-					button.btn.btn-default.disabled(name='sending') Sending
+				button.btn.btn-primary(name='send', data-loading-text='Sending') Send

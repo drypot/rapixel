@@ -2,14 +2,14 @@
 
 	mongo: db.users.dropIndexes();
 
-	shell: node lib/user-script/add-namel.js config/
+	shell: node lib/user-script/add-namel.js --config config/live-
 
 	shell: rename upload/public/photo to images
 
 	mongo: db.photos.renameCollection('images')
 
 
-##
+## done
 
 	db.users.update({}, { $set: { footer: '' }}, { multi: true })
 

@@ -109,10 +109,6 @@ form {
   margin-left: 20%;
   margin-bottom: 50px;
 }
-form .checkbox label {
-  display: inine-block;
-  font-weight: bold;
-}
 form .file-group .files .file .hidden-input {
   position: absolute;
   top: -999px;
@@ -120,7 +116,10 @@ form .file-group .files .file .hidden-input {
   height: 0px;
 }
 form .file-group .files .file button {
-  width: 60%;
+  width: 100%;
+}
+form .file-group .files .file input[type=file] {
+  display: inline-block;
 }
 form textarea {
   font-family: monospace;

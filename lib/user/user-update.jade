@@ -29,9 +29,6 @@ block content
 					input.form-control(name="password", type="password", maxlength=64)
 				.form-group
 					label.control-label Profile
-					textarea(name="profile", rows=5) #{tuser.profile}
+					textarea.form-control(name="profile", rows=5) #{tuser.profile}
 			.sub-section
-				.send-panel
-					button.btn.btn-primary(name='send') Send
-				.sending-panel.hide
-					button.btn.btn-default.disabled(name='sending') Sending
+				button.btn.btn-primary(name='send', data-loading-text='Sending') Send

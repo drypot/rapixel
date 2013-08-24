@@ -66,7 +66,7 @@ init.add(function () {
 
 	imagel.initNewForm = function () {
 		var $form = formty.getForm('#form');
-		formty.initFileGroup($form, 'files', 'photo');
+		formty.initFileGroup($form, 'files');
 		$form.$send.click(function (err, res) {
 			formty.post('/api/images', $form, function (err) {
 				if (err) return showError(err);
@@ -78,7 +78,7 @@ init.add(function () {
 
 	imagel.initUpdateForm = function (image) {
 		var $form = formty.getForm('#form');
-		formty.initFileGroup($form, 'files', 'photo');
+		formty.initFileGroup($form, 'files');
 		$form.$send.click(function (err, res) {
 			formty.put('/api/images/' + image._id, $form, function (err) {
 				if (err) return showError(err);

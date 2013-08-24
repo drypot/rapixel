@@ -63,7 +63,9 @@ init.add(function () {
 
 	userl.initProfile = function () {
 		var $profile = $('#profile-text');
-		$profile.html(tagUpText($profile.html()));
+		if ($profile.length) {
+			$profile.html(tagUpText($profile.html()));
+		}
 	};
 
 	userl.initUpdateProfileForm = function () {

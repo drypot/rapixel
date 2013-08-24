@@ -143,12 +143,6 @@ form {
 	margin-left: 20%;
 	margin-bottom: 50px;
 
-	// override bootstrap
-	.checkbox label {
-		display: inine-block;
-		font-weight: bold;
-	}
-
 	.file-group {
 		.files {
 			.file {
@@ -159,7 +153,11 @@ form {
 					height: 0px;
 				}
 				button {
-					width:60%;
+					width:100%;
+				}
+				// for ie
+				input[type=file] {
+					display: inline-block;
 				}
 			}
 		}

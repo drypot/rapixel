@@ -4,10 +4,6 @@ block title
 	title Reset Password - #{appName}
 
 block content
-	script.
-		init.add(function () {
-			userl.initResetReq();
-		});
 
 	.side-space
 		.section.page-title
@@ -17,13 +13,15 @@ block content
 			.section.card
 				| Check your mailbox.
 		else
+			script.
+				init.add(function () {
+					userl.initResetReq();
+				});
+				
 			form#form.section
 				.sub-section
 					.form-group
 						label.control-label Email
 						input.form-control(name="email", type="text")
 				.sub-section
-					.send-panel
-						button.btn.btn-primary(name='send') Send
-					.sending-panel.hide
-						button.btn.btn-default.disabled(name='sending') Sending
+					button.btn.btn-primary(name='send', data-loading-text='Sending') Send

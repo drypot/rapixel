@@ -26,7 +26,7 @@ block content
 			| !{jade.escape(image.comment).replace(/\n/g, '<br>')}
 
 		.sub-section
-			if locals.user && (image.user._id == user._id || user.admin)
+			if updatable
 				button#update-btn.btn.btn-success.btn-xs Update
 				button#del-btn.btn.btn-danger.btn-xs Delete
 				button#del-confirm-btn.btn.btn-danger.btn-xs.hide Yes, Delete

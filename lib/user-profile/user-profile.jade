@@ -18,7 +18,7 @@ block content
 			#profile-text.sub-section.card
 				| !{jade.escape(tuser.profile).replace(/\n/g, "<br>")}
 
-			if editable
+			if updatable
 				.sub-section.card.link-set
 					a(href='/users/' + tuser._id + '/update') Update Profile
 

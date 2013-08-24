@@ -33,15 +33,11 @@ block content
 					label.control-label Password
 					input.form-control(name="password", type="password")
 				.form-group
-					.checkbox
-						label 
-							input(name="remember", type="checkbox") 
-							| Remember
+					label Remember
+					br
+					input(name="remember", type="checkbox") 
 			.sub-section
-				.send-panel
-					button.btn.btn-default(name='send') Send
-				.sending-panel.hide
-					button.btn.btn-default.disabled(name='sending') Sending
+				button.btn.btn-primary(name='send', data-loading-text='Sending') Send
 
 		.section
 			a(href='/users/reset-step1') Reset Password

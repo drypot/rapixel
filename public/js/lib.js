@@ -150,6 +150,9 @@ init.add(function() {
 				$form['$' + name] = $(this);
 			}
 		});
+		if ($form.$send) {
+			$form.$send.button();
+		}
 		return $form;
 	};
 
@@ -186,12 +189,17 @@ init.add(function() {
 		return obj;
 	};
 
-	formty.initFileGroup = function ($form, name, type) {
+	formty.initFileGroup = function ($form, name, adder) {
 		var $fileTempl = $('#file-input-templ').children(0);
 		var $fileTemplIE = $('#file-input-templ-msie').children(0);
-		var $files = $form.find('.file-group .files');
-		var $adder = $form.find('.file-group .glyphicon-plus');
+		var $fileGroup = $form.find('.file-group');
+		var $files = $('<div/>').addClass('files');
+		var $adder = $('<div/>').addClass('glyphicon glyphicon-plus');
 
+		$fileGroup.append($files);
+		if (adder) {
+			$fileGroup.append($adder);
+		}
 		function addFileInput() {
 			var $set = msie ? $fileTemplIE.clone(): $fileTempl.clone();
 
@@ -200,14 +208,13 @@ init.add(function() {
 
 			if (!msie) {
 				var $btn = $set.find('button');
-				$btn.text('Select ' + type);
 				$btn.click(function () {
 					$file.click();
 					return false;
 				});
 				$file.on('change', function () {
 					var files = $file[0].files;
-					var text = files.length + ' ' + type + ' selected';
+					var text = files.length + ' files selected';
 					$btn.text(text);
 				});
 			}
@@ -294,21 +301,17 @@ init.add(function() {
 	}
 
 	formty.showSending = function ($form) {
-		var $sendPanel = $form.find('.send-panel');
-		var $sendingPanel = $form.find('.sending-panel');
-		if ($sendPanel.length && $sendingPanel.length) {
-			$sendPanel.addClass('hide');
-			$sendingPanel.removeClass('hide');
+		if ($form.$send) {
+			$form.$send.button('loading');
 		}
+		return;
 	};
 
 	formty.hideSending = function ($form) {
-		var $sendPanel = $form.find('.send-panel');
-		var $sendingPanel = $form.find('.sending-panel');
-		if ($sendPanel.length && $sendingPanel.length) {
-			$sendPanel.removeClass('hide');
-			$sendingPanel.addClass('hide');
+		if ($form.$send) {
+			$form.$send.button('reset');
 		}
+		return;
 	};
 
 	formty.clearAlerts = function ($form) {
@@ -319,7 +322,7 @@ init.add(function() {
 	formty.addAlert = function ($control, msg) {
 		var $group = $control.closest('.form-group');
 		$group.addClass('has-error');
-		$group.append($('<p>').addClass('help-block').text(msg));
+		$group.append($('<p>').addClass('help-block text-danger').text(msg));
 	};
 
 	formty.addAlerts = function ($form, errors) {
