@@ -5,7 +5,7 @@
 
 /node_modules/
 
-/config/live*.json
+/config/*live*.json
 /tmp/
-/upload*/
+/upload/
 /samples/untracked/

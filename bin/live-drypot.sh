@@ -1,1 +1,0 @@
-NODE_ENV=production node lib/app/app.js --config config/live-drypot.json

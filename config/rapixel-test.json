@@ -1,15 +1,15 @@
 {
-	"appName": "Rapixel Test",
-	"appDesc": "4K Images",
+	"appName": "Rapixel",
+	"appDesc": "4K images",
 	"appType": "rapixel",
+
+	"frontUrl": "http://rapixel:8080",
 
 	"appPort": 8021,
 	"cookieSecret": "o;iejf832ndvs",
 
-	"frontUrl": "http://rapixel:8080",
-
 	"uploadUrl": "http://rapixel-file:8080",
-	"uploadDir": "upload-test",
+	"uploadDir": "upload/rapixel-test",
 	"uploadMax": 10,
 
 	"mongoDb": "rapixel-test",
