@@ -8,6 +8,7 @@ var _vers = [
 	{ width:2880, height: 1620, postfix: '169' },
 	{ width:1440, height: 810, postfix: '169' },
 	{ width:1280, height: 720, postfix: '169' },
+	{ width:1136, height: 640, postfix: '169' },
 	{ width:960 , height: 540, postfix: '169' },
 	{ width:640 , height: 360, postfix: '169' }
 ];
