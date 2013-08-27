@@ -1,0 +1,7 @@
+.images .image {
+  margin-bottom: 25px;
+}
+.images .image img {
+  margin-top: -5px;
+  margin-bottom: -5px;
+}

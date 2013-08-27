@@ -58,18 +58,18 @@
   font-weight: 500;
 }
 .images .image {
-  margin-bottom: 30px;
+  margin-bottom: 45px;
 }
 .images .image img {
   max-width: 100%;
-  margin-bottom: 2px;
+  margin-bottom: 5px;
 }
 .images .image .info a {
   color: inherit;
 }
 @media (max-width: 768px) {
   .images .image {
-    margin-bottom: 25px;
+    margin-bottom: 20px;
   }
 }
 .pager-prev {

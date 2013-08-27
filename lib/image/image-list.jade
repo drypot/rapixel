@@ -8,7 +8,7 @@ block content
 	.section.page-title.site-title
 		h1
 			a(href="/") #{appName}
-		p.lead 4K Images
+		p.lead #{appDesc}
 
 	if !gtUrl
 		if locals.user
@@ -35,9 +35,10 @@ block content
 				.img
 					a(href='/images/' + image._id)
 						img(src=image.dir + '/' + image._id + '-640.jpg')
-				.info
-					span
-						a(href='/' + encodeURIComponent(image.user.home)) #{image.user.name}
+				if showName
+					.info
+						span
+							a(href='/' + encodeURIComponent(image.user.home)) #{image.user.name}
 
 	if locals.ltUrl
 		.section.pager-next

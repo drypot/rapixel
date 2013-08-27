@@ -9,11 +9,12 @@ html
 		meta(name="description", content=appDesc)
 		meta(name="author", content="")
 
-		link(rel="icon", type="image/png", href="/image/favicon.png")
+		link(rel="icon", type="image/png", href="/image/" + appType + "/favicon.png")
 
 		link(rel="stylesheet", href="/lib/bootstrap/css/bootstrap.min.css")
 		//-link(rel="stylesheet", href="/lib/bootstrap/css/bootstrap-theme.min.css")
 		link(rel="stylesheet", href="/css/base.css")
+		link(rel="stylesheet", href="/css/" + appType + ".css")
 
 		//if lt IE 9
 			script(src="/lib/html5shiv.js")
