@@ -2,6 +2,7 @@
 
 	shell: mv /data2/rapixel/upload/* /data2/rapixel
 
+	shell: node lib/image-script/add-comment.js --config config/osoky-live.json
 
 ##
 
