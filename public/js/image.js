@@ -27,15 +27,15 @@ init.add(function () {
 	};
 
 	function renderImage(image) {
-		var windowWidth = $window.width()
+		var winSize = getWindowSize();
 		if (window.devicePixelRatio > 1) {
-			windowWidth *= window.devicePixelRatio;
+			winSize *= window.devicePixelRatio;
 		}
 
 		var ver;
 		for (var i = 0; i < image.vers.length; i++) {
 			ver = image.vers[i]
-			if (ver == 640 || image.vers[i+1] < windowWidth ) {
+			if (ver == 640 || image.vers[i+1] < winSize ) {
 				break;
 			}
 		}
@@ -54,14 +54,21 @@ init.add(function () {
 		});
 
 		$window.on('resize', function () {
-			var windowWidth = $window.width();
-			var imgWidth = windowWidth + 8 > ver ? ver : windowWidth;
+			var winSize = getWindowSize();
+			var imgWidth = winSize + 8 > ver ? ver : winSize;
 			$imgHi.width(imgWidth);
 			$imgLow.width(imgWidth);
-			$imgHi.offset({ top: 0, left: (windowWidth - imgWidth) / 2});
+			$imgHi.offset({ top: 0, left: ($window.width() - imgWidth) / 2});
 		});
 
 		$window.trigger('resize');
+	}
+
+	function getWindowSize() {
+		if (appType == 'osoky') {
+			return $window.width() > $window.height() ? $window.height() : $window.width();
+		}
+		return $window.width();
 	}
 
 	imagel.initNewForm = function () {
