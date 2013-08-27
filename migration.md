@@ -2,13 +2,14 @@
 
 	shell: mv /data2/rapixel/upload/* /data2/rapixel
 
-##
 
-	mongo: db.users.dropIndexes();
+##
 
 	shell: node lib/user-script/add-namel.js --config config/live-
 
 	shell: rename upload/public/photo to images
+
+	mongo: db.users.dropIndexes();
 
 	mongo: db.photos.renameCollection('images')
 
