@@ -27,6 +27,15 @@ init.add(function () {
 	};
 
 	function renderImage(image) {
+		if (appType == 'drypot') {
+			var $svg = $('img.svg');
+			$svg.click(function () {
+				history.back();
+				return false;
+			});
+			return;
+		}
+		
 		var winSize = getWindowSize();
 		if (window.devicePixelRatio > 1) {
 			winSize *= window.devicePixelRatio;

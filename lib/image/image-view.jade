@@ -10,8 +10,11 @@ block image
 		});
 
 	.image-view
-		img.low-res(src=image.dir + '/' + image._id + '-640.jpg')
-		img.hi-res
+		if svg
+			img.svg(src=image.dir + '/' + image._id + '-org.svg')
+		else
+			img.low-res(src=image.dir + '/' + image._id + '-640.jpg')
+			img.hi-res
 
 block content
 

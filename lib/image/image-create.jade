@@ -28,6 +28,9 @@ block content
 						.file-group
 						p.help-block
 							| You can upload #{ticketCount} more images today.
+							br
+							if appType == 'drypot'
+								| Only SVG files.
 					.form-group
 						label Comment
 						textarea.form-control(name='comment', rows=7)
@@ -43,8 +46,5 @@ block content
 					| Recommended sizes are 5120x2880 or 3840x2160.
 					br
 					| Max file size is 10MB.
-					br
-				if appType == 'drypot'
-					| Only SVG files.
 					br
 				| You must be copyright owner.
