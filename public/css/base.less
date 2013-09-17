@@ -2,7 +2,7 @@ body {
 }
 
 .container {
-	width: 640px;
+	max-width: 640px; // for mobile
 	padding: 0px;
 	text-align: center;
 }
@@ -79,6 +79,8 @@ body {
 	.image {
 		margin-bottom: 45px;
 		img {
+			max-width: 100%; // for mobile
+			max-height: 100%; // for mobile
 			margin-bottom: 5px;
 		}
 		.info {
@@ -115,7 +117,7 @@ body {
 
 	img.low-res {
 		cursor: pointer;
-		max-width: none;
+		max-width: 100%; // for mobile
 	}
 	img.hi-res {
 		cursor:pointer;
@@ -127,6 +129,7 @@ body {
 	img.svg {
 		cursor: pointer;
 		width: 100%;
+		max-width: 100%; // for mobile
 		max-height: 100%;
 	}
 }
