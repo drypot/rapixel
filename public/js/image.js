@@ -37,7 +37,7 @@ init.add(function () {
 		}
 		
 		var winSize = getWindowSize();
-		if (window.devicePixelRatio > 1) {
+		if (window.devicePixelRatio > 1.5) {
 			winSize *= window.devicePixelRatio;
 		}
 

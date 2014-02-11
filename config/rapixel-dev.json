@@ -3,12 +3,12 @@
 	"appDesc": "4K images",
 	"appType": "rapixel",
 	
-	"frontUrl": "http://rapixel:8080",
+	"frontUrl": "http://rapixel",
 
 	"appPort": 8020,
 	"cookieSecret": "o;iejf832ndvs",
 	
-	"uploadUrl": "http://rapixel-file:8080",
+	"uploadUrl": "http://rapixel-file",
 	"uploadDir": "upload/rapixel",
 	"uploadMax": 10,
 
