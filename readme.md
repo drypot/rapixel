@@ -6,6 +6,9 @@ Image gallery powering the following sites.
 * [https://osoky.com](https://osoky.com)
 * [https://drypot.com](https://drypot.com)
 
+## How to run
+
+	node lib/app/app.js --config config/rapixel-dev.json
 
 ## History
 
