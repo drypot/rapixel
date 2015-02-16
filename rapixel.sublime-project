@@ -1,33 +1,33 @@
 {
-	"folders":
-	[
-		{
-			"path": ".",
-			"folder_exclude_patterns": [
-				"*"
-			]
-		},
-		{
-			"path": "bin"
-		},
-		{
-			"path": "config"
-		},
-		{
-			"path": "samples"
-		},
-		{
-			"path": "public",
-			"folder_exclude_patterns": [
-				"public/lib"
-			]
-		},
-		{
-			"path": "lib"
-		},
+  "folders":
+  [
+    {
+      "path": ".",
+      "folder_exclude_patterns": [
+        "*"
+      ]
+    },
+    {
+      "path": "bin"
+    },
+    {
+      "path": "config"
+    },
+    {
+      "path": "samples"
+    },
+    {
+      "path": "public",
+      "folder_exclude_patterns": [
+        "public/lib"
+      ]
+    },
+    {
+      "path": "lib"
+    },
 
-	],
-	"settings":
+  ],
+  "settings":
     {
     },
     "build_systems":

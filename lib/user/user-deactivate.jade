@@ -1,26 +1,26 @@
 extends ../layout/layout
 
 block title
-	title Deactivate My Account - #{appName}
+  title Deactivate My Account - #{appName}
 
 block content
-	script.
-		init.add(function () {
-			userl.initDeactivate();
-		});
+  script.
+    init.add(function () {
+      userl.initDeactivate();
+    });
 
-	.side-space
-		.section.page-title
-			h1 Deactivate My Account
+  .side-space
+    .section.page-title
+      h1 Deactivate My Account
 
-		.section
-			.sub-section.card
-				| YOU CAN NOT LOGIN AGAIN.
-				br
-				| IMAGES ARE NOT DELETED AUTOMATICALLY.
-				br
-				| DELETE YOUR IMAGES FIRST.
+    .section
+      .sub-section.card
+        | YOU CAN NOT LOGIN AGAIN.
+        br
+        | IMAGES ARE NOT DELETED AUTOMATICALLY.
+        br
+        | DELETE YOUR IMAGES FIRST.
 
-			.sub-section
-				button#dea-btn.btn.btn-danger Deactivate My Account
-				button#dea-confirm-btn.btn.btn-danger.hide Yes, Deactivate
+      .sub-section
+        button#dea-btn.btn.btn-danger Deactivate My Account
+        button#dea-confirm-btn.btn.btn-danger.hide Yes, Deactivate

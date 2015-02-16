@@ -1,21 +1,21 @@
 {
-	"appName": "Rapixel",
-	"appDesc": "4K images",
-	"appType": "rapixel",
-	
-	"frontUrl": "http://rapixel",
+  "appName": "Rapixel",
+  "appDesc": "4K images",
+  "appType": "rapixel",
+  
+  "frontUrl": "http://rapixel",
 
-	"appPort": 8020,
-	"cookieSecret": "o;iejf832ndvs",
-	
-	"uploadUrl": "http://rapixel-file",
-	"uploadDir": "upload/rapixel",
-	"uploadMax": 10,
+  "appPort": 8020,
+  "cookieSecret": "o;iejf832ndvs",
+  
+  "uploadUrl": "http://rapixel-file",
+  "uploadDir": "upload/rapixel",
+  "uploadMax": 10,
 
-	"mongoDb": "rapixel",
+  "mongoDb": "rapixel",
 
-	"mailServer": "",
+  "mailServer": "",
 
-	"ticketGenInterval": 18,
-	"ticketMax": 1
+  "ticketGenInterval": 18,
+  "ticketMax": 1
 }

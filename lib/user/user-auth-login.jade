@@ -1,43 +1,43 @@
 extends ../layout/layout
 
 block title
-	title Login - #{appName}
+  title Login - #{appName}
 
 block content
-	script.
-		init.add(function () {
-			userl.initLogin();
-		});
+  script.
+    init.add(function () {
+      userl.initLogin();
+    });
 
-	.side-space
-		if query.hasOwnProperty('newuser')
-			.section.page-title
-				h1 Thank you
+  .side-space
+    if query.hasOwnProperty('newuser')
+      .section.page-title
+        h1 Thank you
 
-			.section.card
-				| Thank you for registering.
-				br
-				| Your account has been successfully created.
-				br
-				| You can now login with your email and password.
+      .section.card
+        | Thank you for registering.
+        br
+        | Your account has been successfully created.
+        br
+        | You can now login with your email and password.
 
-		.section.page-title
-			h1 Login
+    .section.page-title
+      h1 Login
 
-		form#form.section
-			.sub-section
-				.form-group
-					label.control-label Email
-					input.form-control(name="email", type="text")
-				.form-group
-					label.control-label Password
-					input.form-control(name="password", type="password")
-				.form-group
-					label Remember
-					br
-					input(name="remember", type="checkbox") 
-			.sub-section
-				button.btn.btn-primary(name='send', data-loading-text='Sending') Send
+    form#form.section
+      .sub-section
+        .form-group
+          label.control-label Email
+          input.form-control(name="email", type="text")
+        .form-group
+          label.control-label Password
+          input.form-control(name="password", type="password")
+        .form-group
+          label Remember
+          br
+          input(name="remember", type="checkbox") 
+      .sub-section
+        button.btn.btn-primary(name='send', data-loading-text='Sending') Send
 
-		.section
-			a(href='/users/reset-step1') Reset Password
+    .section
+      a(href='/users/reset-step1') Reset Password

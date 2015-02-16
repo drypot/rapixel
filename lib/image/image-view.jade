@@ -1,35 +1,35 @@
 extends ../layout/layout
 
 block title
-	title Image !{image._id} - #{appName}
+  title Image !{image._id} - #{appName}
 
 block image
-	script.
-		init.add(function() {
-			imagel.initImageView(!{JSON.stringify(image)});
-		});
+  script.
+    init.add(function() {
+      imagel.initImageView(!{JSON.stringify(image)});
+    });
 
-	.image-view
-		if svg
-			img.svg(src=image.dir + '/' + image._id + '-org.svg')
-		else
-			img.low-res(src=image.dir + '/' + image._id + '-640.jpg')
-			img.hi-res
+  .image-view
+    if svg
+      img.svg(src=image.dir + '/' + image._id + '-org.svg')
+    else
+      img.low-res(src=image.dir + '/' + image._id + '-640.jpg')
+      img.hi-res
 
 block content
 
-	.section.image-info
-		.sub-section
-			span
-				a(href='/' + encodeURIComponent(image.user.home)) #{image.user.name}
-			span !{image.cdateStr.slice(0,16)}
-			span #{image.fname}
+  .section.image-info
+    .sub-section
+      span
+        a(href='/' + encodeURIComponent(image.user.home)) #{image.user.name}
+      span !{image.cdateStr.slice(0,16)}
+      span #{image.fname}
 
-		#comment.sub-section
-			| !{jade.escape(image.comment).replace(/\n/g, '<br>')}
+    #comment.sub-section
+      | !{jade.escape(image.comment).replace(/\n/g, '<br>')}
 
-		.sub-section
-			if updatable
-				button#update-btn.btn.btn-success.btn-xs Update
-				button#del-btn.btn.btn-danger.btn-xs Delete
-				button#del-confirm-btn.btn.btn-danger.btn-xs.hide Yes, Delete
+    .sub-section
+      if updatable
+        button#update-btn.btn.btn-success.btn-xs Update
+        button#del-btn.btn.btn-danger.btn-xs Delete
+        button#del-confirm-btn.btn.btn-danger.btn-xs.hide Yes, Delete

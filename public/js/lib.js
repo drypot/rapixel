@@ -1,334 +1,334 @@
 var request = superagent;
 
 (function () {
-	// for IE 7
+  // for IE 7
 
-	if (!window.localStorage) {
-		window.localStorage = {
-			getItem: function () {},
-			setItem: function () {},
-			removeItem: function () {}
-		}
-		window.sessionStorage = {
-			getItem: function () {},
-			setItem: function () {},
-			removeItem: function () {}
-		}
-	}
+  if (!window.localStorage) {
+    window.localStorage = {
+      getItem: function () {},
+      setItem: function () {},
+      removeItem: function () {}
+    }
+    window.sessionStorage = {
+      getItem: function () {},
+      setItem: function () {},
+      removeItem: function () {}
+    }
+  }
 
-	if (!window.console) {
-		window.console = {
-			log: function () {}
-		}
-	}
+  if (!window.console) {
+    window.console = {
+      log: function () {}
+    }
+  }
 
-	window.msie = /msie/.test(navigator.userAgent.toLowerCase());
+  window.msie = /msie/.test(navigator.userAgent.toLowerCase());
 })();
 
 (function () {
-	window.init = {};
+  window.init = {};
 
-	var funcs = [];
+  var funcs = [];
 
-	window.init.add = function (func) {
-		funcs.push(func);
-	};
+  window.init.add = function (func) {
+    funcs.push(func);
+  };
 
-	$(function () {
-		console.log('init:');
+  $(function () {
+    console.log('init:');
 
-		var i = 0;
-		var len = funcs.length;
+    var i = 0;
+    var len = funcs.length;
 
-		for (i = 0; i < len; i++) {
-			funcs[i]();
-		}
-	});
+    for (i = 0; i < len; i++) {
+      funcs[i]();
+    }
+  });
 })();
 
 init.add(function () {
-	window.error = {};
+  window.error = {};
 
-	function define(code, msg) {
-		error[code] = {
-			code: code,
-			message: msg
-		}
-	}
+  function define(code, msg) {
+    error[code] = {
+      code: code,
+      message: msg
+    }
+  }
 
-	define('INVALID_DATA', '비정상적인 값이 입력되었습니다.');
-	define('MULTIPLE', '*');
+  define('INVALID_DATA', '비정상적인 값이 입력되었습니다.');
+  define('MULTIPLE', '*');
 
-	define('NOT_AUTHENTICATED', '먼저 로그인해 주십시오.');
-	define('NOT_AUTHORIZED', '사용 권한이 없습니다.');
+  define('NOT_AUTHENTICATED', '먼저 로그인해 주십시오.');
+  define('NOT_AUTHORIZED', '사용 권한이 없습니다.');
 });
 
 init.add(function () {
-	window.$window = $(window);
-	window.$document = $(document);
-	window.$content = $('#content');
+  window.$window = $(window);
+  window.$document = $(document);
+  window.$content = $('#content');
 
-	window.url = {};
-	window.url.pathnames = window.location.pathname.slice(1).split('/');
-	window.url.query = (function () {
-		var plusx = /\+/g;
-		var paramx = /([^&=]+)=?([^&]*)/g;
-		var search = window.location.search.slice(1);
-		var query = {};
-		var match;
-		while (match = paramx.exec(search)) {
-			query[match[1]] = decodeURIComponent(match[2].replace(plusx, ' '));
-		}
-		return query;
-	})();
+  window.url = {};
+  window.url.pathnames = window.location.pathname.slice(1).split('/');
+  window.url.query = (function () {
+    var plusx = /\+/g;
+    var paramx = /([^&=]+)=?([^&]*)/g;
+    var search = window.location.search.slice(1);
+    var query = {};
+    var match;
+    while (match = paramx.exec(search)) {
+      query[match[1]] = decodeURIComponent(match[2].replace(plusx, ' '));
+    }
+    return query;
+  })();
 });
 
 init.add(function () {
-	var patterns = [
-		{	// url
-			pattern: /(https?:\/\/[^ "'><)\n\r]+)/g,
-			replace: '<a href="$1" target="_blank">$1</a>'
-		}
-	];
+  var patterns = [
+    { // url
+      pattern: /(https?:\/\/[^ "'><)\n\r]+)/g,
+      replace: '<a href="$1" target="_blank">$1</a>'
+    }
+  ];
 
-	window.tagUpText = function (s, pi) {
-		if (pi == undefined) {
-			pi = 0;
-		}
-		if (pi == patterns.length) {
-			return s;
-		}
-		var p = patterns[pi];
-		var r = '';
-		var a = 0;
-		var match;
-		while(match = p.pattern.exec(s)) {
-			r += tagUpText(s.slice(a, match.index), pi + 1);
-			r += p.replace.replace(/\$1/g, match[1]);
-			a = match.index + match[0].length;
-		}
-		r += tagUpText(s.slice(a), pi + 1);
-		return r;
-	};
+  window.tagUpText = function (s, pi) {
+    if (pi == undefined) {
+      pi = 0;
+    }
+    if (pi == patterns.length) {
+      return s;
+    }
+    var p = patterns[pi];
+    var r = '';
+    var a = 0;
+    var match;
+    while(match = p.pattern.exec(s)) {
+      r += tagUpText(s.slice(a, match.index), pi + 1);
+      r += p.replace.replace(/\$1/g, match[1]);
+      a = match.index + match[0].length;
+    }
+    r += tagUpText(s.slice(a), pi + 1);
+    return r;
+  };
 });
 
 
 init.add(function() {
-	var $modal = $('#error-modal');
-	var $title = $modal.find('.modal-title');
-	var $body = $modal.find('.modal-body');
+  var $modal = $('#error-modal');
+  var $title = $modal.find('.modal-title');
+  var $body = $modal.find('.modal-body');
 
-	window.showError = function (err, next) {
-		$title.text(err.message);
-		var body = '';
-		if (err.stack) {
-			body += '<p>System Error ' + err.stack.replace(/Error:.+\n/, '').replace(/\n/g, '<br>') + '</p>';
-		}
-		if (err.detail) {
-			body += '<pre>' + err.detail.replace(/\n/g, '<br>') + '</pre>';
-		}
-		console.log(body);
-		$body.html(body);
-		$modal.off('hidden.bs.modal');
-		if (next) {
-			$modal.on('hidden.bs.modal', next);
-		}
-		$modal.modal('show');
-	};
+  window.showError = function (err, next) {
+    $title.text(err.message);
+    var body = '';
+    if (err.stack) {
+      body += '<p>System Error ' + err.stack.replace(/Error:.+\n/, '').replace(/\n/g, '<br>') + '</p>';
+    }
+    if (err.detail) {
+      body += '<pre>' + err.detail.replace(/\n/g, '<br>') + '</pre>';
+    }
+    console.log(body);
+    $body.html(body);
+    $modal.off('hidden.bs.modal');
+    if (next) {
+      $modal.on('hidden.bs.modal', next);
+    }
+    $modal.modal('show');
+  };
 });
 
 init.add(function() {
-	window.formty = {};
+  window.formty = {};
 
-	var namex = /[^\[]+/;
+  var namex = /[^\[]+/;
 
-	formty.getForm = function (sel) {
-		var $form = $(sel);
-		$form.find('input, textarea, select, button').each(function () {
-			if (this.name) {
-				var name = this.name.match(namex)[0];
-				$form['$' + name] = $(this);
-			}
-		});
-		if ($form.$send) {
-			$form.$send.button();
-		}
-		return $form;
-	};
+  formty.getForm = function (sel) {
+    var $form = $(sel);
+    $form.find('input, textarea, select, button').each(function () {
+      if (this.name) {
+        var name = this.name.match(namex)[0];
+        $form['$' + name] = $(this);
+      }
+    });
+    if ($form.$send) {
+      $form.$send.button();
+    }
+    return $form;
+  };
 
-	formty.toObject = function ($form) {
-		var obj = {};
-		$form.find('input, textarea, select').each(function () {
-			if (this.name && !this.disabled) {
-				var $this = $(this);
-				var name = this.name.match(namex)[0];
-				var braket = this.name.length != name.length;
-				if (this.type == 'checkbox') {
-					if (braket) {
-						if ($this.prop('checked')) {
-							if (obj[name]) {
-								obj[name].push($this.val());
-							} else {
-								obj[name] = [$this.val()];
-							}
-						}
-					} else {
-						obj[name] = $this.prop('checked');
-					}
-					return;
-				}
-				if (this.type == 'file') {
-					return;
-				}
-				obj[name] = $this.val();
-			}
-		});
-		for (var key in $form.extra) {
-			obj[key] = $form.extra[key];
-		}
-		return obj;
-	};
+  formty.toObject = function ($form) {
+    var obj = {};
+    $form.find('input, textarea, select').each(function () {
+      if (this.name && !this.disabled) {
+        var $this = $(this);
+        var name = this.name.match(namex)[0];
+        var braket = this.name.length != name.length;
+        if (this.type == 'checkbox') {
+          if (braket) {
+            if ($this.prop('checked')) {
+              if (obj[name]) {
+                obj[name].push($this.val());
+              } else {
+                obj[name] = [$this.val()];
+              }
+            }
+          } else {
+            obj[name] = $this.prop('checked');
+          }
+          return;
+        }
+        if (this.type == 'file') {
+          return;
+        }
+        obj[name] = $this.val();
+      }
+    });
+    for (var key in $form.extra) {
+      obj[key] = $form.extra[key];
+    }
+    return obj;
+  };
 
-	formty.initFileGroup = function ($form, name, adder) {
-		var $fileTempl = $('#file-input-templ').children(0);
-		var $fileTemplIE = $('#file-input-templ-msie').children(0);
-		var $fileGroup = $form.find('.file-group');
-		var $files = $('<div/>').addClass('files');
-		var $adder = $('<div/>').addClass('glyphicon glyphicon-plus');
+  formty.initFileGroup = function ($form, name, adder) {
+    var $fileTempl = $('#file-input-templ').children(0);
+    var $fileTemplIE = $('#file-input-templ-msie').children(0);
+    var $fileGroup = $form.find('.file-group');
+    var $files = $('<div/>').addClass('files');
+    var $adder = $('<div/>').addClass('glyphicon glyphicon-plus');
 
-		$fileGroup.append($files);
-		if (adder) {
-			$fileGroup.append($adder);
-		}
-		function addFileInput() {
-			var $set = msie ? $fileTemplIE.clone(): $fileTempl.clone();
+    $fileGroup.append($files);
+    if (adder) {
+      $fileGroup.append($adder);
+    }
+    function addFileInput() {
+      var $set = msie ? $fileTemplIE.clone(): $fileTempl.clone();
 
-			var $file = $set.find('input[type="file"]');
-			$file.attr('name', name);
+      var $file = $set.find('input[type="file"]');
+      $file.attr('name', name);
 
-			if (!msie) {
-				var $btn = $set.find('button');
-				$btn.click(function () {
-					$file.click();
-					return false;
-				});
-				$file.on('change', function () {
-					var files = $file[0].files;
-					var text = files.length + ' files selected';
-					$btn.text(text);
-				});
-			}
-			$files.append($set);
-		}
+      if (!msie) {
+        var $btn = $set.find('button');
+        $btn.click(function () {
+          $file.click();
+          return false;
+        });
+        $file.on('change', function () {
+          var files = $file[0].files;
+          var text = files.length + ' files selected';
+          $btn.text(text);
+        });
+      }
+      $files.append($set);
+    }
 
-		addFileInput();
+    addFileInput();
 
-		$adder.click(function () {
-			addFileInput();
-			return false;
-		});
-	};
+    $adder.click(function () {
+      addFileInput();
+      return false;
+    });
+  };
 
-	formty.sendFiles = function ($form, next) {
-		var files = $('input[type=file]', $form).filter(function () {
-			return $(this).val();
-		});
-		if (files.length) {
-			console.log('sending ' + files.length + ' files.');
-			$.ajax('/api/upload?rtype=html', {
-				dataType: 'json',
-				method: 'POST',
-				files: files,
-				iframe: true,
-				success: function(data, textStatus, jqXHR) {
-					next(null, { body: data });
-				},
-				error:function (jqXHR, textStatus, errorThrown) {
-					var err = {
-						message: "Uploading Error",
-						detail: jqXHR.responseText
-					};
-					next(err);
-				}
-			});
-			return;
-		}
-		next(null, { body: {} });
-	};
+  formty.sendFiles = function ($form, next) {
+    var files = $('input[type=file]', $form).filter(function () {
+      return $(this).val();
+    });
+    if (files.length) {
+      console.log('sending ' + files.length + ' files.');
+      $.ajax('/api/upload?rtype=html', {
+        dataType: 'json',
+        method: 'POST',
+        files: files,
+        iframe: true,
+        success: function(data, textStatus, jqXHR) {
+          next(null, { body: data });
+        },
+        error:function (jqXHR, textStatus, errorThrown) {
+          var err = {
+            message: "Uploading Error",
+            detail: jqXHR.responseText
+          };
+          next(err);
+        }
+      });
+      return;
+    }
+    next(null, { body: {} });
+  };
 
-	// gen http methods
+  // gen http methods
 
-	var methods = [ 'post', 'get', 'put', 'del' ];
+  var methods = [ 'post', 'get', 'put', 'del' ];
 
-	for (var i = 0; i < methods.length; i++) {
-		var method = methods[i];
-		formty[method] = (function (method) {
-			return function (url, $form, next) {
-				var form = formty.toObject($form);
-				formty.clearAlerts($form);
-				formty.showSending($form);
-				formty.sendFiles($form, function (err, res) {
-					if (err) {
-						formty.hideSending($form);
-						return next(err);
-					}
-					for (var key in res.body) {
-						form[key] = res.body[key];
-					}
-					request[method].call(request, url).send(form).end(function (err, res) {
-						err = err || res.error;
-						if (err) {
-							formty.hideSending($form);
-							return next(err);
-						}
-						if (res.body.err) {
-							if (res.body.err.code === error.MULTIPLE.code) {
-								formty.addAlerts($form, res.body.err.errors);
-								formty.hideSending($form);
-								return;
-							}
-							showError(res.body.err);
-							formty.hideSending($form);
-							return;
-						}
-						// formty.hideSending($form) 을 부르지 않는다.
-						// 보통 페이지 이동이 일어나므로 버튼을 바꿀 필요가 없다.
-						next(null, res);
-					});
-				});
-			};
-		})(method)
-	}
+  for (var i = 0; i < methods.length; i++) {
+    var method = methods[i];
+    formty[method] = (function (method) {
+      return function (url, $form, next) {
+        var form = formty.toObject($form);
+        formty.clearAlerts($form);
+        formty.showSending($form);
+        formty.sendFiles($form, function (err, res) {
+          if (err) {
+            formty.hideSending($form);
+            return next(err);
+          }
+          for (var key in res.body) {
+            form[key] = res.body[key];
+          }
+          request[method].call(request, url).send(form).end(function (err, res) {
+            err = err || res.error;
+            if (err) {
+              formty.hideSending($form);
+              return next(err);
+            }
+            if (res.body.err) {
+              if (res.body.err.code === error.MULTIPLE.code) {
+                formty.addAlerts($form, res.body.err.errors);
+                formty.hideSending($form);
+                return;
+              }
+              showError(res.body.err);
+              formty.hideSending($form);
+              return;
+            }
+            // formty.hideSending($form) 을 부르지 않는다.
+            // 보통 페이지 이동이 일어나므로 버튼을 바꿀 필요가 없다.
+            next(null, res);
+          });
+        });
+      };
+    })(method)
+  }
 
-	formty.showSending = function ($form) {
-		if ($form.$send) {
-			$form.$send.button('loading');
-		}
-		return;
-	};
+  formty.showSending = function ($form) {
+    if ($form.$send) {
+      $form.$send.button('loading');
+    }
+    return;
+  };
 
-	formty.hideSending = function ($form) {
-		if ($form.$send) {
-			$form.$send.button('reset');
-		}
-		return;
-	};
+  formty.hideSending = function ($form) {
+    if ($form.$send) {
+      $form.$send.button('reset');
+    }
+    return;
+  };
 
-	formty.clearAlerts = function ($form) {
-		$form.find('.has-error').removeClass('has-error');
-		$form.find('.text-danger').remove();
-	};
+  formty.clearAlerts = function ($form) {
+    $form.find('.has-error').removeClass('has-error');
+    $form.find('.text-danger').remove();
+  };
 
-	formty.addAlert = function ($control, msg) {
-		var $group = $control.closest('.form-group');
-		$group.addClass('has-error');
-		$group.append($('<p>').addClass('help-block text-danger').text(msg));
-	};
+  formty.addAlert = function ($control, msg) {
+    var $group = $control.closest('.form-group');
+    $group.addClass('has-error');
+    $group.append($('<p>').addClass('help-block text-danger').text(msg));
+  };
 
-	formty.addAlerts = function ($form, errors) {
-		for (var i = 0; i < errors.length; i++) {
-			var error = errors[i];
-			formty.addAlert($form.find('[name="' + error.field + '"]'), error.message);
-		}
-	}
+  formty.addAlerts = function ($form, errors) {
+    for (var i = 0; i < errors.length; i++) {
+      var error = errors[i];
+      formty.addAlert($form.find('[name="' + error.field + '"]'), error.message);
+    }
+  }
 });

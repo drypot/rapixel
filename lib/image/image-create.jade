@@ -1,50 +1,50 @@
 extends ../layout/layout
 
 block title
-	title Upload - #{appName}
+  title Upload - #{appName}
 
 block content
 
-	.side-space
-		.section.page-title
-			h1 Upload
+  .side-space
+    .section.page-title
+      h1 Upload
 
-		if !ticketCount
-			.section.card
-				| !{ticketMax} images a day.
-				br
-				| You can upload #{hours} hours later.
+    if !ticketCount
+      .section.card
+        | !{ticketMax} images a day.
+        br
+        | You can upload #{hours} hours later.
 
-		else
-			script.
-				init.add(function() {
-					imagel.initNewForm();
-				});
+    else
+      script.
+        init.add(function() {
+          imagel.initNewForm();
+        });
 
-			form#form.section
-				.sub-section
-					.form-group
-						label Image
-						.file-group
-						p.help-block
-							| You can upload #{ticketCount} more images today.
-							br
-							if appType == 'drypot'
-								| Only SVG files.
-					.form-group
-						label Comment
-						textarea.form-control(name='comment', rows=7)
-				.sub-section
-					button.btn.btn-primary(name='send', data-loading-text='Sending') Send
+      form#form.section
+        .sub-section
+          .form-group
+            label Image
+            .file-group
+            p.help-block
+              | You can upload #{ticketCount} more images today.
+              br
+              if appType == 'drypot'
+                | Only SVG files.
+          .form-group
+            label Comment
+            textarea.form-control(name='comment', rows=7)
+        .sub-section
+          button.btn.btn-primary(name='send', data-loading-text='Sending') Send
 
-			.section.card
-				if appType == 'rapixel'
-					| Image must be larger than 3840x2160 pixels.
-					br
-					| Image will be cropped to 16:9 automatically.
-					br
-					| Recommended sizes are 5120x2880 or 3840x2160.
-					br
-					| Max file size is 10MB.
-					br
-				| You must be copyright owner.
+      .section.card
+        if appType == 'rapixel'
+          | Image must be larger than 3840x2160 pixels.
+          br
+          | Image will be cropped to 16:9 automatically.
+          br
+          | Recommended sizes are 5120x2880 or 3840x2160.
+          br
+          | Max file size is 10MB.
+          br
+        | You must be copyright owner.

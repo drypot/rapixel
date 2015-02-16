@@ -1,22 +1,22 @@
 {
-	"appName": "Osoky",
-	"appDesc": "Your randos",
-	"appType": "osoky",
+  "appName": "Osoky",
+  "appDesc": "Your randos",
+  "appType": "osoky",
 
-	"frontUrl": "http://osoky",
+  "frontUrl": "http://osoky",
 
-	"appPort": 8030,
-	"cookieSecret": "o;iejf832ndvs",
+  "appPort": 8030,
+  "cookieSecret": "o;iejf832ndvs",
 
-	"uploadUrl": "http://osoky-file",
-	"uploadDir": "upload/osoky",
-	"uploadMax": 10,
+  "uploadUrl": "http://osoky-file",
+  "uploadDir": "upload/osoky",
+  "uploadMax": 10,
 
-	"mongoDb": "osoky",
+  "mongoDb": "osoky",
 
-	"mailServer": "",
+  "mailServer": "",
 
-	"ticketGenInterval": 18,
-	"ticketMax" : 7
+  "ticketGenInterval": 18,
+  "ticketMax" : 7
 }
 

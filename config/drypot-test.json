@@ -1,22 +1,22 @@
 {
-	"appName": "Drypot",
-	"appDesc": "Simply vectors",
-	"appType": "drypot",
+  "appName": "Drypot",
+  "appDesc": "Simply vectors",
+  "appType": "drypot",
 
-	"frontUrl": "http://drypot",
+  "frontUrl": "http://drypot",
 
-	"appPort": 8041,
-	"cookieSecret": "o;iejf832ndvs",
+  "appPort": 8041,
+  "cookieSecret": "o;iejf832ndvs",
 
-	"uploadUrl": "http://drypot-file",
-	"uploadDir": "upload/drypot-test",
-	"uploadMax": 10,
+  "uploadUrl": "http://drypot-file",
+  "uploadDir": "upload/drypot-test",
+  "uploadMax": 10,
 
-	"mongoDb": "drypot-test",
+  "mongoDb": "drypot-test",
 
-	"mailServer": "",
+  "mailServer": "",
 
-	"ticketGenInterval": 18,
-	"ticketMax" : 3
+  "ticketGenInterval": 18,
+  "ticketMax" : 3
 }
 

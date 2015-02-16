@@ -1,12 +1,12 @@
 if [ $# -eq 0 ]; then
-	echo 'run [rapixel|osoky|drypot|...] [dev|live]'
-	exit 1
+  echo 'run [rapixel|osoky|drypot|...] [dev|live]'
+  exit 1
 fi
 
 if [ '$2' = 'live' ]; then
-	NODE_ENV=production
+  NODE_ENV=production
 else
-	NODE_ENV=development
+  NODE_ENV=development
 fi
 
 node lib/app/app.js --config config/$1-$2.json

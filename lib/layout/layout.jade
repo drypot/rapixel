@@ -1,72 +1,72 @@
 !!! 5
 html
-	head
-		meta(charset="utf-8")
+  head
+    meta(charset="utf-8")
 
-		block title
+    block title
 
-		meta(name="viewport", content="width=device-width, initial-scale=1.0")
-		meta(name="description", content=appDesc)
-		meta(name="author", content="")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(name="description", content=appDesc)
+    meta(name="author", content="")
 
-		link(rel="icon", type="image/png", href="/image/" + appType + "/favicon.png")
+    link(rel="icon", type="image/png", href="/image/" + appType + "/favicon.png")
 
-		link(rel="stylesheet", href="/lib/bootstrap/css/bootstrap.min.css")
-		//-link(rel="stylesheet", href="/lib/bootstrap/css/bootstrap-theme.min.css")
-		link(rel="stylesheet", href="/css/base.css")
-		link(rel="stylesheet", href="/css/" + appType + ".css")
+    link(rel="stylesheet", href="/lib/bootstrap/css/bootstrap.min.css")
+    //-link(rel="stylesheet", href="/lib/bootstrap/css/bootstrap-theme.min.css")
+    link(rel="stylesheet", href="/css/base.css")
+    link(rel="stylesheet", href="/css/" + appType + ".css")
 
-		//if lt IE 9
-			script(src="/lib/html5shiv.js")
-			script(src="/lib/respond.min.js")
+    //if lt IE 9
+      script(src="/lib/html5shiv.js")
+      script(src="/lib/respond.min.js")
 
-		script(src="/lib/json2.js")
-		script(src="/lib/jquery-1.10.2.min.js")
-		script(src='/lib/jquery.iframe-transport.js')
-		script(src="/lib/bootstrap/js/bootstrap.min.js")
-		script(src="/lib/superagent.js")
+    script(src="/lib/json2.js")
+    script(src="/lib/jquery-1.10.2.min.js")
+    script(src='/lib/jquery.iframe-transport.js')
+    script(src="/lib/bootstrap/js/bootstrap.min.js")
+    script(src="/lib/superagent.js")
 
-		script.
-			window.appType = '!{appType}';
-			window.user = !{locals.user ? JSON.stringify({ id: user._id, name: user.name }) : 'undefined'};
+    script.
+      window.appType = '!{appType}';
+      window.user = !{locals.user ? JSON.stringify({ id: user._id, name: user.name }) : 'undefined'};
 
-		script(src="/js/lib.js")
-		script(src="/js/user.js")
-		script(src="/js/image.js")
+    script(src="/js/lib.js")
+    script(src="/js/user.js")
+    script(src="/js/image.js")
 
-	body
+  body
 
-		if locals.imageView
-			block image
+    if locals.imageView
+      block image
 
-		.container
-			block content
+    .container
+      block content
 
-			.section.page-footer
-				ul.list-inline
-					li: a(href="/company") Company
-					li: a(href="/services") Services
-					li: a(href="/privacy") Privacy
-					li: a(href="/help") Help
-				.home
-					a(href='/') #{appName}
+      .section.page-footer
+        ul.list-inline
+          li: a(href="/company") Company
+          li: a(href="/services") Services
+          li: a(href="/privacy") Privacy
+          li: a(href="/help") Help
+        .home
+          a(href='/') #{appName}
 
-		#error-modal.modal
-			.modal-dialog
-				.modal-content
-					.modal-header
-						button.close(type="button", data-dismiss="modal", aria-hidden="true") ×
-						h4.modal-title
-					.modal-body
-					.modal-footer
-						button.btn.btn-default(data-dismiss="modal") Close
+    #error-modal.modal
+      .modal-dialog
+        .modal-content
+          .modal-header
+            button.close(type="button", data-dismiss="modal", aria-hidden="true") ×
+            h4.modal-title
+          .modal-body
+          .modal-footer
+            button.btn.btn-default(data-dismiss="modal") Close
 
-		#file-input-templ.hide
-			.file
-				.hidden-input
-					input(type='file', multiple='multiple')
-				button.btn.btn-default Select
+    #file-input-templ.hide
+      .file
+        .hidden-input
+          input(type='file', multiple='multiple')
+        button.btn.btn-default Select
 
-		#file-input-templ-msie.hide
-			.file
-				input(type='file')
+    #file-input-templ-msie.hide
+      .file
+        input(type='file')

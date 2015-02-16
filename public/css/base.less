@@ -2,205 +2,205 @@ body {
 }
 
 .container {
-	max-width: 640px; // for mobile
-	padding: 0px;
-	text-align: center;
+  max-width: 640px; // for mobile
+  padding: 0px;
+  text-align: center;
 }
 
 .side-space {
-	margin-left: 1px;
-	margin-right: 1px;
-	padding-left: 8px;
-	padding-right: 8px;
+  margin-left: 1px;
+  margin-right: 1px;
+  padding-left: 8px;
+  padding-right: 8px;
 }
 
 .card {
-	font-size: 18px;
+  font-size: 18px;
 }
 
 .link-set {
-	a {
-		padding-left:10px;
-		padding-right:10px;
-	}
+  a {
+    padding-left:10px;
+    padding-right:10px;
+  }
 }
 
 .section {
-	margin-bottom: 50px;
+  margin-bottom: 50px;
 }
 
 .sub-section {
-	margin-bottom: 35px;
+  margin-bottom: 35px;
 }
 
 .page-title {
-	margin-top: 60px;
+  margin-top: 60px;
 
-	a {
-		color: #333;
-	}
-	a:hover {
-		text-decoration: none;
-	}
+  a {
+    color: #333;
+  }
+  a:hover {
+    text-decoration: none;
+  }
 }
 
 .site-title {
-	h1 {
-		font-size: 53px;
-	}
+  h1 {
+    font-size: 53px;
+  }
 }
 
 .update {
-	margin-top: 20px;
+  margin-top: 20px;
 }
 
 .page-footer {
-	margin-bottom: 60px;
-	a {
-		color: #333;
-	}
-	ul {
-		margin: 0px;
-		li {
-			padding-left:0px;
-			padding-right:9px;
-		}
-	}
-	.home {
-		margin: 15px;
-		a, a.hover {
-			font-size: 28px;
-			font-weight: 500;
-		}
-	}
+  margin-bottom: 60px;
+  a {
+    color: #333;
+  }
+  ul {
+    margin: 0px;
+    li {
+      padding-left:0px;
+      padding-right:9px;
+    }
+  }
+  .home {
+    margin: 15px;
+    a, a.hover {
+      font-size: 28px;
+      font-weight: 500;
+    }
+  }
 }
 
 .images {
-	.image {
-		margin-bottom: 45px;
-		img {
-			max-width: 100%; // for mobile
-			max-height: 100%; // for mobile
-			margin-bottom: 5px;
-		}
-		.info {
-			span {
-				//margin-right:15px;
-			}
-			a {
-				color: #333;
-			}
-		}
-	}
+  .image {
+    margin-bottom: 45px;
+    img {
+      max-width: 100%; // for mobile
+      max-height: 100%; // for mobile
+      margin-bottom: 5px;
+    }
+    .info {
+      span {
+        //margin-right:15px;
+      }
+      a {
+        color: #333;
+      }
+    }
+  }
 }
 
 @media (max-width: 768px) {
-	.images {
-		.image {
-			margin-bottom: 20px;
-		}
-	}
+  .images {
+    .image {
+      margin-bottom: 20px;
+    }
+  }
 }
 
 .pager-prev {
-	font-size: 18px;
-	line-height: 1;
+  font-size: 18px;
+  line-height: 1;
 }
 
 .pager-next {
-	font-size: 18px;
-	line-height: 1;
+  font-size: 18px;
+  line-height: 1;
 }
 
 .image-view {
-	text-align: center;
+  text-align: center;
 
-	img.low-res {
-		cursor: pointer;
-		max-width: 100%; // for mobile
-	}
-	img.hi-res {
-		cursor:pointer;
-		display: block;
-		position: absolute;
-		z-index: 10;
-		max-width: none;
-	}
-	img.svg {
-		cursor: pointer;
-		width: 100%;
-		max-width: 100%; // for mobile
-		max-height: 100%;
-	}
+  img.low-res {
+    cursor: pointer;
+    max-width: 100%; // for mobile
+  }
+  img.hi-res {
+    cursor:pointer;
+    display: block;
+    position: absolute;
+    z-index: 10;
+    max-width: none;
+  }
+  img.svg {
+    cursor: pointer;
+    width: 100%;
+    max-width: 100%; // for mobile
+    max-height: 100%;
+  }
 }
 
 .image-info {
-	margin-top: 5px;
-	span {
-		padding-left: 10px;
-		padding-right: 10px;
-	}
-	a {
-		color: #333;
-	}
+  margin-top: 5px;
+  span {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  a {
+    color: #333;
+  }
 }
 
 form {
-	width: 60%;
-	margin-left: 20%;
-	margin-bottom: 50px;
+  width: 60%;
+  margin-left: 20%;
+  margin-bottom: 50px;
 
-	.file-group {
-		.files {
-			.file {
-				.hidden-input {
-					position:absolute;
-					top: -999px;
-					width: 0px;
-					height: 0px;
-				}
-				button {
-					width:100%;
-				}
-				// for ie
-				input[type=file] {
-					display: inline-block;
-				}
-			}
-		}
-	}
-	
-	textarea {
-		font-family: monospace;
-	}
+  .file-group {
+    .files {
+      .file {
+        .hidden-input {
+          position:absolute;
+          top: -999px;
+          width: 0px;
+          height: 0px;
+        }
+        button {
+          width:100%;
+        }
+        // for ie
+        input[type=file] {
+          display: inline-block;
+        }
+      }
+    }
+  }
+  
+  textarea {
+    font-family: monospace;
+  }
 }
 
 @media (max-width: 480px) {
-	form {
-		width: 100%;
-		margin-left: 0%;
-	}
+  form {
+    width: 100%;
+    margin-left: 0%;
+  }
 }
 
 pre.error-report {
-	margin: 0px;
+  margin: 0px;
 
-	padding: 0px;
-	padding-top: 5px;
+  padding: 0px;
+  padding-top: 5px;
 
-	border: 0;
-	border-top: 1px solid #eeeeee;
+  border: 0;
+  border-top: 1px solid #eeeeee;
 
-	text-align: left;
-	font-family: monospace;
-	font-size: 14px;
-	background-color: white;
-	white-space: nowrap;
+  text-align: left;
+  font-family: monospace;
+  font-size: 14px;
+  background-color: white;
+  white-space: nowrap;
 }
 
 .modal-body {
-	p {
-		white-space: nowrap;
-		overflow: scroll;
-	}
+  p {
+    white-space: nowrap;
+    overflow: scroll;
+  }
 }

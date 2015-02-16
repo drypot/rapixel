@@ -8,7 +8,7 @@ Image gallery powering the following sites.
 
 ## How to run
 
-	node lib/app/app.js --config config/rapixel-dev.json
+  node lib/app/app.js --config config/rapixel-dev.json
 
 ## History
 
@@ -35,27 +35,27 @@ Image gallery powering the following sites.
 
 개발환경용 Nginx 설정 예
 
-	server {
-		listen 8080;
-		server_name rapixel;
-		root /Users/drypot/projects/rapixel/website/public;
+    server {
+      listen 8080;
+      server_name rapixel;
+      root /Users/drypot/projects/rapixel/website/public;
 
-		client_max_body_size 10m;
+      client_max_body_size 10m;
 
-		location / {
-			proxy_pass http://localhost:8802;
-			proxy_set_header Host $http_host;
-		}
+      location / {
+        proxy_pass http://localhost:8802;
+        proxy_set_header Host $http_host;
+      }
 
-		location ~ /(?:css|image|js|lib)/ {
-		}
-	}
+      location ~ /(?:css|image|js|lib)/ {
+      }
+    }
 
-	server {
-		listen 8080;
-		server_name rapixel-file;
-		root /Users/drypot/projects/rapixel/website/upload-rapixel/public;
-	}
+    server {
+      listen 8080;
+      server_name rapixel-file;
+      root /Users/drypot/projects/rapixel/website/upload-rapixel/public;
+    }
 
 
 ## License

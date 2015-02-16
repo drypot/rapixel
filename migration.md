@@ -1,27 +1,27 @@
 ##
 
-	shell: mv /data2/rapixel/upload/* /data2/rapixel
+  shell: mv /data2/rapixel/upload/* /data2/rapixel
 
-	shell: node lib/image-script/add-comment.js --config config/osoky-live.json
+  shell: node lib/image-script/add-comment.js --config config/osoky-live.json
 
 ##
 
-	shell: node lib/user-script/add-namel.js --config config/live-
+  shell: node lib/user-script/add-namel.js --config config/live-
 
-	shell: rename upload/public/photo to images
+  shell: rename upload/public/photo to images
 
-	mongo: db.users.dropIndexes();
+  mongo: db.users.dropIndexes();
 
-	mongo: db.photos.renameCollection('images')
+  mongo: db.photos.renameCollection('images')
 
 
 ## done
 
-	db.users.update({}, { $set: { footer: '' }}, { multi: true })
+  db.users.update({}, { $set: { footer: '' }}, { multi: true })
 
-	db.photos.dropIndexes();
+  db.photos.dropIndexes();
 
-	db.photos.update({ userId: { $exists: true } },
-		{ $rename: { userId: 'uid' } },
-		{ multi: true }
-	);
+  db.photos.update({ userId: { $exists: true } },
+    { $rename: { userId: 'uid' } },
+    { multi: true }
+  );

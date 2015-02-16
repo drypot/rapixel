@@ -1,34 +1,34 @@
 extends ../layout/layout
 
 block title
-	title Update Profile - #{appName}
+  title Update Profile - #{appName}
 
 block content
-	script.
-		init.add(function () {
-			userl.initUpdateProfileForm();
-		});
+  script.
+    init.add(function () {
+      userl.initUpdateProfileForm();
+    });
 
-	.side-space
-		.section.page-title
-			h1 Update Profile
+  .side-space
+    .section.page-title
+      h1 Update Profile
 
-		form#form.section
-			.sub-section
-				.form-group
-					label.control-label Name
-					input.form-control(name="name", type="text", maxlength=32, value=tuser.name)
-				.form-group
-					label#domain-url.control-label
-					input.form-control(name="home", type="text", maxlength=32, value=tuser.home)
-				.form-group
-					label.control-label Email
-					input.form-control(name="email", type="text", maxlength=64, value=tuser.email)
-				.form-group
-					label.control-label Password
-					input.form-control(name="password", type="password", maxlength=64)
-				.form-group
-					label.control-label Profile
-					textarea.form-control(name="profile", rows=5) #{tuser.profile}
-			.sub-section
-				button.btn.btn-primary(name='send', data-loading-text='Sending') Send
+    form#form.section
+      .sub-section
+        .form-group
+          label.control-label Name
+          input.form-control(name="name", type="text", maxlength=32, value=tuser.name)
+        .form-group
+          label#domain-url.control-label
+          input.form-control(name="home", type="text", maxlength=32, value=tuser.home)
+        .form-group
+          label.control-label Email
+          input.form-control(name="email", type="text", maxlength=64, value=tuser.email)
+        .form-group
+          label.control-label Password
+          input.form-control(name="password", type="password", maxlength=64)
+        .form-group
+          label.control-label Profile
+          textarea.form-control(name="profile", rows=5) #{tuser.profile}
+      .sub-section
+        button.btn.btn-primary(name='send', data-loading-text='Sending') Send

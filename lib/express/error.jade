@@ -1,25 +1,25 @@
 extends ../layout/layout
 
 block title
-	title Error - #{appName}
+  title Error - #{appName}
 
 block content
 
-	.side-space
-		.section.page-title
-			h1 Error
+  .side-space
+    .section.page-title
+      h1 Error
 
-		.section
-			.sub-section.card
-				if err.message
-					| #{err.message}
-				else
-					| Unknown Error
+    .section
+      .sub-section.card
+        if err.message
+          | #{err.message}
+        else
+          | Unknown Error
 
-			.sub-section
-				pre.error-report
-					if err.code
-						| #{'Code: ' + err.code}
-						br
-					if err.stack
-						| !{err.stack.replace(/\n/g, '<br>')}
+      .sub-section
+        pre.error-report
+          if err.code
+            | #{'Code: ' + err.code}
+            br
+          if err.stack
+            | !{err.stack.replace(/\n/g, '<br>')}
