@@ -3,12 +3,12 @@
   "appDesc": "Your randos",
   "appType": "osoky",
 
-  "frontUrl": "http://osoky",
+  "frontUrl": "http://osoky.local:8080",
 
   "appPort": 8031,
   "cookieSecret": "o;iejf832ndvs",
 
-  "uploadUrl": "http://osoky-file",
+  "uploadUrl": "http://file.osoky.local:8080",
   "uploadDir": "upload/osoky-test",
   "uploadMax": 10,
 
@@ -17,6 +17,6 @@
   "mailServer": "",
 
   "ticketGenInterval": 18,
-  "ticketMax" : 7
+  "ticketMax": 7
 }
 
