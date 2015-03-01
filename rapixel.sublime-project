@@ -1,36 +1,43 @@
 {
-  "folders":
-  [
-    {
-      "path": ".",
-      "folder_exclude_patterns": [
-        "*"
-      ]
-    },
-    {
-      "path": "bin"
-    },
-    {
-      "path": "config"
-    },
-    {
-      "path": "samples"
-    },
-    {
-      "path": "public",
-      "folder_exclude_patterns": [
-        "public/lib"
-      ]
-    },
-    {
-      "path": "lib"
-    },
-
-  ],
-  "settings":
-    {
-    },
-    "build_systems":
-    [
-    ]
+	"build_systems":
+	[
+	],
+	"folders":
+	[
+		{
+			"folder_exclude_patterns":
+			[
+				"*"
+			],
+			"follow_symlinks": true,
+			"path": "."
+		},
+		{
+			"follow_symlinks": true,
+			"path": "bin"
+		},
+		{
+			"follow_symlinks": true,
+			"path": "config"
+		},
+		{
+			"follow_symlinks": true,
+			"path": "samples"
+		},
+		{
+			"folder_exclude_patterns":
+			[
+				"public/lib"
+			],
+			"follow_symlinks": true,
+			"path": "public"
+		},
+		{
+			"follow_symlinks": true,
+			"path": "lib"
+		}
+	],
+	"settings":
+	{
+	}
 }
