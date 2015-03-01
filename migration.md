@@ -1,10 +1,12 @@
 ##
 
+## done
+
   shell: mv /data2/rapixel/upload/* /data2/rapixel
 
   shell: node lib/image-script/add-comment.js --config config/osoky-live.json
 
-##
+## done
 
   shell: node lib/user-script/add-namel.js --config config/live-
 
