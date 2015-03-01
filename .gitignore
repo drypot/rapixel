@@ -4,6 +4,7 @@
 *.sublime-workspace
 
 /node_modules/
+/public/lib/
 
 /config/*live*.json
 /tmp/
