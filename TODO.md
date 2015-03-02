@@ -1,12 +1,6 @@
 # To-Do
 
 
-* postfix
-
-* graphicsmagick
-
-* osoky 도움말에 email: support+rapixel@raysoda.com 이렇게 나오는 거 +osoky 로 수정.
-
 * 세션 끝났는데 업로드하면 에러 난다.
 
 * connect-mulitparty 를 https://github.com/andrewrk/node-multiparty/ 직접 사용으로 교체.

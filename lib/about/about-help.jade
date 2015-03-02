@@ -15,8 +15,5 @@ block content
         a(href='/users/deactivate') click
       .sub-section.card
         | email:&nbsp;
-        a(href='mailto:support+rapixel@raysoda.com') support+rapixel@raysoda.com
-        br
-        | twitter:&nbsp;
-        a(href='https://twitter.com/drypot', target='_blank') https://twitter.com/drypot
-        | &nbsp;(developer's personal)
+        -var email = 'support+' + appName.toLowerCase() + '@raysoda.com'
+        a(href='mailto:' + email)= email 
