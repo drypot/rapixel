@@ -43,13 +43,13 @@ mongodb, redis, ImageMagick
 
     server {
       listen 8080;
-      server_name rapixel;
+      server_name rapixel.local;
       root /Users/drypot/projects/rapixel/website/public;
 
       client_max_body_size 10m;
 
       location / {
-        proxy_pass http://localhost:8802;
+        proxy_pass http://localhost:8020;
         proxy_set_header Host $http_host;
       }
 
@@ -59,8 +59,8 @@ mongodb, redis, ImageMagick
 
     server {
       listen 8080;
-      server_name rapixel-file;
-      root /Users/drypot/projects/rapixel/website/upload-rapixel/public;
+      server_name file.rapixel.local;
+      root /Users/drypot/projects/rapixel/website/upload/rapixel/public;
     }
 
 
