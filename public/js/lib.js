@@ -57,7 +57,7 @@ init.add(function () {
   }
 
   define('INVALID_DATA', '비정상적인 값이 입력되었습니다.');
-  define('MULTIPLE', '*');
+  define('INVALID_FORM', '*');
 
   define('NOT_AUTHENTICATED', '먼저 로그인해 주십시오.');
   define('NOT_AUTHORIZED', '사용 권한이 없습니다.');
@@ -282,7 +282,7 @@ init.add(function() {
               return next(err);
             }
             if (res.body.err) {
-              if (res.body.err.code === error.MULTIPLE.code) {
+              if (res.body.err.code === error.INVALID_FORM.code) {
                 formty.addAlerts($form, res.body.err.errors);
                 formty.hideSending($form);
                 return;
