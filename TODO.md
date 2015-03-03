@@ -11,3 +11,5 @@
     var multipart = require('connect-multiparty');
     var multipartMiddleware = multipart();
     app.post('/upload', multipartMiddleware, function(req, resp) {
+
+* 클릭시 자동으로 풀 화면
