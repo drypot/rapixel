@@ -1,7 +1,10 @@
 # Migration
 
 ##
-
+    nginx:  
+        location ~ /(?:css|image|js|lib)/ ->
+        location ~ /(?:modules)/
+        
 ## done
 
     $ mv /data2/rapixel/upload/* /data2/rapixel

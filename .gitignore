@@ -3,7 +3,7 @@
 *.sublime-workspace
 
 /node_modules/
-/public/bower_components/
+/public/modules/bower/
 
 /config/*live*.json
 /tmp/

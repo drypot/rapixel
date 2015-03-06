@@ -1,43 +1,43 @@
 {
-	"build_systems":
-	[
-	],
-	"folders":
-	[
-		{
-			"folder_exclude_patterns":
-			[
-				"*"
-			],
-			"follow_symlinks": true,
-			"path": "."
-		},
-		{
-			"follow_symlinks": true,
-			"path": "bin"
-		},
-		{
-			"follow_symlinks": true,
-			"path": "config"
-		},
-		{
-			"follow_symlinks": true,
-			"path": "samples"
-		},
-		{
-			"folder_exclude_patterns":
-			[
-				"public/lib"
-			],
-			"follow_symlinks": true,
-			"path": "public"
-		},
-		{
-			"follow_symlinks": true,
-			"path": "lib"
-		}
-	],
-	"settings":
-	{
-	}
+  "build_systems":
+  [
+  ],
+  "folders":
+  [
+    {
+      "folder_exclude_patterns":
+      [
+        "*"
+      ],
+      "follow_symlinks": true,
+      "path": "."
+    },
+    {
+      "follow_symlinks": true,
+      "path": "bin"
+    },
+    {
+      "follow_symlinks": true,
+      "path": "config"
+    },
+    {
+      "follow_symlinks": true,
+      "path": "samples"
+    },
+    {
+      "folder_exclude_patterns":
+      [
+        "public/modules/bower"
+      ],
+      "follow_symlinks": true,
+      "path": "public"
+    },
+    {
+      "follow_symlinks": true,
+      "path": "modules"
+    }
+  ],
+  "settings":
+  {
+  }
 }

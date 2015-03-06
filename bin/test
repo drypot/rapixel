@@ -1,4 +1,4 @@
-for var in $(find ${1-lib} -name "*-test.js"); do
+for var in $(find ${1-modules} -name "*-test.js"); do
   echo mocha $var
   mocha $var
   if [ $? -ne 0 ]; then break; fi
