@@ -28,6 +28,10 @@ exports.addTail = function (func) {
 exports.run = function (done) {
   var i = 0;
 
+  done = done || function (err) {
+    if (err) throw err;
+  };
+  
   function run() {
     if (i == funcs.length) {
       funcs = [];

@@ -12,12 +12,10 @@ var userv = require('../user/user-view');
 var useru = require('../user/user-update');
 var userf = require('../user/user-fixture');
 
+var local = require('../main/local');
+
 before(function (done) {
   init.run(done);
-});
-
-before(function () {
-  express2.app.listen();
 });
 
 before(function (done) {

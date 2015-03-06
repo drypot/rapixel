@@ -7,13 +7,14 @@ var redisStore = require('connect-redis')(session);
 var multipart = require('connect-multiparty');
 var errorHandler = require('errorhandler');
 
-
 var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config');
 
+var app;
+
 init.add(function () {
-  var app = exports.app = express();
+  app = exports.app = express();
 
   // Set Middlewares
 
@@ -69,12 +70,12 @@ init.add(function () {
     });
   });
 
-  should.not.exist(app.listen2);
-  app.listen2 = function () {
-    app.use(errorHandler());
-    app.listen(config.appPort);
-    console.log('express: listening ' + config.appPort);
-  };
+});
+
+init.addTail(function () {
+  app.use(errorHandler());
+  app.listen(config.appPort);
+  console.log('express: listening ' + config.appPort);
 });
 
 // Error Util

@@ -9,6 +9,8 @@ var userb = require('../user/user-base');
 var usera = require('../user/user-auth');
 var userf = require('../user/user-fixture');
 
+var local = require('../main/local');
+
 init.add(function () {
   var app = express2.app;
 
@@ -41,10 +43,6 @@ init.add(function () {
 
 before(function (done) {
   init.run(done);
-});
-
-before(function () {
-  express2.app.listen();
 });
 
 describe("login", function () {
@@ -146,7 +144,7 @@ describe("accessing admin resource", function () {
 describe("accessing user resouce ", function () {
   describe("with out auto login", function () {
     it("given new test session", function (done) {
-      express2.newSession();
+      local.newSession();
       done();
     });
     it("should fail", function (done) {
@@ -187,7 +185,7 @@ describe("accessing user resouce ", function () {
   });
   describe("with auto login", function () {
     it("given new test sesssion",function (done) {
-      express2.newSession();
+      local.newSession();
       done();
     });
     it("should fail", function (done) {
@@ -239,7 +237,7 @@ describe("accessing user resouce ", function () {
   });
   describe("with auto login with invalid email", function () {
     it("given new test sesssion",function (done) {
-      express2.newSession();
+      local.newSession();
       done();
     });
     it("should fail", function (done) {
@@ -276,7 +274,7 @@ describe("accessing user resouce ", function () {
       };
       userb.users.update({ _id: userf.user1._id }, fields, function (err, cnt) {
         should.not.exist(err);
-        cnt.should.true;
+        (cnt == 1).should.true;
         done();
       });
     });

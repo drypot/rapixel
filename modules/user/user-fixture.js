@@ -2,7 +2,7 @@ var should = require('should');
 
 var init = require('../base/init');
 var userc = require('../user/user-create');
-var express2 = require('../main/express');
+var local = require('../main/local');
 
 init.add(function (done) {
   var forms = [

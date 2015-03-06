@@ -1,19 +1,13 @@
 var should = require('should');
 var shouldhttp = require('should-http');
-var supertest = require('supertest');
 
 var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config')({ path: 'config/rapixel-test.json' });
 var express2 = require('../main/express');
+var local = require('../main/local');
 
-var local;
-
-before(function (done) {
-  init.run(done);
-});
-
-before(function() {
+init.add(function () {
   var app = express2.app;
 
   app.get('/test/no-action', function (req, res, done) {
@@ -43,9 +37,10 @@ before(function() {
     }
     res.json(obj);
   });
+});
 
-  app.listen2();
-  local = supertest.agent(app);
+before(function (done) {
+  init.run(done);
 });
 
 describe("/api/hello", function () {

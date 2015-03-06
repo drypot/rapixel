@@ -11,12 +11,10 @@ var userc = require('../user/user-create');
 var userf = require('../user/user-fixture');
 var userp = require('../user/user-reset');
 
+var local = require('../main/local');
+
 before(function (done) {
   init.run(done);
-});
-
-before(function () {
-  express2.app.listen();
 });
 
 describe("resets collection", function () {
@@ -121,7 +119,7 @@ describe("resetting user", function () {
   it("should fail old password", function (done) {
     userb.users.findOne({ email: _user.email }, function (err, user) {
       should.not.exist(err);
-      should.not.exist(userc.checkPassword(_user.password, user.hash));
+      userc.checkPassword(_user.password, user.hash).should.false;
       done();
     });
   });
@@ -183,7 +181,7 @@ describe("resetting admin", function () {
   it("should fail new password", function (done) {
     userb.users.findOne({ email: _user.email }, function (err, user) {
       should.not.exist(err);
-      should.not.exist(userc.checkPassword('new-pass', user.hash));
+      userc.checkPassword('new-pass', user.hash).should.false;
       done();
     });
   });

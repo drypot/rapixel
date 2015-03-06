@@ -10,12 +10,10 @@ var userc = require('../user/user-create');
 var userv = require('../user/user-view');
 var userf = require('../user/user-fixture');
 
+var local = require('../main/local');
+
 before(function (done) {
   init.run(done);
-});
-
-before(function () {
-  express2.app.listen();
 });
 
 describe("finding user", function () {

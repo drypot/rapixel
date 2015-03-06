@@ -10,6 +10,8 @@ var usera = require('../user/user-auth');
 var userf = require('../user/user-fixture');
 var userd = require('../user/user-deactivate');
 
+var local = require('../main/local');
+
 init.add(function () {
   var app = express2.app;
 
@@ -23,10 +25,6 @@ init.add(function () {
 
 before(function (done) {
   init.run(done);
-});
-
-before(function () {
-  express2.app.listen();
 });
 
 describe("deactivating self", function () {

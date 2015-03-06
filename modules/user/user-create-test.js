@@ -1,5 +1,4 @@
 var should = require('should');
-var supertest = require('supertest');
 
 var init = require('../base/init');
 var error = require('../base/error');
@@ -9,15 +8,10 @@ var express2 = require('../main/express');
 var userb = require('../user/user-base');
 var userc = require('../user/user-create');
 
-var local;
+var local = require('../main/local');
 
 before(function (done) {
   init.run(done);
-});
-
-before(function () {
-  express2.app.listen();
-  local = supertest.agent(app);
 });
 
 before(function (done) {
