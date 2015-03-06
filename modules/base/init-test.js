@@ -2,7 +2,7 @@ var should = require('should');
 
 var init = require('../base/init');
 
-describe("normal init function", function () {
+describe("sync init function", function () {
   it("should success", function (done) {
     var a = [];
     init.reset();
@@ -42,7 +42,7 @@ describe("async init function", function () {
   });
 });
 
-describe("normal throw", function () {
+describe("sync throw", function () {
   it("should success", function (done) {
     var a = [];
     init.reset();
@@ -86,3 +86,25 @@ describe("async throw", function () {
   });
 });
 
+describe("tail function", function () {
+  it("should success", function (done) {
+    var a = [];
+    init.reset();
+    init.add(function () {
+      a.push(3);
+    });
+    init.addTail(function () {
+      a.push(10);
+    });
+    init.add(function () {
+      a.push(7);
+    });
+    init.run(function () {
+      a.should.length(3);
+      a[0].should.equal(3);
+      a[1].should.equal(7);
+      a[2].should.equal(10);
+      done();
+    });
+  });
+});

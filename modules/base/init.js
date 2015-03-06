@@ -1,6 +1,7 @@
 var util = require('util');
 
 var funcs = [];
+var tails = [];
 
 process.on('uncaughtException', function (err) {
   console.error('UNCAUGHT EXCEPTION');
@@ -13,10 +14,15 @@ process.on('uncaughtException', function (err) {
 
 exports.reset = function () {
   funcs = [];
+  tails = [];
 }
 
 exports.add = function (func) {
   funcs.push(func);
+};
+
+exports.addTail = function (func) {
+  tails.unshift(func);
 };
 
 exports.run = function (done) {
@@ -25,6 +31,7 @@ exports.run = function (done) {
   function run() {
     if (i == funcs.length) {
       funcs = [];
+      tails = [];
       return done();
     }
     var func = funcs[i++];
@@ -39,5 +46,6 @@ exports.run = function (done) {
     }
   };
 
+  funcs = funcs.concat(tails);
   run();
 };
