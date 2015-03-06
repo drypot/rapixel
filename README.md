@@ -6,13 +6,12 @@ Image gallery running following sites.
 * [https://osoky.com](https://osoky.com)
 * [https://drypot.com](https://drypot.com)
 
-## Requirements
 
-mongodb, redis, ImageMagick
+## Install and Upgrade
 
-## How to run
+* [Install](INSTALL.md)
+* [Upgrade](UPGRADE.md)
 
-    bin/run
 
 ## History
 
@@ -35,33 +34,6 @@ mongodb, redis, ImageMagick
 2013.05.01 갑자기 개발 시작.
 
 2011.04.06 rapixel.com 도메인 구매. 사진 한 장 올려두고 2 년간 방치.
-
-
-## Nginx
-
-개발환경용 Nginx 설정 예
-
-    server {
-      listen 8080;
-      server_name rapixel.local;
-      root /Users/drypot/projects/rapixel/website/public;
-
-      client_max_body_size 10m;
-
-      location / {
-        proxy_pass http://localhost:8020;
-        proxy_set_header Host $http_host;
-      }
-
-      location ~ /(?:css|image|js|lib)/ {
-      }
-    }
-
-    server {
-      listen 8080;
-      server_name file.rapixel.local;
-      root /Users/drypot/projects/rapixel/website/upload/rapixel/public;
-    }
 
 
 ## License

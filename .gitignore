@@ -1,10 +1,9 @@
 /.idea/
-/projectFilesBackup/
 
 *.sublime-workspace
 
 /node_modules/
-/public/lib/
+/public/bower_components/
 
 /config/*live*.json
 /tmp/
