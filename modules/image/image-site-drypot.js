@@ -1,7 +1,7 @@
 var exec = require('child_process').exec;
 
-var error = require('../error/error');
-var config = require('../config/config');
+var error = require('../base/error');
+var config = require('../base/config');
 var imageb = require('../image/image-base');
 
 exports.showListName = true;

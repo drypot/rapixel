@@ -1,17 +1,17 @@
 var should = require('should');
 
 var init = require('../base/init');
-var error = require('../error/error');
-var config = require('../config/config')({ path: 'config/rapixel-test.json' });
+var error = require('../base/error');
+var config = require('../base/config')({ path: 'config/rapixel-test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
-var express = require('../express/express');
+var express2 = require('../main/express');
 var userb = require('../user/user-base');
 var usera = require('../user/user-auth');
 var userf = require('../user/user-fixture');
 var userd = require('../user/user-deactivate');
 
 init.add(function () {
-  var app = express.app;
+  var app = express2.app;
 
   app.get('/test/user', function (req, res) {
     usera.getUser(res, function (err, user) {
@@ -26,7 +26,7 @@ before(function (done) {
 });
 
 before(function () {
-  express.listen();
+  express2.listen();
 });
 
 describe("deactivating self", function () {
@@ -34,32 +34,32 @@ describe("deactivating self", function () {
     userf.loginUser1(done);
   });
   it("should success accessing user resource", function (done) {
-    express.get('/test/user').end(function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(!res.body.err);
+    express2.get('/test/user').end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
       done();
     })
   });
   it("should success deactivating user1", function (done) {
-    express.del('/api/users/' + userf.user1._id).end(function (err, res) {
-      should(!res.error);
-      should(!res.body.err);
+    express2.del('/api/users/' + userf.user1._id).end(function (err, res) {
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
       done();
     });
   });
   it("can be checked", function (done) {
     userb.users.findOne({ _id: userf.user1._id }, function (err, user) {
-      should(!err);
-      should(user.status == 'd');
+      should.not.exist(err);
+      (user.status == 'd').should.true;
       done();
     });
   });
   it("should fail accessing user resource (because logged out)", function (done) {
-    express.get('/test/user').end(function (err, res) {
-      should(!res.error);
-      should(res.body.err);
-      should(error.find(res.body.err, error.NOT_AUTHENTICATED));
+    express2.get('/test/user').end(function (err, res) {
+      should.not.exist(res.error);
+      should.exist(res.body.err);
+      error.find(res.body.err, error.NOT_AUTHENTICATED).should.true;
       done();
     });
   });
@@ -70,10 +70,10 @@ describe("deactivating with no login", function () {
     userf.logout(done);
   });
   it("should fail deactivating user2", function (done) {
-    express.del('/api/users/' + userf.user2._id).end(function (err, res) {
-      should(!res.error);
-      should(res.body.err);
-      should(error.find(res.body.err, error.NOT_AUTHENTICATED));
+    express2.del('/api/users/' + userf.user2._id).end(function (err, res) {
+      should.not.exist(res.error);
+      should.exist(res.body.err);
+      error.find(res.body.err, error.NOT_AUTHENTICATED).should.true;
       done();
     });
   });
@@ -84,10 +84,10 @@ describe("deactivating other", function () {
     userf.loginUser2(done);
   });
   it("should fail deactivating user3", function (done) {
-    express.del('/api/users/' + userf.user3._id).end(function (err, res) {
-      should(!res.error);
-      should(res.body.err);
-      should(error.find(res.body.err, error.NOT_AUTHORIZED));
+    express2.del('/api/users/' + userf.user3._id).end(function (err, res) {
+      should.not.exist(res.error);
+      should.exist(res.body.err);
+      error.find(res.body.err, error.NOT_AUTHORIZED).should.true;
       done();
     });
   });
@@ -98,9 +98,9 @@ describe("deactivating by admin", function () {
     userf.loginAdmin(done);
   });
   it("should success deactivating user3", function (done) {
-    express.del('/api/users/' + userf.user3._id).end(function (err, res) {
-      should(!res.error);
-      should(!res.body.err);
+    express2.del('/api/users/' + userf.user3._id).end(function (err, res) {
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
       done();
     });
   });

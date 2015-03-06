@@ -2,11 +2,11 @@ var should = require('should');
 var fs = require('fs');
 
 var init = require('../base/init');
-var error = require('../error/error');
+var error = require('../base/error');
 var fs2 = require('../fs/fs');
-var config = require('../config/config')({ path: 'config/drypot-test.json' });
+var config = require('../base/config')({ path: 'config/drypot-test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
-var express = require('../express/express');
+var express2 = require('../main/express');
 var upload = require('../upload/upload');
 var userf = require('../user/user-fixture');
 var imageb = require('../image/image-base');
@@ -17,7 +17,7 @@ before(function (done) {
 });
 
 before(function () {
-  express.listen();
+  express2.listen();
 });
 
 before(function (done) {
@@ -43,11 +43,11 @@ describe("posting 1 image", function () {
   it("should success", function (done) {
     this.timeout(30000);
     var form = { files: _files, comment: 'image1' };
-    express.post('/api/images').send(form).end(function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(!res.body.err);
-      should(res.body.ids);
+    express2.post('/api/images').send(form).end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
+      should.exist(res.body.ids);
       res.body.ids.length.should.equal(1);
       _ids = res.body.ids;
       done();
@@ -56,14 +56,14 @@ describe("posting 1 image", function () {
   it("can be checked", function (done) {
     var _id = _ids[0];
     imageb.images.findOne({ _id: _id }, function (err, image) {
-      should(!err);
+      should.not.exist(err);
       image._id.should.equal(_id);
       image.uid.should.equal(userf.user1._id);
       image.fname.should.equal('svg-sample.svg');
       image.format.should.equal('svg');
-      should(!image.width);
-      should(!image.vers);
-      should(image.cdate);
+      should.not.exist(image.width);
+      should.not.exist(image.vers);
+      should.exist(image.cdate);
       image.comment.should.equal('image1');
       var dir = imageb.getImageDir(_id);
       fs.existsSync(imageb.getOriginalPath(dir, _id, 'svg')).should.be.true;
@@ -86,11 +86,11 @@ describe("posting too many images", function () {
   it("given max posts", function (done) {
     this.timeout(30000);
     var form = { files: _files };
-    express.post('/api/images').send(form).end(function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(!res.body.err);
-      should(res.body.ids);
+    express2.post('/api/images').send(form).end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
+      should.exist(res.body.ids);
       res.body.ids.should.length(config.ticketMax);
       done();
     });
@@ -104,11 +104,11 @@ describe("posting too many images", function () {
   it("should return empty ids", function (done) {
     this.timeout(30000);
     var form = { files: _files };
-    express.post('/api/images').send(form).end(function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(!res.body.err);
-      should(res.body.ids);
+    express2.post('/api/images').send(form).end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
+      should.exist(res.body.ids);
       res.body.ids.should.length(0);
       done();
     });
@@ -128,11 +128,11 @@ describe("posting jpeg", function () {
   });
   it("should fail", function (done) {
     var form = { files: _files };
-    express.post('/api/images').send(form).end(function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(res.body.err);
-      should(error.find(res.body.err, error.IMAGE_TYPE));
+    express2.post('/api/images').send(form).end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.exist(res.body.err);
+      error.find(res.body.err, error.IMAGE_TYPE).should.true;
       done();
     });
   });
@@ -151,11 +151,11 @@ describe("posting text file", function () {
   });
   it("should fail", function (done) {
     var form = { files: _files };
-    express.post('/api/images').send(form).end(function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(res.body.err);
-      should(error.find(res.body.err, error.IMAGE_TYPE));
+    express2.post('/api/images').send(form).end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.exist(res.body.err);
+      error.find(res.body.err, error.IMAGE_TYPE).should.true;
       done();
     });
   });
@@ -167,11 +167,11 @@ describe("posting no file", function () {
   }); 
   it("should fail", function (done) {
     var form = { };
-    express.post('/api/images').send(form).end(function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(res.body.err);
-      should(error.find(res.body.err, error.IMAGE_NO_FILE));
+    express2.post('/api/images').send(form).end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.exist(res.body.err);
+      error.find(res.body.err, error.IMAGE_NO_FILE).should.true;
       done();
     });
   });

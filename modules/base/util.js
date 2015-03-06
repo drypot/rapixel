@@ -26,3 +26,34 @@ exports.merge = function () {
 exports.pass = function () {
   arguments[arguments.length - 1]();
 }
+
+function pad(number) {
+  var r = String(number);
+  if ( r.length === 1 ) {
+    r = '0' + r;
+  }
+  return r;
+}
+
+exports.toDateTimeString = function (d) {
+  return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + ' ' +
+    pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+};
+
+exports.makeUrl = function(url, params) {
+  var qm;
+
+  for(var p in params) {
+    if (qm) {
+      url += '&';
+    } else {
+      url += '?';
+      qm = true;
+    }
+    url += p;
+    url += '=';
+    url += params[p];
+  }
+
+  return url;
+};

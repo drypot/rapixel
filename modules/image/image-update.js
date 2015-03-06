@@ -1,10 +1,10 @@
 var fs = require('fs');
 
 var init = require('../base/init');
-var error = require('../error/error');
-var config = require('../config/config');
+var error = require('../base/error');
+var config = require('../base/config');
 var fs2 = require('../fs/fs');
-var express = require('../express/express');
+var express2 = require('../main/express');
 var upload = require('../upload/upload');
 var usera = require('../user/user-auth');
 var imageb = require('../image/image-base');
@@ -12,7 +12,7 @@ var imagec = require('../image/image-create');
 var site = require('../image/image-site');
 
 init.add(function () {
-  var app = express.app;
+  var app = express2.app;
 
   app.put('/api/images/:id([0-9]+)', function (req, res) {
     usera.getUser(res, function (err, user) {

@@ -1,7 +1,7 @@
 var init = require('../base/init');
-var error = require('../error/error');
+var error = require('../base/error');
 var fs2 = require('../fs/fs');
-var config = require('../config/config');
+var config = require('../base/config');
 var mongo = require('../mongo/mongo');
 
 init.add(function () {

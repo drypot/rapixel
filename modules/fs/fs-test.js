@@ -115,7 +115,7 @@ describe("makeDirs", function () {
   it("can make dir", function (done) {
     fs.existsSync(testdir + '/sub1').should.be.false;
     fs2.makeDirs(testdir, 'sub1', function (err, dir) {
-      should(!err);
+      should.not.exist(err);
       dir.should.equal(testdir + '/sub1');
       fs.existsSync(testdir + '/sub1').should.be.true;
       done();
@@ -124,7 +124,7 @@ describe("makeDirs", function () {
   it("can make dir in existing dir", function (done) {
     fs.existsSync(testdir + '/sub1/sub2').should.be.false;
     fs2.makeDirs(testdir, 'sub1', 'sub2', function (err, dir) {
-      should(!err);
+      should.not.exist(err);
       dir.should.equal(testdir + '/sub1/sub2');
       fs.existsSync(testdir + '/sub1/sub2').should.be.true;
       done();
@@ -133,7 +133,7 @@ describe("makeDirs", function () {
   it("can make dirs with array ", function (done) {
     fs.existsSync(testdir + '/ary1/ary2/ary3').should.be.false;
     fs2.makeDirs(testdir, [ 'ary1', 'ary2', 'ary3' ], function (err, dir) {
-      should(!err);
+      should.not.exist(err);
       dir.should.equal(testdir + '/ary1/ary2/ary3');
       fs.existsSync(testdir + '/ary1/ary2/ary3').should.be.true;
       done();
@@ -142,7 +142,7 @@ describe("makeDirs", function () {
   it("can make dirs with string ", function (done) {
     fs.existsSync(testdir + '/str1/str2/str3').should.be.false;
     fs2.makeDirs(testdir, 'str1/str2/str3', function (err, dir) {
-      should(!err);
+      should.not.exist(err);
       dir.should.equal(testdir + '/str1/str2/str3');
       fs.existsSync(testdir + '/str1/str2/str3').should.be.true;
       done();
@@ -151,7 +151,7 @@ describe("makeDirs", function () {
   it("can make dirs with string and array ", function (done) {
     fs.existsSync(testdir + '/c1/c2/c3/c4/c5').should.be.false;
     fs2.makeDirs(testdir, 'c1', [ 'c2', 'c3' ], 'c4/c5', function (err, dir) {
-      should(!err);
+      should.not.exist(err);
       dir.should.equal(testdir + '/c1/c2/c3/c4/c5');
       fs.existsSync(testdir + '/c1/c2/c3/c4/c5').should.be.true;
       done();
@@ -177,7 +177,7 @@ describe("safeFilename", function () {
       var a = fs2.safeFilename(pair[0]);
       var b = pair[1];
       if (a !== b) console.log(pair);
-      should(a === b);
+      a.should.equal.(b);
     })
   });
 });

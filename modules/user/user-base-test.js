@@ -1,8 +1,8 @@
 var should = require('should');
 
 var init = require('../base/init');
-var error = require('../error/error');
-var config = require('../config/config')({ path: 'config/rapixel-test.json' });
+var error = require('../base/error');
+var config = require('../base/config')({ path: 'config/rapixel-test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
 var userb = require('../user/user-base');
 
@@ -16,6 +16,6 @@ describe("newId", function () {
     var id1 = userb.newId();
     var id2 = userb.newId();
     var id2 = userb.newId();
-    should(id1 < id2);
+    (id1 < id2).should.true;
   });
 });

@@ -8,21 +8,11 @@ var multipart = require('connect-multiparty');
 var errorHandler = require('errorhandler');
 
 var init = require('../base/init');
-var error = require('../error/error');
-var config = require('../config/config');
+var error = require('../base/error');
+var config = require('../base/config');
 
-var app = express();
-var opt = {};
-
-exports = module.exports = function (_opt) {
-  for(var p in _opt) {
-    opt[p] = _opt[p];
-  }
-  return exports;
-};
-
-init.add(function () {
-  exports.app = app;
+exports = module.exports = function () {
+  var app = express();
 
   // Set Middlewares
 
@@ -73,44 +63,26 @@ init.add(function () {
   app.get('/error', function (req, res) {
     var err = new Error('Error Sample Page');
     err.code = 999;
-    res.render('express/error', {
+    res.render('main/error', {
       err: err
     });
   });
-});
 
-// App Functions
+  should.not.exist(app.listen2);
+  app.listen2 = function () {
+    app.use(errorHandler());
+    app.listen(config.appPort);
+    console.log('express: listening ' + config.appPort);
+  };
 
-exports.listen = function () {
-  app.use(errorHandler());
-  app.listen(config.appPort);
-  console.log('express: listening ' + config.appPort);
+  return app;
 };
-
-// Test Util
-
-var treq = require('superagent').agent();
-
-exports.resetTestSession = function () {
-  treq = require('superagent').agent();
-};
-
-['post', 'get', 'put', 'del'].forEach(function (method) {
-  exports[method] = reqProxy(method);
-});
-
-function reqProxy(method) {
-  return function () {
-    arguments[0] = 'http://localhost:' + config.appPort + arguments[0];
-    return treq[method].apply(treq, arguments);
-  }
-}
 
 // Error Util
 
 var emptyMatch = [''];
 
-should(!express.response.jsonErr);
+should.not.exist(express.response.jsonErr);
 express.response.jsonErr = function (_err) {
   var res = this;
   var err = {};
@@ -122,7 +94,7 @@ express.response.jsonErr = function (_err) {
   res.json({ err: err });
 };
 
-should(!express.response.renderErr);
+should.not.exist(express.response.renderErr);
 express.response.renderErr = function (_err) {
   var res = this;
   if (_err.code && _err.code == error.NOT_AUTHENTICATED.code) {
@@ -135,5 +107,6 @@ express.response.renderErr = function (_err) {
   }
   err.message = _err.message;
   err.stack = (_err.stack.match(/^(?:.*\n){1,6}/m) || emptyMatch)[0].replace(/Error:.+\n/, '');
-  res.render('express/error', { err: err });
+  res.render('main/error', { err: err });
 };
+

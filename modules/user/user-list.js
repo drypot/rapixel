@@ -1,11 +1,11 @@
 var init = require('../base/init');
-var error = require('../error/error');
-var config = require('../config/config');
-var express = require('../express/express');
+var error = require('../base/error');
+var config = require('../base/config');
+var express2 = require('../main/express');
 var userb = require('../user/user-base');
 
 init.add(function () {
-  var app = express.app;
+  var app = express2.app;
 
   app.get('/users', function (req, res) {
     userb.users.count(function (err, count) {

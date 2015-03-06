@@ -1,10 +1,10 @@
 var should = require('should');
 
 var init = require('../base/init');
-var error = require('../error/error');
-var config = require('../config/config')({ path: 'config/rapixel-test.json' });
+var error = require('../base/error');
+var config = require('../base/config')({ path: 'config/rapixel-test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
-var express = require('../express/express');
+var express2 = require('../main/express');
 var upload = require('../upload/upload');
 var userf = require('../user/user-fixture');
 var imageb = require('../image/image-base');
@@ -15,7 +15,7 @@ before(function (done) {
 });
 
 before(function () {
-  express.listen();
+  express2.listen();
 });
 
 before(function (done) {
@@ -39,7 +39,7 @@ before(function (done) {
 describe("counting", function () {
   it("should success", function (done) {
     imageb.images.count(function (err, c) {
-      should(!err);
+      should.not.exist(err);
       c.should.equal(10);
       done();
     })
@@ -51,9 +51,9 @@ describe("listing all", function () {
     var query = {
       ps: 99
     }
-    express.get('/api/images').query(query).end(function (err, res) {
-      should(!res.error);
-      should(!res.body.err);
+    express2.get('/api/images').query(query).end(function (err, res) {
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
       res.body.gt.should.equal(0);
       res.body.lt.should.equal(0);
       res.body.images.length.should.equal(10);
@@ -71,9 +71,9 @@ describe("listing page 1", function () {
     var query = {
       ps: 4
     };
-    express.get('/api/images').query(query).end(function (err, res) {
-      should(!res.error);
-      should(!res.body.err);
+    express2.get('/api/images').query(query).end(function (err, res) {
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
       res.body.gt.should.equal(0);
       res.body.lt.should.equal(7);
       res.body.images.should.length(4);
@@ -89,9 +89,9 @@ describe("listing page 2 with lt", function () {
     var query = {
       lt:7, ps: 4
     }
-    express.get('/api/images').query(query).end(function (err, res) {
-      should(!res.error);
-      should(!res.body.err);
+    express2.get('/api/images').query(query).end(function (err, res) {
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
       res.body.gt.should.equal(6);
       res.body.lt.should.equal(3);
       res.body.images.should.length(4);
@@ -107,9 +107,9 @@ describe("listing last page with lt", function () {
     var query = {
       lt: 3, ps: 4
     }
-    express.get('/api/images').query(query).end(function (err, res) {
-      should(!res.error);
-      should(!res.body.err);
+    express2.get('/api/images').query(query).end(function (err, res) {
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
       res.body.gt.should.equal(2);
       res.body.lt.should.equal(0);
       res.body.images.should.length(2);
@@ -126,9 +126,9 @@ describe("listing page 2 with gt", function () {
     var query = {
       gt:2, ps: 4
     }
-    express.get('/api/images').query(query).end(function (err, res) {
-      should(!res.error);
-      should(!res.body.err);
+    express2.get('/api/images').query(query).end(function (err, res) {
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
       res.body.gt.should.equal(6);
       res.body.lt.should.equal(3);
       res.body.images.should.length(4);
@@ -144,9 +144,9 @@ describe("listing page 1 with gt", function () {
     var query = {
       gt: 6, ps: 4
     };
-    express.get('/api/images').query(query).end(function (err, res) {
-      should(!res.error);
-      should(!res.body.err);
+    express2.get('/api/images').query(query).end(function (err, res) {
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
       res.body.gt.should.equal(0);
       res.body.lt.should.equal(7);
       res.body.images.should.length(4);

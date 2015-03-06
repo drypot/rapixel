@@ -2,11 +2,11 @@ var should = require('should');
 var fs = require('fs');
 
 var init = require('../base/init');
-var error = require('../error/error');
+var error = require('../base/error');
 var fs2 = require('../fs/fs');
-var config = require('../config/config')({ path: 'config/drypot-test.json' });
+var config = require('../base/config')({ path: 'config/drypot-test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
-var express = require('../express/express');
+var express2 = require('../main/express');
 var upload = require('../upload/upload');
 var userf = require('../user/user-fixture');
 var imageb = require('../image/image-base');
@@ -17,7 +17,7 @@ before(function (done) {
 });
 
 before(function () {
-  express.listen();
+  express2.listen();
 });
 
 before(function (done) {
@@ -40,11 +40,11 @@ describe("updating", function () {
   it("given post", function (done) {
     this.timeout(30000);
     var form = { files: _files, comment: 'image1' };
-    express.post('/api/images').send(form).end(function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(!res.body.err);
-      should(res.body.ids);
+    express2.post('/api/images').send(form).end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
+      should.exist(res.body.ids);
       res.body.ids.length.should.equal(1);
       _id = res.body.ids[0];
       done();
@@ -52,13 +52,13 @@ describe("updating", function () {
   });
   it("can be checked", function (done) {
     imageb.images.findOne({ _id: _id }, function (err, image) {
-      should(!err);
-      should(image);
+      should.not.exist(err);
+      should.exist(image);
       image.fname.should.equal('svg-sample.svg');
       image.format.should.equal('svg');
-      should(!image.width);
-      should(!image.vers);
-      should(image.cdate);
+      should.not.exist(image.width);
+      should.not.exist(image.vers);
+      should.exist(image.cdate);
       image.comment.should.equal('image1');
       var dir = imageb.getImageDir(_id);
       fs.existsSync(imageb.getOriginalPath(dir, _id, 'svg')).should.be.true;
@@ -74,22 +74,22 @@ describe("updating", function () {
   it("should success", function (done) {
     this.timeout(30000);
     var form = { files: _files, comment: 'image2' };
-    express.put('/api/images/' + _id).send(form).end(function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(!res.body.err);
+    express2.put('/api/images/' + _id).send(form).end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
       done();
     });
   });
   it("can be checked", function (done) {
     imageb.images.findOne({ _id: _id }, function (err, image) {
-      should(!err);
-      should(image);
+      should.not.exist(err);
+      should.exist(image);
       image.fname.should.equal('svg-sample-2.svg');
       image.format.should.equal('svg');
-      should(!image.width);
-      should(!image.vers);
-      should(image.cdate);
+      should.not.exist(image.width);
+      should.not.exist(image.vers);
+      should.exist(image.cdate);
       image.comment.should.equal('image2');
       var dir = imageb.getImageDir(_id);
       fs.existsSync(imageb.getOriginalPath(dir, _id, 'svg')).should.be.true;
@@ -109,17 +109,17 @@ describe("updating with no file", function () {
   });
   it("should success", function (done) {
     var form = { comment: 'updated with no file' };
-    express.put('/api/images/' + _id).send(form).end(function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(!res.body.err);
+    express2.put('/api/images/' + _id).send(form).end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
       done();
     });
   });
   it("can be checked", function (done) {
     imageb.images.findOne({ _id: _id }, function (err, image) {
-      should(!err);
-      should(image);
+      should.not.exist(err);
+      should.exist(image);
       image.comment.should.equal('updated with no file');
       done();
     });
@@ -144,11 +144,11 @@ describe("updating with jpeg", function () {
   });
   it("should fail", function (done) {
     var form = { files: _files };
-    express.put('/api/images/' + _id).send(form).end(function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(res.body.err);
-      should(error.find(res.body.err, error.IMAGE_TYPE));
+    express2.put('/api/images/' + _id).send(form).end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.exist(res.body.err);
+      error.find(res.body.err, error.IMAGE_TYPE).should.true;
       done();
     });
   });
@@ -172,11 +172,11 @@ describe("updating with text file", function () {
   });
   it("should fail", function (done) {
     var form = { files: _files };
-    express.put('/api/images/' + _id).send(form).end(function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(res.body.err);
-      should(error.find(res.body.err, error.IMAGE_TYPE));
+    express2.put('/api/images/' + _id).send(form).end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.exist(res.body.err);
+      error.find(res.body.err, error.IMAGE_TYPE).should.true;
       done();
     });
   });
@@ -197,11 +197,11 @@ describe("updating by others", function () {
   });
   it("should fail", function (done) {
     var form = { comment: 'xxxx' };
-    express.put('/api/images/' + _id).send(form).end(function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(res.body.err);
-      should(error.find(res.body.err, error.NOT_AUTHORIZED));
+    express2.put('/api/images/' + _id).send(form).end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.exist(res.body.err);
+      error.find(res.body.err, error.NOT_AUTHORIZED).should.true;
       done();
     });
   });

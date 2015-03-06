@@ -1,6 +1,6 @@
 var init = require('../base/init');
-var config = require('../config/config');
-var express = require('../express/express');
+var config = require('../base/config');
+var express2 = require('../main/express');
 
 require('../image/image-create');
 require('../image/image-view');
@@ -21,5 +21,5 @@ require('../user-profile/user-profile');
 
 init.run(function (err) {
   if (err) throw err;
-  express.listen();
+  express2.listen();
 });

@@ -1,10 +1,10 @@
 var should = require('should');
 
 var init = require('../base/init');
-var error = require('../error/error');
-var config = require('../config/config')({ path: 'config/rapixel-test.json' });
+var error = require('../base/error');
+var config = require('../base/config')({ path: 'config/rapixel-test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
-var express = require('../express/express');
+var express2 = require('../main/express');
 var usera = require('../user/user-auth');
 var userc = require('../user/user-create');
 var userv = require('../user/user-view');
@@ -15,32 +15,32 @@ before(function (done) {
 });
 
 before(function () {
-  express.listen();
+  express2.listen();
 });
 
 describe("finding user", function () {
   var _user = { name: 'test', email: 'test@def.com', password: '1234'  };
   it("given new user", function (done) {
-    express.post('/api/users').send(_user).end(function (err, res) {
-      should(!res.error);
-      should(!res.body.err);
+    express2.post('/api/users').send(_user).end(function (err, res) {
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
       _user._id = res.body.id;
       done();
     });
   });
   it("given login", function (done) {
     var form = { email: _user.email, password: _user.password };
-    express.post('/api/sessions').send(form).end(function (err, res) {
-      should(!res.error);
-      should(!res.body.err);
+    express2.post('/api/sessions').send(form).end(function (err, res) {
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
       done();
     });
   });
   it("should return email", function (done) {
-    express.get('/api/users/' + _user._id).end(function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(!res.body.err);
+    express2.get('/api/users/' + _user._id).end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
       res.body.user._id.should.equal(_user._id);
       res.body.user.name.should.equal(_user.name);
       res.body.user.email.should.equal(_user.email);
@@ -51,13 +51,13 @@ describe("finding user", function () {
     userf.loginUser2(done);
   });
   it("should not return email", function (done) {
-    express.get('/api/users/' + _user._id).end(function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(!res.body.err);
+    express2.get('/api/users/' + _user._id).end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
       res.body.user._id.should.equal(_user._id);
       res.body.user.name.should.equal(_user.name);
-      should(!res.body.user.email);
+      should.not.exist(res.body.user.email);
       done();
     });
   });
@@ -65,10 +65,10 @@ describe("finding user", function () {
     userf.loginAdmin(done);
   });
   it("should return email", function (done) {
-    express.get('/api/users/' + _user._id).end(function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(!res.body.err);
+    express2.get('/api/users/' + _user._id).end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
       res.body.user._id.should.equal(_user._id);
       res.body.user.name.should.equal(_user.name);
       res.body.user.email.should.equal(_user.email);
@@ -76,31 +76,31 @@ describe("finding user", function () {
     });
   });
   it("given no login", function (done) {
-    express.del('/api/sessions', function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(!res.body.err);
+    express2.del('/api/sessions', function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
       done();
     })
   });
   it("should not return email", function (done) {
-    express.get('/api/users/' + _user._id).end(function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(!res.body.err);
+    express2.get('/api/users/' + _user._id).end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
       res.body.user._id.should.equal(_user._id);
       res.body.user.name.should.equal(_user.name);
       res.body.user.profile.should.equal('');
-      should(!res.body.user.email);
+      should.not.exist(res.body.user.email);
       done();
     });
   });
   it("should fail with invalid id", function (done) {
-    express.get('/api/users/999').end(function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(res.body.err);
-      should(error.find(res.body.err, error.USER_NOT_FOUND));
+    express2.get('/api/users/999').end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.exist(res.body.err);
+      error.find(res.body.err, error.USER_NOT_FOUND).should.true;
       done();
     });
   });

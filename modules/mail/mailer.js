@@ -1,7 +1,7 @@
 var nodemailer = require("nodemailer");
 
 var init = require('../base/init');
-var config = require('../config/config');
+var config = require('../base/config');
 
 var transport;
 

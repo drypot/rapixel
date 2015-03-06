@@ -1,13 +1,13 @@
 var init = require('../base/init');
-var error = require('../error/error');
-var express = require('../express/express');
+var error = require('../base/error');
+var express2 = require('../main/express');
 var userb = require('../user/user-base');
 var userv = require('../user/user-view');
 var usera = require('../user/user-auth');
 var useru = require('../user/user-update');
 
 init.add(function () {
-  var app = express.app;
+  var app = express2.app;
 
   app.delete('/api/users/:id([0-9]+)', function (req, res) {
     usera.getUser(res, function (err, user) {

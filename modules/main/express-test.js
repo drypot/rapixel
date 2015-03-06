@@ -2,16 +2,17 @@ var should = require('should');
 require('should-http');
 
 var init = require('../base/init');
-var error = require('../error/error');
-var config = require('../config/config')({ path: 'config/rapixel-test.json' });
-var express = require('../express/express');
+var error = require('../base/error');
+var config = require('../base/config')({ path: 'config/rapixel-test.json' });
+var express2 = require('../main/express');
+var local = require('../main/local');
 
 before(function (done) {
   init.run(done);
 });
 
 before(function(done) {
-  var app = express.app;
+  var app = express2();
 
   app.get('/test/no-action', function (req, res, done) {
     done();
@@ -41,22 +42,21 @@ before(function(done) {
     res.json(obj);
   });
 
-  express.listen();
-
+  app.listen2();
   done();
 });
 
 describe("/api/hello", function () {
   it("should return 'hello'", function (done) {
-    express.get('/api/hello', function (err, res) {
-      should(!err);
-      should(!res.error);
+    local.get('/api/hello', function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
       res.should.be.json;
       res.body.name.should.equal(config.appName);
       var stime = parseInt(res.body.time || 0);
       var ctime = Date.now();
-      should(stime <= ctime);
-      should(stime >= ctime - 100);
+      (stime <= ctime).should.true;
+      (stime >= ctime - 100).should.true;
       done();
     });
   });
@@ -64,8 +64,8 @@ describe("/api/hello", function () {
 
 describe("no-action", function () {
   it("should return not found", function (done) {
-    express.get('/no-action', function (err, res) {
-      should(!err);
+    local.get('/no-action', function (err, res) {
+      should.not.exist(err);
       res.should.status(404);
       done();
     });
@@ -74,9 +74,9 @@ describe("no-action", function () {
 
 describe("plain-text", function () {
   it("should return 'hello'", function (done) {
-    express.get('/test/plain-text', function (err, res) {
-      should(!err);
-      should(!res.error);
+    local.get('/test/plain-text', function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
       res.text.should.equal('some text');
       done();
     });
@@ -85,12 +85,12 @@ describe("plain-text", function () {
 
 describe("invalid-data", function () {
   it("should return code", function (done) {
-    express.get('/api/invalid-data').end(function (err, res) {
-      should(!err);
-      should(!res.error);
+    local.get('/api/invalid-data').end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
       res.should.be.json;
-      should(res.body.err);
-      should(error.find(res.body.err, error.INVALID_DATA));
+      should.exist(res.body.err);
+      error.find(res.body.err, error.INVALID_DATA).should.true;
       done();
     });
   });
@@ -99,9 +99,9 @@ describe("invalid-data", function () {
 describe("Cache-Control test", function () {
   describe("/test/hello", function () {
     it("should return private", function (done) {
-      express.get('/test/plain-text', function (err, res) {
-        should(!err);
-        should(!res.error);
+      local.get('/test/plain-text', function (err, res) {
+        should.not.exist(err);
+        should.not.exist(res.error);
         res.get('Cache-Control').should.equal('private');
         done();
       });
@@ -109,9 +109,9 @@ describe("Cache-Control test", function () {
   });
   describe("/api/json", function () {
     it("should return private", function (done) {
-      express.get('/api/json', function (err, res) {
-        should(!err);
-        should(!res.error);
+      local.get('/api/json', function (err, res) {
+        should.not.exist(err);
+        should.not.exist(res.error);
         res.get('Cache-Control').should.equal('no-cache');
         done();
       });
@@ -121,9 +121,9 @@ describe("Cache-Control test", function () {
 
 describe("null", function () {
   it("should return {}", function (done) {
-    express.get('/api/null', function (err, res) {
-      should(!err);
-      should(!res.error);
+    local.get('/api/null', function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
       res.body.should.eql({});
       done();
     });
@@ -132,9 +132,9 @@ describe("null", function () {
 
 describe("echo-query-params", function () {
   it("should success", function (done) {
-    express.get('/api/echo-query?p1&p2=123', function (err, res) {
-      should(!err);
-      should(!res.error);
+    local.get('/api/echo-query?p1&p2=123', function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
       res.body.should.eql({
         p1: '',
         p2: '123'

@@ -1,7 +1,7 @@
 var init = require('../base/init');
-var lang = require('../base/lang');
-var config = require('../config/config');
+var util2 = require('../base/util');
+var config = require('../base/config');
 
 init.add(function () {
-  lang.merge(module.exports, require('./image-site-' + config.appType));
+  util2.merge(module.exports, require('./image-site-' + config.appType));
 });

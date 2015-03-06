@@ -1,10 +1,10 @@
 var should = require('should');
 
 var init = require('../base/init');
-var error = require('../error/error');
-var config = require('../config/config')({ path: 'config/rapixel-test.json' });
+var error = require('../base/error');
+var config = require('../base/config')({ path: 'config/rapixel-test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
-var express = require('../express/express');
+var express2 = require('../main/express');
 var upload = require('../upload/upload');
 var userf = require('../user/user-fixture');
 var imagec = require('../image/image-create');
@@ -15,7 +15,7 @@ before(function (done) {
 });
 
 before(function () {
-  express.listen();
+  express2.listen();
 });
 
 before(function (done) {
@@ -27,10 +27,10 @@ describe("get image", function () {
   var _pid;
   var _files;
   it("given tmp file", function (done) {
-    express.post('/api/upload').attach('files', _f1).end(function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(!res.body.err);
+    express2.post('/api/upload').attach('files', _f1).end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
       _files = res.body.files;
       done();
     });
@@ -38,30 +38,30 @@ describe("get image", function () {
   it("given new image", function (done) {
     this.timeout(30000);
     var form = { files: _files, comment: 'image1' };
-    express.post('/api/images').send(form).end(function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(!res.body.err);
-      should(res.body.ids);
+    express2.post('/api/images').send(form).end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
+      should.exist(res.body.ids);
       res.body.ids.length.should.equal(1);
       _pid = res.body.ids[0];
       done();
     });
   });
   it("should success", function (done) {
-    express.get('/api/images/' + _pid).end(function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(!res.body.err);
+    express2.get('/api/images/' + _pid).end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
       res.body.hit.should.equal(0);
       done();
     });
   });
   it("should success with hit", function (done) {
-    express.get('/api/images/' + _pid + '?hit').end(function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(!res.body.err);
+    express2.get('/api/images/' + _pid + '?hit').end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
       res.body.hit.should.equal(1);
       done();
     });

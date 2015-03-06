@@ -1,18 +1,18 @@
 var should = require('should');
 var fs = require('fs');
 
-var lang = require('../base/lang');
+var util2 = require('../base/util');
 var init = require('../base/init');
 var fs2 = require('../fs/fs');
-var config = require('../config/config')({ path: 'config/rapixel-test.json' });
+var config = require('../base/config')({ path: 'config/rapixel-test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
-var express = require('../express/express');
+var express2 = require('../main/express');
 var usera = require('../user/user-auth');
 var userf = require('../user/user-fixture');
 var upload = require('../upload/upload');
 
 function find(files, oname) {
-  return lang.find(files, function (file) {
+  return util2.find(files, function (file) {
     return file.oname === oname;
   });
 }
@@ -22,7 +22,7 @@ before(function (done) {
 });
 
 before(function () {
-  express.listen();
+  express2.listen();
 });
 
 before(function (done) {
@@ -67,13 +67,13 @@ describe("deleter", function () {
 describe("uploading one file", function () {
   it("should success", function (done) {
     var f1 = 'modules/upload/fixture/f1.txt';
-    express.post('/api/upload').attach('files', f1).end(function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(!res.body.err);
-      should(res.body.files);
+    express2.post('/api/upload').attach('files', f1).end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
+      should.exist(res.body.files);
       var file;
-      should(file = find(res.body.files, 'f1.txt'));
+      should.exist(file = find(res.body.files, 'f1.txt'));
       fs.existsSync(upload.getTmpPath(file.tname)).should.be.true;
       done();
     });
@@ -84,14 +84,14 @@ describe("uploading two files", function () {
   it("should success", function (done) {
     var f1 = 'modules/upload/fixture/f1.txt';
     var f2 = 'modules/upload/fixture/f2.txt';
-    express.post('/api/upload').attach('files', f1).attach('files', f2).end(function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(!res.body.err);
+    express2.post('/api/upload').attach('files', f1).attach('files', f2).end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
       var file;
-      should(file = find(res.body.files, 'f1.txt'));
+      should.exist(file = find(res.body.files, 'f1.txt'));
       fs.existsSync(upload.getTmpPath(file.tname)).should.be.true;
-      should(file = find(res.body.files, 'f2.txt'));
+      should.exist(file = find(res.body.files, 'f2.txt'));
       fs.existsSync(upload.getTmpPath(file.tname)).should.be.true;
       done();
     });
@@ -102,16 +102,16 @@ describe("uploading two files to html", function () {
   it("should success", function (done) {
     var f1 = 'modules/upload/fixture/f1.txt';
     var f2 = 'modules/upload/fixture/f2.txt';
-    express.post('/api/upload?rtype=html').attach('files', f1).attach('files', f2).end(function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(!res.body.err);
+    express2.post('/api/upload?rtype=html').attach('files', f1).attach('files', f2).end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
       res.should.be.html;
       res.body = JSON.parse(res.text);
       var file;
-      should(file = find(res.body.files, 'f1.txt'));
+      should.exist(file = find(res.body.files, 'f1.txt'));
       fs.existsSync(upload.getTmpPath(file.tname)).should.be.true;
-      should(file = find(res.body.files, 'f2.txt'));
+      should.exist(file = find(res.body.files, 'f2.txt'));
       fs.existsSync(upload.getTmpPath(file.tname)).should.be.true;
       done();
     });
@@ -120,10 +120,10 @@ describe("uploading two files to html", function () {
 
 describe("uploading none", function () {
   it("should success", function (done) {
-    express.post('/api/upload').end(function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(!res.body.err);
+    express2.post('/api/upload').end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
       res.body.should.eql({});
       done();
     });
@@ -136,10 +136,10 @@ describe("deleting files", function () {
     var f1 = 'modules/upload/fixture/f1.txt';
     var f2 = 'modules/upload/fixture/f2.txt';
     var f3 = 'modules/upload/fixture/f3.txt';
-    express.post('/api/upload').attach('files', f1).attach('files', f2).attach('files', f3).end(function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(!res.body.err);
+    express2.post('/api/upload').attach('files', f1).attach('files', f2).attach('files', f3).end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
       _files = res.body.files;
       for (var i = 0; i < _files.length; i++) {
         _files[i].tpath = upload.getTmpPath(_files[i].tname);
@@ -149,36 +149,36 @@ describe("deleting files", function () {
   });
   it("should success for f1.txt", function (done) {
     var f1;
-    should(f1 = find(_files, 'f1.txt'))
+    should.exist(f1 = find(_files, 'f1.txt'))
     fs.existsSync(f1.tpath).should.be.true;
-    express.del('/api/upload').send({ files: [ f1.tname ] }).end(function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(!res.body.err);
+    express2.del('/api/upload').send({ files: [ f1.tname ] }).end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
       fs.existsSync(f1.tpath).should.be.false;
       done();
     });
   });
   it("should success for f2.txt and f3.txt", function (done) {
     var f2, f3;
-    should(f2 = find(_files, 'f2.txt'))
+    should.exist(f2 = find(_files, 'f2.txt'))
     fs.existsSync(f2.tpath).should.be.true;
-    should(f3 = find(_files, 'f3.txt'))
+    should.exist(f3 = find(_files, 'f3.txt'))
     fs.existsSync(f3.tpath).should.be.true;
-    express.del('/api/upload').send({ files: [ f2.tname, f3.tname ] }).end(function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(!res.body.err);
+    express2.del('/api/upload').send({ files: [ f2.tname, f3.tname ] }).end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
       fs.existsSync(f2.tpath).should.be.false;
       fs.existsSync(f3.tpath).should.be.false;
       done();
     });
   });
   it("should success for invalid file", function (done) {
-    express.del('/api/upload').send({ files: [ 'no-file.txt' ] }).end(function (err, res) {
-      should(!err);
-      should(!res.error);
-      should(!res.body.err);
+    express2.del('/api/upload').send({ files: [ 'no-file.txt' ] }).end(function (err, res) {
+      should.not.exist(err);
+      should.not.exist(res.error);
+      should.not.exist(res.body.err);
       done();
     });
   });

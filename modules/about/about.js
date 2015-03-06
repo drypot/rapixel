@@ -1,8 +1,8 @@
 var init = require('../base/init');
-var express = require('../express/express');
+var express2 = require('../main/express');
 
 init.add(function () {
-  var app = express.app;
+  var app = express2.app;
 
   app.get('/company', function (req, res) {
     res.render('about/about-company');

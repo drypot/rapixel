@@ -1,16 +1,16 @@
 var crypto = require('crypto');
 
 var init = require('../base/init');
-var error = require('../error/error');
-var config = require('../config/config');
+var error = require('../base/error');
+var config = require('../base/config');
 var mongo = require('../mongo/mongo');
-var express = require('../express/express');
+var express2 = require('../main/express');
 var mailer = require('../mail/mailer');
 var userb = require('../user/user-base');
 var userc = require('../user/user-create');
 
 init.add(function () {
-  var app = express.app;
+  var app = express2.app;
 
   app.post('/api/resets', function (req, res) {
     var form = getStep1Form(req);

@@ -1,5 +1,5 @@
 var init = require('../base/init');
-var config = require('../config/config');
+var config = require('../base/config');
 var mongo = require('../mongo/mongo');
 var userb = require('../user/user-base');
 

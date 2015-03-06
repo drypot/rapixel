@@ -1,15 +1,15 @@
 var init = require('../base/init');
-var error = require('../error/error');
-var config = require('../config/config');
-var dt = require('../base/dt');
-var express = require('../express/express');
+var util2 = require('../base/util');
+var error = require('../base/error');
+var config = require('../base/config');
+var express2 = require('../main/express');
 var upload = require('../upload/upload');
 var userv = require('../user/user-view');
 var imageb = require('../image/image-base');
 var site = require('../image/image-site');
 
 init.add(function () {
-  var app = express.app;
+  var app = express2.app;
 
   app.get('/api/images/:id([0-9]+)', function (req, res) {
     var id = parseInt(req.params.id) || 0;
@@ -65,7 +65,7 @@ function findImage(id, done) {
         home: user.home
       };
       image.dir = imageb.getImageUrl(image._id);
-      image.cdateStr = dt.format(image.cdate);
+      image.cdateStr = util2.toDateTimeString(image.cdate);
       image.cdate = image.cdate.getTime();
       done(null, image);
     });

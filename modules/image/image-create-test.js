@@ -2,10 +2,10 @@ var should = require('should');
 var fs = require('fs');
 
 var init = require('../base/init');
-var error = require('../error/error');
-var config = require('../config/config')({ path: 'config/rapixel-test.json' });
+var error = require('../base/error');
+var config = require('../base/config')({ path: 'config/rapixel-test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
-var express = require('../express/express');
+var express2 = require('../main/express');
 var upload = require('../upload/upload');
 var userf = require('../user/user-fixture');
 var imageb = require('../image/image-base');
@@ -16,7 +16,7 @@ before(function (done) {
 });
 
 before(function () {
-  express.listen();
+  express2.listen();
 });
 
 before(function (done) {
@@ -48,7 +48,7 @@ describe("getTicketCount", function () {
   });
   it("should return ticketMax", function (done) {
     imagec.getTicketCount(_now, userf.user1, function (err, count, hours) {
-      should(!err);
+      should.not.exist(err);
       count.should.equal(config.ticketMax);
       done();
     });
@@ -58,7 +58,7 @@ describe("getTicketCount", function () {
   });
   it("should return ticketMax", function (done) {
     imagec.getTicketCount(_now, userf.user1, function (err, count, hours) {
-      should(!err);
+      should.not.exist(err);
       count.should.equal(config.ticketMax);
       done();
     });
@@ -68,7 +68,7 @@ describe("getTicketCount", function () {
   });
   it("should return (ticketMax - 1)", function (done) {
     imagec.getTicketCount(_now, userf.user1, function (err, count, hours) {
-      should(!err);
+      should.not.exist(err);
       count.should.equal(config.ticketMax - 1);
       done();
     });
@@ -81,7 +81,7 @@ describe("getTicketCount", function () {
   });
   it("should return 0 and hours", function (done) {
     imagec.getTicketCount(_now, userf.user1, function (err, count, hours) {
-      should(!err);
+      should.not.exist(err);
       count.should.equal(0);
       hours.should.equal(3);
       done();

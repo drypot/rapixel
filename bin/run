@@ -9,4 +9,4 @@ else
   NODE_ENV=development
 fi
 
-node modules/app/app.js --config config/$1-$2.json
+node modules/main/main.js --config config/$1-$2.json

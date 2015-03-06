@@ -2,12 +2,12 @@ var bcrypt = require('bcrypt');
 var crypto = require('crypto');
 
 var init = require('../base/init');
-var error = require('../error/error');
-var express = require('../express/express');
+var error = require('../base/error');
+var express2 = require('../main/express');
 var userb = require('../user/user-base');
 
 init.add(function () {
-  var app = express.app;
+  var app = express2.app;
 
   app.post('/api/users', function (req, res) {
     var form = exports.getForm(req.body);

@@ -3,9 +3,9 @@ var fs = require('fs');
 var path = require('path');
 
 var init = require('../base/init');
-var config = require('../config/config');
+var config = require('../base/config');
 var fs2 = require('../fs/fs');
-var express = require('../express/express');
+var express2 = require('../main/express');
 var usera = require('../user/user-auth');
 
 var tmpDir;
@@ -20,7 +20,7 @@ init.add(function (done) {
 });
 
 init.add(function () {
-  var app = express.app;
+  var app = express2.app;
 
   app.post('/api/upload', function (req, res) {
     if (req.query.rtype === 'html') {
@@ -161,14 +161,14 @@ exports.upload = function (file, count, done) {
     done = count;
     count = 1;
   }
-  var req = express.post('/api/upload');
+  var req = express2.post('/api/upload');
   for (var i = 0; i < count; i++) {
     req.attach('files', file);
   }
   req.end(function (err, res) {
-    should(!err);
-    should(!res.error);
-    should(!res.body.err);
+    should.not.exist(err);
+    should.not.exist(res.error);
+    should.not.exist(res.body.err);
     res.body.files.should.length(count);
     done(null, res.body.files);
   });

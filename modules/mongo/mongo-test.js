@@ -1,7 +1,7 @@
 var should = require('should');
 
 var init = require('../base/init');
-var config = require('../config/config')({ path: 'config/rapixel-test.json' });
+var config = require('../base/config')({ path: 'config/rapixel-test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
 
 before(function (done) {

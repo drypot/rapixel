@@ -1,13 +1,13 @@
 var init = require('../base/init');
-var error = require('../error/error');
-var express = require('../express/express');
-var http2 = require('../http/http');
+var util2 = require('../http/http');
+var error = require('../base/error');
+var express2 = require('../main/express');
 var userv = require('../user/user-view');
 var imagel = require('../image/image-list');
 var site = require('../image/image-site');
 
 init.add(function () {
-  var app = express.app;
+  var app = express2.app;
 
   app.get('/users/:id([0-9]+)', function (req, res) {
     var id = parseInt(req.params.id) || 0;
@@ -36,8 +36,8 @@ function renderProfile(req, res, id) {
         updatable: user && (user.admin || user._id === id),
         images: images,
         suffix: site.thumbnailSuffix,
-        gtUrl: gt ? http2.makeUrl(req.path, { gt: gt }) : undefined,
-        ltUrl: lt ? http2.makeUrl(req.path, { lt: lt }) : undefined
+        gtUrl: gt ? util2.makeUrl(req.path, { gt: gt }) : undefined,
+        ltUrl: lt ? util2.makeUrl(req.path, { lt: lt }) : undefined
       });
     });
   });

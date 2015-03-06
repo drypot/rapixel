@@ -3,7 +3,7 @@ var Server = require('mongodb').Server;
 var ObjectID = require('mongodb').ObjectID;
 
 var init = require('../base/init');
-var config = require('../config/config');
+var config = require('../base/config');
 
 var opt = {};
 

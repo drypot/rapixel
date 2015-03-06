@@ -1,16 +1,15 @@
 var init = require('../base/init');
-var error = require('../error/error');
-var config = require('../config/config');
+var util2 = require('../base/util');
+var error = require('../base/error');
+var config = require('../base/config');
 var mongo = require('../mongo/mongo');
-var dt = require('../base/dt');
-var express = require('../express/express');
-var http2 = require('../http/http');
+var express2 = require('../main/express');
 var userv = require('../user/user-view');
 var imageb = require('../image/image-base');
 var site = require('../image/image-site');
 
 init.add(function () {
-  var app = express.app;
+  var app = express2.app;
 
   app.get('/api/images', function (req, res) {
     var params = exports.getParams(req);
@@ -32,8 +31,8 @@ init.add(function () {
         images: images,
         showName: site.showListName,
         suffix: site.thumbnailSuffix,
-        gtUrl: gt ? http2.makeUrl(('/'), { gt: gt }) : undefined,
-        ltUrl: lt ? http2.makeUrl(('/'), { lt: lt }) : undefined
+        gtUrl: gt ? util2.makeUrl(('/'), { gt: gt }) : undefined,
+        ltUrl: lt ? util2.makeUrl(('/'), { lt: lt }) : undefined
       });
     });
   });
@@ -61,7 +60,7 @@ function modify(image, done) {
       home: user.home
     };
     image.dir = imageb.getImageUrl(image._id);
-    image.cdateStr = dt.format(image.cdate);
+    image.cdateStr = util2.toDateTimeString(image.cdate);
     done(null, image);
   });
 }
