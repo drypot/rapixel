@@ -1,6 +1,6 @@
 var init = require('../base/init');
 var error = require('../base/error');
-var fs2 = require('../fs/fs');
+var fs2 = require('../base/fs');
 var config = require('../base/config');
 var mongo = require('../mongo/mongo');
 

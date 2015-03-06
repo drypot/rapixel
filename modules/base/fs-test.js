@@ -1,7 +1,7 @@
 var should = require('should');
 var fs = require('fs');
 
-var fs2 = require('../fs/fs');
+var fs2 = require('../base/fs');
 
 var testdir = 'tmp/fs-test';
 
@@ -177,7 +177,7 @@ describe("safeFilename", function () {
       var a = fs2.safeFilename(pair[0]);
       var b = pair[1];
       if (a !== b) console.log(pair);
-      a.should.equal.(b);
+      (a == b).should.true;
     })
   });
 });

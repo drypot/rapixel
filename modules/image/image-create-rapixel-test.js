@@ -3,7 +3,7 @@ var fs = require('fs');
 
 var init = require('../base/init');
 var error = require('../base/error');
-var fs2 = require('../fs/fs');
+var fs2 = require('../base/fs');
 var config = require('../base/config')({ path: 'config/rapixel-test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
 var express2 = require('../main/express');
@@ -45,7 +45,7 @@ describe("posting 1 image", function () {
     var form = { files: _files, comment: 'image1' };
     express2.post('/api/images').send(form).end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       should.exist(res.body.ids);
       res.body.ids.length.should.equal(1);
@@ -91,7 +91,7 @@ describe("posting too many images", function () {
     var form = { files: _files };
     express2.post('/api/images').send(form).end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       should.exist(res.body.ids);
       res.body.ids.should.length(config.ticketMax);
@@ -109,7 +109,7 @@ describe("posting too many images", function () {
     var form = { files: _files };
     express2.post('/api/images').send(form).end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       should.exist(res.body.ids);
       res.body.ids.should.length(0);
@@ -133,7 +133,7 @@ describe("posting small", function () {
     var form = { files: _files };
     express2.post('/api/images').send(form).end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.IMAGE_SIZE).should.true;
       done();
@@ -156,7 +156,7 @@ describe("posting text file", function () {
     var form = { files: _files };
     express2.post('/api/images').send(form).end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.IMAGE_TYPE).should.true;
       done();
@@ -172,7 +172,7 @@ describe("posting no file", function () {
     var form = { };
     express2.post('/api/images').send(form).end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.IMAGE_NO_FILE).should.true;
       done();

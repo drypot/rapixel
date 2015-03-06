@@ -3,7 +3,7 @@ var fs = require('fs');
 
 var init = require('../base/init');
 var error = require('../base/error');
-var fs2 = require('../fs/fs');
+var fs2 = require('../base/fs');
 var config = require('../base/config')({ path: 'config/rapixel-test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
 var express2 = require('../main/express');
@@ -38,7 +38,7 @@ describe("deleting image", function () {
   it("given tmp file", function (done) {
     express2.post('/api/upload').attach('files', _f1).end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       _files = res.body.files;
       done();
@@ -49,7 +49,7 @@ describe("deleting image", function () {
     var form = { files: _files, comment: 'image1' };
     express2.post('/api/images').send(form).end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       should.exist(res.body.ids);
       _id = res.body.ids[0];
@@ -62,7 +62,7 @@ describe("deleting image", function () {
     fs.existsSync(p).should.true;
     express2.del('/api/images/' + _id, function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       fs.existsSync(p).should.false;
       done();
@@ -90,7 +90,7 @@ describe("deleting by admin", function () {
   it("given tmp file", function (done) {
     express2.post('/api/upload').attach('files', _f1).end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       _files = res.body.files;
       done();
@@ -101,7 +101,7 @@ describe("deleting by admin", function () {
     var form = { files: _files, comment: 'image1' };
     express2.post('/api/images').send(form).end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       should.exist(res.body.ids);
       _id = res.body.ids[0];
@@ -117,7 +117,7 @@ describe("deleting by admin", function () {
     fs.existsSync(p).should.true;
     express2.del('/api/images/' + _id, function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       done();
     });
@@ -144,7 +144,7 @@ describe("deleting other's image", function () {
   it("given tmp file", function (done) {
     express2.post('/api/upload').attach('files', _f1).end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       _files = res.body.files;
       done();
@@ -155,7 +155,7 @@ describe("deleting other's image", function () {
     var form = { files: _files, comment: 'hello' };
     express2.post('/api/images').send(form).end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       should.exist(res.body.ids);
       _id = res.body.ids[0];
@@ -171,7 +171,7 @@ describe("deleting other's image", function () {
     fs.existsSync(p).should.true;
     express2.del('/api/images/' + _id, function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.NOT_AUTHORIZED).should.true;
       done();

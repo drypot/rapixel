@@ -28,7 +28,7 @@ init.add(function (done) {
 exports.logout = function (done) {
   express2.del('/api/sessions', function (err, res) {
     should.not.exist(err);
-    should.not.exist(res.error);
+    res.error.should.false;
     should.not.exist(res.body.err);
     done();
   });
@@ -38,7 +38,7 @@ exports.loginUser1 = function (done) {
   var form = { email: exports.user1.email, password: exports.user1.password };
   express2.post('/api/sessions').send(form).end(function (err, res) {
     should.not.exist(err);
-    should.not.exist(res.error);
+    res.error.should.false;
     should.not.exist(res.body.err);
     done();
   });
@@ -48,7 +48,7 @@ exports.loginUser1WithRemember = function (done) {
   var form = { email: exports.user1.email, password: exports.user1.password, remember: true };
   express2.post('/api/sessions').send(form).end(function (err, res) {
     should.not.exist(err);
-    should.not.exist(res.error);
+    res.error.should.false;
     should.not.exist(res.body.err);
     done();
   });
@@ -58,7 +58,7 @@ exports.loginUser2 = function (done) {
   var form = { email: exports.user2.email, password: exports.user2.password };
   express2.post('/api/sessions').send(form).end(function (err, res) {
     should.not.exist(err);
-    should.not.exist(res.error);
+    res.error.should.false;
     should.not.exist(res.body.err);
     done();
   });
@@ -68,7 +68,7 @@ exports.loginUser3 = function (done) {
   var form = { email: exports.user3.email, password: exports.user3.password };
   express2.post('/api/sessions').send(form).end(function (err, res) {
     should.not.exist(err);
-    should.not.exist(res.error);
+    res.error.should.false;
     should.not.exist(res.body.err);
     done();
   });
@@ -78,7 +78,7 @@ exports.loginAdmin = function (done) {
   var form = { email: exports.admin.email , password: exports.admin.password };
   express2.post('/api/sessions').send(form).end(function (err, res) {
     should.not.exist(err);
-    should.not.exist(res.error);
+    res.error.should.false;
     should.not.exist(res.body.err);
     done();
   });

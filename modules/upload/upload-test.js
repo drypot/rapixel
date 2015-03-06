@@ -3,7 +3,7 @@ var fs = require('fs');
 
 var util2 = require('../base/util');
 var init = require('../base/init');
-var fs2 = require('../fs/fs');
+var fs2 = require('../base/fs');
 var config = require('../base/config')({ path: 'config/rapixel-test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
 var express2 = require('../main/express');
@@ -69,7 +69,7 @@ describe("uploading one file", function () {
     var f1 = 'modules/upload/fixture/f1.txt';
     express2.post('/api/upload').attach('files', f1).end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       should.exist(res.body.files);
       var file;
@@ -86,7 +86,7 @@ describe("uploading two files", function () {
     var f2 = 'modules/upload/fixture/f2.txt';
     express2.post('/api/upload').attach('files', f1).attach('files', f2).end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       var file;
       should.exist(file = find(res.body.files, 'f1.txt'));
@@ -104,7 +104,7 @@ describe("uploading two files to html", function () {
     var f2 = 'modules/upload/fixture/f2.txt';
     express2.post('/api/upload?rtype=html').attach('files', f1).attach('files', f2).end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       res.should.be.html;
       res.body = JSON.parse(res.text);
@@ -122,7 +122,7 @@ describe("uploading none", function () {
   it("should success", function (done) {
     express2.post('/api/upload').end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       res.body.should.eql({});
       done();
@@ -138,7 +138,7 @@ describe("deleting files", function () {
     var f3 = 'modules/upload/fixture/f3.txt';
     express2.post('/api/upload').attach('files', f1).attach('files', f2).attach('files', f3).end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       _files = res.body.files;
       for (var i = 0; i < _files.length; i++) {
@@ -153,7 +153,7 @@ describe("deleting files", function () {
     fs.existsSync(f1.tpath).should.be.true;
     express2.del('/api/upload').send({ files: [ f1.tname ] }).end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       fs.existsSync(f1.tpath).should.be.false;
       done();
@@ -167,7 +167,7 @@ describe("deleting files", function () {
     fs.existsSync(f3.tpath).should.be.true;
     express2.del('/api/upload').send({ files: [ f2.tname, f3.tname ] }).end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       fs.existsSync(f2.tpath).should.be.false;
       fs.existsSync(f3.tpath).should.be.false;
@@ -177,7 +177,7 @@ describe("deleting files", function () {
   it("should success for invalid file", function (done) {
     express2.del('/api/upload').send({ files: [ 'no-file.txt' ] }).end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       done();
     });

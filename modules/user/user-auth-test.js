@@ -52,7 +52,7 @@ describe("login", function () {
     var form = { email: userf.user1.email, password: userf.user1.password };
     express2.post('/api/sessions').send(form).end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       res.body.user.id.should.equal(userf.user1._id);
       res.body.user.name.should.equal(userf.user1.name);
@@ -62,7 +62,7 @@ describe("login", function () {
   it("should fail with invalid email", function (done) {
     var form = { email: 'xxx@xxx.com', password: 'xxxx' };
     express2.post('/api/sessions').send(form).end(function (err, res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.EMAIL_NOT_FOUND).should.true;
       done();
@@ -71,7 +71,7 @@ describe("login", function () {
   it("should fail with invalid password", function (done) {
     var form = { email: userf.user1.email, password: 'xxxx' };
     express2.post('/api/sessions').send(form).end(function (err, res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.PASSWORD_WRONG).should.true;
       done();
@@ -86,7 +86,7 @@ describe("accessing user resource", function () {
   it("should success", function (done) {
     express2.get('/test/user').end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       done();
     })
@@ -97,7 +97,7 @@ describe("accessing user resource", function () {
   it("should fail", function (done) {
     express2.get('/test/user').end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.NOT_AUTHENTICATED).should.true;
       done();
@@ -112,7 +112,7 @@ describe("accessing admin resource", function () {
   it("should success", function (done) {
     express2.get('/test/admin').end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       done();
     })
@@ -123,7 +123,7 @@ describe("accessing admin resource", function () {
   it("should fail", function (done) {
     express2.get('/test/admin').end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.NOT_AUTHENTICATED).should.true;
       done();
@@ -135,7 +135,7 @@ describe("accessing admin resource", function () {
   it("should fail", function (done) {
     express2.get('/test/admin').end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.NOT_AUTHORIZED).should.true;
       done();
@@ -152,7 +152,7 @@ describe("accessing user resouce ", function () {
     it("should fail", function (done) {
       express2.get('/test/user').end(function (err, res) {
         should.not.exist(err);
-        should.not.exist(res.error);
+        res.error.should.false;
         should.exist(res.body.err);
         done();
       });
@@ -163,7 +163,7 @@ describe("accessing user resouce ", function () {
     it("should success", function (done) {
       express2.get('/test/user').end(function (err, res) {
         should.not.exist(err);
-        should.not.exist(res.error);
+        res.error.should.false;
         should.not.exist(res.body.err);
         done();
       });
@@ -171,7 +171,7 @@ describe("accessing user resouce ", function () {
     it("given new session", function (done) {
       express2.del('/test/del-session').end(function (err, res) {
         should.not.exist(err);
-        should.not.exist(res.error);
+        res.error.should.false;
         should.not.exist(res.body.err);
         done();
       });
@@ -179,7 +179,7 @@ describe("accessing user resouce ", function () {
     it("should fail", function (done) {
       express2.get('/test/user').end(function (err, res) {
         should.not.exist(err);
-        should.not.exist(res.error);
+        res.error.should.false;
         should.exist(res.body.err);
         done();
       });
@@ -193,7 +193,7 @@ describe("accessing user resouce ", function () {
     it("should fail", function (done) {
       express2.get('/test/user').end(function (err, res) {
         should.not.exist(err);
-        should.not.exist(res.error);
+        res.error.should.false;
         should.exist(res.body.err);
         done();
       });
@@ -204,7 +204,7 @@ describe("accessing user resouce ", function () {
     it("should success", function (done) {
       express2.get('/test/user').end(function (err, res) {
         should.not.exist(err);
-        should.not.exist(res.error);
+        res.error.should.false;
         should.not.exist(res.body.err);
         done();
       });
@@ -212,7 +212,7 @@ describe("accessing user resouce ", function () {
     it("given new session", function (done) {
       express2.del('/test/del-session').end(function (err, res) {
         should.not.exist(err);
-        should.not.exist(res.error);
+        res.error.should.false;
         should.not.exist(res.body.err);
         done();
       });
@@ -220,7 +220,7 @@ describe("accessing user resouce ", function () {
     it("should success", function (done) {
       express2.get('/test/user').end(function (err, res) {
         should.not.exist(err);
-        should.not.exist(res.error);
+        res.error.should.false;
         should.not.exist(res.body.err);
         done();
       });
@@ -231,7 +231,7 @@ describe("accessing user resouce ", function () {
     it("should fail", function (done) {
       express2.get('/test/user').end(function (err, res) {
         should.not.exist(err);
-        should.not.exist(res.error);
+        res.error.should.false;
         should.exist(res.body.err);
         done();
       })
@@ -245,7 +245,7 @@ describe("accessing user resouce ", function () {
     it("should fail", function (done) {
       express2.get('/test/user').end(function (err, res) {
         should.not.exist(err);
-        should.not.exist(res.error);
+        res.error.should.false;
         should.exist(res.body.err);
         done();
       });
@@ -256,7 +256,7 @@ describe("accessing user resouce ", function () {
     it("should success", function (done) {
       express2.get('/test/user').end(function (err, res) {
         should.not.exist(err);
-        should.not.exist(res.error);
+        res.error.should.false;
         should.not.exist(res.body.err);
         done();
       });
@@ -264,7 +264,7 @@ describe("accessing user resouce ", function () {
     it("checking email cookie", function (done) {
       express2.get('/test/cookies').end(function (err, res) {
         should.not.exist(err);
-        should.not.exist(res.error);
+        res.error.should.false;
         should.not.exist(res.body.err);
         res.body.email.should.equal(userf.user1.email);
         done();
@@ -283,7 +283,7 @@ describe("accessing user resouce ", function () {
     it("given new session", function (done) {
       express2.del('/test/del-session').end(function (err, res) {
         should.not.exist(err);
-        should.not.exist(res.error);
+        res.error.should.false;
         should.not.exist(res.body.err);
         done();
       });
@@ -291,7 +291,7 @@ describe("accessing user resouce ", function () {
     it("should fail", function (done) {
       express2.get('/test/user').end(function (err, res) {
         should.not.exist(err);
-        should.not.exist(res.error);
+        res.error.should.false;
         should.exist(res.body.err);
         done();
       });
@@ -299,7 +299,7 @@ describe("accessing user resouce ", function () {
     it("checking email cookie is null", function (done) {
       express2.get('/test/cookies').end(function (err, res) {
         should.not.exist(err);
-        should.not.exist(res.error);
+        res.error.should.false;
         should.not.exist(res.body.err);
         should.not.exist(res.body.email);
         done();

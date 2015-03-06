@@ -36,14 +36,14 @@ describe("deactivating self", function () {
   it("should success accessing user resource", function (done) {
     express2.get('/test/user').end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       done();
     })
   });
   it("should success deactivating user1", function (done) {
     express2.del('/api/users/' + userf.user1._id).end(function (err, res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       done();
     });
@@ -57,7 +57,7 @@ describe("deactivating self", function () {
   });
   it("should fail accessing user resource (because logged out)", function (done) {
     express2.get('/test/user').end(function (err, res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.NOT_AUTHENTICATED).should.true;
       done();
@@ -71,7 +71,7 @@ describe("deactivating with no login", function () {
   });
   it("should fail deactivating user2", function (done) {
     express2.del('/api/users/' + userf.user2._id).end(function (err, res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.NOT_AUTHENTICATED).should.true;
       done();
@@ -85,7 +85,7 @@ describe("deactivating other", function () {
   });
   it("should fail deactivating user3", function (done) {
     express2.del('/api/users/' + userf.user3._id).end(function (err, res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.NOT_AUTHORIZED).should.true;
       done();
@@ -99,7 +99,7 @@ describe("deactivating by admin", function () {
   });
   it("should success deactivating user3", function (done) {
     express2.del('/api/users/' + userf.user3._id).end(function (err, res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       done();
     });

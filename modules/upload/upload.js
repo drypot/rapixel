@@ -4,7 +4,7 @@ var path = require('path');
 
 var init = require('../base/init');
 var config = require('../base/config');
-var fs2 = require('../fs/fs');
+var fs2 = require('../base/fs');
 var express2 = require('../main/express');
 var usera = require('../user/user-auth');
 
@@ -167,7 +167,7 @@ exports.upload = function (file, count, done) {
   }
   req.end(function (err, res) {
     should.not.exist(err);
-    should.not.exist(res.error);
+    res.error.should.false;
     should.not.exist(res.body.err);
     res.body.files.should.length(count);
     done(null, res.body.files);

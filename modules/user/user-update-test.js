@@ -31,7 +31,7 @@ describe("updating user / permission", function () {
   var _user = { name: 'testauth', email: 'testauth@mail.com', password: '1234' };
   it("given new user", function (done) {
     express2.post('/api/users').send(_user).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       _user._id = res.body.id;
       done();
@@ -40,7 +40,7 @@ describe("updating user / permission", function () {
   it("given new user login", function (done) {
     var form = { email: _user.email, password: _user.password };
     express2.post('/api/sessions').send(form).end(function (err, res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       done();
     });
@@ -48,7 +48,7 @@ describe("updating user / permission", function () {
   it("should success updating own profile", function (done) {
     var form = { name: 'testauth', home: 'testauth', email: 'testauth@mail.com' };
     express2.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       done();
     });
@@ -59,7 +59,7 @@ describe("updating user / permission", function () {
   it("should fail updating new user's profile", function (done) {
     var form = { name: 'testauth', home: 'testauth', email: 'testauth@mail.com' };
     express2.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.NOT_AUTHORIZED).should.true;
       done();
@@ -71,7 +71,7 @@ describe("updating user / permission", function () {
   it("should success updating anybody", function (done) {
     var form = { name: 'testauth', home: 'testauth', email: 'testauth@mail.com' };
     express2.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       done();
     });
@@ -79,7 +79,7 @@ describe("updating user / permission", function () {
   it("should fail for invalid id", function (done) {
     var form = { name: 'testauth3', home: 'testauth3', email: 'testauth3@mail.com' };
     express2.put('/api/users/' + 999).send(form).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       error.find(res.body.err, error.USER_NOT_FOUND).should.true;
       done();
     });
@@ -90,7 +90,7 @@ describe("updating user / name", function () {
   var _user = { name: 'NameTest', email: 'nametest@mail.com', password: '1234' };
   it("given user", function (done) {
     express2.post('/api/users').send(_user).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       _user._id = res.body.id;
       done();
@@ -99,7 +99,7 @@ describe("updating user / name", function () {
   it("given login", function (done) {
     var form = { email: _user.email, password: _user.password };
     express2.post('/api/sessions').send(form).end(function (err, res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       done();
     });
@@ -107,7 +107,7 @@ describe("updating user / name", function () {
   it("should success", function (done) {
     var form = { name: 'NameTest-NEW', home: 'NameTest', email: 'nametest@mail.com', password: '1234' };
     express2.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       done();
     });
@@ -124,7 +124,7 @@ describe("updating user / name", function () {
   it("should fail with same name to name", function (done) {
     var form = { name: 'NAME1', home: 'NameTest', email: 'nametest@mail.com', password: '1234' };
     express2.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.NAME_DUPE).should.true;
       done();
@@ -133,7 +133,7 @@ describe("updating user / name", function () {
   it("should fail with same name to home", function (done) {
     var form = { name: 'HOME1', home: 'NameTest', email: 'nametest@mail.com', password: '1234' };
     express2.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.NAME_DUPE).should.true;
       done();
@@ -142,7 +142,7 @@ describe("updating user / name", function () {
   it("should fail when name empty", function (done) {
     var form = { name: '', home: 'NameTest', email: 'nametest@mail.com', password: '1234' };
     express2.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       error.find(res.body.err, error.NAME_EMPTY).should.true;
       done();
     });
@@ -150,7 +150,7 @@ describe("updating user / name", function () {
   it("should fail when name short", function (done) {
     var form = { name: 'u', home: 'NameTest', email: 'nametest@mail.com', password: '1234' };
     express2.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       error.find(res.body.err, error.NAME_RANGE).should.true;
       done();
     });
@@ -158,7 +158,7 @@ describe("updating user / name", function () {
   it("should success when name length 2", function (done) {
     var form = { name: 'uu', home: 'NameTest', email: 'nametest@mail.com', password: '1234' };
     express2.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       done();
     });
@@ -166,7 +166,7 @@ describe("updating user / name", function () {
   it("should fail when name long", function (done) {
     var form = { name: '123456789012345678901234567890123', home: 'NameTest', email: 'nametest@mail.com', password: '1234' };
     express2.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       error.find(res.body.err, error.NAME_RANGE).should.true;
       done();
     });
@@ -174,7 +174,7 @@ describe("updating user / name", function () {
   it("should success when name length 32", function (done) {
     var form = { name: '12345678901234567890123456789012', home: 'NameTest', email: 'nametest@mail.com', password: '1234' };
     express2.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       done();
     });
@@ -185,7 +185,7 @@ describe("updating user / home", function () {
   var _user = { name: 'HomeTest', email: 'hometest@mail.com', password: '1234' };
   it("given new user", function (done) {
     express2.post('/api/users').send(_user).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       _user._id = res.body.id;
       done();
@@ -194,7 +194,7 @@ describe("updating user / home", function () {
   it("given login", function (done) {
     var form = { email: _user.email, password: _user.password };
     express2.post('/api/sessions').send(form).end(function (err, res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       done();
     });
@@ -202,7 +202,7 @@ describe("updating user / home", function () {
   it("should success", function (done) {
     var form = { name: 'HomeTest', home: 'HomeTest-NEW', email: 'hometest@mail.com', password: '1234' };
     express2.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       done();
     });
@@ -220,7 +220,7 @@ describe("updating user / home", function () {
   it("should fail with same home to home", function (done) {
     var form = { name: 'HomeTest', home: 'HOME1', email: 'hometest@mail.com', password: '1234' };
     express2.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.HOME_DUPE).should.true;
       done();
@@ -229,7 +229,7 @@ describe("updating user / home", function () {
   it("should fail with same home to name", function (done) {
     var form = { name: 'HomeTest', home: 'NAME1', email: 'hometest@mail.com', password: '1234' };
     express2.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.HOME_DUPE).should.true;
       done();
@@ -238,7 +238,7 @@ describe("updating user / home", function () {
   it("should fail when home empty", function (done) {
     var form = { name: 'HomeTest', home: '', email: 'hometest@mail.com', password: '1234' };
     express2.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       error.find(res.body.err, error.HOME_EMPTY).should.true;
       done();
     });
@@ -246,7 +246,7 @@ describe("updating user / home", function () {
   it("should fail when home short", function (done) {
     var form = { name: 'HomeTest', home: 'h', email: 'hometest@mail.com', password: '1234' };
     express2.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       error.find(res.body.err, error.HOME_RANGE).should.true;
       done();
     });
@@ -254,7 +254,7 @@ describe("updating user / home", function () {
   it("should success when home length 2", function (done) {
     var form = { name: 'HomeTest', home: 'hh', email: 'hometest@mail.com', password: '1234' };
     express2.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       done();
     });
@@ -262,7 +262,7 @@ describe("updating user / home", function () {
   it("should fail when home long", function (done) {
     var form = { name: 'HomeTest', home: '123456789012345678901234567890123', email: 'hometest@mail.com', password: '1234' };
     express2.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       error.find(res.body.err, error.HOME_RANGE).should.true;
       done();
     });
@@ -270,7 +270,7 @@ describe("updating user / home", function () {
   it("should success when home length 32", function (done) {
     var form = { name: 'HomeTest', home: '1234567890123456789012345678901H', email: 'hometest@mail.com', password: '1234' };
     express2.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       done();
     });
@@ -282,7 +282,7 @@ describe("updating user / email", function () {
   it("given new user", function (done) {
     express2.post('/api/users').send(_user).end(function (err,res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       _user._id = res.body.id;
       done();
@@ -292,7 +292,7 @@ describe("updating user / email", function () {
     var form = { email: _user.email, password: _user.password };
     express2.post('/api/sessions').send(form).end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       done();
     });
@@ -300,7 +300,7 @@ describe("updating user / email", function () {
   it("should success", function (done) {
     var form = { name: 'mailtest', home: 'mailtest', email: 'mailtest-new@mail.com', password: '1234' };
     express2.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       done();
     });
@@ -316,7 +316,7 @@ describe("updating user / email", function () {
   it("should fail when already exists", function (done) {
     var form = { name: 'mailtest', home: 'mailtest', email: 'mail1@mail.com', password: '1234' };
     express2.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       error.find(res.body.err, error.EMAIL_DUPE).should.true;
       done();
     });
@@ -324,7 +324,7 @@ describe("updating user / email", function () {
   it("should fail when email invalid", function (done) {
     var form = { name: 'mailtest', home: 'mailtest', email: 'abc.mail.com', password: '1234' };
     express2.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       error.find(res.body.err, error.EMAIL_PATTERN).should.true;
       done();
     });
@@ -335,7 +335,7 @@ describe("updating user / password", function () {
   var _user = { name: 'pwtest', email: 'pwtest@mail.com', password: '1234' };
   it("given new user", function (done) {
     express2.post('/api/users').send(_user).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       _user._id = res.body.id;
       done();
@@ -344,7 +344,7 @@ describe("updating user / password", function () {
   it("given login", function (done) {
     var form = { email: _user.email, password: _user.password };
     express2.post('/api/sessions').send(form).end(function (err, res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       done();
     });
@@ -352,7 +352,7 @@ describe("updating user / password", function () {
   it("should success", function (done) {
     var form = { name: 'pwtest', home: 'pwtest', email: 'pwtest@mail.com', password: '5678' };
     express2.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       done();
     });
@@ -368,7 +368,7 @@ describe("updating user / password", function () {
   it("should success when password emtpy", function (done) {
     var form = { name: 'pwtest', home: 'pwtest', email: 'pwtest@mail.com' };
     express2.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       done();
     });
@@ -384,7 +384,7 @@ describe("updating user / password", function () {
   it("should fail when password short", function (done) {
     var form = { name: 'pwtest', home: 'pwtest', email: 'pwtest@mail.com', password: '123' };
     express2.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       error.find(res.body.err, error.PASSWORD_RANGE).should.true;
       done();
     });
@@ -392,7 +392,7 @@ describe("updating user / password", function () {
   it("should fail when password long", function (done) {
     var form = { name: 'pwtest', home: 'pwtest', email: 'pwtest@mail.com', password: '123456789012345678901234567890123' };
     express2.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       error.find(res.body.err, error.PASSWORD_RANGE).should.true;
       done();
     });
@@ -400,7 +400,7 @@ describe("updating user / password", function () {
   it("should success when password 32", function (done) {
     var form = { name: 'pwtest', home: 'pwtest', email: 'pwtest@mail.com', password: '12345678901234567890123456789012' };
     express2.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       done();
     });
@@ -411,7 +411,7 @@ describe("updating user / profile", function () {
   var _user = { name: 'pftest', email: 'pftest@mail.com', password: '1234', profile: 'profile' };
   it("given new user", function (done) {
     express2.post('/api/users').send(_user).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       _user._id = res.body.id;
       done();
@@ -420,7 +420,7 @@ describe("updating user / profile", function () {
   it("given login", function (done) {
     var form = { email: _user.email, password: _user.password };
     express2.post('/api/sessions').send(form).end(function (err, res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       done();
     });
@@ -428,7 +428,7 @@ describe("updating user / profile", function () {
   it("should success", function (done) {
     var form = { name: 'pftest', home: 'pftest', email: 'pftest@mail.com', profile: 'profile-new' };
     express2.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       done();
     });
@@ -447,7 +447,7 @@ describe("updating user / cache", function () {
   var _user = { name: 'cachetest', email: 'cachetest@mail.com', password: '1234' };
   it("given new user", function (done) {
     express2.post('/api/users').send(_user).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       _user._id = res.body.id;
       done();
@@ -456,7 +456,7 @@ describe("updating user / cache", function () {
   it("given login", function (done) {
     var form = { email: _user.email, password: _user.password };
     express2.post('/api/sessions').send(form).end(function (err, res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       done();
     });
@@ -473,7 +473,7 @@ describe("updating user / cache", function () {
   it("should success", function (done) {
     var form = { name: 'cachetest-new', home: 'home-new', email: 'cachetest-new@mail.com' };
     express2.put('/api/users/' + _user._id).send(form).end(function (err,res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       done();
     });

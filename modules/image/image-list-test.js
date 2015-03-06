@@ -52,7 +52,7 @@ describe("listing all", function () {
       ps: 99
     }
     express2.get('/api/images').query(query).end(function (err, res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       res.body.gt.should.equal(0);
       res.body.lt.should.equal(0);
@@ -72,7 +72,7 @@ describe("listing page 1", function () {
       ps: 4
     };
     express2.get('/api/images').query(query).end(function (err, res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       res.body.gt.should.equal(0);
       res.body.lt.should.equal(7);
@@ -90,7 +90,7 @@ describe("listing page 2 with lt", function () {
       lt:7, ps: 4
     }
     express2.get('/api/images').query(query).end(function (err, res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       res.body.gt.should.equal(6);
       res.body.lt.should.equal(3);
@@ -108,7 +108,7 @@ describe("listing last page with lt", function () {
       lt: 3, ps: 4
     }
     express2.get('/api/images').query(query).end(function (err, res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       res.body.gt.should.equal(2);
       res.body.lt.should.equal(0);
@@ -127,7 +127,7 @@ describe("listing page 2 with gt", function () {
       gt:2, ps: 4
     }
     express2.get('/api/images').query(query).end(function (err, res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       res.body.gt.should.equal(6);
       res.body.lt.should.equal(3);
@@ -145,7 +145,7 @@ describe("listing page 1 with gt", function () {
       gt: 6, ps: 4
     };
     express2.get('/api/images').query(query).end(function (err, res) {
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       res.body.gt.should.equal(0);
       res.body.lt.should.equal(7);

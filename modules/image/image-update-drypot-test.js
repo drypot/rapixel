@@ -3,7 +3,7 @@ var fs = require('fs');
 
 var init = require('../base/init');
 var error = require('../base/error');
-var fs2 = require('../fs/fs');
+var fs2 = require('../base/fs');
 var config = require('../base/config')({ path: 'config/drypot-test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
 var express2 = require('../main/express');
@@ -42,7 +42,7 @@ describe("updating", function () {
     var form = { files: _files, comment: 'image1' };
     express2.post('/api/images').send(form).end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       should.exist(res.body.ids);
       res.body.ids.length.should.equal(1);
@@ -76,7 +76,7 @@ describe("updating", function () {
     var form = { files: _files, comment: 'image2' };
     express2.put('/api/images/' + _id).send(form).end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       done();
     });
@@ -111,7 +111,7 @@ describe("updating with no file", function () {
     var form = { comment: 'updated with no file' };
     express2.put('/api/images/' + _id).send(form).end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       done();
     });
@@ -146,7 +146,7 @@ describe("updating with jpeg", function () {
     var form = { files: _files };
     express2.put('/api/images/' + _id).send(form).end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.IMAGE_TYPE).should.true;
       done();
@@ -174,7 +174,7 @@ describe("updating with text file", function () {
     var form = { files: _files };
     express2.put('/api/images/' + _id).send(form).end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.IMAGE_TYPE).should.true;
       done();
@@ -199,7 +199,7 @@ describe("updating by others", function () {
     var form = { comment: 'xxxx' };
     express2.put('/api/images/' + _id).send(form).end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.NOT_AUTHORIZED).should.true;
       done();

@@ -29,7 +29,7 @@ describe("get image", function () {
   it("given tmp file", function (done) {
     express2.post('/api/upload').attach('files', _f1).end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       _files = res.body.files;
       done();
@@ -40,7 +40,7 @@ describe("get image", function () {
     var form = { files: _files, comment: 'image1' };
     express2.post('/api/images').send(form).end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       should.exist(res.body.ids);
       res.body.ids.length.should.equal(1);
@@ -51,7 +51,7 @@ describe("get image", function () {
   it("should success", function (done) {
     express2.get('/api/images/' + _pid).end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       res.body.hit.should.equal(0);
       done();
@@ -60,7 +60,7 @@ describe("get image", function () {
   it("should success with hit", function (done) {
     express2.get('/api/images/' + _pid + '?hit').end(function (err, res) {
       should.not.exist(err);
-      should.not.exist(res.error);
+      res.error.should.false;
       should.not.exist(res.body.err);
       res.body.hit.should.equal(1);
       done();
