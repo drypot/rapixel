@@ -21,5 +21,5 @@ require('../user-profile/user-profile');
 
 init.run(function (err) {
   if (err) throw err;
-  express2.listen();
+  express2.app.listen();
 });

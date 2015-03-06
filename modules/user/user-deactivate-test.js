@@ -26,7 +26,7 @@ before(function (done) {
 });
 
 before(function () {
-  express2.listen();
+  express2.app.listen();
 });
 
 describe("deactivating self", function () {
@@ -34,7 +34,7 @@ describe("deactivating self", function () {
     userf.loginUser1(done);
   });
   it("should success accessing user resource", function (done) {
-    express2.get('/test/user').end(function (err, res) {
+    local.get('/test/user').end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.not.exist(res.body.err);
@@ -42,7 +42,7 @@ describe("deactivating self", function () {
     })
   });
   it("should success deactivating user1", function (done) {
-    express2.del('/api/users/' + userf.user1._id).end(function (err, res) {
+    local.del('/api/users/' + userf.user1._id).end(function (err, res) {
       res.error.should.false;
       should.not.exist(res.body.err);
       done();
@@ -56,7 +56,7 @@ describe("deactivating self", function () {
     });
   });
   it("should fail accessing user resource (because logged out)", function (done) {
-    express2.get('/test/user').end(function (err, res) {
+    local.get('/test/user').end(function (err, res) {
       res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.NOT_AUTHENTICATED).should.true;
@@ -70,7 +70,7 @@ describe("deactivating with no login", function () {
     userf.logout(done);
   });
   it("should fail deactivating user2", function (done) {
-    express2.del('/api/users/' + userf.user2._id).end(function (err, res) {
+    local.del('/api/users/' + userf.user2._id).end(function (err, res) {
       res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.NOT_AUTHENTICATED).should.true;
@@ -84,7 +84,7 @@ describe("deactivating other", function () {
     userf.loginUser2(done);
   });
   it("should fail deactivating user3", function (done) {
-    express2.del('/api/users/' + userf.user3._id).end(function (err, res) {
+    local.del('/api/users/' + userf.user3._id).end(function (err, res) {
       res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.NOT_AUTHORIZED).should.true;
@@ -98,7 +98,7 @@ describe("deactivating by admin", function () {
     userf.loginAdmin(done);
   });
   it("should success deactivating user3", function (done) {
-    express2.del('/api/users/' + userf.user3._id).end(function (err, res) {
+    local.del('/api/users/' + userf.user3._id).end(function (err, res) {
       res.error.should.false;
       should.not.exist(res.body.err);
       done();

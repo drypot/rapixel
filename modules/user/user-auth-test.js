@@ -44,13 +44,13 @@ before(function (done) {
 });
 
 before(function () {
-  express2.listen();
+  express2.app.listen();
 });
 
 describe("login", function () {
   it("should success", function (done) {
     var form = { email: userf.user1.email, password: userf.user1.password };
-    express2.post('/api/sessions').send(form).end(function (err, res) {
+    local.post('/api/sessions').send(form).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.not.exist(res.body.err);
@@ -61,7 +61,7 @@ describe("login", function () {
   });
   it("should fail with invalid email", function (done) {
     var form = { email: 'xxx@xxx.com', password: 'xxxx' };
-    express2.post('/api/sessions').send(form).end(function (err, res) {
+    local.post('/api/sessions').send(form).end(function (err, res) {
       res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.EMAIL_NOT_FOUND).should.true;
@@ -70,7 +70,7 @@ describe("login", function () {
   });
   it("should fail with invalid password", function (done) {
     var form = { email: userf.user1.email, password: 'xxxx' };
-    express2.post('/api/sessions').send(form).end(function (err, res) {
+    local.post('/api/sessions').send(form).end(function (err, res) {
       res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.PASSWORD_WRONG).should.true;
@@ -84,7 +84,7 @@ describe("accessing user resource", function () {
     userf.loginUser1(done);
   });
   it("should success", function (done) {
-    express2.get('/test/user').end(function (err, res) {
+    local.get('/test/user').end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.not.exist(res.body.err);
@@ -95,7 +95,7 @@ describe("accessing user resource", function () {
     userf.logout(done);
   });
   it("should fail", function (done) {
-    express2.get('/test/user').end(function (err, res) {
+    local.get('/test/user').end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.exist(res.body.err);
@@ -110,7 +110,7 @@ describe("accessing admin resource", function () {
     userf.loginAdmin(done);
   });
   it("should success", function (done) {
-    express2.get('/test/admin').end(function (err, res) {
+    local.get('/test/admin').end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.not.exist(res.body.err);
@@ -121,7 +121,7 @@ describe("accessing admin resource", function () {
     userf.logout(done);
   });
   it("should fail", function (done) {
-    express2.get('/test/admin').end(function (err, res) {
+    local.get('/test/admin').end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.exist(res.body.err);
@@ -133,7 +133,7 @@ describe("accessing admin resource", function () {
     userf.loginUser1(done);
   });
   it("should fail", function (done) {
-    express2.get('/test/admin').end(function (err, res) {
+    local.get('/test/admin').end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.exist(res.body.err);
@@ -150,7 +150,7 @@ describe("accessing user resouce ", function () {
       done();
     });
     it("should fail", function (done) {
-      express2.get('/test/user').end(function (err, res) {
+      local.get('/test/user').end(function (err, res) {
         should.not.exist(err);
         res.error.should.false;
         should.exist(res.body.err);
@@ -161,7 +161,7 @@ describe("accessing user resouce ", function () {
       userf.loginUser1(done);
     });
     it("should success", function (done) {
-      express2.get('/test/user').end(function (err, res) {
+      local.get('/test/user').end(function (err, res) {
         should.not.exist(err);
         res.error.should.false;
         should.not.exist(res.body.err);
@@ -169,7 +169,7 @@ describe("accessing user resouce ", function () {
       });
     });
     it("given new session", function (done) {
-      express2.del('/test/del-session').end(function (err, res) {
+      local.del('/test/del-session').end(function (err, res) {
         should.not.exist(err);
         res.error.should.false;
         should.not.exist(res.body.err);
@@ -177,7 +177,7 @@ describe("accessing user resouce ", function () {
       });
     });
     it("should fail", function (done) {
-      express2.get('/test/user').end(function (err, res) {
+      local.get('/test/user').end(function (err, res) {
         should.not.exist(err);
         res.error.should.false;
         should.exist(res.body.err);
@@ -191,7 +191,7 @@ describe("accessing user resouce ", function () {
       done();
     });
     it("should fail", function (done) {
-      express2.get('/test/user').end(function (err, res) {
+      local.get('/test/user').end(function (err, res) {
         should.not.exist(err);
         res.error.should.false;
         should.exist(res.body.err);
@@ -202,7 +202,7 @@ describe("accessing user resouce ", function () {
       userf.loginUser1WithRemember(done);
     });
     it("should success", function (done) {
-      express2.get('/test/user').end(function (err, res) {
+      local.get('/test/user').end(function (err, res) {
         should.not.exist(err);
         res.error.should.false;
         should.not.exist(res.body.err);
@@ -210,7 +210,7 @@ describe("accessing user resouce ", function () {
       });
     });
     it("given new session", function (done) {
-      express2.del('/test/del-session').end(function (err, res) {
+      local.del('/test/del-session').end(function (err, res) {
         should.not.exist(err);
         res.error.should.false;
         should.not.exist(res.body.err);
@@ -218,7 +218,7 @@ describe("accessing user resouce ", function () {
       });
     });
     it("should success", function (done) {
-      express2.get('/test/user').end(function (err, res) {
+      local.get('/test/user').end(function (err, res) {
         should.not.exist(err);
         res.error.should.false;
         should.not.exist(res.body.err);
@@ -229,7 +229,7 @@ describe("accessing user resouce ", function () {
       userf.logout(done);
     });
     it("should fail", function (done) {
-      express2.get('/test/user').end(function (err, res) {
+      local.get('/test/user').end(function (err, res) {
         should.not.exist(err);
         res.error.should.false;
         should.exist(res.body.err);
@@ -243,7 +243,7 @@ describe("accessing user resouce ", function () {
       done();
     });
     it("should fail", function (done) {
-      express2.get('/test/user').end(function (err, res) {
+      local.get('/test/user').end(function (err, res) {
         should.not.exist(err);
         res.error.should.false;
         should.exist(res.body.err);
@@ -254,7 +254,7 @@ describe("accessing user resouce ", function () {
       userf.loginUser1WithRemember(done);
     });
     it("should success", function (done) {
-      express2.get('/test/user').end(function (err, res) {
+      local.get('/test/user').end(function (err, res) {
         should.not.exist(err);
         res.error.should.false;
         should.not.exist(res.body.err);
@@ -262,7 +262,7 @@ describe("accessing user resouce ", function () {
       });
     });
     it("checking email cookie", function (done) {
-      express2.get('/test/cookies').end(function (err, res) {
+      local.get('/test/cookies').end(function (err, res) {
         should.not.exist(err);
         res.error.should.false;
         should.not.exist(res.body.err);
@@ -281,7 +281,7 @@ describe("accessing user resouce ", function () {
       });
     });
     it("given new session", function (done) {
-      express2.del('/test/del-session').end(function (err, res) {
+      local.del('/test/del-session').end(function (err, res) {
         should.not.exist(err);
         res.error.should.false;
         should.not.exist(res.body.err);
@@ -289,7 +289,7 @@ describe("accessing user resouce ", function () {
       });
     });
     it("should fail", function (done) {
-      express2.get('/test/user').end(function (err, res) {
+      local.get('/test/user').end(function (err, res) {
         should.not.exist(err);
         res.error.should.false;
         should.exist(res.body.err);
@@ -297,7 +297,7 @@ describe("accessing user resouce ", function () {
       });
     });
     it("checking email cookie is null", function (done) {
-      express2.get('/test/cookies').end(function (err, res) {
+      local.get('/test/cookies').end(function (err, res) {
         should.not.exist(err);
         res.error.should.false;
         should.not.exist(res.body.err);

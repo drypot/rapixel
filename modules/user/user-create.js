@@ -10,8 +10,8 @@ init.add(function () {
   var app = express2.app;
 
   app.post('/api/users', function (req, res) {
-    var form = exports.getForm(req.body);
-    exports.createUser(form, function (err, user) {
+    var form = getForm(req.body);
+    createUser(form, function (err, user) {
       if (err) return res.jsonErr(err);
       res.json({
         id: user._id
@@ -26,15 +26,15 @@ init.add(function () {
 
 var emailx = exports.emailx = /^[a-z0-9-_+.]+@[a-z0-9-]+(\.[a-z0-9-]+)+$/i
 
-exports.makeHash = function (password) {
+var makeHash = exports.makeHash = function (password) {
   return bcrypt.hashSync(password, 10);
 }
 
-exports.checkPassword = function (password, hash) {
+var checkPassword = exports.checkPassword = function (password, hash) {
   return bcrypt.compareSync(password, hash);
 }
 
-exports.getForm = function (body) {
+var getForm = exports.getForm = function (body) {
   var form = {};
   form.name = String(body.name || '').trim();
   form.home = String(body.home || '').trim();
@@ -44,10 +44,10 @@ exports.getForm = function (body) {
   return form;
 }
 
-exports.createUser = function (form, done) {
+var createUser = exports.createUser = function (form, done) {
   form.home = form.name;
   form.homel = form.namel = form.name.toLowerCase();
-  exports.checkForm(form, 0, function (err) {
+  checkForm(form, 0, function (err) {
     if (err) return done(err);
     var now = new Date();
     var user = {
@@ -57,7 +57,7 @@ exports.createUser = function (form, done) {
       home: form.home,
       homel: form.homel,
       email: form.email,
-      hash: exports.makeHash(form.password),
+      hash: makeHash(form.password),
       status: 'v',
       cdate: now,
       adate: now,
@@ -74,7 +74,7 @@ exports.createUser = function (form, done) {
   });
 };
 
-exports.checkForm = function (form, id, done) {
+var checkForm = exports.checkForm = function (form, id, done) {
   var errors = [];
   var creating = id == 0;
 
@@ -149,7 +149,7 @@ var checkFormEmail = exports.checkFormEmail = function (form, errors) {
     errors.push(error.EMAIL_EMPTY);
   } else if (form.email.length > 64 || form.email.length < 8) {
     errors.push(error.EMAIL_RANGE);
-  } else if (!exports.emailx.test(form.email)) {
+  } else if (!emailx.test(form.email)) {
     errors.push(error.EMAIL_PATTERN);
   }
 }

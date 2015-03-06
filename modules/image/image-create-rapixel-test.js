@@ -17,7 +17,7 @@ before(function (done) {
 });
 
 before(function () {
-  express2.listen();
+  express2.app.listen();
 });
 
 before(function (done) {
@@ -43,7 +43,7 @@ describe("posting 1 image", function () {
   it("should success", function (done) {
     this.timeout(30000);
     var form = { files: _files, comment: 'image1' };
-    express2.post('/api/images').send(form).end(function (err, res) {
+    local.post('/api/images').send(form).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.not.exist(res.body.err);
@@ -89,7 +89,7 @@ describe("posting too many images", function () {
   it("given max posts", function (done) {
     this.timeout(30000);
     var form = { files: _files };
-    express2.post('/api/images').send(form).end(function (err, res) {
+    local.post('/api/images').send(form).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.not.exist(res.body.err);
@@ -107,7 +107,7 @@ describe("posting too many images", function () {
   it("should return empty ids", function (done) {
     this.timeout(30000);
     var form = { files: _files };
-    express2.post('/api/images').send(form).end(function (err, res) {
+    local.post('/api/images').send(form).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.not.exist(res.body.err);
@@ -131,7 +131,7 @@ describe("posting small", function () {
   });
   it("should fail", function (done) {
     var form = { files: _files };
-    express2.post('/api/images').send(form).end(function (err, res) {
+    local.post('/api/images').send(form).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.exist(res.body.err);
@@ -154,7 +154,7 @@ describe("posting text file", function () {
   });
   it("should fail", function (done) {
     var form = { files: _files };
-    express2.post('/api/images').send(form).end(function (err, res) {
+    local.post('/api/images').send(form).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.exist(res.body.err);
@@ -170,7 +170,7 @@ describe("posting no file", function () {
   }); 
   it("should fail", function (done) {
     var form = { };
-    express2.post('/api/images').send(form).end(function (err, res) {
+    local.post('/api/images').send(form).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.exist(res.body.err);

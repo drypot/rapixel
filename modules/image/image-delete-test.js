@@ -17,7 +17,7 @@ before(function (done) {
 });
 
 before(function () {
-  express2.listen();
+  express2.app.listen();
 });
 
 before(function (done) {
@@ -36,7 +36,7 @@ describe("deleting image", function () {
     userf.loginUser1(done);
   });
   it("given tmp file", function (done) {
-    express2.post('/api/upload').attach('files', _f1).end(function (err, res) {
+    local.post('/api/upload').attach('files', _f1).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.not.exist(res.body.err);
@@ -47,7 +47,7 @@ describe("deleting image", function () {
   it("given image", function (done) {
     this.timeout(30000);
     var form = { files: _files, comment: 'image1' };
-    express2.post('/api/images').send(form).end(function (err, res) {
+    local.post('/api/images').send(form).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.not.exist(res.body.err);
@@ -60,7 +60,7 @@ describe("deleting image", function () {
     var dir = imageb.getImageDir(_id);
     var p = imageb.getVersionPath(dir, _id, 3840);
     fs.existsSync(p).should.true;
-    express2.del('/api/images/' + _id, function (err, res) {
+    local.del('/api/images/' + _id, function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.not.exist(res.body.err);
@@ -88,7 +88,7 @@ describe("deleting by admin", function () {
     userf.loginUser1(done);
   });
   it("given tmp file", function (done) {
-    express2.post('/api/upload').attach('files', _f1).end(function (err, res) {
+    local.post('/api/upload').attach('files', _f1).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.not.exist(res.body.err);
@@ -99,7 +99,7 @@ describe("deleting by admin", function () {
   it("given image", function (done) {
     this.timeout(30000);
     var form = { files: _files, comment: 'image1' };
-    express2.post('/api/images').send(form).end(function (err, res) {
+    local.post('/api/images').send(form).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.not.exist(res.body.err);
@@ -115,7 +115,7 @@ describe("deleting by admin", function () {
     var dir = imageb.getImageDir(_id);
     var p = imageb.getVersionPath(dir, _id, 3840);
     fs.existsSync(p).should.true;
-    express2.del('/api/images/' + _id, function (err, res) {
+    local.del('/api/images/' + _id, function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.not.exist(res.body.err);
@@ -142,7 +142,7 @@ describe("deleting other's image", function () {
     userf.loginUser1(done);
   });
   it("given tmp file", function (done) {
-    express2.post('/api/upload').attach('files', _f1).end(function (err, res) {
+    local.post('/api/upload').attach('files', _f1).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.not.exist(res.body.err);
@@ -153,7 +153,7 @@ describe("deleting other's image", function () {
   it("given image", function (done) {
     this.timeout(30000);
     var form = { files: _files, comment: 'hello' };
-    express2.post('/api/images').send(form).end(function (err, res) {
+    local.post('/api/images').send(form).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.not.exist(res.body.err);
@@ -169,7 +169,7 @@ describe("deleting other's image", function () {
     var dir = imageb.getImageDir(_id);
     var p = imageb.getVersionPath(dir, _id, 3840);
     fs.existsSync(p).should.true;
-    express2.del('/api/images/' + _id, function (err, res) {
+    local.del('/api/images/' + _id, function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.exist(res.body.err);

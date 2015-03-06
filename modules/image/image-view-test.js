@@ -15,7 +15,7 @@ before(function (done) {
 });
 
 before(function () {
-  express2.listen();
+  express2.app.listen();
 });
 
 before(function (done) {
@@ -27,7 +27,7 @@ describe("get image", function () {
   var _pid;
   var _files;
   it("given tmp file", function (done) {
-    express2.post('/api/upload').attach('files', _f1).end(function (err, res) {
+    local.post('/api/upload').attach('files', _f1).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.not.exist(res.body.err);
@@ -38,7 +38,7 @@ describe("get image", function () {
   it("given new image", function (done) {
     this.timeout(30000);
     var form = { files: _files, comment: 'image1' };
-    express2.post('/api/images').send(form).end(function (err, res) {
+    local.post('/api/images').send(form).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.not.exist(res.body.err);
@@ -49,7 +49,7 @@ describe("get image", function () {
     });
   });
   it("should success", function (done) {
-    express2.get('/api/images/' + _pid).end(function (err, res) {
+    local.get('/api/images/' + _pid).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.not.exist(res.body.err);
@@ -58,7 +58,7 @@ describe("get image", function () {
     });
   });
   it("should success with hit", function (done) {
-    express2.get('/api/images/' + _pid + '?hit').end(function (err, res) {
+    local.get('/api/images/' + _pid + '?hit').end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.not.exist(res.body.err);

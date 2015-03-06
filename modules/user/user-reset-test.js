@@ -16,7 +16,7 @@ before(function (done) {
 });
 
 before(function () {
-  express2.listen();
+  express2.app.listen();
 });
 
 describe("resets collection", function () {
@@ -40,7 +40,7 @@ describe("resetting user", function () {
   });
   it("given new reset request", function (done) {
     var form = { email: _user.email };
-    express2.post('/api/resets').send(form).end(function (err, res) {
+    local.post('/api/resets').send(form).end(function (err, res) {
       res.error.should.false;
       should.not.exist(res.body.err);
       done();
@@ -58,7 +58,7 @@ describe("resetting user", function () {
   });
   it("should fail with invalid email", function (done) {
     var form = { email: 'abc.def.xyz' };
-    express2.post('/api/resets').send(form).end(function (err, res) {
+    local.post('/api/resets').send(form).end(function (err, res) {
       res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.EMAIL_PATTERN).should.true;
@@ -67,7 +67,7 @@ describe("resetting user", function () {
   });
   it("should fail with non-exist email", function (done) {
     var form = { email: 'non-exist@xyz.com' };
-    express2.post('/api/resets').send(form).end(function (err, res) {
+    local.post('/api/resets').send(form).end(function (err, res) {
       res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.EMAIL_NOT_EXIST).should.true;
@@ -76,7 +76,7 @@ describe("resetting user", function () {
   });
   it("should fail with invalid id", function (done) {
     var form = { id: '012345678901234567890123', token: _reset.token, password: '4567' };
-    express2.put('/api/resets').send(form).end(function (err, res) {
+    local.put('/api/resets').send(form).end(function (err, res) {
       res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.INVALID_DATA).should.true;
@@ -85,7 +85,7 @@ describe("resetting user", function () {
   });
   it("should fail with invalid token", function (done) {
     var form = { id: _reset._id, token: 'xxxxx', password: '4567' };
-    express2.put('/api/resets').send(form).end(function (err, res) {
+    local.put('/api/resets').send(form).end(function (err, res) {
       res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.INVALID_DATA).should.true;
@@ -94,7 +94,7 @@ describe("resetting user", function () {
   });
   it("should fail with invalid password", function (done) {
     var form = { id: _reset._id, token: _reset.token, password: '' };
-    express2.put('/api/resets').send(form).end(function (err, res) {
+    local.put('/api/resets').send(form).end(function (err, res) {
       res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.PASSWORD_EMPTY).should.true;
@@ -103,7 +103,7 @@ describe("resetting user", function () {
   });
   it("should fail with invalid password", function (done) {
     var form = { id: _reset._id, token: _reset.token, password: 'xx' };
-    express2.put('/api/resets').send(form).end(function (err, res) {
+    local.put('/api/resets').send(form).end(function (err, res) {
       res.error.should.false;
       should.exist(res.body.err);
       error.find(res.body.err, error.PASSWORD_RANGE).should.true;
@@ -112,7 +112,7 @@ describe("resetting user", function () {
   });
   it("should success", function (done) {
     var form = { id: _reset._id, token: _reset.token, password: 'new-pass' };
-    express2.put('/api/resets').send(form).end(function (err, res) {
+    local.put('/api/resets').send(form).end(function (err, res) {
       res.error.should.false;
       should.not.exist(res.body.err);
       done();
@@ -149,7 +149,7 @@ describe("resetting admin", function () {
   });
   it("given new reset request", function (done) {
     var form = { email: _user.email };
-    express2.post('/api/resets').send(form).end(function (err, res) {
+    local.post('/api/resets').send(form).end(function (err, res) {
       res.error.should.false;
       should.not.exist(res.body.err);
       done();
@@ -167,7 +167,7 @@ describe("resetting admin", function () {
   });
   it("should success", function (done) {
     var form = { id: _reset._id, token: _reset.token, password: 'new-pass' };
-    express2.put('/api/resets').send(form).end(function (err, res) {
+    local.put('/api/resets').send(form).end(function (err, res) {
       res.error.should.false;
       should.not.exist(res.body.err);
       done();

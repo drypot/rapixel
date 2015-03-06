@@ -15,13 +15,13 @@ before(function (done) {
 });
 
 before(function () {
-  express2.listen();
+  express2.app.listen();
 });
 
 describe("finding user", function () {
   var _user = { name: 'test', email: 'test@def.com', password: '1234'  };
   it("given new user", function (done) {
-    express2.post('/api/users').send(_user).end(function (err, res) {
+    local.post('/api/users').send(_user).end(function (err, res) {
       res.error.should.false;
       should.not.exist(res.body.err);
       _user._id = res.body.id;
@@ -30,14 +30,14 @@ describe("finding user", function () {
   });
   it("given login", function (done) {
     var form = { email: _user.email, password: _user.password };
-    express2.post('/api/sessions').send(form).end(function (err, res) {
+    local.post('/api/sessions').send(form).end(function (err, res) {
       res.error.should.false;
       should.not.exist(res.body.err);
       done();
     });
   });
   it("should return email", function (done) {
-    express2.get('/api/users/' + _user._id).end(function (err, res) {
+    local.get('/api/users/' + _user._id).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.not.exist(res.body.err);
@@ -51,7 +51,7 @@ describe("finding user", function () {
     userf.loginUser2(done);
   });
   it("should not return email", function (done) {
-    express2.get('/api/users/' + _user._id).end(function (err, res) {
+    local.get('/api/users/' + _user._id).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.not.exist(res.body.err);
@@ -65,7 +65,7 @@ describe("finding user", function () {
     userf.loginAdmin(done);
   });
   it("should return email", function (done) {
-    express2.get('/api/users/' + _user._id).end(function (err, res) {
+    local.get('/api/users/' + _user._id).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.not.exist(res.body.err);
@@ -76,7 +76,7 @@ describe("finding user", function () {
     });
   });
   it("given no login", function (done) {
-    express2.del('/api/sessions', function (err, res) {
+    local.del('/api/sessions', function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.not.exist(res.body.err);
@@ -84,7 +84,7 @@ describe("finding user", function () {
     })
   });
   it("should not return email", function (done) {
-    express2.get('/api/users/' + _user._id).end(function (err, res) {
+    local.get('/api/users/' + _user._id).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.not.exist(res.body.err);
@@ -96,7 +96,7 @@ describe("finding user", function () {
     });
   });
   it("should fail with invalid id", function (done) {
-    express2.get('/api/users/999').end(function (err, res) {
+    local.get('/api/users/999').end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.exist(res.body.err);

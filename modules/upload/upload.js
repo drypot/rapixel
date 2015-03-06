@@ -161,7 +161,7 @@ exports.upload = function (file, count, done) {
     done = count;
     count = 1;
   }
-  var req = express2.post('/api/upload');
+  var req = local.post('/api/upload');
   for (var i = 0; i < count; i++) {
     req.attach('files', file);
   }

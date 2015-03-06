@@ -15,7 +15,7 @@ before(function (done) {
 });
 
 before(function () {
-  express2.listen();
+  express2.app.listen();
 });
 
 before(function (done) {
@@ -51,7 +51,7 @@ describe("listing all", function () {
     var query = {
       ps: 99
     }
-    express2.get('/api/images').query(query).end(function (err, res) {
+    local.get('/api/images').query(query).end(function (err, res) {
       res.error.should.false;
       should.not.exist(res.body.err);
       res.body.gt.should.equal(0);
@@ -71,7 +71,7 @@ describe("listing page 1", function () {
     var query = {
       ps: 4
     };
-    express2.get('/api/images').query(query).end(function (err, res) {
+    local.get('/api/images').query(query).end(function (err, res) {
       res.error.should.false;
       should.not.exist(res.body.err);
       res.body.gt.should.equal(0);
@@ -89,7 +89,7 @@ describe("listing page 2 with lt", function () {
     var query = {
       lt:7, ps: 4
     }
-    express2.get('/api/images').query(query).end(function (err, res) {
+    local.get('/api/images').query(query).end(function (err, res) {
       res.error.should.false;
       should.not.exist(res.body.err);
       res.body.gt.should.equal(6);
@@ -107,7 +107,7 @@ describe("listing last page with lt", function () {
     var query = {
       lt: 3, ps: 4
     }
-    express2.get('/api/images').query(query).end(function (err, res) {
+    local.get('/api/images').query(query).end(function (err, res) {
       res.error.should.false;
       should.not.exist(res.body.err);
       res.body.gt.should.equal(2);
@@ -126,7 +126,7 @@ describe("listing page 2 with gt", function () {
     var query = {
       gt:2, ps: 4
     }
-    express2.get('/api/images').query(query).end(function (err, res) {
+    local.get('/api/images').query(query).end(function (err, res) {
       res.error.should.false;
       should.not.exist(res.body.err);
       res.body.gt.should.equal(6);
@@ -144,7 +144,7 @@ describe("listing page 1 with gt", function () {
     var query = {
       gt: 6, ps: 4
     };
-    express2.get('/api/images').query(query).end(function (err, res) {
+    local.get('/api/images').query(query).end(function (err, res) {
       res.error.should.false;
       should.not.exist(res.body.err);
       res.body.gt.should.equal(0);

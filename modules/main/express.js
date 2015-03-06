@@ -7,12 +7,13 @@ var redisStore = require('connect-redis')(session);
 var multipart = require('connect-multiparty');
 var errorHandler = require('errorhandler');
 
+
 var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config');
 
-exports = module.exports = function () {
-  var app = express();
+init.add(function () {
+  var app = exports.app = express();
 
   // Set Middlewares
 
@@ -74,9 +75,7 @@ exports = module.exports = function () {
     app.listen(config.appPort);
     console.log('express: listening ' + config.appPort);
   };
-
-  return app;
-};
+});
 
 // Error Util
 

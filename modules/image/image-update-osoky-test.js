@@ -17,7 +17,7 @@ before(function (done) {
 });
 
 before(function () {
-  express2.listen();
+  express2.app.listen();
 });
 
 before(function (done) {
@@ -40,7 +40,7 @@ describe("updating", function () {
   it("given post", function (done) {
     this.timeout(30000);
     var form = { files: _files, comment: 'image1' };
-    express2.post('/api/images').send(form).end(function (err, res) {
+    local.post('/api/images').send(form).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.not.exist(res.body.err);
@@ -76,7 +76,7 @@ describe("updating", function () {
   it("should success", function (done) {
     this.timeout(30000);
     var form = { files: _files, comment: 'image2' };
-    express2.put('/api/images/' + _id).send(form).end(function (err, res) {
+    local.put('/api/images/' + _id).send(form).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.not.exist(res.body.err);
@@ -112,7 +112,7 @@ describe("updating with no file", function () {
   });
   it("should success", function (done) {
     var form = { comment: 'updated with no file' };
-    express2.put('/api/images/' + _id).send(form).end(function (err, res) {
+    local.put('/api/images/' + _id).send(form).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.not.exist(res.body.err);
@@ -147,7 +147,7 @@ describe("updating with small", function () {
   });
   it("should fail", function (done) {
     var form = { files: _files };
-    express2.put('/api/images/' + _id).send(form).end(function (err, res) {
+    local.put('/api/images/' + _id).send(form).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.exist(res.body.err);
@@ -175,7 +175,7 @@ describe("updating with text file", function () {
   });
   it("should fail", function (done) {
     var form = { files: _files };
-    express2.put('/api/images/' + _id).send(form).end(function (err, res) {
+    local.put('/api/images/' + _id).send(form).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.exist(res.body.err);
@@ -200,7 +200,7 @@ describe("updating by others", function () {
   });
   it("should fail", function (done) {
     var form = { comment: 'xxxx' };
-    express2.put('/api/images/' + _id).send(form).end(function (err, res) {
+    local.put('/api/images/' + _id).send(form).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.exist(res.body.err);

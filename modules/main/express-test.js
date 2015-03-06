@@ -13,8 +13,8 @@ before(function (done) {
   init.run(done);
 });
 
-before(function(done) {
-  var app = express2();
+before(function() {
+  var app = express2.app;
 
   app.get('/test/no-action', function (req, res, done) {
     done();
@@ -46,7 +46,6 @@ before(function(done) {
 
   app.listen2();
   local = supertest.agent(app);
-  done();
 });
 
 describe("/api/hello", function () {

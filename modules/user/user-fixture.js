@@ -26,7 +26,7 @@ init.add(function (done) {
 });
 
 exports.logout = function (done) {
-  express2.del('/api/sessions', function (err, res) {
+  local.del('/api/sessions', function (err, res) {
     should.not.exist(err);
     res.error.should.false;
     should.not.exist(res.body.err);
@@ -36,7 +36,7 @@ exports.logout = function (done) {
 
 exports.loginUser1 = function (done) {
   var form = { email: exports.user1.email, password: exports.user1.password };
-  express2.post('/api/sessions').send(form).end(function (err, res) {
+  local.post('/api/sessions').send(form).end(function (err, res) {
     should.not.exist(err);
     res.error.should.false;
     should.not.exist(res.body.err);
@@ -46,7 +46,7 @@ exports.loginUser1 = function (done) {
 
 exports.loginUser1WithRemember = function (done) {
   var form = { email: exports.user1.email, password: exports.user1.password, remember: true };
-  express2.post('/api/sessions').send(form).end(function (err, res) {
+  local.post('/api/sessions').send(form).end(function (err, res) {
     should.not.exist(err);
     res.error.should.false;
     should.not.exist(res.body.err);
@@ -56,7 +56,7 @@ exports.loginUser1WithRemember = function (done) {
 
 exports.loginUser2 = function (done) {
   var form = { email: exports.user2.email, password: exports.user2.password };
-  express2.post('/api/sessions').send(form).end(function (err, res) {
+  local.post('/api/sessions').send(form).end(function (err, res) {
     should.not.exist(err);
     res.error.should.false;
     should.not.exist(res.body.err);
@@ -66,7 +66,7 @@ exports.loginUser2 = function (done) {
 
 exports.loginUser3 = function (done) {
   var form = { email: exports.user3.email, password: exports.user3.password };
-  express2.post('/api/sessions').send(form).end(function (err, res) {
+  local.post('/api/sessions').send(form).end(function (err, res) {
     should.not.exist(err);
     res.error.should.false;
     should.not.exist(res.body.err);
@@ -76,7 +76,7 @@ exports.loginUser3 = function (done) {
 
 exports.loginAdmin = function (done) {
   var form = { email: exports.admin.email , password: exports.admin.password };
-  express2.post('/api/sessions').send(form).end(function (err, res) {
+  local.post('/api/sessions').send(form).end(function (err, res) {
     should.not.exist(err);
     res.error.should.false;
     should.not.exist(res.body.err);
