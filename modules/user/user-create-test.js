@@ -14,14 +14,7 @@ before(function (done) {
   init.run(done);
 });
 
-before(function (done) {
-  var users = [
-    { _id: userb.newId(), name: 'Name1', namel: 'name1', home: 'Home1', homel: 'home1', email: 'mail1@mail.com' }
-  ];
-  userb.users.insert(users, done);
-});
-
-describe("emailx", function () {
+describe("emailx test", function () {
   it("should success", function () {
     userc.emailx.test("abc.mail.com").should.false;
     userc.emailx.test("abc*xyz@mail.com").should.false;
@@ -31,7 +24,7 @@ describe("emailx", function () {
 });
 
 describe("newId", function () {
-  it("should success", function () {
+  it("should work", function () {
     var id1 = userb.newId();
     var id1 = userb.newId();
     var id2 = userb.newId();
@@ -40,15 +33,24 @@ describe("newId", function () {
   });
 });
 
+describe("preparing Name1", function (done) {
+  it("should success", function (done) {
+    var users = [
+      { _id: userb.newId(), name: 'Name1', namel: 'name1', home: 'Home1', homel: 'home1', email: 'mail1@mail.com' }
+    ];
+    userb.users.insert(users, done);      
+  });
+});
+
 describe("creating user / name check", function () {
-  it("shoud success", function (done) {
+  it("given NameTest", function (done) {
     var form = { name: 'NameTest', email: 'nametest@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
       should.not.exist(res.body.err);
       done();
     });
   });
-  it("can be checked", function (done) {
+  it("NameTest should exist", function (done) {
     userb.users.findOne({ email: 'nametest@mail.com' }, function (err, user) {
       should.not.exist(err);
       user.name.should.equal('NameTest');
@@ -58,14 +60,14 @@ describe("creating user / name check", function () {
       done();
     });
   });
-  it("shoud success with another name", function (done) {
+  it("shoud success NameTest2", function (done) {
     var form = { name: 'NameTest2', email: 'nametest2@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
       should.not.exist(res.body.err);
       done();
     });
   });
-  it("should fail with same name to name", function (done) {
+  it("should fail with same name NAME1", function (done) {
     var form = { name: 'NAME1', email: 'nametest9837@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
       should.exist(res.body.err);
@@ -73,7 +75,7 @@ describe("creating user / name check", function () {
       done();
     });
   });
-  it("should fail with same name to home", function (done) {
+  it("should fail with same name to HOME1", function (done) {
     var form = { name: 'HOME1', email: 'nametest4329@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
       should.exist(res.body.err);
@@ -135,7 +137,7 @@ describe("creating user / email check", function () {
       done();
     });
   });
-  it("should fail with same email", function (done) {
+  it("should fail with same email mail1@gmail.com", function (done) {
     var form = { name: 'mailtest8724', email: 'mail1@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
       res.error.should.false;
@@ -144,7 +146,7 @@ describe("creating user / email check", function () {
       done();
     });
   });
-  it("should success with different case", function (done) {
+  it("should success with different case Mail1@gmail.com", function (done) {
     var form = { name: 'mailtest0098', email: 'Mail1@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
       res.error.should.false;
@@ -189,14 +191,14 @@ describe("creating user / email check", function () {
 });
 
 describe("creating user / password check", function () {
-  it("should success", function (done) {
+  it("given user", function (done) {
     var form = { name: 'passtest3847', email: 'passtest3847@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
       should.not.exist(res.body.err);
       done();
     });
   });
-  it("can be checked", function (done) {
+  it("user should exist", function (done) {
     userb.users.findOne({ email: 'passtest3847@mail.com' }, function (err, user) {
       should.not.exist(err);
       user.name.should.equal('passtest3847');

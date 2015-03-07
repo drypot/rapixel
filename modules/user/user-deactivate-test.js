@@ -31,7 +31,7 @@ describe("deactivating self", function () {
   it("given user1 login", function (done) {
     userf.loginUser1(done);
   });
-  it("should success accessing user resource", function (done) {
+  it("and checked can be accessed", function (done) {
     local.get('/test/user').end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
@@ -39,21 +39,21 @@ describe("deactivating self", function () {
       done();
     })
   });
-  it("should success deactivating user1", function (done) {
+  it("and deactivated", function (done) {
     local.del('/api/users/' + userf.user1._id).end(function (err, res) {
       res.error.should.false;
       should.not.exist(res.body.err);
       done();
     });
   });
-  it("can be checked", function (done) {
+  it("user1 should be deactivated status", function (done) {
     userb.users.findOne({ _id: userf.user1._id }, function (err, user) {
       should.not.exist(err);
       (user.status == 'd').should.true;
       done();
     });
   });
-  it("should fail accessing user resource (because logged out)", function (done) {
+  it("and should not be accessed (because logged out)", function (done) {
     local.get('/test/user').end(function (err, res) {
       res.error.should.false;
       should.exist(res.body.err);
@@ -67,7 +67,7 @@ describe("deactivating with no login", function () {
   it("given no login", function (done) {
     userf.logout(done);
   });
-  it("should fail deactivating user2", function (done) {
+  it("should fail", function (done) {
     local.del('/api/users/' + userf.user2._id).end(function (err, res) {
       res.error.should.false;
       should.exist(res.body.err);
