@@ -26,7 +26,7 @@ init.add(function () {
 
   app.engine('jade', require('jade').renderFile);
   app.set('view engine', 'jade');
-  app.set('views', 'lib');
+  app.set('views', 'modules');
 
   app.use(cookieParser());
   app.use(session({ 

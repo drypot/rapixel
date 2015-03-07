@@ -1,5 +1,5 @@
 var init = require('../base/init');
-var util2 = require('../http/http');
+var util2 = require('../base/util');
 var error = require('../base/error');
 var express2 = require('../main/express');
 var userv = require('../user/user-view');
