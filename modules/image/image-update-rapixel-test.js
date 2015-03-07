@@ -12,12 +12,10 @@ var userf = require('../user/user-fixture');
 var imageb = require('../image/image-base');
 var imageu = require('../image/image-update');
 
+var local = require('../main/local');
+
 before(function (done) {
   init.run(done);
-});
-
-before(function () {
-  express2.app.listen();
 });
 
 before(function (done) {
@@ -31,13 +29,13 @@ before(function (done) {
 describe("updating", function () {
   var _id;
   var _files;
-  it("given upload", function (done) {
-    upload.upload('samples/5120x2880-169.jpg', function (err, files) {
+  it("given image", function (done) {
+    local.upload('samples/5120x2880-169.jpg', function (err, files) {
       _files = files;
       done(err);
     });
   });
-  it("given post", function (done) {
+  it("and posted", function (done) {
     this.timeout(30000);
     var form = { files: _files, comment: 'image1' };
     local.post('/api/images').send(form).end(function (err, res) {
@@ -50,7 +48,7 @@ describe("updating", function () {
       done();
     });
   });
-  it("can be checked", function (done) {
+  it("versions should exist", function (done) {
     imageb.images.findOne({ _id: _id }, function (err, image) {
       should.not.exist(err);
       should.exist(image);
@@ -67,13 +65,13 @@ describe("updating", function () {
       done();
     });
   });
-  it("given upload 2", function (done) {
-    upload.upload('samples/3840x2160-169.jpg', function (err, files) {
+  it("given image 2", function (done) {
+    local.upload('samples/3840x2160-169.jpg', function (err, files) {
       _files = files;
       done(err);
     });
   });
-  it("should success", function (done) {
+  it("and updated", function (done) {
     this.timeout(30000);
     var form = { files: _files, comment: 'image2' };
     local.put('/api/images/' + _id).send(form).end(function (err, res) {
@@ -83,7 +81,7 @@ describe("updating", function () {
       done();
     });
   });
-  it("can be checked", function (done) {
+  it("versions should have been modified", function (done) {
     imageb.images.findOne({ _id: _id }, function (err, image) {
       should.not.exist(err);
       should.exist(image);
@@ -103,16 +101,16 @@ describe("updating", function () {
   });
 });
 
-describe("updating with no file", function () {
+describe("updating", function () {
   var _id;
-  it("given post", function (done) {
+  it("given post with no file", function (done) {
     var form = {
       _id: _id = imageb.newId(),
       uid: userf.user1._id
     };
     imageb.images.insert(form, done);
   });
-  it("should success", function (done) {
+  it("and updated", function (done) {
     var form = { comment: 'updated with no file' };
     local.put('/api/images/' + _id).send(form).end(function (err, res) {
       should.not.exist(err);
@@ -121,7 +119,7 @@ describe("updating with no file", function () {
       done();
     });
   });
-  it("can be checked", function (done) {
+  it("post should have been modifed", function (done) {
     imageb.images.findOne({ _id: _id }, function (err, image) {
       should.not.exist(err);
       should.exist(image);
@@ -131,7 +129,7 @@ describe("updating with no file", function () {
   });
 });
 
-describe("updating with small", function () {
+describe("updating", function () {
   var _id;
   var _files;
   it("given post", function (done) {
@@ -141,8 +139,8 @@ describe("updating with small", function () {
     };
     imageb.images.insert(form, done);
   });
-  it("given small upload", function (done) {
-    upload.upload('samples/2880x1620-169.jpg', function (err, files) {
+  it("and small new image", function (done) {
+    local.upload('samples/2880x1620-169.jpg', function (err, files) {
       _files = files;
       done(err);
     });
@@ -159,7 +157,7 @@ describe("updating with small", function () {
   });
 });
 
-describe("updating with text file", function () {
+describe("updating", function () {
   var _id;
   var _files;
   it("given post", function (done) {
@@ -169,8 +167,8 @@ describe("updating with text file", function () {
     };
     imageb.images.insert(form, done);
   });
-  it("given text upload", function (done) {
-    upload.upload('modules/upload/fixture/f1.txt', function (err, files) {
+  it("and new text file", function (done) {
+    local.upload('modules/upload/fixture/f1.txt', function (err, files) {
       _files = files;
       done(err);
     });
@@ -187,7 +185,7 @@ describe("updating with text file", function () {
   });
 });
 
-describe("updating by others", function () {
+describe("updating", function () {
   var _id;
   var _files;
   it("given post", function (done) {
@@ -197,7 +195,7 @@ describe("updating by others", function () {
     };
     imageb.images.insert(form, done);
   });
-  it("given user2 login", function (done) {
+  it("and user2 login", function (done) {
     userf.loginUser2(done);
   });
   it("should fail", function (done) {

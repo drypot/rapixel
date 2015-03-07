@@ -142,7 +142,7 @@ describe("accessing admin resource", function () {
 });
 
 describe("accessing user resouce ", function () {
-  describe("with out auto login", function () {
+  describe("without auto login", function () {
     it("given new test session", function (done) {
       local.newSession();
       done();

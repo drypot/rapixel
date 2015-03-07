@@ -10,23 +10,21 @@ var userf = require('../user/user-fixture');
 var imagec = require('../image/image-create');
 var imagev = require('../image/image-view');
 
+var local = require('../main/local');
+
 before(function (done) {
   init.run(done);
-});
-
-before(function () {
-  express2.app.listen();
 });
 
 before(function (done) {
   userf.loginUser1(done);
 });
 
-describe("get image", function () {
+describe("getting", function () {
   var _f1 = 'samples/3840x2160-169.jpg';
   var _pid;
   var _files;
-  it("given tmp file", function (done) {
+  it("given image", function (done) {
     local.post('/api/upload').attach('files', _f1).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
@@ -35,7 +33,7 @@ describe("get image", function () {
       done();
     });
   });
-  it("given new image", function (done) {
+  it("and posted", function (done) {
     this.timeout(30000);
     var form = { files: _files, comment: 'image1' };
     local.post('/api/images').send(form).end(function (err, res) {

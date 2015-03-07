@@ -12,12 +12,10 @@ var userf = require('../user/user-fixture');
 var imageb = require('../image/image-base');
 var imaged = require('../image/image-delete');
 
+var local = require('../main/local');
+
 before(function (done) {
   init.run(done);
-});
-
-before(function () {
-  express2.app.listen();
 });
 
 before(function (done) {
@@ -28,14 +26,14 @@ var _f1 = 'samples/3840x2160-169.jpg';
 var _id;
 var _files;
 
-describe("deleting image", function () {
+describe("deleting", function () {
   before(function (done) {
     imageb.images.remove(done);
   });
   it("given user1 session", function (done) {
     userf.loginUser1(done);
   });
-  it("given tmp file", function (done) {
+  it("and image", function (done) {
     local.post('/api/upload').attach('files', _f1).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
@@ -44,7 +42,7 @@ describe("deleting image", function () {
       done();
     });
   });
-  it("given image", function (done) {
+  it("and posted", function (done) {
     this.timeout(30000);
     var form = { files: _files, comment: 'image1' };
     local.post('/api/images').send(form).end(function (err, res) {
@@ -56,7 +54,7 @@ describe("deleting image", function () {
       done();
     });
   });
-  it("should success", function (done) {
+  it("and deleted", function (done) {
     var dir = imageb.getImageDir(_id);
     var p = imageb.getVersionPath(dir, _id, 3840);
     fs.existsSync(p).should.true;
@@ -68,7 +66,7 @@ describe("deleting image", function () {
       done();
     });
   });
-  it("can be checked", function (done) {
+  it("version should not exist", function (done) {
     var dir = imageb.getImageDir(_id);
     var p = imageb.getVersionPath(dir, _id, 3840);
     fs.existsSync(p).should.false;
@@ -87,7 +85,7 @@ describe("deleting by admin", function () {
   it("given user1 session", function (done) {
     userf.loginUser1(done);
   });
-  it("given tmp file", function (done) {
+  it("and image", function (done) {
     local.post('/api/upload').attach('files', _f1).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
@@ -96,7 +94,7 @@ describe("deleting by admin", function () {
       done();
     });
   });
-  it("given image", function (done) {
+  it("and posted", function (done) {
     this.timeout(30000);
     var form = { files: _files, comment: 'image1' };
     local.post('/api/images').send(form).end(function (err, res) {
@@ -108,10 +106,10 @@ describe("deleting by admin", function () {
       done();
     });
   });
-  it("given admin session", function (done) {
+  it("and admin session", function (done) {
     userf.loginAdmin(done);
   });
-  it("should success", function (done) {
+  it("and deleted", function (done) {
     var dir = imageb.getImageDir(_id);
     var p = imageb.getVersionPath(dir, _id, 3840);
     fs.existsSync(p).should.true;
@@ -122,7 +120,7 @@ describe("deleting by admin", function () {
       done();
     });
   });
-  it("can be checked", function (done) {
+  it("version should not exist", function (done) {
     var dir = imageb.getImageDir(_id);
     var p = imageb.getVersionPath(dir, _id, 3840);
     fs.existsSync(p).should.false;
@@ -141,7 +139,7 @@ describe("deleting other's image", function () {
   it("given user1 session", function (done) {
     userf.loginUser1(done);
   });
-  it("given tmp file", function (done) {
+  it("and image", function (done) {
     local.post('/api/upload').attach('files', _f1).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
@@ -150,7 +148,7 @@ describe("deleting other's image", function () {
       done();
     });
   });
-  it("given image", function (done) {
+  it("and posted", function (done) {
     this.timeout(30000);
     var form = { files: _files, comment: 'hello' };
     local.post('/api/images').send(form).end(function (err, res) {
@@ -162,10 +160,10 @@ describe("deleting other's image", function () {
       done();
     });
   });
-  it("given user2 session", function (done) {
+  it("and user2 session", function (done) {
     userf.loginUser2(done);
   });
-  it("should fail", function (done) {
+  it("deleting should fail", function (done) {
     var dir = imageb.getImageDir(_id);
     var p = imageb.getVersionPath(dir, _id, 3840);
     fs.existsSync(p).should.true;
@@ -177,7 +175,7 @@ describe("deleting other's image", function () {
       done();
     });
   });
-  it("can be checked", function (done) {
+  it("version should exist", function (done) {
     var dir = imageb.getImageDir(_id);
     var p = imageb.getVersionPath(dir, _id, 3840);
     fs.existsSync(p).should.true;

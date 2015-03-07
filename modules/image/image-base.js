@@ -17,6 +17,9 @@ init.add(function () {
 var imageDir;
 var imageUrl;
 
+var images;
+var imageId;
+
 init.add(function (done) {
   imageDir = exports.imageDir = config.uploadDir + '/public/images'
   imageUrl = config.uploadUrl + '/images';
@@ -24,11 +27,9 @@ init.add(function (done) {
 });
 
 init.add(function (done) {
-  exports.images = mongo.db.collection("images");
-  exports.images.ensureIndex({ uid: 1, _id: -1 }, done);
+  images = exports.images = mongo.db.collection("images");
+  images.ensureIndex({ uid: 1, _id: -1 }, done);
 });
-
-var imageId;
 
 init.add(function (done) {
   var opt = {
@@ -36,7 +37,7 @@ init.add(function (done) {
     sort: { _id: -1 },
     limit: 1
   };
-  exports.images.find({}, opt).nextObject(function (err, obj) {
+  images.find({}, opt).nextObject(function (err, obj) {
     if (err) return done(err);
     imageId = obj ? obj._id : 0;
     console.log('image-base: image id = ' + imageId);

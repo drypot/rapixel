@@ -16,8 +16,8 @@ init.add(function () {
   app.post('/api/images', function (req, res) {
     usera.getUser(res, function (err, user) {
       if (err) return res.jsonErr(err);
-      var form = exports.getForm(req.body);
-      exports.createImages(form, user, function (err, ids) {
+      var form = getForm(req.body);
+      createImages(form, user, function (err, ids) {
         if (err) return res.jsonErr(err);
         res.json({
           ids: ids
@@ -30,7 +30,7 @@ init.add(function () {
     usera.getUser(res, function (err, user) {
       if (err) return res.renderErr(err);
       var now = new Date();
-      exports.getTicketCount(now, user, function (err, count, hours) {
+      getTicketCount(now, user, function (err, count, hours) {
         res.render('image/image-create', {
           ticketMax: config.ticketMax,
           ticketCount: count,
@@ -41,7 +41,7 @@ init.add(function () {
   });
 });
 
-exports.getForm = function (body) {
+var getForm = exports.getForm = function (body) {
   var form = {};
   form.now = new Date();
   form.comment = body.comment || '';
@@ -49,7 +49,7 @@ exports.getForm = function (body) {
   return form;
 }
 
-exports.getTicketCount = function(now, user, done) {
+var getTicketCount = exports.getTicketCount = function(now, user, done) {
   var count = config.ticketMax;
   var hours;
   var opt = {
@@ -71,7 +71,7 @@ exports.getTicketCount = function(now, user, done) {
   });
 };
 
-exports.createImages = function(form, user, _done) {
+var createImages = exports.createImages = function(form, user, _done) {
   var done = upload.deleter(form.files, _done);
   if (!form.files.length) {
     return done(error(error.IMAGE_NO_FILE));
@@ -83,7 +83,7 @@ exports.createImages = function(form, user, _done) {
       return done(null, ids);
     }
     var file = form.files[i++];
-    exports.getTicketCount(form.now, user, function (err, count, hours) {
+    getTicketCount(form.now, user, function (err, count, hours) {
       if (err) return done(err);
       if (!count) {
         return done(null, ids);

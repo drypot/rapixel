@@ -12,12 +12,10 @@ var userf = require('../user/user-fixture');
 var imageb = require('../image/image-base');
 var imagec = require('../image/image-create');
 
+var local = require('../main/local');
+
 before(function (done) {
   init.run(done);
-});
-
-before(function () {
-  express2.app.listen();
 });
 
 before(function (done) {
@@ -28,19 +26,19 @@ before(function (done) {
   fs2.emptyDir(imageb.imageDir, done);
 });
 
-describe("posting 1 image", function () {
+describe("posting", function () {
   var _files;
   var _ids;
   before(function (done) {
     imageb.images.remove(done);
   });
-  it("given upload", function (done) {
-    upload.upload('samples/3840x2160-169.jpg', function (err, files) {
+  it("given one image", function (done) {
+    local.upload('samples/3840x2160-169.jpg', function (err, files) {
       _files = files;
       done(err);
     });
   });
-  it("should success", function (done) {
+  it("and posted", function (done) {
     this.timeout(30000);
     var form = { files: _files, comment: 'image1' };
     local.post('/api/images').send(form).end(function (err, res) {
@@ -53,7 +51,7 @@ describe("posting 1 image", function () {
       done();
     });
   });
-  it("can be checked", function (done) {
+  it("versions should exist", function (done) {
     var _id = _ids[0];
     imageb.images.findOne({ _id: _id }, function (err, image) {
       should.not.exist(err);
@@ -75,18 +73,18 @@ describe("posting 1 image", function () {
   });
 });
 
-describe("posting too many images", function () {
+describe("posting", function () {
   var _files;
   before(function (done) {
     imageb.images.remove(done);
   }); 
-  it("given max uploads", function (done) {
-    upload.upload('samples/3840x2160-169.jpg', config.ticketMax, function (err, files) {
+  it("given max images", function (done) {
+    local.upload('samples/3840x2160-169.jpg', config.ticketMax, function (err, files) {
       _files = files;
       done(err);
     });
   });
-  it("given max posts", function (done) {
+  it("and posted", function (done) {
     this.timeout(30000);
     var form = { files: _files };
     local.post('/api/images').send(form).end(function (err, res) {
@@ -98,13 +96,13 @@ describe("posting too many images", function () {
       done();
     });
   });
-  it("given one more upload", function (done) {
-    upload.upload('samples/3840x2160-169.jpg', function (err, files) {
+  it("and given one more", function (done) {
+    local.upload('samples/3840x2160-169.jpg', function (err, files) {
       _files = files;
       done(err);
     });
   });
-  it("should return empty ids", function (done) {
+  it("should recive empty ids", function (done) {
     this.timeout(30000);
     var form = { files: _files };
     local.post('/api/images').send(form).end(function (err, res) {
@@ -118,13 +116,13 @@ describe("posting too many images", function () {
   });
 });
 
-describe("posting small", function () {
+describe("posting", function () {
   var _files;
   before(function (done) {
     imageb.images.remove(done);
   });
-  it("given upload", function (done) {
-    upload.upload('samples/2880x1620-169.jpg', function (err, files) {
+  it("given small image", function (done) {
+    local.upload('samples/2880x1620-169.jpg', function (err, files) {
       _files = files;
       done(err);
     });
@@ -141,13 +139,13 @@ describe("posting small", function () {
   });
 });
 
-describe("posting text file", function () {
+describe("posting", function () {
   var _files;
   before(function (done) {
     imageb.images.remove(done);
   }); 
-  it("given upload", function (done) {
-    upload.upload('modules/upload/fixture/f1.txt', function (err, files) {
+  it("given text file", function (done) {
+    local.upload('modules/upload/fixture/f1.txt', function (err, files) {
       _files = files;
       done(err);
     });
@@ -164,7 +162,7 @@ describe("posting text file", function () {
   });
 });
 
-describe("posting no file", function () {
+describe("posting with no file", function () {
   before(function (done) {
     imageb.images.remove(done);
   }); 

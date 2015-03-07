@@ -11,12 +11,10 @@ var userf = require('../user/user-fixture');
 var imageb = require('../image/image-base');
 var imagec = require('../image/image-create');
 
+var local = require('../main/local');
+
 before(function (done) {
   init.run(done);
-});
-
-before(function () {
-  express2.app.listen();
 });
 
 before(function (done) {

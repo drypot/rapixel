@@ -11,6 +11,8 @@ var usera = require('../user/user-auth');
 var userf = require('../user/user-fixture');
 var upload = require('../upload/upload');
 
+var local = require('../main/local');
+
 function find(files, oname) {
   return util2.find(files, function (file) {
     return file.oname === oname;
@@ -19,10 +21,6 @@ function find(files, oname) {
 
 before(function (done) {
   init.run(done);
-});
-
-before(function () {
-  express2.app.listen();
 });
 
 before(function (done) {

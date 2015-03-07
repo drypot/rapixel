@@ -1,4 +1,3 @@
-var should = require('should');
 var fs = require('fs');
 var path = require('path');
 
@@ -153,24 +152,3 @@ exports.deleter = function (files, done) {
     unlink();
   };
 };
-
-// for test
-
-exports.upload = function (file, count, done) {
-  if (typeof count == 'function') {
-    done = count;
-    count = 1;
-  }
-  var req = local.post('/api/upload');
-  for (var i = 0; i < count; i++) {
-    req.attach('files', file);
-  }
-  req.end(function (err, res) {
-    should.not.exist(err);
-    res.error.should.false;
-    should.not.exist(res.body.err);
-    res.body.files.should.length(count);
-    done(null, res.body.files);
-  });
-};
-

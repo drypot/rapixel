@@ -10,34 +10,31 @@ var userf = require('../user/user-fixture');
 var imageb = require('../image/image-base');
 var imagel = require('../image/image-list');
 
+var local = require('../main/local');
+
 before(function (done) {
   init.run(done);
-});
-
-before(function () {
-  express2.app.listen();
 });
 
 before(function (done) {
   userf.loginUser1(done);
 });
 
-before(function (done) {
-  var images = [];
-  for (var i = 0; i < 10; i++) {
-    var image = {
-      _id: imageb.newId(),
-      uid: userf.user1._id,
-      cdate: new Date(),
-      comment: '' + i
+describe("preparing dummy", function (done) {
+  it("given inserts", function (done) {
+    var images = [];
+    for (var i = 0; i < 10; i++) {
+      var image = {
+        _id: imageb.newId(),
+        uid: userf.user1._id,
+        cdate: new Date(),
+        comment: '' + i
+      };
+      images.push(image);
     };
-    images.push(image);
-  };
-  imageb.images.insert(images, done);
-});
-
-describe("counting", function () {
-  it("should success", function (done) {
+    imageb.images.insert(images, done);    
+  });
+  it("can be counted", function (done) {
     imageb.images.count(function (err, c) {
       should.not.exist(err);
       c.should.equal(10);
@@ -46,8 +43,8 @@ describe("counting", function () {
   });
 });
 
-describe("listing all", function () {
-  it("should success", function (done) {
+describe("listing", function () {
+  it("should success for big page", function (done) {
     var query = {
       ps: 99
     }
@@ -64,10 +61,7 @@ describe("listing all", function () {
       done();
     });
   });
-});
-
-describe("listing page 1", function () {
-  it("should success", function (done) {
+  it("should success for page 1", function (done) {
     var query = {
       ps: 4
     };
@@ -82,10 +76,7 @@ describe("listing page 1", function () {
       done();
     });
   });
-});
-
-describe("listing page 2 with lt", function () {
-  it("should success", function (done) {
+  it("should success for page 2 with lt", function (done) {
     var query = {
       lt:7, ps: 4
     }
@@ -100,10 +91,7 @@ describe("listing page 2 with lt", function () {
       done();
     });
   });
-});
-
-describe("listing last page with lt", function () {
-  it("should success", function (done) {
+  it("should success for last page with lt", function (done) {
     var query = {
       lt: 3, ps: 4
     }
@@ -118,11 +106,7 @@ describe("listing last page with lt", function () {
       done();
     });
   });
-});
-
-
-describe("listing page 2 with gt", function () {
-  it("should success", function (done) {
+  it("should success for page 2 with gt", function (done) {
     var query = {
       gt:2, ps: 4
     }
@@ -137,10 +121,7 @@ describe("listing page 2 with gt", function () {
       done();
     });
   });
-});
-
-describe("listing page 1 with gt", function () {
-  it("should success", function (done) {
+  it("should success for page 1 with gt", function (done) {
     var query = {
       gt: 6, ps: 4
     };
