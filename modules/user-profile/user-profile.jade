@@ -19,7 +19,7 @@ block content
         | !{jade.escape(tuser.profile).replace(/\n/g, "<br>")}
 
       if updatable
-        .sub-section.card.link-set
+        .sub-section.card.top-links
           a(href='/users/' + tuser._id + '/update') Update Profile
 
   if images.length

@@ -5,7 +5,7 @@ init.add(function () {
   imagel.initImageView = function (image) {
     renderImage(image);
 
-    var $comment = $('#comment');
+    var $comment = $('.image-info .comment');
     $comment.html(tagUpText($comment.html()));
 
     $('#update-btn').click(function () {

@@ -3,7 +3,7 @@ extends ../layout/layout
 block title
   title Image !{image._id} - #{appName}
 
-block image
+block content
   script.
     init.add(function() {
       imagel.initImageView(!{JSON.stringify(image)});
@@ -16,20 +16,16 @@ block image
       img.low-res(src=image.dir + '/' + image._id + '-640.jpg')
       img.hi-res
 
-block content
-
-  .section.image-info
-    .sub-section
-      span
-        a(href='/' + encodeURIComponent(image.user.home)) #{image.user.name}
-      span !{image.cdateStr.slice(0,16)}
-      span #{image.fname}
-
-    #comment.sub-section
+  .image-info
+    .uname
+      a(href='/' + encodeURIComponent(image.user.home)) #{image.user.name}
+    .comment
       | !{jade.escape(image.comment).replace(/\n/g, '<br>')}
+    .cdate !{image.cdateStr.slice(0,16)}
+    .fname #{image.fname}
 
-    .sub-section
-      if updatable
+    if updatable
+      .commands
         button#update-btn.btn.btn-success.btn-xs Update
         button#del-btn.btn.btn-danger.btn-xs Delete
         button#del-confirm-btn.btn.btn-danger.btn-xs.hide Yes, Delete

@@ -5,42 +5,40 @@ block title
 
 block content
 
-  .section.page-title.site-title
+  .site-title
     h1
       a(href="/") #{appName}
     p.lead #{appDesc}
 
   if !gtUrl
     if locals.user
-      .section.card.link-set
+      .top-links
         a(href="/images/new") Upload
         a(href="/users/" + user._id) Profile
         a#logout-btn(href="/users/logout") Logout
     else
-      .section.card.link-set
+      .top-links
         a(href="/users/login") Login
         a(href="/users/register") Register
 
-    //-.section.update
-      .card
+    //-.news
         | Update: Can change user address at profile.
 
   if locals.gtUrl
-    .section.pager-prev
+    .pager-prev
       a(href=gtUrl) Previous
 
-  .section.images
+  .images
     for image in images
       .image
-        .img
+        .image
           a(href='/images/' + image._id)
             img(src=image.dir + '/' + image._id + suffix)
         if showName
-          .info
-            span
-              a(href='/' + encodeURIComponent(image.user.home)) #{image.user.name}
+          .uname
+            a(href='/' + encodeURIComponent(image.user.home)) #{image.user.name}
 
   if locals.ltUrl
-    .section.pager-next
+    .pager-next
       a(href=ltUrl) Next
 
