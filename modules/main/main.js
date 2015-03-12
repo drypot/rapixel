@@ -13,7 +13,7 @@ require('../user/user-view');
 require('../user/user-list');
 require('../user/user-update');
 require('../user/user-deactivate');
-require('../user/user-reset');
+require('../user/user-reset-pass');
 
 require('../about/about');
 

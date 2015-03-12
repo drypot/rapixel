@@ -118,7 +118,7 @@ init.add(function() {
   var $title = $modal.find('.modal-title');
   var $body = $modal.find('.modal-body');
 
-  window.showError = function (err, next) {
+  window.showError = function (err, done) {
     $title.text(err.message);
     var body = '';
     if (err.stack) {
@@ -130,8 +130,8 @@ init.add(function() {
     console.log(body);
     $body.html(body);
     $modal.off('hidden.bs.modal');
-    if (next) {
-      $modal.on('hidden.bs.modal', next);
+    if (done) {
+      $modal.on('hidden.bs.modal', done);
     }
     $modal.modal('show');
   };
@@ -229,7 +229,7 @@ init.add(function() {
     });
   };
 
-  formty.sendFiles = function ($form, next) {
+  formty.sendFiles = function ($form, done) {
     var files = $('input[type=file]', $form).filter(function () {
       return $(this).val();
     });
@@ -241,36 +241,33 @@ init.add(function() {
         files: files,
         iframe: true,
         success: function(data, textStatus, jqXHR) {
-          next(null, { body: data });
+          done(null, { body: data });
         },
         error:function (jqXHR, textStatus, errorThrown) {
           var err = {
             message: "Uploading Error",
             detail: jqXHR.responseText
           };
-          next(err);
+          done(err);
         }
       });
       return;
     }
-    next(null, { body: {} });
+    done(null, { body: {} });
   };
 
   // gen http methods
 
-  var methods = [ 'post', 'get', 'put', 'del' ];
-
-  for (var i = 0; i < methods.length; i++) {
-    var method = methods[i];
+  ['post', 'get', 'put', 'del'].forEach(function (method) {
     formty[method] = (function (method) {
-      return function (url, $form, next) {
+      return function (url, $form, done) {
         var form = formty.toObject($form);
         formty.clearAlerts($form);
         formty.showSending($form);
         formty.sendFiles($form, function (err, res) {
           if (err) {
             formty.hideSending($form);
-            return next(err);
+            return done(err);
           }
           for (var key in res.body) {
             form[key] = res.body[key];
@@ -278,8 +275,9 @@ init.add(function() {
           request[method].call(request, url).send(form).end(function (err, res) {
             err = err || res.error;
             if (err) {
+              showError(err);
               formty.hideSending($form);
-              return next(err);
+              return;
             }
             if (res.body.err) {
               if (res.body.err.code === error.INVALID_FORM.code) {
@@ -293,12 +291,12 @@ init.add(function() {
             }
             // formty.hideSending($form) 을 부르지 않는다.
             // 보통 페이지 이동이 일어나므로 버튼을 바꿀 필요가 없다.
-            next(null, res);
+            done(null, res);
           });
         });
       };
     })(method)
-  }
+  });
 
   formty.showSending = function ($form) {
     if ($form.$send) {

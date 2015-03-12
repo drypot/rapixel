@@ -11,9 +11,8 @@ html
 
     link(rel="icon", type="image/png", href="/modules/favicon/" + appType + ".png")
 
-    //-link(rel="stylesheet", href="/modules/bower/bootstrap/dist/css/bootstrap.min.css")
-    //-link(rel="stylesheet", href="/modules/bower/bootstrap/dist/css/bootstrap-theme.min.css")
-    link(rel="stylesheel", href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.1/semantic.min.css")
+    link(rel="stylesheet", href="/modules/bower/bootstrap/dist/css/bootstrap.min.css")
+    link(rel="stylesheet", href="/modules/bower/bootstrap/dist/css/bootstrap-theme.min.css")
     link(rel="stylesheet", href="/modules/layout/base.css")
     link(rel="stylesheet", href="/modules/layout/" + appType + ".css")
 
@@ -21,16 +20,12 @@ html
     //-  script(src="/modules/bower/html5shiv.js")
     //-  script(src="/modules/bower/respond.min.js")
 
-    //-script(src="/modules/bower/json2/json2.js")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/json2/20140204/json2.min.js")
-    //-script(src="/modules/bower/jquery/dist/jquery.min.js")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js")
+    script(src="/modules/bower/json2/json2.js")
+    script(src="/modules/bower/jquery/dist/jquery.min.js")
     script(src="/modules/bower/jquery.iframe-transport/jquery.iframe-transport.js")
-    //-script(src="/modules/bower/superagent/superagent.js")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/superagent/0.15.7/superagent.min.js")
-    //-script(src="/modules/bower/bootstrap/dist/js/bootstrap.min.js")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.1/semantic.min.js")
-
+    script(src="/modules/bower/superagent/superagent.js")
+    script(src="/modules/bower/bootstrap/dist/js/bootstrap.min.js")
+    
     script.
       window.appType = '!{appType}';
       window.user = !{locals.user ? JSON.stringify({ id: user._id, name: user.name }) : 'undefined'};
@@ -52,22 +47,20 @@ html
       .home
         a(href='/') #{appName}
 
-//-    #error-modal.modal
-//-      .modal-dialog
-//-        .modal-content
-//-          .modal-header
-//-            button.close(type="button", data-dismiss="modal", aria-hidden="true") ×
-//-            h4.modal-title
-//-          .modal-body
-//-          .modal-footer
-//-            button.btn.btn-default(data-dismiss="modal") Close
-//-
-//-    #file-input-templ.hide
-//-      .file
-//-        .hidden-input
-//-          input(type='file', multiple='multiple')
-//-        button.btn.btn-default Select
-//-
-//-    #file-input-templ-msie.hide
-//-      .file
-//-        input(type='file')
+    #error-modal.modal
+      .modal-dialog
+        .modal-content
+          .modal-header
+            button.close(type="button", data-dismiss="modal", aria-hidden="true") ×
+            h4.modal-title
+          .modal-body
+          .modal-footer
+            button.btn.btn-default(data-dismiss="modal") Close
+    #file-input-templ.hide
+      .file
+        .hidden-input
+          input(type='file', multiple='multiple')
+        button.btn.btn-default Select
+    #file-input-templ-msie.hide
+      .file
+        input(type='file')

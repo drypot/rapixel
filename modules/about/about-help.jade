@@ -5,15 +5,14 @@ block title
 
 block content
 
-  .side-space
-    .section.page-title
-      h1 Help
+  .page-title
+    h1 Help
 
-    .section
-      .sub-section.card
-        span How to deactivate my account?&nbsp;
-        a(href='/users/deactivate') click
-      .sub-section.card
-        | email:&nbsp;
-        -var email = 'support+' + appName.toLowerCase() + '@raysoda.com'
-        a(href='mailto:' + email)= email 
+  .section
+    .sub-section
+      span Want to deactivate your account?&nbsp;
+      a(href='/users/deactivate') click
+    .sub-section
+      | email:&nbsp;
+      -var email = 'support+' + appType + '@raysoda.com'
+      a(href='mailto:' + email)= email 

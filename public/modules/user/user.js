@@ -3,11 +3,11 @@ init.add(function () {
   window.userl = {};
 
   userl.initLogin = function () {
-    var $form = formty.getForm('#form');
+    var $form = formty.getForm('form.main');
     $form.$email.focus();
     $form.$send.click(function () {
       formty.post('/api/sessions', $form, function (err) {
-        if (err) return showError(err);
+        // formty.method 에서 에러처리 함
         location = '/';
       });
       return false;
@@ -16,6 +16,7 @@ init.add(function () {
 
   userl.logout = function () {
     request.del('/api/sessions').end(function (err, res) {
+      // formty.method 와 달리 agent 에러는 직접 처리
       err = err || res.error || res.body.err;
       if (err) return showError(err);
       console.log('logged out');
@@ -24,37 +25,35 @@ init.add(function () {
   };
 
   userl.initRegister = function () {
-    var $form = formty.getForm('#form');
+    var $form = formty.getForm('form.main');
     $form.$send.click(function () {
-      formty.post('/api/users', $form, function (err, res) {
+      formty.post('/api/users', $form, function () {
         location = '/users/login?newuser';
       });
       return false;
     });
   };
 
-  userl.initResetReq = function () {
-    var $form = formty.getForm('#form');
+  userl.initResetPassStep1 = function () {
+    var $form = formty.getForm('form.main');
     $form.$email.focus();
     $form.$send.click(function () {
-      formty.post('/api/resets', $form, function (err) {
-        if (err) return showError(err);
-        location = '?done';
+      formty.post('/api/reset-pass', $form, function () {
+        location = '?step=2';
       });
       return false;
     });
   };
 
-  userl.initReset = function () {
-    var $form = formty.getForm('#form');
+  userl.initResetPassStep3 = function () {
+    var $form = formty.getForm('form.main');
     $form.extra = {
       id: url.query.id,
       token: url.query.t
     };
     $form.$password.focus();
     $form.$send.click(function () {
-      formty.put('/api/resets', $form, function (err) {
-        if (err) return showError(err);
+      formty.put('/api/reset-pass', $form, function () {
         location = '/users/login';
       });
       return false;
@@ -69,11 +68,11 @@ init.add(function () {
   };
 
   userl.initUpdateProfileForm = function () {
-    var $form = formty.getForm('#form');
+    var $form = formty.getForm('form.main');
     var uid = url.pathnames[1];
     $('#domain-url').text(location.origin + '/');
     $form.$send.click(function () {
-      formty.put('/api/users/' + uid, $form, function (err, res) {
+      formty.put('/api/users/' + uid, $form, function () {
         location = '/users/' + uid;
       });
       return false;
@@ -88,7 +87,7 @@ init.add(function () {
     $('#dea-confirm-btn').click(function () {
       request.del('/api/users/' + user.id).end(function (err, res) {
         err = err || res.error || res.body.err;
-        if (err) return showError(res.body.err);
+        if (err) return showError(err);
         location = '/';
       });
       return false;

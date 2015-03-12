@@ -9,20 +9,19 @@ block content
       userl.initRegister();
     });
 
-  .side-space
-    .section.page-title
-      h1 Register
+  .page-title
+    h1 Register
 
-    form#form.section
-      .sub-section
-        .form-group
-          label.control-label Name
-          input.form-control(name="name", type="text", maxlength=32)
-        .form-group
-          label.control-label Email
-          input.form-control(name="email", type="text", maxlength=64)
-        .form-group
-          label.control-label Password
-          input.form-control(name="password", type="password", maxlength=64)
-      .sub-section
-        button.btn.btn-primary(name='send', data-loading-text='Sending') Send
+  form.main
+    .sub-section
+      .form-group
+        label.control-label Name
+        input.form-control(name="name", type="text", maxlength=32)
+      .form-group
+        label.control-label Email
+        input.form-control(name="email", type="text", maxlength=64)
+      .form-group
+        label.control-label Password
+        input.form-control(name="password", type="password", maxlength=64)
+    .sub-section
+      button.btn.btn-primary(name='send', data-loading-text='Sending') Send

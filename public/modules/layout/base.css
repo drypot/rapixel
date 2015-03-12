@@ -1,40 +1,70 @@
-.page-title {
-  margin: 0 auto;
+body {
+  font-family: serif;
+  font-size: 18px;
+  color: #333333;
+}
+.black-link a {
+  color: #333333;
+}
+.section {
   max-width: 640px;
-  padding: 0px;
-  text-align: center;
+  margin: 0 auto;
   margin-bottom: 50px;
-  margin-top: 60px;
+  padding: 0px 8px;
+  text-align: center;
+}
+.sub-section {
+  margin-bottom: 30px;
+}
+.page-title {
+  max-width: 640px;
+  margin: 0 auto;
+  margin-bottom: 50px;
+  padding: 0px 8px;
+  text-align: center;
+  margin-top: 55px;
 }
 .page-title a {
   color: #333333;
+}
+.page-title h1 {
+  font-size: 41.4px;
 }
 .page-title a:hover {
   text-decoration: none;
 }
 .site-title {
-  margin: 0 auto;
   max-width: 640px;
-  padding: 0px;
-  text-align: center;
+  margin: 0 auto;
   margin-bottom: 50px;
-  margin-top: 60px;
+  padding: 0px 8px;
+  text-align: center;
+  margin-top: 55px;
 }
 .site-title a {
   color: #333333;
+}
+.site-title h1 {
+  font-size: 41.4px;
 }
 .site-title a:hover {
   text-decoration: none;
 }
 .site-title h1 {
-  font-size: 53px;
+  font-size: 57.6px;
+  margin-bottom: 35px;
+}
+.site-title .desc {
+  font-size: 21.6px;
 }
 .page-footer {
-  margin: 0 auto;
   max-width: 640px;
-  padding: 0px;
+  margin: 0 auto;
+  margin-bottom: 50px;
+  padding: 0px 8px;
   text-align: center;
-  margin-bottom: 60px;
+  margin-top: 80px;
+  margin-bottom: 80px;
 }
 .page-footer a {
   color: #333333;
@@ -43,60 +73,58 @@
   margin: 0px;
 }
 .page-footer ul li {
-  padding-left: 0px;
-  padding-right: 9px;
+  font-size: 14.4px;
+  padding: 0 5px;
 }
 .page-footer .home {
-  margin: 15px;
+  margin-top: 15px;
 }
 .page-footer .home a {
-  font-size: 28px;
+  font-size: 36px;
   font-weight: 500;
 }
 .top-links {
-  margin: 0 auto;
   max-width: 640px;
-  padding: 0px;
-  text-align: center;
+  margin: 0 auto;
   margin-bottom: 50px;
-  font-size: 18px;
+  padding: 0px 8px;
+  text-align: center;
 }
 .top-links a {
   padding-left: 10px;
   padding-right: 10px;
 }
 .news {
-  margin: 0 auto;
   max-width: 640px;
-  padding: 0px;
-  text-align: center;
+  margin: 0 auto;
   margin-bottom: 50px;
-  margin-top: 20px;
+  padding: 0px 8px;
+  text-align: center;
+  margin-top: 50px 0.4;
 }
 .pager-prev {
-  margin: 0 auto;
   max-width: 640px;
-  padding: 0px;
-  text-align: center;
+  margin: 0 auto;
   margin-bottom: 50px;
-  font-size: 18px;
+  padding: 0px 8px;
+  text-align: center;
   line-height: 1;
 }
 .pager-next {
-  margin: 0 auto;
   max-width: 640px;
-  padding: 0px;
-  text-align: center;
+  margin: 0 auto;
   margin-bottom: 50px;
-  font-size: 18px;
+  padding: 0px 8px;
+  text-align: center;
   line-height: 1;
 }
 .images {
-  margin: 0 auto;
   max-width: 640px;
-  padding: 0px;
-  text-align: center;
+  margin: 0 auto;
   margin-bottom: 50px;
+  padding: 0px 8px;
+  text-align: center;
+  padding-left: 0px;
 }
 .images a {
   color: #333333;
@@ -108,9 +136,6 @@
   max-width: 100%;
   max-height: 100%;
   margin-bottom: 5px;
-}
-.images .image .uname a {
-  color: #333;
 }
 @media (max-width: 768px) {
   .images .image {
@@ -138,53 +163,59 @@
   max-height: 100%;
 }
 .image-info {
-  margin: 0 auto;
   max-width: 640px;
-  padding: 0px;
-  text-align: center;
+  margin: 0 auto;
   margin-bottom: 50px;
-  margin-top: 5px;
-  font-size: 18px;
+  padding: 0px 8px;
+  text-align: center;
+  margin-top: 15px;
 }
 .image-info a {
   color: #333333;
 }
 .image-info .uname {
-  font-size: 27px;
+  margin-bottom: 20px;
+  font-size: 28.8px;
+}
+.image-info .comment {
+  margin-bottom: 20px;
 }
 .image-info .cdate {
-  font-color: #b3b3b3;
+  margin-bottom: 5px;
+  font-size: 14.4px;
+  color: #b3b3b3;
 }
 .image-info .fname {
-  font-color: #b3b3b3;
+  margin-bottom: 30px;
+  font-size: 14.4px;
+  color: #b3b3b3;
 }
-.image-info .commands {
-  margin-bottom: 35px;
-}
-form {
-  width: 60%;
-  margin-left: 20%;
+form.main {
+  max-width: 640px;
+  margin: 0 auto;
   margin-bottom: 50px;
+  padding: 0px 8px;
+  text-align: center;
+  width: 384px;
 }
-form .file-group .files .file .hidden-input {
+form.main .file-group .files .file .hidden-input {
   position: absolute;
   top: -999px;
   width: 0px;
   height: 0px;
 }
-form .file-group .files .file button {
+form.main .file-group .files .file button {
   width: 100%;
 }
-form .file-group .files .file input[type=file] {
+form.main .file-group .files .file input[type=file] {
   display: inline-block;
 }
-form textarea {
+form.main textarea {
   font-family: monospace;
 }
 @media (max-width: 480px) {
   form {
     width: 100%;
-    margin-left: 0%;
   }
 }
 pre.error-report {

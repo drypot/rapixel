@@ -1,44 +1,40 @@
-@normal-font-size: 18px;
-@normal-color: #333;
-@dim-color: lighten(@normal-color, 50%);
+@font-size: 18px;
+@color: #333;
+@dim-color: lighten(@color, 50%);
+@margin: 50px;
+@width: 640px;
 
 body {
+  font-family: serif;
+  font-size: @font-size;
+  color: @color; 
 }
 
-.block() {
-  margin: 0 auto; // auto 는 IE9 이상부터
-  max-width: 640px; // for mobile. width 를 쓰면 작은 화면에서 화면 밖으로 나간다.
-  padding: 0px;
-}
-
-.center-block() {
-  .block;
-  text-align: center;
-}
-
-.big-margin-bottom() {
-  margin-bottom: 50px;
-}
-
-.mid-margin-bottom() {
-  margin-bottom: 35px;
-}
-
-.mid-margin-top() {
-  margin-bottom: 35px;
-}
-
-.black-link() {
+.black-link {
   a {
-    color: @normal-color;
+    color: @color;
   }
 }
 
+.section {
+  max-width: @width; // for mobile. width 를 쓰면 작은 화면에서 화면 밖으로 나간다.
+  margin: 0 auto; // auto 는 IE9 이상부터
+  margin-bottom: @margin;
+  padding: 0px 8px;
+  text-align: center;
+}
+
+.sub-section {
+  margin-bottom: @margin * 0.6;
+}
+
 .page-title {
-  .center-block;
-  .big-margin-bottom;
+  .section;
   .black-link;
-  margin-top: 60px;
+  margin-top: @margin * 1.1;
+  h1 {
+    font-size: @font-size * 2.3;
+  }
   a:hover {
     text-decoration: none;
   }
@@ -47,34 +43,37 @@ body {
 .site-title {
   .page-title;
   h1 {
-    font-size: 53px;
+    font-size: @font-size * 3.2;
+    margin-bottom: @margin * 0.7;
+  }
+  .desc {
+    font-size: @font-size * 1.2;
   }
 }
 
 .page-footer {
-  .center-block;
+  .section;
   .black-link;
-  margin-bottom: 60px;
+  margin-top: @margin * 1.6;
+  margin-bottom: @margin * 1.6;
   ul {
     margin: 0px;
     li {
-      padding-left:0px;
-      padding-right:9px;
+      font-size: @font-size * 0.8;
+      padding: 0 5px;
     }
   }
   .home {
-    margin: 15px;
+    margin-top: @margin * 0.3;
     a {
-      font-size: 28px;
+      font-size: @font-size * 2;
       font-weight: 500;
     }
   }
 }
 
 .top-links {
-  .center-block;
-  .big-margin-bottom;
-  font-size: @normal-font-size;
+  .section;
   a {
     padding-left:10px;
     padding-right:10px;
@@ -82,15 +81,12 @@ body {
 }
 
 .news {
-  .center-block;
-  .big-margin-bottom;
-  margin-top: 20px;
+  .section;
+  margin-top: @margin 0.4;
 }
 
 .pager-prev {
-  .center-block;
-  .big-margin-bottom;
-  font-size: @normal-font-size;
+  .section;
   line-height: 1;
 }
 
@@ -99,20 +95,15 @@ body {
 }
 
 .images {
-  .center-block;
-  .big-margin-bottom;
+  .section;
   .black-link;
+  padding-left: 0px;
   .image {
-    margin-bottom: 45px;
+    margin-bottom: @margin * 0.9;
     img {
       max-width: 100%; // for mobile
       max-height: 100%; // for mobile
-      margin-bottom: 5px;
-    }
-    .uname {
-      a {
-        color: #333;
-      }
+      margin-bottom: @margin * 0.1;
     }
   }
 }
@@ -120,7 +111,7 @@ body {
 @media (max-width: 768px) {
   .images {
     .image {
-      margin-bottom: 20px;
+      margin-bottom: @margin * 0.4;
     }
   }
 }
@@ -147,32 +138,33 @@ body {
 }
  
 .image-info {
-  .center-block;
-  .big-margin-bottom;
+  .section;
   .black-link;
-  margin-top: 5px;
-  font-size: @normal-font-size;
+  margin-top: @margin * 0.3;
   .uname {
-    font-size: @normal-font-size * 1.5;
+    margin-bottom: @margin * 0.4;
+    font-size: @font-size * 1.6;
   }
   .comment {
-
+    margin-bottom: @margin * 0.4;
   }
   .cdate {
-    font-color: @dim-color;
+    margin-bottom: @margin * 0.1;
+    font-size: @font-size * 0.8;
+    color: @dim-color;
   }
   .fname {
-    font-color: @dim-color;  
+    margin-bottom: @margin * 0.6;
+    font-size: @font-size * 0.8;
+    color: @dim-color;  
   }
   .commands {
-    .mid-margin-top;
   }
 }
 
-form {
-  width: 60%;
-  margin-left: 20%;
-  margin-bottom: 50px;
+form.main {
+  .section;
+  width: @width * 0.6;
 
   .file-group {
     .files {
@@ -202,7 +194,6 @@ form {
 @media (max-width: 480px) {
   form {
     width: 100%;
-    margin-left: 0%;
   }
 }
 

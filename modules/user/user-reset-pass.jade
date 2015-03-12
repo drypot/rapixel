@@ -1,0 +1,41 @@
+extends ../layout/layout
+
+block title
+  title Reset Password - #{appName}
+
+block content
+
+    .page-title
+      h1 Reset Password
+
+    if !query.step
+      script.
+        init.add(function () {
+          userl.initResetPassStep1();
+        });
+        
+      form.main
+        .sub-section
+          .form-group
+            label.control-label Email
+            input.form-control(name="email", type="text")
+        .sub-section
+          button.btn.btn-primary(name='send', data-loading-text='Sending') Send
+
+    if query.step == 2
+      .section
+        | Check your mailbox.
+
+    if query.step == 3
+      script.
+        init.add(function () {
+          userl.initResetPassStep3();
+        });
+
+      form.main
+        .sub-section
+          .form-group
+            label.control-label Password
+            input.form-control(name="password", type="password")
+        .sub-section
+          button.btn.btn-primary(name='send', data-loading-text='Sending') Send

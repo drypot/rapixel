@@ -19,8 +19,7 @@ block content
   .image-info
     .uname
       a(href='/' + encodeURIComponent(image.user.home)) #{image.user.name}
-    .comment
-      | !{jade.escape(image.comment).replace(/\n/g, '<br>')}
+    .comment !{jade.escape(image.comment).replace(/\n/g, '<br>')}
     .cdate !{image.cdateStr.slice(0,16)}
     .fname #{image.fname}
 

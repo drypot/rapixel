@@ -12,7 +12,7 @@ var userc = require('../user/user-create');
 init.add(function () {
   var app = express2.app;
 
-  app.post('/api/resets', function (req, res) {
+  app.post('/api/reset-pass', function (req, res) {
     var form = getStep1Form(req);
     step1(form, function (err) {
       if (err) return res.jsonErr(err);
@@ -20,7 +20,7 @@ init.add(function () {
     });
   });
 
-  app.put('/api/resets', function (req, res) {
+  app.put('/api/reset-pass', function (req, res) {
     var form = getStep2Form(req);
     step2(form, function (err) {
       if (err) return res.jsonErr(err);
@@ -28,12 +28,8 @@ init.add(function () {
     });
   });
 
-  app.get('/users/reset-step1', function (req, res) {
-    res.render('user/user-reset-step1');
-  });
-
-  app.get('/users/reset-step2', function (req, res) {
-    res.render('user/user-reset-step2');
+  app.get('/users/reset-pass', function (req, res) {
+    res.render('user/user-reset-pass');
   });
 });
 
@@ -73,7 +69,7 @@ function step1(form, done) {
             text:
               '\n' +
               'Open the following URL to reset your password.\n\n' +
-              config.frontUrl + '/users/reset-step2?id=' + reset._id + '&t=' + reset.token + '\n\n' +
+              config.frontUrl + '/users/reset-pass?step=3&id=' + reset._id + '&t=' + reset.token + '\n\n' +
               config.appName
           };
           mailer.send(mail, done);
