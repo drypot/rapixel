@@ -1,7 +1,7 @@
-.images .image {
+.images .card {
   margin-bottom: 25px;
 }
-.images .image img {
+.images .card img {
   margin-top: -5px;
   margin-bottom: -5px;
 }
