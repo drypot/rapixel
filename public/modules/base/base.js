@@ -266,14 +266,16 @@ init.add(function() {
         formty.showSending($form);
         formty.sendFiles($form, function (err, res) {
           if (err) {
+            showError(err);
             formty.hideSending($form);
-            return done(err);
+            return;
           }
           for (var key in res.body) {
             form[key] = res.body[key];
           }
           request[method].call(request, url).send(form).end(function (err, res) {
-            err = err || res.error;
+            // 4xx or 5xx response with superagent is not considered an error by default.
+            err = err || res.error; 
             if (err) {
               showError(err);
               formty.hideSending($form);

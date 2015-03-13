@@ -180,13 +180,13 @@ body {
 .image-info .comment {
   margin-bottom: 20px;
 }
-.image-info .cdate {
+.image-info .fname {
   margin-bottom: 5px;
   font-size: 14.4px;
   color: #b3b3b3;
 }
-.image-info .fname {
-  margin-bottom: 30px;
+.image-info .cdate {
+  margin-bottom: 5px;
   font-size: 14.4px;
   color: #b3b3b3;
 }

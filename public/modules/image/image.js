@@ -84,8 +84,7 @@ init.add(function () {
     var $form = formty.getForm('form.main');
     formty.initFileGroup($form, 'files');
     $form.$send.click(function (err, res) {
-      formty.post('/api/images', $form, function (err) {
-        if (err) return showError(err);
+      formty.post('/api/images', $form, function () {
         location = '/';
       });
       return false;
@@ -96,8 +95,7 @@ init.add(function () {
     var $form = formty.getForm('form.main');
     formty.initFileGroup($form, 'files');
     $form.$send.click(function (err, res) {
-      formty.put('/api/images/' + image._id, $form, function (err) {
-        if (err) return showError(err);
+      formty.put('/api/images/' + image._id, $form, function () {
         location = '/images/' + image._id;
       });
       return false;

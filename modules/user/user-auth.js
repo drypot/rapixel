@@ -42,9 +42,6 @@ express2.restoreLocalsUser = function (req, res, done) {
       done();
     });
   }
-  if (res.locals.api) {
-    return done();
-  }
   createSessionAuto(req, res, done);
 };
 

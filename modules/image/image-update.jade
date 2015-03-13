@@ -5,38 +5,37 @@ block title
 
 block content
 
-  .side-space
-    .section.page-title
-      h1 Update Image
+  script.
+    init.add(function() {
+      imagel.initUpdateForm(!{JSON.stringify(image)});
+    });
 
-    script.
-      init.add(function() {
-        imagel.initUpdateForm(!{JSON.stringify(image)});
-      });
+  .page-title
+    h1 Update Image
 
-    form.main
-      .sub-section
-        .form-group
-          label Image
-          .file-group
-          if appType == 'drypot'
-            p.help-block
-              | Only SVG files.
-      .sub-section
-        .form-group
-          label Comment
-          textarea.form-control(name='comment', rows=7) #{image.comment}
-      .sub-section
-        button.btn.btn-primary(name='send', data-loading-text='Sending') Send
+  form.main
+    .sub-section
+      .form-group
+        label Image
+        .file-group
+        if appType == 'drypot'
+          p.help-block
+            | Only SVG files.
+    .sub-section
+      .form-group
+        label Comment
+        textarea.form-control(name='comment', rows=7) #{image.comment}
+    .sub-section
+      button.btn.btn-primary(name='send', data-loading-text='Sending') Send
 
-    .section.card
-      if appType == 'rapixel'
-        | Image must be larger than 3840x2160 pixels.
-        br
-        | Image will be cropped to 16:9 automatically.
-        br
-        | Recommended sizes are 5120x2880 or 3840x2160.
-        br
-        | Max file size is 10MB.
-        br
-      | You must be copyright owner.
+  .section
+    if appType == 'rapixel'
+      | Image must be larger than 3840x2160 pixels.
+      br
+      | Image will be cropped to 16:9 automatically.
+      br
+      | Recommended sizes are 5120x2880 or 3840x2160.
+      br
+      | Max file size is 10MB.
+      br
+    | You must be copyright owner.

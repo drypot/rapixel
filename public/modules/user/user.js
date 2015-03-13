@@ -6,7 +6,7 @@ init.add(function () {
     var $form = formty.getForm('form.main');
     $form.$email.focus();
     $form.$send.click(function () {
-      formty.post('/api/sessions', $form, function (err) {
+      formty.post('/api/sessions', $form, function () {
         // formty.method 에서 에러처리 함
         location = '/';
       });
