@@ -17,18 +17,18 @@ describe("find", function () {
   });
 });
 
-describe("merge", function () {
+describe("mergeObject", function () {
   it("should success", function () {
     var obj1 = { a: 1 };
     var obj2 = { b: 2 };
-    util2.merge(obj1, obj2);
+    util2.mergeObject(obj1, obj2);
     obj1.should.eql({ a: 1, b: 2 });
   });
   it("should success", function () {
     var obj1 = { };
     var obj2 = { a: 1 };
     var obj3 = { b: 2 };
-    util2.merge(obj1, obj2, obj3);
+    util2.mergeObject(obj1, obj2, obj3);
     obj1.should.eql({ a: 1, b: 2 });
   });
 });

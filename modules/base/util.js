@@ -13,7 +13,7 @@ exports.find = function (a, fn) {
   return null;
 };
 
-exports.merge = function () {
+exports.mergeObject = function () {
   var tar = arguments[0];
   for (var i = 1; i < arguments.length; i++) {
     var src = arguments[i];
@@ -22,6 +22,9 @@ exports.merge = function () {
     }
   }
 }
+
+// 마지막 인자 콜백을 바로 호출. 
+// 테스트 디버깅 용으로 만들었던 듯.
 
 exports.pass = function () {
   arguments[arguments.length - 1]();
