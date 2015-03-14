@@ -23,6 +23,24 @@ exports.mergeObject = function () {
   }
 }
 
+exports.mergeArray = function () {
+  var tar = arguments[0];
+  var fn = arguments[arguments.length -1];
+  for (var a = 1; a < arguments.length - 1; a++) {
+    var src = arguments[a];
+    sloop:
+    for (var s = 0; s < src.length; s++) {
+      for (var t = 0; t < tar.length; t++) {
+        if (fn(tar[t], src[s])) {
+          tar[t] = src[s];
+          continue sloop;
+        }
+      }
+      tar.push(src[s]);
+    }
+  }
+}
+
 // 마지막 인자 콜백을 바로 호출. 
 // 테스트 디버깅 용으로 만들었던 듯.
 

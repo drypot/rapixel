@@ -1,7 +1,7 @@
 var should = require('should');
 
 var init = require('../base/init');
-var config = require('../base/config')({ path: 'config/rapixel-test.json' });
+var config = require('../base/config')({ path: 'modules/base/config-fixture.json' });
 
 describe("config with valid path", function () {
   it("should success", function (done) {
