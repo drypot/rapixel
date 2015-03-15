@@ -10,7 +10,7 @@ init.add(function () {
 
   app.post('/api/sessions', function (req, res) {
     var form = getForm(req.body);
-    createSessionWithForm(req, res, form, function (err, user) {
+    createSessionForm(req, res, form, function (err, user) {
       if (err) return res.jsonErr(err);
       res.json({
         user: {
@@ -31,20 +31,6 @@ init.add(function () {
   });
 });
 
-express2.restoreLocalsUser = function (req, res, done) {
-  if (req.session.uid) {
-    return userv.getCached(req.session.uid, function (err, user) {
-      if (err) {
-        req.session.destroy();
-        return done(err);
-      }
-      res.locals.user = user;
-      done();
-    });
-  }
-  createSessionAuto(req, res, done);
-};
-
 function getForm(body) {
   var form = {};
   form.email = String(body.email || '').trim();
@@ -53,7 +39,7 @@ function getForm(body) {
   return form;
 };
 
-function createSessionWithForm(req, res, form, done) {
+function createSessionForm(req, res, form, done) {
   userv.findAndCache(form.email, function (err, user) {
     if (err) return done(err);
     validateUser(user, form.password, function (err) {
@@ -68,7 +54,7 @@ function createSessionWithForm(req, res, form, done) {
           httpOnly: true
         });
       }
-      createSessionWithUser(req, user, function (err) {
+      createSession(req, user, function (err) {
         if (err) return done(err);
         done(null, user);
       });
@@ -90,7 +76,7 @@ function createSessionAuto(req, res, done) {
         res.clearCookie('password');
         return done();
       }
-      createSessionWithUser(req, user, function (err) {
+      createSession(req, user, function (err) {
         if (err) return done(err);
         res.locals.user = user;
         done();
@@ -112,7 +98,7 @@ function validateUser(user, password, done) {
   done();
 }
 
-function createSessionWithUser(req, user, done) {
+function createSession(req, user, done) {
   req.session.regenerate(function (err) {
     if (err) return done(err);
     var now = new Date();
@@ -148,4 +134,18 @@ exports.getAdmin = function (res, done) {
     return done(error(error.NOT_AUTHORIZED));
   }
   done(null, user);
+};
+
+express2.restoreLocalsUser = function (req, res, done) {
+  if (req.session.uid) {
+    return userv.getCached(req.session.uid, function (err, user) {
+      if (err) {
+        req.session.destroy();
+        return done(err);
+      }
+      res.locals.user = user;
+      done();
+    });
+  }
+  createSessionAuto(req, res, done);
 };
