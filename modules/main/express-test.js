@@ -1,5 +1,6 @@
 var should = require('should');
 var shouldhttp = require('should-http');
+var express = require('express');
 
 var init = require('../base/init');
 var error = require('../base/error');
@@ -7,36 +8,11 @@ var config = require('../base/config')({ path: 'config/rapixel-test.json' });
 var express2 = require('../main/express');
 var local = require('../main/local');
 
+var app;
+
 init.add(function () {
-  var app = express2.app;
-
-  app.get('/test/no-action', function (req, res, done) {
-    done();
-  });
-
-  app.get('/test/plain-text', function (req, res) {
-    res.send('some text');
-  });
-
-  app.get('/api/invalid-data', function (req, res) {
-    res.jsonErr(error(error.INVALID_DATA));
-  });
-
-  app.get('/api/json', function (req, res) {
-    res.json({});
-  });
-
-  app.get('/api/null', function (req, res) {
-    res.json(null);
-  });
-
-  app.get('/api/echo-query', function (req, res) {
-    var obj = {};
-    for(var p in req.query) {
-      obj[p] = req.query[p];
-    }
-    res.json(obj);
-  });
+  app = express.Router();
+  express2.app.use(app);
 });
 
 before(function (done) {
@@ -44,7 +20,7 @@ before(function (done) {
 });
 
 describe("/api/hello", function () {
-  it("should return 'hello'", function (done) {
+  it("should return appName", function (done) {
     local.get('/api/hello').end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
@@ -59,29 +35,91 @@ describe("/api/hello", function () {
   });
 });
 
-describe("no-action", function () {
-  it("should return not found", function (done) {
-    local.get('/no-action').end(function (err, res) {
+describe("undefined url", function () {
+  it("should return 404", function (done) {
+    local.get('/xxx').end(function (err, res) {
       should.not.exist(err);
-      res.should.status(404);
+      res.should.status(404); // Not Found
+      res.error.status.should.eql(404);
       done();
     });
   });
 });
 
-describe("plain-text", function () {
-  it("should return 'hello'", function (done) {
-    local.get('/test/plain-text').end(function (err, res) {
+describe("text-html", function () {
+  it("given handler", function () {
+    app.get('/test/text-html', function (req, res) {
+      res.send('some text');
+    });
+  });
+  it("should return html", function (done) {
+    local.get('/test/text-html').end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
+      res.should.html;
       res.text.should.equal('some text');
       done();
     });
   });
 });
 
-describe("invalid-data", function () {
-  it("should return code", function (done) {
+describe("json", function () {
+  it("given handler", function () {
+    app.get('/api/json', function (req, res) {
+      res.json({ msg: 'valid json' });
+    });
+  });
+  it("should return json", function (done) {
+    local.get('/api/json').end(function (err, res) {
+      should.not.exist(err);
+      res.error.should.false;
+      res.should.json;
+      res.body.msg.should.equal('valid json');
+      done();
+    });
+  });
+});
+
+describe("null", function () {
+  it("given handler", function () {
+    app.get('/api/null', function (req, res) {
+      res.json(null);
+    });
+  });
+
+  it("should return {}", function (done) {
+    local.get('/api/null').end(function (err, res) {
+      should.not.exist(err);
+      res.error.should.false;
+      res.body.should.eql({});
+      done();
+    });
+  });
+});
+
+describe("no-action", function () {
+  it("given handler", function () {
+    app.get('/test/no-action', function (req, res, done) {
+      done();
+    });
+  });
+  it("should return 404", function (done) {
+    local.get('/test/no-action').end(function (err, res) {
+      should.not.exist(err);
+      res.should.status(404); // Not Found
+      res.error.status.should.eql(404);
+      done();
+    });
+  });
+});
+
+describe("INVALID_DATA", function () {
+  it("given handler", function () {
+    app.get('/api/invalid-data', function (req, res) {
+       res.jsonErr(error(error.INVALID_DATA));
+     });
+  });
+  it("should return INVALID_DATA", function (done) {
     local.get('/api/invalid-data').end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
@@ -93,41 +131,40 @@ describe("invalid-data", function () {
   });
 });
 
-describe("Cache-Control test", function () {
-  describe("/test/hello", function () {
-    it("should return private", function (done) {
-      local.get('/test/plain-text').end(function (err, res) {
-        should.not.exist(err);
-        res.error.should.false;
-        res.get('Cache-Control').should.equal('private');
-        done();
-      });
+describe("Cache-Control", function () {
+  it("given handler", function () {
+    app.get('/test/cacheable', function (req, res) {
+      res.send('some text');
     });
   });
-  describe("/api/json", function () {
-    it("should return private", function (done) {
-      local.get('/api/json').end(function (err, res) {
-        should.not.exist(err);
-        res.error.should.false;
-        res.get('Cache-Control').should.equal('no-cache');
-        done();
-      });
-    });
-  });
-});
-
-describe("null", function () {
-  it("should return {}", function (done) {
-    local.get('/api/null').end(function (err, res) {
+  it("plain html should return Cache-Control: private", function (done) {
+    local.get('/test/cacheable').end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
-      res.body.should.eql({});
+      res.get('Cache-Control').should.equal('private');
+      done();
+    });
+  });
+  it("api should return Cache-Control: no-cache", function (done) {
+    local.get('/api/hello').end(function (err, res) {
+      should.not.exist(err);
+      res.error.should.false;
+      res.get('Cache-Control').should.equal('no-cache');
       done();
     });
   });
 });
 
 describe("echo-query-params", function () {
+  it("given handler", function () {
+    app.get('/api/echo-query', function (req, res) {
+      var obj = {};
+      for(var p in req.query) {
+        obj[p] = req.query[p];
+      }
+      res.json(obj);
+    });
+  });
   it("should success", function (done) {
     local.get('/api/echo-query?p1&p2=123').end(function (err, res) {
       should.not.exist(err);
@@ -141,3 +178,42 @@ describe("echo-query-params", function () {
   });
 });
 
+describe.only("middleware", function () {
+  it("given handlers", function () {
+    function initr(req, res, done) {
+      res.locals.result = {};
+      done();
+    }
+
+    function mid1(req, res, done) {
+      res.locals.result.mid1 = 'ok';
+      done();
+    }
+
+    function mid2(req, res, done) {
+      res.locals.result.mid2 = 'ok';
+      done();
+    }
+    
+    function miderr(req, res, done) {
+      done(new Error("xxx"));
+    }
+    
+    app.get('/api/mw-1-2', initr, mid1, mid2, function (req, res) {
+      res.json(res.locals.result);
+    });
+
+    app.get('/api/mw-1-err-2', initr, mid1, miderr, mid2, function (req, res) {
+      res.json(res.locals.result);
+    });
+  });
+  it("mw-1-2 should return 1, 2", function (done) {
+    local.get('/api/mw-1-2').end(function (err, res) {
+      should.not.exist(err);
+      res.error.should.false;
+      res.body.mid1.should.equal('ok');
+      res.body.mid2.should.equal('ok');
+      done();
+    });
+  });
+});

@@ -4,13 +4,15 @@ var path = require('path');
 var init = require('../base/init');
 var config = require('../base/config');
 var fs2 = require('../base/fs');
+var _multiparty = require('connect-multiparty');
 var express2 = require('../main/express');
-var usera = require('../user/user-auth');
 
 var tmpDir;
+var multiparty;
 
 init.add(function (done) {
   console.log('upload: ' + config.uploadDir);
+  multiparty = _multiparty({ uploadDir: config.uploadDir + '/tmp' });
   tmpDir = config.uploadDir + '/tmp',
   fs2.makeDirs(tmpDir, function (err) {
     if (err) return done(err);
@@ -18,33 +20,19 @@ init.add(function (done) {
   });
 });
 
-init.add(function () {
-  var app = express2.app;
-
-  app.post('/api/upload', function (req, res) {
-    if (req.query.rtype === 'html') {
-      usera.getUser(res, function (err, user) {
-        if (err) return res.send(JSON.stringify(err));
-        res.send(JSON.stringify(saveTmpFiles(req)));
-      });
-    } else {
-      usera.getUser(res, function (err, user) {
-        if (err) return res.jsonErr(err);
-        res.json(saveTmpFiles(req));
-      });
-    }
-  });
-
-  app.delete('/api/upload', function (req, res) {
+exports.handler = function (req, res, done) {
+  if (req.query.rtype === 'html') {
+    usera.getUser(res, function (err, user) {
+      if (err) return res.send(JSON.stringify(err));
+      res.send(JSON.stringify(saveTmpFiles(req)));
+    });
+  } else {
     usera.getUser(res, function (err, user) {
       if (err) return res.jsonErr(err);
-      deleteFiles(req, function (err) {
-        if (err) return res.jsonErr(err);
-        res.json({});
-      });
+      res.json(saveTmpFiles(req));
     });
-  });
-});
+  }
+};
 
 function saveTmpFiles(req) {
   var files = {};
@@ -101,22 +89,6 @@ function saveTmpFiles(req) {
   
   return files;
 };
-
-function deleteFiles(req, done) {
-  var files = req.body.files;
-  if (files) {
-    var i = 0;
-    function del() {
-      if (i == files.length) return done();
-      var file = files[i++];
-      fs.unlink(getTmpPath(path.basename(file)), function (err) {
-        if (err && err.code !== 'ENOENT') return done(err);
-        setImmediate(del);
-      });
-    }
-    del();
-  }
-}
 
 var getTmpPath = exports.getTmpPath = function (tname) {
   return tmpDir + '/' + tname;

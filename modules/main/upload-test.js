@@ -5,11 +5,8 @@ var util2 = require('../base/util');
 var init = require('../base/init');
 var fs2 = require('../base/fs');
 var config = require('../base/config')({ path: 'config/rapixel-test.json' });
-var mongo = require('../mongo/mongo')({ dropDatabase: true });
 var express2 = require('../main/express');
-var usera = require('../user/user-auth');
-var userf = require('../user/user-fixture');
-var upload = require('../upload/upload');
+var upload = require('../main/upload');
 
 var local = require('../main/local');
 
@@ -21,10 +18,6 @@ function find(files, oname) {
 
 before(function (done) {
   init.run(done);
-});
-
-before(function (done) {
-  userf.loginUser1(done);
 });
 
 describe("deleter", function () {

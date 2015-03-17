@@ -4,7 +4,6 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var redisStore = require('connect-redis')(session);
-var multipart = require('connect-multiparty');
 var errorHandler = require('errorhandler');
 
 var init = require('../base/init');
@@ -37,7 +36,6 @@ init.add(function () {
   }));
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
-  app.use(multipart({ uploadDir: config.uploadDir + '/tmp' }));
 
   app.use(function (req, res, done) {
     res.locals.query = req.query;
