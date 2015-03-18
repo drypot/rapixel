@@ -113,19 +113,31 @@ describe("no-action", function () {
   });
 });
 
-describe("INVALID_DATA", function () {
+describe.only("INVALID_DATA", function () {
   it("given handler", function () {
-    app.get('/api/invalid-data', function (req, res) {
-       res.jsonErr(error(error.INVALID_DATA));
-     });
+    app.get('/api/invalid-data', function (req, res, done) {
+       done(error(error.INVALID_DATA));
+    });
+    app.get('/test/invalid-data', function (req, res, done) {
+       done(error(error.INVALID_DATA));
+    });
   });
-  it("should return INVALID_DATA", function (done) {
+  it("api should return json", function (done) {
     local.get('/api/invalid-data').end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
-      res.should.be.json;
+      res.should.json;
       should.exist(res.body.err);
       error.find(res.body.err, error.INVALID_DATA).should.true;
+      done();
+    });
+  });
+  it("page should return html", function (done) {
+    local.get('/test/invalid-data').end(function (err, res) {
+      should.not.exist(err);
+      res.error.should.false;
+      res.should.html;
+      res.text.should.match(/.*INVALID_DATA.*/);
       done();
     });
   });

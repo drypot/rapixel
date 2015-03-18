@@ -31,6 +31,18 @@ init.add(function () {
   });
 });
 
+init.addTail(function () {
+  var app = express2.app;
+
+  app.use(function (err, req, res, done) {
+    if (err.code == error.NOT_AUTHENTICATED.code) {
+      res.redirect('/users/login');
+    } else {
+      done();
+    }
+  });
+})
+
 function getForm(body) {
   var form = {};
   form.email = String(body.email || '').trim();

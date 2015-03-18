@@ -4,7 +4,6 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var redisStore = require('connect-redis')(session);
-var errorHandler = require('errorhandler');
 
 var init = require('../base/init');
 var error = require('../base/error');
@@ -39,9 +38,8 @@ init.add(function () {
 
   app.use(function (req, res, done) {
     res.locals.query = req.query;
-    //var nocache = req.xhr;
-    var nocache = /^\/api\//.test(req.path);
-    if (nocache) {
+    res.locals.api = /^\/api\//.test(req.path);
+    if (res.locals.api /* req.xhr */) {
       // solve IE ajax caching problem.
       // IE 는 웹페이지까지만 refresh 하고 ajax request 는 refresh 하지 않는다.  
       res.set('Cache-Control', 'no-cache');
@@ -74,40 +72,25 @@ init.add(function () {
 });
 
 init.addTail(function () {
-  app.use(errorHandler(/* {log: false} */));
+  var emptyMatch = [''];
+
+  //app.use(errorHandler(/* {log: false} */));
+  
+  app.use(function (_err, req, res, done) {
+    var err = {};
+    for (var key in _err) {
+      err[key] = _err[key];
+    }
+    err.message = _err.message;
+    if (res.locals.api) {
+      err.stack = (_err.stack.match(/^(?:.*\n){1,6}/m) || emptyMatch)[0];
+      res.json({ err: err });
+    } else {
+      err.stack = (_err.stack.match(/^(?:.*\n){1,6}/m) || emptyMatch)[0].replace(/Error:.+\n/, '');
+      res.render('main/error', { err: err });
+    }
+  });
+
   app.listen(config.appPort);
   console.log('express: listening ' + config.appPort);
 });
-
-// Error Util
-
-var emptyMatch = [''];
-
-should.not.exist(express.response.jsonErr);
-express.response.jsonErr = function (_err) {
-  var res = this;
-  var err = {};
-  for (var key in _err) {
-    err[key] = _err[key];
-  }
-  err.message = _err.message;
-  err.stack = (_err.stack.match(/^(?:.*\n){1,6}/m) || emptyMatch)[0];
-  res.json({ err: err });
-};
-
-should.not.exist(express.response.renderErr);
-express.response.renderErr = function (_err) {
-  var res = this;
-  if (_err.code && _err.code == error.NOT_AUTHENTICATED.code) {
-    res.redirect('/users/login');
-    return;
-  }
-  var err = {};
-  for (var key in _err) {
-    err[key] = _err[key];
-  }
-  err.message = _err.message;
-  err.stack = (_err.stack.match(/^(?:.*\n){1,6}/m) || emptyMatch)[0].replace(/Error:.+\n/, '');
-  res.render('main/error', { err: err });
-};
-
