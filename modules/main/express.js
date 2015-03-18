@@ -71,7 +71,7 @@ init.add(function () {
 });
 
 init.addTail(function () {
-  app.use(errorHandler());
+  app.use(errorHandler(/* {log: false} */));
   app.listen(config.appPort);
   console.log('express: listening ' + config.appPort);
 });

@@ -188,7 +188,7 @@ describe.only("middleware", function () {
     }
     
     function miderr(req, res, done) {
-      done(error(error.INVALID_DATA));
+      done("some error");
     }
     
     app.get('/api/mw-1-2', mid1, mid2, function (req, res) {
