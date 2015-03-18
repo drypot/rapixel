@@ -113,7 +113,7 @@ describe("no-action", function () {
   });
 });
 
-describe.only("INVALID_DATA", function () {
+describe("INVALID_DATA", function () {
   it("given handler", function () {
     app.get('/api/invalid-data', function (req, res, done) {
        done(error(error.INVALID_DATA));
@@ -192,7 +192,6 @@ describe("echo-query-params", function () {
 
 describe("middleware", function () {
   var result;
-
   it("given handlers", function () {
     function mid1(req, res, done) {
       result.mid1 = 'ok';
@@ -205,7 +204,7 @@ describe("middleware", function () {
     }
     
     function miderr(req, res, done) {
-      done("some error");
+      done(new Error("some error"));
     }
     
     app.get('/api/mw-1-2', mid1, mid2, function (req, res) {
@@ -233,7 +232,7 @@ describe("middleware", function () {
     result = {};
     local.get('/api/mw-1-err-2').end(function (err, res) {
       should.not.exist(err);
-      res.error.should.ok;
+      res.error.should.false;
       should.exist(result.mid1);
       should.not.exist(result.mid2);
       should.not.exist(result.mid3);
