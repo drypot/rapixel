@@ -1,5 +1,6 @@
 var should = require('should');
 var fs = require('fs');
+var express = require('express');
 
 var util2 = require('../base/util');
 var init = require('../base/init');
@@ -7,65 +8,86 @@ var fs2 = require('../base/fs');
 var config = require('../base/config')({ path: 'config/rapixel-test.json' });
 var express2 = require('../main/express');
 var upload = require('../main/upload');
-
 var local = require('../main/local');
 
-function find(files, oname) {
-  return util2.find(files, function (file) {
-    return file.oname === oname;
-  });
-}
+var app;
+
+// function find(files, oname) {
+//   return util2.find(files, function (file) {
+//     return file.safeFilename === oname;
+//   });
+// }
+
+init.add(function () {
+  app = express.Router();
+  express2.app.use(app);
+});
 
 before(function (done) {
   init.run(done);
 });
 
-describe("deleter", function () {
-  var _path1, _path2, _path3;
-
-  it("given tmp files", function (done) {
-    fs.writeFileSync(_path1 = upload.getTmpPath('f1.txt'), '');
-    fs.writeFileSync(_path2 = upload.getTmpPath('f2.txt'), '');
-    fs.writeFileSync(_path3 = upload.getTmpPath('f3.txt'), '');
-    done();
+describe("uploading json", function () {
+  it("given handler", function () {
+    app.post('/api/test/upload-json', upload.handler(function (req, res, done) {
+      req.get('content-type').should.equal('application/json');
+      res.json({files: req.files, field: req.body.field});
+      done();
+    }));
   });
-  it("can be checked", function (done) {
-    fs.existsSync(_path1).should.be.true;
-    fs.existsSync(_path2).should.be.true;
-    fs.existsSync(_path3).should.be.true;
-    done();
-  });
-  it("should success", function (_done) {
-    var files = [
-      { tpath: _path1 },
-      { tpath: _path2 }
-    ];
-    var done = upload.deleter(files, function (err, param) {
-      err.should.equal('errxx');
-      param.should.equal('param1');
-      _done();
+  it("should success", function (done) {
+    local.post('/api/test/upload-json').send({'field': 'abc'}).end(function (err, res) {
+      should.not.exist(err);
+      res.error.should.false;
+      should.not.exist(res.body.err);
+      should.not.exist(res.body.files);
+      res.body.field.should.equal('abc');
+      done();
     });
-    done('errxx', 'param1');
   });
-  it("can be checked", function (done) {
-    fs.existsSync(_path1).should.be.false;
-    fs.existsSync(_path2).should.be.false;
-    fs.existsSync(_path3).should.be.true;
-    done();
+});
+
+describe.only("uploading no file", function () {
+  it("given handler", function () {
+    app.post('/api/test/upload-none', upload.handler(function (req, res, done) {
+      req.get('content-type').should.startWith('multipart/form-data');
+      res.json({files: req.files, field: req.body.field});
+      done();
+    }));
+  });
+  it("should success", function (done) {
+    local.post('/api/test/upload-none').field('field', 'abc').end(function (err, res) {
+      should.not.exist(err);
+      should('abc').not.exist;
+      res.error.should.false;
+
+      should.not.exist(res.body.err);
+      res.body.files.should.eql({});
+      res.body.field.should.equal('abc');
+      done();
+    });
   });
 });
 
 describe("uploading one file", function () {
+  var f1 = 'modules/main/upload-fixture1.txt';
+  var p1;
+  it("given handler", function () {
+    app.post('/api/test/upload-one', upload.handler(function (req, res, done) {
+      p1 = req.files.files[0].path;
+      fs.existsSync(p1).should.true;
+      res.json({files: req.files, field1: req.body.field1});
+      done();
+    }));
+  });
   it("should success", function (done) {
-    var f1 = 'modules/upload/fixture/f1.txt';
-    local.post('/api/upload').attach('files', f1).end(function (err, res) {
+    local.post('/api/test/upload-one').field('field1', 'abc').attach('files', f1).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       should.not.exist(res.body.err);
-      should.exist(res.body.files);
-      var file;
-      should.exist(file = find(res.body.files, 'f1.txt'));
-      fs.existsSync(upload.getTmpPath(file.tname)).should.be.true;
+      res.body.files.files[0].safeFilename.should.equal('upload-fixture1.txt');
+      res.body.field1.should.equal('abc');
+      fs.existsSync(p1).should.false;
       done();
     });
   });
@@ -73,8 +95,8 @@ describe("uploading one file", function () {
 
 describe("uploading two files", function () {
   it("should success", function (done) {
-    var f1 = 'modules/upload/fixture/f1.txt';
-    var f2 = 'modules/upload/fixture/f2.txt';
+    var f1 = 'modules/main/upload-fixture1.txt';
+    var f2 = 'modules/main/upload-fixture2.txt';
     local.post('/api/upload').attach('files', f1).attach('files', f2).end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
@@ -89,89 +111,5 @@ describe("uploading two files", function () {
   });
 });
 
-describe("uploading two files to html", function () {
-  it("should success", function (done) {
-    var f1 = 'modules/upload/fixture/f1.txt';
-    var f2 = 'modules/upload/fixture/f2.txt';
-    local.post('/api/upload?rtype=html').attach('files', f1).attach('files', f2).end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      should.not.exist(res.body.err);
-      res.should.be.html;
-      res.body = JSON.parse(res.text);
-      var file;
-      should.exist(file = find(res.body.files, 'f1.txt'));
-      fs.existsSync(upload.getTmpPath(file.tname)).should.be.true;
-      should.exist(file = find(res.body.files, 'f2.txt'));
-      fs.existsSync(upload.getTmpPath(file.tname)).should.be.true;
-      done();
-    });
-  });
-});
 
-describe("uploading none", function () {
-  it("should success", function (done) {
-    local.post('/api/upload').end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      should.not.exist(res.body.err);
-      res.body.should.eql({});
-      done();
-    });
-  });
-});
-
-describe("deleting files", function () {
-  var _files;
-  it("given three uploaded files", function (done) {
-    var f1 = 'modules/upload/fixture/f1.txt';
-    var f2 = 'modules/upload/fixture/f2.txt';
-    var f3 = 'modules/upload/fixture/f3.txt';
-    local.post('/api/upload').attach('files', f1).attach('files', f2).attach('files', f3).end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      should.not.exist(res.body.err);
-      _files = res.body.files;
-      for (var i = 0; i < _files.length; i++) {
-        _files[i].tpath = upload.getTmpPath(_files[i].tname);
-      };
-      done();
-    });
-  });
-  it("should success for f1.txt", function (done) {
-    var f1;
-    should.exist(f1 = find(_files, 'f1.txt'))
-    fs.existsSync(f1.tpath).should.be.true;
-    local.del('/api/upload').send({ files: [ f1.tname ] }).end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      should.not.exist(res.body.err);
-      fs.existsSync(f1.tpath).should.be.false;
-      done();
-    });
-  });
-  it("should success for f2.txt and f3.txt", function (done) {
-    var f2, f3;
-    should.exist(f2 = find(_files, 'f2.txt'))
-    fs.existsSync(f2.tpath).should.be.true;
-    should.exist(f3 = find(_files, 'f3.txt'))
-    fs.existsSync(f3.tpath).should.be.true;
-    local.del('/api/upload').send({ files: [ f2.tname, f3.tname ] }).end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      should.not.exist(res.body.err);
-      fs.existsSync(f2.tpath).should.be.false;
-      fs.existsSync(f3.tpath).should.be.false;
-      done();
-    });
-  });
-  it("should success for invalid file", function (done) {
-    local.del('/api/upload').send({ files: [ 'no-file.txt' ] }).end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      should.not.exist(res.body.err);
-      done();
-    });
-  });
-});
 

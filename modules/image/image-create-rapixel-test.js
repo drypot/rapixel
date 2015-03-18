@@ -145,7 +145,7 @@ describe("posting", function () {
     imageb.images.remove(done);
   }); 
   it("given text file", function (done) {
-    local.upload('modules/upload/fixture/f1.txt', function (err, files) {
+    local.upload('modules/main/upload-fixture1.txt', function (err, files) {
       _files = files;
       done(err);
     });

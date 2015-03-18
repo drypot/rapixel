@@ -73,7 +73,7 @@ exports.updateImage = function(id, form, _done) {
             site.makeVersions(org, meta, dir, id, function (err, vers) {
               if (err) return done(err);
               var fields = {
-                fname: file.oname,
+                fname: file.safeFilename,
                 format: meta.format,
               }
               site.fillFields(fields, form, meta, vers);

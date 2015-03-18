@@ -114,7 +114,7 @@ function createImage(form, file, user, done) {
             _id: id,
             uid: user._id,
             hit: 0,
-            fname: file.oname,
+            fname: file.safeFilename,
             format: meta.format,
             cdate: form.now
           };
