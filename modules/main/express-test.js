@@ -173,41 +173,53 @@ describe("echo-query-params", function () {
   });
 });
 
-describe("middleware", function () {
-  it("given handlers", function () {
-    function initr(req, res, done) {
-      res.locals.result = {};
-      done();
-    }
+describe.only("middleware", function () {
+  var result;
 
+  it("given handlers", function () {
     function mid1(req, res, done) {
-      res.locals.result.mid1 = 'ok';
+      result.mid1 = 'ok';
       done();
     }
 
     function mid2(req, res, done) {
-      res.locals.result.mid2 = 'ok';
+      result.mid2 = 'ok';
       done();
     }
     
     function miderr(req, res, done) {
-      done(new Error("xxx"));
+      done(error(error.INVALID_DATA));
     }
     
-    app.get('/api/mw-1-2', initr, mid1, mid2, function (req, res) {
-      res.json(res.locals.result);
+    app.get('/api/mw-1-2', mid1, mid2, function (req, res) {
+      result.mid3 = 'ok';
+      res.json({});
     });
 
-    app.get('/api/mw-1-err-2', initr, mid1, miderr, mid2, function (req, res) {
-      res.json(res.locals.result);
+    app.get('/api/mw-1-err-2', mid1, miderr, mid2, function (req, res) {
+      result.mid3 = 'ok';
+      res.json({});
     });
   });
   it("mw-1-2 should return 1, 2", function (done) {
+    result = {};
     local.get('/api/mw-1-2').end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
-      res.body.mid1.should.equal('ok');
-      res.body.mid2.should.equal('ok');
+      should.exist(result.mid1);
+      should.exist(result.mid2);
+      should.exist(result.mid3);
+      done();
+    });
+  });
+  it("mw-1-err-2 should return 1, 2", function (done) {
+    result = {};
+    local.get('/api/mw-1-err-2').end(function (err, res) {
+      should.not.exist(err);
+      res.error.should.ok;
+      should.exist(result.mid1);
+      should.not.exist(result.mid2);
+      should.not.exist(result.mid3);
       done();
     });
   });
