@@ -38,9 +38,9 @@ init.add(function () {
 
   app.use(function (req, res, done) {
     res.locals.query = req.query;
-    res.locals.api = /^\/api\//.test(req.path);
-    if (res.locals.api /* req.xhr */) {
-      // solve IE ajax caching problem.
+    //res.locals.api = /^\/api\//.test(req.path); 
+    //req.xhr
+    if (req.is('json')) {
       // IE 는 웹페이지까지만 refresh 하고 ajax request 는 refresh 하지 않는다.  
       res.set('Cache-Control', 'no-cache');
     } else {
@@ -72,17 +72,14 @@ init.add(function () {
 });
 
 init.addTail(function () {
-  var emptyMatch = [''];
-
-  //app.use(errorHandler(/* {log: false} */));
-  
+  var emptyMatch = [''];  
   app.use(function (_err, req, res, done) {
     var err = {};
     for (var key in _err) {
       err[key] = _err[key];
     }
     err.message = _err.message;
-    if (res.locals.api) {
+    if (req.is('json')) {
       err.stack = (_err.stack.match(/^(?:.*\n){1,6}/m) || emptyMatch)[0];
       res.json({ err: err });
     } else {
@@ -90,6 +87,8 @@ init.addTail(function () {
       res.render('main/error', { err: err });
     }
   });
+
+  //app.use(errorHandler(/* {log: false} */));
 
   app.listen(config.appPort);
   console.log('express: listening ' + config.appPort);
