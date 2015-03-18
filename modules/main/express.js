@@ -39,11 +39,14 @@ init.add(function () {
 
   app.use(function (req, res, done) {
     res.locals.query = req.query;
-    if (req.xhr) {
+    //var nocache = req.xhr;
+    var nocache = /^\/api\//.test(req.path);
+    if (nocache) {
       // solve IE ajax caching problem.
+      // IE 는 웹페이지까지만 refresh 하고 ajax request 는 refresh 하지 않는다.  
       res.set('Cache-Control', 'no-cache');
     } else {
-      // force web page cacehd.
+      // force web page cached.
       res.set('Cache-Control', 'private');
     }
     done();

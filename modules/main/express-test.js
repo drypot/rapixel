@@ -131,9 +131,14 @@ describe("INVALID_DATA", function () {
   });
 });
 
-describe.only("Cache-Control", function () {
+describe("Cache-Control", function () {
+  it("given handler", function () {
+    app.get('/test/cache-test', function (req, res) {
+       res.send('<p>muse be cached</p>');
+     });
+  });
   it("none ajax request should return Cache-Control: private", function (done) {
-    local.get('/api/hello').end(function (err, res) {
+    local.get('/test/cache-test').end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       res.get('Cache-Control').should.equal('private');
@@ -173,7 +178,7 @@ describe("echo-query-params", function () {
   });
 });
 
-describe.only("middleware", function () {
+describe("middleware", function () {
   var result;
 
   it("given handlers", function () {
