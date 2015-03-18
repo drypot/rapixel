@@ -1,4 +1,4 @@
-var should = require('should');
+var expect = require('chai').expect;
 
 var init = require('../base/init');
 var error = require('../base/error');
@@ -15,17 +15,17 @@ before(function () {
 describe("error(error)", function () {
   it("should success", function () {
     var err = error(error.INVALID_DATA);
-    err.code.should.equal(error.INVALID_DATA.code);
-    err.message.should.equal(error.INVALID_DATA.message);
-    err.should.property('stack');
+    expect(err.code).equal(error.INVALID_DATA.code);
+    expect(err.message).equal(error.INVALID_DATA.message);
+    expect(err).property('stack');
   });
 });
 
 describe("defining duplicated", function () {
   it("should fail", function (done) {
-    (function() {
+    expect(function() {
       error.define('NAME_DUPE', '이미 등록되어 있는 이름입니다.', 'name');
-    }).should.throw();
+    }).throw();
     done();
   });  
 });
@@ -36,17 +36,17 @@ describe("error(field errors)", function () {
     errors.push(error.NAME_DUPE);
     errors.push(error.PASSWORD_EMPTY);
     var err = error(errors);
-    err.code.should.equal(error.INVALID_FORM.code);
-    err.errors[0].should.eql(error.NAME_DUPE);
-    err.errors[1].should.eql(error.PASSWORD_EMPTY);
+    expect(err.code).equal(error.INVALID_FORM.code);
+    expect(err.errors[0]).eql(error.NAME_DUPE);
+    expect(err.errors[1]).eql(error.PASSWORD_EMPTY);
   })
 });
 
 describe("error(field error)", function () {
   it("should success", function () {
     var err = error(error.NAME_DUPE);
-    err.code.should.equal(error.INVALID_FORM.code);
-    err.errors[0].should.eql(error.NAME_DUPE);
+    expect(err.code).equal(error.INVALID_FORM.code);
+    expect(err.errors[0]).eql(error.NAME_DUPE);
   })
 });
 
@@ -54,9 +54,9 @@ describe("error(unknown)", function () {
   it("should success", function () {
     var obj = { opt: 'extra' };
     var err = error(obj);
-    err.should.not.have.property('code');
-    err.message.should.equal('unknown error');
-    err.should.have.property('opt', 'extra')
-    err.should.property('stack');
+    expect(err).not.have.property('code');
+    expect(err.message).equal('unknown error');
+    expect(err).have.property('opt', 'extra')
+    expect(err).property('stack');
   });
 });

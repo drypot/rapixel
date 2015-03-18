@@ -1,4 +1,4 @@
-var should = require('should');
+var expect = require('chai').expect;
 
 var init = require('../base/init');
 
@@ -34,7 +34,7 @@ init.add(function () {
 });
 
 exports.define = function (code, msg, field) {
-  should.not.exist(exports[code]);
+  expect(exports[code]).not.exist;
   var ec = exports[code] = {
     code: code,
     message: msg
