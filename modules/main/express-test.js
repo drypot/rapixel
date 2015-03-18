@@ -37,7 +37,7 @@ describe("/api/hello", function () {
 
 describe("undefined url", function () {
   it("should return 404", function (done) {
-    local.get('/xxx').end(function (err, res) {
+    local.get('/api/xxx').end(function (err, res) {
       should.not.exist(err);
       res.should.status(404); // Not Found
       res.error.status.should.eql(404);
@@ -46,10 +46,10 @@ describe("undefined url", function () {
   });
 });
 
-describe("text-html", function () {
+describe("res.send", function () {
   it("given handler", function () {
     app.get('/test/text-html', function (req, res) {
-      res.send('some text');
+      res.send('<p>some text</p>');
     });
   });
   it("should return html", function (done) {
@@ -57,13 +57,13 @@ describe("text-html", function () {
       should.not.exist(err);
       res.error.should.false;
       res.should.html;
-      res.text.should.equal('some text');
+      res.text.should.equal('<p>some text</p>');
       done();
     });
   });
 });
 
-describe("json", function () {
+describe("res.json", function () {
   it("given handler", function () {
     app.get('/api/json', function (req, res) {
       res.json({ msg: 'valid json' });
@@ -86,11 +86,11 @@ describe("null", function () {
       res.json(null);
     });
   });
-
   it("should return {}", function (done) {
     local.get('/api/null').end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
+      res.should.json;
       res.body.should.eql({});
       done();
     });
@@ -99,12 +99,12 @@ describe("null", function () {
 
 describe("no-action", function () {
   it("given handler", function () {
-    app.get('/test/no-action', function (req, res, done) {
+    app.get('/api/test/no-action', function (req, res, done) {
       done();
     });
   });
   it("should return 404", function (done) {
-    local.get('/test/no-action').end(function (err, res) {
+    local.get('/api/test/no-action').end(function (err, res) {
       should.not.exist(err);
       res.should.status(404); // Not Found
       res.error.status.should.eql(404);
@@ -113,17 +113,14 @@ describe("no-action", function () {
   });
 });
 
-describe("INVALID_DATA", function () {
+describe("api error", function () {
   it("given handler", function () {
-    app.get('/api/invalid-data', function (req, res, done) {
-       done(error(error.INVALID_DATA));
-    });
-    app.get('/test/invalid-data', function (req, res, done) {
+    app.get('/api/test/invalid-data', function (req, res, done) {
        done(error(error.INVALID_DATA));
     });
   });
-  it("api should return json", function (done) {
-    local.get('/api/invalid-data').end(function (err, res) {
+  it("should return json", function (done) {
+    local.get('/api/test/invalid-data').end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       res.should.json;
@@ -132,7 +129,15 @@ describe("INVALID_DATA", function () {
       done();
     });
   });
-  it("page should return html", function (done) {
+});
+
+describe("page error", function () {
+  it("given handler", function () {
+    app.get('/test/invalid-data', function (req, res, done) {
+       done(error(error.INVALID_DATA));
+    });
+  });
+  it("should return html", function (done) {
     local.get('/test/invalid-data').end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
@@ -149,7 +154,7 @@ describe("Cache-Control", function () {
        res.send('<p>muse be cached</p>');
      });
   });
-  it("none ajax request should return Cache-Control: private", function (done) {
+  it("none api request should return Cache-Control: private", function (done) {
     local.get('/test/cache-test').end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
@@ -157,8 +162,8 @@ describe("Cache-Control", function () {
       done();
     });
   });
-  it("ajax request should return Cache-Control: no-cache", function (done) {
-    local.get('/api/hello').set('X-Requested-With', 'XMLHttpRequest').end(function (err, res) {
+  it("api should return Cache-Control: no-cache", function (done) {
+    local.get('/api/hello').end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       res.get('Cache-Control').should.equal('no-cache');
