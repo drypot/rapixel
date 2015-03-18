@@ -131,22 +131,17 @@ describe("INVALID_DATA", function () {
   });
 });
 
-describe("Cache-Control", function () {
-  it("given handler", function () {
-    app.get('/test/cacheable', function (req, res) {
-      res.send('some text');
-    });
-  });
-  it("plain html should return Cache-Control: private", function (done) {
-    local.get('/test/cacheable').end(function (err, res) {
+describe.only("Cache-Control", function () {
+  it("none ajax request should return Cache-Control: private", function (done) {
+    local.get('/api/hello').end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       res.get('Cache-Control').should.equal('private');
       done();
     });
   });
-  it("api should return Cache-Control: no-cache", function (done) {
-    local.get('/api/hello').end(function (err, res) {
+  it("ajax request should return Cache-Control: no-cache", function (done) {
+    local.get('/api/hello').set('X-Requested-With', 'XMLHttpRequest').end(function (err, res) {
       should.not.exist(err);
       res.error.should.false;
       res.get('Cache-Control').should.equal('no-cache');
@@ -178,7 +173,7 @@ describe("echo-query-params", function () {
   });
 });
 
-describe.only("middleware", function () {
+describe("middleware", function () {
   it("given handlers", function () {
     function initr(req, res, done) {
       res.locals.result = {};

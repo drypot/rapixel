@@ -39,7 +39,8 @@ init.add(function () {
 
   app.use(function (req, res, done) {
     res.locals.query = req.query;
-    if (res.locals.api = /^\/api\//.test(req.path)) {
+    console.log(req.get('X-Requested-With'));
+    if (req.xhr) {
       // solve IE ajax caching problem.
       res.set('Cache-Control', 'no-cache');
     } else {
