@@ -1,9 +1,13 @@
-var should = require('should');
+var chai = require('chai');
+var expect = chai.expect;
+chai.use(require('chai-http'));
+chai.config.includeStack = true;
+
 var fs = require('fs');
 
 var init = require('../base/init');
 var error = require('../base/error');
-var config = require('../base/config')({ path: 'config/rapixel-test.json' });
+var config = require('../base/config')({ path: 'config/test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
 var express2 = require('../main/express');
 var upload = require('../upload/upload');
@@ -18,7 +22,7 @@ before(function (done) {
 });
 
 before(function (done) {
-  userf.loginUser1(done);
+  userf.login('user1', done);
 });
 
 var _now = new Date();
@@ -46,7 +50,7 @@ describe("getTicketCount", function () {
   });
   it("should return ticketMax", function (done) {
     imagec.getTicketCount(_now, userf.user1, function (err, count, hours) {
-      should.not.exist(err);
+      expect(err).not.exist;
       count.should.equal(config.ticketMax);
       done();
     });
@@ -56,7 +60,7 @@ describe("getTicketCount", function () {
   });
   it("should return ticketMax", function (done) {
     imagec.getTicketCount(_now, userf.user1, function (err, count, hours) {
-      should.not.exist(err);
+      expect(err).not.exist;
       count.should.equal(config.ticketMax);
       done();
     });
@@ -66,7 +70,7 @@ describe("getTicketCount", function () {
   });
   it("should return (ticketMax - 1)", function (done) {
     imagec.getTicketCount(_now, userf.user1, function (err, count, hours) {
-      should.not.exist(err);
+      expect(err).not.exist;
       count.should.equal(config.ticketMax - 1);
       done();
     });
@@ -79,7 +83,7 @@ describe("getTicketCount", function () {
   });
   it("should return 0 and hours", function (done) {
     imagec.getTicketCount(_now, userf.user1, function (err, count, hours) {
-      should.not.exist(err);
+      expect(err).not.exist;
       count.should.equal(0);
       hours.should.equal(3);
       done();

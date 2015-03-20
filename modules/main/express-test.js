@@ -1,18 +1,18 @@
-var should = require('should');
-var shouldhttp = require('should-http');
-var express = require('express');
+var chai = require('chai');
+var expect = chai.expect;
+chai.use(require('chai-http'));
+chai.config.includeStack = true;
 
 var init = require('../base/init');
 var error = require('../base/error');
-var config = require('../base/config')({ path: 'config/rapixel-test.json' });
+var config = require('../base/config')({ path: 'config/test.json' });
 var express2 = require('../main/express');
 var local = require('../main/local');
 
 var app;
 
 init.add(function () {
-  app = express.Router();
-  express2.app.use(app);
+  app = express2.app;
 });
 
 before(function (done) {
@@ -22,14 +22,14 @@ before(function (done) {
 describe("/api/hello", function () {
   it("should return appName", function (done) {
     local.get('/api/hello').end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      res.should.be.json;
-      res.body.name.should.equal(config.appName);
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res).json;
+      expect(res.body.name).equal(config.appName);
       var stime = parseInt(res.body.time || 0);
       var ctime = Date.now();
-      (stime <= ctime).should.true;
-      (stime >= ctime - 100).should.true;
+      expect(stime <= ctime).true;
+      expect(stime >= ctime - 100).true;
       done();
     });
   });
@@ -38,9 +38,9 @@ describe("/api/hello", function () {
 describe("undefined url", function () {
   it("should return 404", function (done) {
     local.get('/api/xxx').end(function (err, res) {
-      should.not.exist(err);
-      res.should.status(404); // Not Found
-      res.error.status.should.eql(404);
+      expect(err).not.exist;
+      expect(res).status(404); // Not Found
+      expect(res.error.status).equal(404);
       done();
     });
   });
@@ -48,16 +48,16 @@ describe("undefined url", function () {
 
 describe("res.send", function () {
   it("given handler", function () {
-    app.get('/test/text-html', function (req, res) {
+    app.get('/test/text-html', function (req, res, done) {
       res.send('<p>some text</p>');
     });
   });
   it("should return html", function (done) {
     local.get('/test/text-html').end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      res.should.html;
-      res.text.should.equal('<p>some text</p>');
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res).html;
+      expect(res.text).equal('<p>some text</p>');
       done();
     });
   });
@@ -65,16 +65,16 @@ describe("res.send", function () {
 
 describe("res.json", function () {
   it("given handler", function () {
-    app.get('/api/json', function (req, res) {
+    app.get('/api/json', function (req, res, done) {
       res.json({ msg: 'valid json' });
     });
   });
   it("should return json", function (done) {
     local.get('/api/json').end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      res.should.json;
-      res.body.msg.should.equal('valid json');
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res).json;
+      expect(res.body.msg).equal('valid json');
       done();
     });
   });
@@ -82,16 +82,16 @@ describe("res.json", function () {
 
 describe("null", function () {
   it("given handler", function () {
-    app.get('/api/null', function (req, res) {
+    app.get('/api/null', function (req, res, done) {
       res.json(null);
     });
   });
   it("should return {}", function (done) {
     local.get('/api/null').end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      res.should.json;
-      res.body.should.eql({});
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res).json;
+      expect(res.body).eql({});
       done();
     });
   });
@@ -105,9 +105,9 @@ describe("no-action", function () {
   });
   it("should return 404", function (done) {
     local.get('/api/test/no-action').end(function (err, res) {
-      should.not.exist(err);
-      res.should.status(404); // Not Found
-      res.error.status.should.eql(404);
+      expect(err).not.exist;
+      expect(res).status(404); // Not Found
+      expect(res.error.status).eql(404);
       done();
     });
   });
@@ -121,11 +121,11 @@ describe("api error", function () {
   });
   it("should return json", function (done) {
     local.get('/api/test/invalid-data').end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      res.should.json;
-      should.exist(res.body.err);
-      error.find(res.body.err, error.INVALID_DATA).should.true;
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res).json;
+      expect(res.body.err).exist;
+      expect(error.find(res.body.err, error.INVALID_DATA)).true;
       done();
     });
   });
@@ -139,10 +139,10 @@ describe("page error", function () {
   });
   it("should return html", function (done) {
     local.get('/test/invalid-data').end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      res.should.html;
-      res.text.should.match(/.*INVALID_DATA.*/);
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res).html;
+      expect(res.text).match(/.*INVALID_DATA.*/);
       done();
     });
   });
@@ -150,23 +150,23 @@ describe("page error", function () {
 
 describe("Cache-Control", function () {
   it("given handler", function () {
-    app.get('/test/cache-test', function (req, res) {
+    app.get('/test/cache-test', function (req, res, done) {
        res.send('<p>muse be cached</p>');
      });
   });
   it("none api request should return Cache-Control: private", function (done) {
     local.get('/test/cache-test').end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      res.get('Cache-Control').should.equal('private');
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res.get('Cache-Control')).equal('private');
       done();
     });
   });
   it("api should return Cache-Control: no-cache", function (done) {
     local.get('/api/hello').end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      res.get('Cache-Control').should.equal('no-cache');
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res.get('Cache-Control')).equal('no-cache');
       done();
     });
   });
@@ -174,7 +174,7 @@ describe("Cache-Control", function () {
 
 describe("echo-query-params", function () {
   it("given handler", function () {
-    app.get('/api/echo-query', function (req, res) {
+    app.get('/api/echo-query', function (req, res, done) {
       var obj = {};
       for(var p in req.query) {
         obj[p] = req.query[p];
@@ -184,9 +184,9 @@ describe("echo-query-params", function () {
   });
   it("should success", function (done) {
     local.get('/api/echo-query?p1&p2=123').end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      res.body.should.eql({
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res.body).eql({
         p1: '',
         p2: '123'
       });
@@ -212,12 +212,12 @@ describe("middleware", function () {
       done(new Error("some error"));
     }
     
-    app.get('/api/mw-1-2', mid1, mid2, function (req, res) {
+    app.get('/api/mw-1-2', mid1, mid2, function (req, res, done) {
       result.mid3 = 'ok';
       res.json({});
     });
 
-    app.get('/api/mw-1-err-2', mid1, miderr, mid2, function (req, res) {
+    app.get('/api/mw-1-err-2', mid1, miderr, mid2, function (req, res, done) {
       result.mid3 = 'ok';
       res.json({});
     });
@@ -225,22 +225,22 @@ describe("middleware", function () {
   it("mw-1-2 should return 1, 2", function (done) {
     result = {};
     local.get('/api/mw-1-2').end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      should.exist(result.mid1);
-      should.exist(result.mid2);
-      should.exist(result.mid3);
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(result.mid1).exist;
+      expect(result.mid2).exist;
+      expect(result.mid3).exist;
       done();
     });
   });
   it("mw-1-err-2 should return 1, 2", function (done) {
     result = {};
     local.get('/api/mw-1-err-2').end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      should.exist(result.mid1);
-      should.not.exist(result.mid2);
-      should.not.exist(result.mid3);
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(result.mid1).exist;
+      expect(result.mid2).not.exist;
+      expect(result.mid3).not.exist;
       done();
     });
   });

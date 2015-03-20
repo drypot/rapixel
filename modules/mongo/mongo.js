@@ -6,6 +6,7 @@ var init = require('../base/init');
 var config = require('../base/config');
 
 var opt = {};
+var db;
 
 exports = module.exports = function (_opt) {
   for(var p in _opt) {
@@ -15,39 +16,30 @@ exports = module.exports = function (_opt) {
 };
 
 init.add(function (done) {
-  
-  function open(done) {
-    var server = new Server('localhost', 27017, { auto_reconnect: true } );
-    var client = new MongoClient(server);
-
-    client.open(function (err) {
-      var db = exports.db = client.db(config.mongoDb);
-      console.log('mongo: ' + db.databaseName);
-      if (config.mongoUser) {
-        return db.authenticate(config.mongoUser, config.mongoPassword, function(err, res) {
-          if (err) return done(err);
-          done();
-        });
-      }
-      done();
-    });
-  }
-
-  function drop(done) {
-    if (opt.dropDatabase) {
-      return exports.db.dropDatabase(function (err) {
+  var server = new Server('localhost', 27017, { auto_reconnect: true } );
+  var client = new MongoClient(server);
+  client.open(function (err) {
+    db = exports.db = client.db(config.mongoDb);
+    console.log('mongo: ' + db.databaseName);
+    if (config.mongoUser) {
+      return db.authenticate(config.mongoUser, config.mongoPassword, function(err, res) {
         if (err) return done(err);
-        console.log('mongo: dropped db');
-        done() 
+        done();
       });
     }
     done();
-  }
-
-  open(function (err) {
-    if (err) return done(err);
-    drop(done);
   });
+});
+
+init.add(function (done) {
+  if (opt.dropDatabase) {
+    return db.dropDatabase(function (err) {
+      if (err) return done(err);
+      console.log('mongo: dropped db');
+      done() 
+    });
+  }
+  done();
 });
 
 exports.ObjectID = ObjectID;

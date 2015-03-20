@@ -9,16 +9,9 @@ block content
     h1 Error
 
   .section
-    .sub-section
-      if err.message
-        | #{err.message}
-      else
-        | Unknown Error
-
-    .sub-section
-      pre.error-report
-        if err.code
-          | #{'Code: ' + err.code}
-          br
-        if err.stack
-          | !{err.stack.replace(/\n/g, '<br>')}
+    pre.error-report
+      if err.code
+        | #{'Code: ' + err.code}
+        br
+      if err.stack
+        | !{err.stack.replace(/\n/g, '<br>')}

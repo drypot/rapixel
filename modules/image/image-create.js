@@ -13,12 +13,12 @@ var site = require('../image/image-site');
 init.add(function () {
   var app = express2.app;
 
-  app.post('/api/images', function (req, res) {
-    usera.getUser(res, function (err, user) {
-      if (err) return res.jsonErr(err);
+  app.post('/api/images', function (req, res, done) {
+    usera.identifyUser(res, function (err, user) {
+      if (err) return done(err);
       var form = getForm(req.body);
       createImages(form, user, function (err, ids) {
-        if (err) return res.jsonErr(err);
+        if (err) return done(err);
         res.json({
           ids: ids
         });
@@ -26,8 +26,8 @@ init.add(function () {
     });
   });
 
-  app.get('/images/new', function (req, res) {
-    usera.getUser(res, function (err, user) {
+  app.get('/images/new', function (req, res, done) {
+    usera.identifyUser(res, function (err, user) {
       if (err) return res.renderErr(err);
       var now = new Date();
       getTicketCount(now, user, function (err, count, hours) {

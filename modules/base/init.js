@@ -4,12 +4,7 @@ var funcs = [];
 var tails = [];
 
 process.on('uncaughtException', function (err) {
-  console.error('UNCAUGHT EXCEPTION');
-  if (err.stack) {
-    console.error(err.stack);
-  } else {
-    console.error(util.inspect(err));
-  }
+  console.error(err.stack);
 });
 
 exports.reset = function () {
@@ -21,7 +16,7 @@ exports.add = function (func) {
   funcs.push(func);
 };
 
-exports.addTail = function (func) {
+exports.tail = function (func) {
   tails.unshift(func);
 };
 

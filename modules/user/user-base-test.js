@@ -1,8 +1,11 @@
-var should = require('should');
+var chai = require('chai');
+var expect = chai.expect;
+chai.use(require('chai-http'));
+chai.config.includeStack = true;
 
 var init = require('../base/init');
 var error = require('../base/error');
-var config = require('../base/config')({ path: 'config/rapixel-test.json' });
+var config = require('../base/config')({ path: 'config/test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
 var userb = require('../user/user-base');
 
@@ -16,6 +19,6 @@ describe("newId", function () {
     var id1 = userb.newId();
     var id2 = userb.newId();
     var id2 = userb.newId();
-    (id1 < id2).should.true;
+    expect(id1 < id2).true;
   });
 });

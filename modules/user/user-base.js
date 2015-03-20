@@ -1,3 +1,6 @@
+var bcrypt = require('bcrypt');
+var crypto = require('crypto');
+
 var init = require('../base/init');
 var error = require('../base/error');
 var fs2 = require('../base/fs');
@@ -39,14 +42,16 @@ init.add(function () {
   error.define('EMAIL_NOT_EXIST', '등록되지 않은 이메일입니다.', 'email');
 });
 
-init.add(function (done) {
-  exports.users = mongo.db.collection("users");
+var users;
 
-  exports.users.ensureIndex({ email: 1 }, function (err) {
+init.add(function (done) {
+  users = exports.users = mongo.db.collection("users");
+
+  users.ensureIndex({ email: 1 }, function (err) {
     if (err) return done(err);
-    exports.users.ensureIndex({ namel: 1 }, function (err) {
+    users.ensureIndex({ namel: 1 }, function (err) {
       if (err) return done(err);
-      exports.users.ensureIndex({ homel: 1 }, done);
+      users.ensureIndex({ homel: 1 }, done);
     });
   });
 });
@@ -59,7 +64,7 @@ init.add(function (done) {
     sort: { _id: -1 },
     limit: 1
   }
-  exports.users.find({}, opt).nextObject(function (err, obj) {
+  users.find({}, opt).nextObject(function (err, obj) {
     if (err) return done(err);
     userId = obj ? obj._id : 0;
     console.log('user-base: user id = ' + userId);
@@ -75,3 +80,11 @@ init.add(function (done) {
 exports.newId = function () {
   return ++userId;
 };
+
+exports.makeHash = function (password) {
+  return bcrypt.hashSync(password, 10);
+}
+
+exports.checkPassword = function (password, hash) {
+  return bcrypt.compareSync(password, hash);
+}

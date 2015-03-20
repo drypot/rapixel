@@ -1,4 +1,7 @@
-var expect = require('chai').expect;
+var chai = require('chai');
+var expect = chai.expect;
+chai.config.includeStack = true;
+
 var fs = require('fs');
 
 var fs2 = require('../base/fs');
@@ -115,7 +118,7 @@ describe("makeDirs", function () {
   it("can make dir", function (done) {
     expect(fs.existsSync(testdir + '/sub1')).be.false;
     fs2.makeDirs(testdir, 'sub1', function (err, dir) {
-      expect(err).null;
+      expect(err).not.exist;
       expect(dir).equal(testdir + '/sub1');
       expect(fs.existsSync(testdir + '/sub1')).be.true;
       done();
@@ -124,7 +127,7 @@ describe("makeDirs", function () {
   it("can make dir in existing dir", function (done) {
     expect(fs.existsSync(testdir + '/sub1/sub2')).be.false;
     fs2.makeDirs(testdir, 'sub1', 'sub2', function (err, dir) {
-      expect(err).null;
+      expect(err).not.exist;
       expect(dir).equal(testdir + '/sub1/sub2');
       expect(fs.existsSync(testdir + '/sub1/sub2')).be.true;
       done();
@@ -133,7 +136,7 @@ describe("makeDirs", function () {
   it("can make dirs with array ", function (done) {
     expect(fs.existsSync(testdir + '/ary1/ary2/ary3')).be.false;
     fs2.makeDirs(testdir, [ 'ary1', 'ary2', 'ary3' ], function (err, dir) {
-      expect(err).null;
+      expect(err).not.exist;
       expect(dir).equal(testdir + '/ary1/ary2/ary3');
       expect(fs.existsSync(testdir + '/ary1/ary2/ary3')).be.true;
       done();
@@ -142,7 +145,7 @@ describe("makeDirs", function () {
   it("can make dirs with string ", function (done) {
     expect(fs.existsSync(testdir + '/str1/str2/str3')).be.false;
     fs2.makeDirs(testdir, 'str1/str2/str3', function (err, dir) {
-      expect(err).null;
+      expect(err).not.exist;
       expect(dir).equal(testdir + '/str1/str2/str3');
       expect(fs.existsSync(testdir + '/str1/str2/str3')).be.true;
       done();
@@ -151,7 +154,7 @@ describe("makeDirs", function () {
   it("can make dirs with string and array ", function (done) {
     expect(fs.existsSync(testdir + '/c1/c2/c3/c4/c5')).be.false;
     fs2.makeDirs(testdir, 'c1', [ 'c2', 'c3' ], 'c4/c5', function (err, dir) {
-      expect(err).null;
+      expect(err).not.exist;
       expect(dir).equal(testdir + '/c1/c2/c3/c4/c5');
       expect(fs.existsSync(testdir + '/c1/c2/c3/c4/c5')).be.true;
       done();

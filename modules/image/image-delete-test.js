@@ -1,10 +1,14 @@
-var should = require('should');
+var chai = require('chai');
+var expect = chai.expect;
+chai.use(require('chai-http'));
+chai.config.includeStack = true;
+
 var fs = require('fs');
 
 var init = require('../base/init');
 var error = require('../base/error');
 var fs2 = require('../base/fs');
-var config = require('../base/config')({ path: 'config/rapixel-test.json' });
+var config = require('../base/config')({ path: 'config/test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
 var express2 = require('../main/express');
 var upload = require('../upload/upload');
@@ -31,13 +35,13 @@ describe("deleting", function () {
     imageb.images.remove(done);
   });
   it("given user1 session", function (done) {
-    userf.loginUser1(done);
+    userf.login('user1', done);
   });
   it("and image", function (done) {
     local.post('/api/upload').attach('files', _f1).end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      should.not.exist(res.body.err);
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res.body.err).not.exist;
       _files = res.body.files;
       done();
     });
@@ -46,9 +50,9 @@ describe("deleting", function () {
     this.timeout(30000);
     var form = { files: _files, comment: 'image1' };
     local.post('/api/images').send(form).end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      should.not.exist(res.body.err);
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res.body.err).not.exist;
       should.exist(res.body.ids);
       _id = res.body.ids[0];
       done();
@@ -59,9 +63,9 @@ describe("deleting", function () {
     var p = imageb.getVersionPath(dir, _id, 3840);
     fs.existsSync(p).should.true;
     local.del('/api/images/' + _id, function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      should.not.exist(res.body.err);
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res.body.err).not.exist;
       fs.existsSync(p).should.false;
       done();
     });
@@ -71,7 +75,7 @@ describe("deleting", function () {
     var p = imageb.getVersionPath(dir, _id, 3840);
     fs.existsSync(p).should.false;
     imageb.images.findOne({ _id: _id }, function (err, image) {
-      should.not.exist(err);
+      expect(err).not.exist;
       should.not.exist(image);
       done();
     });
@@ -83,13 +87,13 @@ describe("deleting by admin", function () {
     imageb.images.remove(done);
   });
   it("given user1 session", function (done) {
-    userf.loginUser1(done);
+    userf.login('user1', done);
   });
   it("and image", function (done) {
     local.post('/api/upload').attach('files', _f1).end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      should.not.exist(res.body.err);
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res.body.err).not.exist;
       _files = res.body.files;
       done();
     });
@@ -98,25 +102,25 @@ describe("deleting by admin", function () {
     this.timeout(30000);
     var form = { files: _files, comment: 'image1' };
     local.post('/api/images').send(form).end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      should.not.exist(res.body.err);
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res.body.err).not.exist;
       should.exist(res.body.ids);
       _id = res.body.ids[0];
       done();
     });
   });
   it("and admin session", function (done) {
-    userf.loginAdmin(done);
+    userf.login('admin', done);
   });
   it("and deleted", function (done) {
     var dir = imageb.getImageDir(_id);
     var p = imageb.getVersionPath(dir, _id, 3840);
     fs.existsSync(p).should.true;
     local.del('/api/images/' + _id, function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      should.not.exist(res.body.err);
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res.body.err).not.exist;
       done();
     });
   });
@@ -125,7 +129,7 @@ describe("deleting by admin", function () {
     var p = imageb.getVersionPath(dir, _id, 3840);
     fs.existsSync(p).should.false;
     imageb.images.findOne({ _id: _id }, function (err, image) {
-      should.not.exist(err);
+      expect(err).not.exist;
       should.not.exist(image);
       done();
     });
@@ -137,13 +141,13 @@ describe("deleting other's image", function () {
     imageb.images.remove(done);
   });
   it("given user1 session", function (done) {
-    userf.loginUser1(done);
+    userf.login('user1', done);
   });
   it("and image", function (done) {
     local.post('/api/upload').attach('files', _f1).end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      should.not.exist(res.body.err);
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res.body.err).not.exist;
       _files = res.body.files;
       done();
     });
@@ -152,25 +156,25 @@ describe("deleting other's image", function () {
     this.timeout(30000);
     var form = { files: _files, comment: 'hello' };
     local.post('/api/images').send(form).end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      should.not.exist(res.body.err);
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res.body.err).not.exist;
       should.exist(res.body.ids);
       _id = res.body.ids[0];
       done();
     });
   });
   it("and user2 session", function (done) {
-    userf.loginUser2(done);
+    userf.login('user2', done);
   });
   it("deleting should fail", function (done) {
     var dir = imageb.getImageDir(_id);
     var p = imageb.getVersionPath(dir, _id, 3840);
     fs.existsSync(p).should.true;
     local.del('/api/images/' + _id, function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      should.exist(res.body.err);
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res.body.err).exist;
       error.find(res.body.err, error.NOT_AUTHORIZED).should.true;
       done();
     });
@@ -180,7 +184,7 @@ describe("deleting other's image", function () {
     var p = imageb.getVersionPath(dir, _id, 3840);
     fs.existsSync(p).should.true;
     imageb.images.findOne({ _id: _id }, function (err, image) {
-      should.not.exist(err);
+      expect(err).not.exist;
       should.exist(image);
       done();
     });

@@ -1,4 +1,8 @@
-var should = require('should');
+var chai = require('chai');
+var expect = chai.expect;
+chai.use(require('chai-http'));
+chai.config.includeStack = true;
+
 var fs = require('fs');
 
 var init = require('../base/init');
@@ -23,7 +27,7 @@ before(function () {
 });
 
 before(function (done) {
-  userf.loginUser1(done);
+  userf.login('user1', done);
 });
 
 before(function (done) {
@@ -46,9 +50,9 @@ describe("posting", function () {
     this.timeout(30000);
     var form = { files: _files, comment: 'image1' };
     local.post('/api/images').send(form).end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      should.not.exist(res.body.err);
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res.body.err).not.exist;
       should.exist(res.body.ids);
       _ids = res.body.ids;
       done();
@@ -57,7 +61,7 @@ describe("posting", function () {
   it("versions should exist", function (done) {
     var _id = _ids[0];
     imageb.images.findOne({ _id: _id }, function (err, image) {
-      should.not.exist(err);
+      expect(err).not.exist;
       image._id.should.equal(_id);
       image.uid.should.equal(userf.user1._id);
       image.fname.should.equal('1440x810-169.jpg');
@@ -92,9 +96,9 @@ describe("posting", function () {
     this.timeout(30000);
     var form = { files: _files, comment: 'image3' };
     local.post('/api/images').send(form).end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      should.not.exist(res.body.err);
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res.body.err).not.exist;
       should.exist(res.body.ids);
       res.body.ids.should.length(3);
       _ids = res.body.ids;
@@ -104,7 +108,7 @@ describe("posting", function () {
   it("first versions should exist", function (done) {
     var _id = _ids[0];
     imageb.images.findOne({ _id: _id }, function (err, image) {
-      should.not.exist(err);
+      expect(err).not.exist;
       image._id.should.equal(_id);
       image.uid.should.equal(userf.user1._id);
       image.fname.should.equal('1280x720-169.jpg');
@@ -122,7 +126,7 @@ describe("posting", function () {
   it("third versions should exist", function (done) {
     var _id = _ids[2];
     imageb.images.findOne({ _id: _id }, function (err, image) {
-      should.not.exist(err);
+      expect(err).not.exist;
       image._id.should.equal(_id);
       image.uid.should.equal(userf.user1._id);
       image.fname.should.equal('1280x720-169.jpg');
@@ -153,9 +157,9 @@ describe("posting", function () {
   it("and posted", function (done) {
     var form = { files: _files };
     local.post('/api/images').send(form).end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      should.not.exist(res.body.err);
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res.body.err).not.exist;
       should.exist(res.body.ids);
       res.body.ids.should.length(config.ticketMax);
       done();
@@ -170,9 +174,9 @@ describe("posting", function () {
   it("should receive empty ids", function (done) {
     var form = { files: _files };
     local.post('/api/images').send(form).end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      should.not.exist(res.body.err);
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res.body.err).not.exist;
       should.exist(res.body.ids);
       res.body.ids.should.length(0);
       done();
@@ -194,9 +198,9 @@ describe("posting", function () {
   it("should fail", function (done) {
     var form = { files: _files };
     local.post('/api/images').send(form).end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      should.exist(res.body.err);
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res.body.err).exist;
       error.find(res.body.err, error.IMAGE_SIZE).should.true;
       done();
     });
@@ -217,9 +221,9 @@ describe("posting", function () {
   it("should fail", function (done) {
     var form = { files: _files };
     local.post('/api/images').send(form).end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      should.exist(res.body.err);
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res.body.err).exist;
       error.find(res.body.err, error.IMAGE_TYPE).should.true;
       done();
     });
@@ -233,9 +237,9 @@ describe("posting with no file", function () {
   it("should fail", function (done) {
     var form = { };
     local.post('/api/images').send(form).end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      should.exist(res.body.err);
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res.body.err).exist;
       error.find(res.body.err, error.IMAGE_NO_FILE).should.true;
       done();
     });

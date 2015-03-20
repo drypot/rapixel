@@ -9,25 +9,25 @@ var usera = require('../user/user-auth');
 init.add(function () {
   var app = express2.app;
 
-  app.put('/api/users/:id([0-9]+)', function (req, res) {
-    usera.getUser(res, function (err, user) {
-      if (err) return res.jsonErr(err);
+  app.put('/api/users/:id([0-9]+)', function (req, res, done) {
+    usera.identifyUser(res, function (err, user) {
+      if (err) return done(err);
       var id = parseInt(req.params.id) || 0;
       var form = userc.getForm(req.body);
       updateUser(id, user, form, function (err) {
-        if (err) return res.jsonErr(err);
+        if (err) return done(err);
         res.json({});
       })
     });
   });
 
-  app.get('/users/:id([0-9]+)/update', function (req, res) {
-    usera.getUser(res, function (err, user) {
+  app.get('/users/:id([0-9]+)/update', function (req, res, done) {
+    usera.identifyUser(res, function (err, user) {
       if (err) return res.renderErr(err);
       var id = parseInt(req.params.id) || 0;
       exports.checkUpdatable(id, user, function (err) {
         if (err) return res.renderErr(err);
-        userv.getCached(id, function (err, tuser) {
+        usera.getCached(id, function (err, tuser) {
           if (err) return res.renderErr(err);
           res.render('user/user-update', {
             tuser: tuser
@@ -54,7 +54,7 @@ function updateUser(id, user, form, done) {
         profile: form.profile
       };
       if (form.password.length) {
-        fields.hash = userc.makeHash(form.password);
+        fields.hash = userb.makeHash(form.password);
       }
       userb.users.update({ _id: id }, { $set: fields }, function (err, cnt) {
         if (err) return done(err);

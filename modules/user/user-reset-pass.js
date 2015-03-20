@@ -12,23 +12,23 @@ var userc = require('../user/user-create');
 init.add(function () {
   var app = express2.app;
 
-  app.post('/api/reset-pass', function (req, res) {
+  app.post('/api/reset-pass', function (req, res, done) {
     var form = getStep1Form(req);
     step1(form, function (err) {
-      if (err) return res.jsonErr(err);
+      if (err) return done(err);
       res.json({});
     });
   });
 
-  app.put('/api/reset-pass', function (req, res) {
+  app.put('/api/reset-pass', function (req, res, done) {
     var form = getStep2Form(req);
     step2(form, function (err) {
-      if (err) return res.jsonErr(err);
+      if (err) return done(err);
       res.json({});
     });
   });
 
-  app.get('/users/reset-pass', function (req, res) {
+  app.get('/users/reset-pass', function (req, res, done) {
     res.render('user/user-reset-pass');
   });
 });
@@ -112,7 +112,7 @@ function step2(form, done) {
 };
 
 exports.updateHash = function (email, password, excludeAdmin, done) {
-  var hash = userc.makeHash(password);
+  var hash = userb.makeHash(password);
   var query = { email: email };
   if (excludeAdmin) {
     query.admin = { $exists: false };

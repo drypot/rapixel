@@ -1,8 +1,11 @@
-var should = require('should');
+var chai = require('chai');
+var expect = chai.expect;
+chai.use(require('chai-http'));
+chai.config.includeStack = true;
 
 var init = require('../base/init');
 var error = require('../base/error');
-var config = require('../base/config')({ path: 'config/rapixel-test.json' });
+var config = require('../base/config')({ path: 'config/test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
 var express2 = require('../main/express');
 var userb = require('../user/user-base');
@@ -16,10 +19,10 @@ before(function (done) {
 
 describe("emailx test", function () {
   it("should success", function () {
-    userc.emailx.test("abc.mail.com").should.false;
-    userc.emailx.test("abc*xyz@mail.com").should.false;
-    userc.emailx.test("-a-b-c_d-e-f@mail.com").should.true;
-    userc.emailx.test("develop.bj@mail.com").should.true;
+    expect(userc.emailx.test("abc.mail.com")).false;
+    expect(userc.emailx.test("abc*xyz@mail.com")).false;
+    expect(userc.emailx.test("-a-b-c_d-e-f@mail.com")).true;
+    expect(userc.emailx.test("develop.bj@mail.com")).true;
   });
 });
 
@@ -29,207 +32,191 @@ describe("newId", function () {
     var id1 = userb.newId();
     var id2 = userb.newId();
     var id2 = userb.newId();
-    (id1 < id2).should.true;
-  });
-});
-
-describe("preparing Name1", function (done) {
-  it("should success", function (done) {
-    var users = [
-      { _id: userb.newId(), name: 'Name1', namel: 'name1', home: 'Home1', homel: 'home1', email: 'mail1@mail.com' }
-    ];
-    userb.users.insert(users, done);      
+    expect(id1 < id2).true;
   });
 });
 
 describe("creating user / name check", function () {
-  it("given NameTest", function (done) {
-    var form = { name: 'NameTest', email: 'nametest@mail.com', password: '1234' };
+  it("given Name1", function (done) {
+    var form = { name: 'Name1', email: 'nametest9980@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
-      should.not.exist(res.body.err);
-      done();
+      expect(res.body.err).not.exist;
+      userb.users.findOne({ _id: res.body.id }, function (err, user) {
+        expect(err).not.exist;
+        expect(user.name).equal('Name1');
+        expect(user.namel).equal('name1');
+        expect(user.home).equal('Name1');
+        expect(user.homel).equal('name1');
+        var fields = {
+          home: 'Home1',
+          homel: 'home1',
+        };
+        userb.users.update({ _id: res.body.id }, { $set: fields }, function (err, cnt) {
+          expect(err).not.exist;
+          expect(cnt).above(0);
+          done();
+        });
+      });
     });
   });
-  it("NameTest should exist", function (done) {
-    userb.users.findOne({ email: 'nametest@mail.com' }, function (err, user) {
-      should.not.exist(err);
-      user.name.should.equal('NameTest');
-      user.namel.should.equal('nametest');
-      user.home.should.equal('NameTest');
-      user.homel.should.equal('nametest');
-      done();
-    });
-  });
-  it("shoud success NameTest2", function (done) {
-    var form = { name: 'NameTest2', email: 'nametest2@mail.com', password: '1234' };
-    local.post('/api/users').send(form).end(function (err,res) {
-      should.not.exist(res.body.err);
-      done();
-    });
-  });
-  it("should fail with same name NAME1", function (done) {
+  it("duped NAME1 should fail", function (done) {
     var form = { name: 'NAME1', email: 'nametest9837@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
-      should.exist(res.body.err);
-      error.find(res.body.err, error.NAME_DUPE).should.true;
+      expect(res.body.err).exist;
+      expect(error.find(res.body.err, error.NAME_DUPE)).true;
       done();
     });
   });
-  it("should fail with same name to HOME1", function (done) {
+  it("duped HOME1 should fail", function (done) {
     var form = { name: 'HOME1', email: 'nametest4329@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
-      should.exist(res.body.err);
-      error.find(res.body.err, error.NAME_DUPE).should.true;
+      expect(res.body.err).exist;
+      expect(error.find(res.body.err, error.NAME_DUPE)).true;
       done();
     });
   });
-  it("should success when name length 2", function (done) {
+  it("length 2 name should success", function (done) {
     var form = { name: '12', email: 'nametest4783@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
-      res.error.should.false;
-      should.not.exist(res.body.err);
-      should.exist(res.body.id);
+      expect(res.error).false;
+      expect(res.body.err).not.exist;
       done();
     });
   });
-  it("should success when name length 32", function (done) {
+  it("length 32 name should success", function (done) {
     var form = { name: '12345678901234567890123456789012', email: 'nametest9928@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
-      res.error.should.false;
-      should.not.exist(res.body.err);
+      expect(res.error).false;
+      expect(res.body.err).not.exist;
       done();
     });
   });
-  it("should fail when name empty", function (done) {
+  it("empty name should fail", function (done) {
     var form = { name: '', email: 'nametest2243@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
-      res.error.should.false;
-      error.find(res.body.err, error.NAME_EMPTY).should.true;
+      expect(res.error).false;
+      expect(error.find(res.body.err, error.NAME_EMPTY)).true;
       done();
     });
   });
-  it("should fail when name short", function (done) {
+  it("length 1 name should fail", function (done) {
     var form = { name: 'a', email: 'nametest3492@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
-      res.error.should.false;
-      should.exist(res.body.err);
-      error.find(res.body.err, error.NAME_RANGE).should.true;
+      expect(res.error).false;
+      expect(res.body.err).exist;
+      expect(error.find(res.body.err, error.NAME_RANGE)).true;
       done();
     });
   });
-  it("should fail when name long", function (done) {
+  it("long name should fail", function (done) {
     var form = { name: '123456789012345678901234567890123', email: 'nametest7762@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
-      res.error.should.false;
-      should.exist(res.body.err);
-      error.find(res.body.err, error.NAME_RANGE).should.true;
+      expect(res.error).false;
+      expect(res.body.err).exist;
+      expect(error.find(res.body.err, error.NAME_RANGE)).true;
       done();
     });
   });
 });
 
 describe("creating user / email check", function () {
-  it("should success", function (done) {
-    var form = { name: 'mailtest', email: 'mailtest1@mail.com', password: '1234' };
+  it("given mail1@mail.com", function (done) {
+    var form = { name: 'mailtest2084', email: 'mail1@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
-      res.error.should.false;
-      should.not.exist(res.body.err);
+      expect(res.body.err).not.exist;
       done();
     });
   });
-  it("should fail with same email mail1@gmail.com", function (done) {
+  it("duped mail1@mail.com should fail", function (done) {
     var form = { name: 'mailtest8724', email: 'mail1@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
-      res.error.should.false;
-      should.exist(res.body.err);
-      error.find(res.body.err, error.EMAIL_DUPE).should.true;
+      expect(res.error).false;
+      expect(res.body.err).exist;
+      expect(error.find(res.body.err, error.EMAIL_DUPE)).true;
       done();
     });
   });
-  it("should success with different case Mail1@gmail.com", function (done) {
+  it("different case should success", function (done) {
     var form = { name: 'mailtest0098', email: 'Mail1@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
-      res.error.should.false;
-      should.not.exist(res.body.err);
+      expect(res.error).false;
+      expect(res.body.err).not.exist;
       done();
     });
   });
-  it("should fail when email invalid", function (done) {
+  it("invalid email should fail", function (done) {
     var form = { name: 'mailtest9938', email: 'abc.mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
-      res.error.should.false;
-      should.exist(res.body.err);
-      error.find(res.body.err, error.EMAIL_PATTERN).should.true;
+      expect(res.error).false;
+      expect(res.body.err).exist;
+      expect(error.find(res.body.err, error.EMAIL_PATTERN)).true;
       done();
     });
   });
-  it("should fail when email invalid", function (done) {
+  it("invalid email should fail", function (done) {
     var form = { name: 'mailtest2342', email: 'abc*xyz@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
-      res.error.should.false;
-      should.exist(res.body.err);
-      error.find(res.body.err, error.EMAIL_PATTERN).should.true;
+      expect(res.error).false;
+      expect(res.body.err).exist;
+      expect(error.find(res.body.err, error.EMAIL_PATTERN)).true;
       done();
     });
   });
-  it("should success with dash", function (done) {
+  it("dash should success", function (done) {
     var form = { name: 'mailtest1124', email: '-a-b-c_d-e-f@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
-      res.error.should.false;
-      should.not.exist(res.body.err);
+      expect(res.error).false;
+      expect(res.body.err).not.exist;
       done();
     });
   });
-  it("should success with +", function (done) {
+  it("+ should success", function (done) {
     var form = { name: 'mailtest5836', email: 'abc+xyz@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
-      res.error.should.false;
-      should.not.exist(res.body.err);
+      expect(res.error).false;
+      expect(res.body.err).not.exist;
       done();
     });
   });
 });
 
 describe("creating user / password check", function () {
-  it("given user", function (done) {
+  it("should success", function (done) {
     var form = { name: 'passtest3847', email: 'passtest3847@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
-      should.not.exist(res.body.err);
-      done();
+      expect(res.body.err).not.exist;
+      userb.users.findOne({ _id: res.body.id }, function (err, user) {
+        expect(err).not.exist;
+        expect(user.name).equal('passtest3847');
+        expect(userb.checkPassword('1234', user.hash)).true;
+        expect(userb.checkPassword('4444', user.hash)).false;
+        done();
+      });
     });
   });
-  it("user should exist", function (done) {
-    userb.users.findOne({ email: 'passtest3847@mail.com' }, function (err, user) {
-      should.not.exist(err);
-      user.name.should.equal('passtest3847');
-      userc.checkPassword('1234', user.hash).should.true;
-      userc.checkPassword('4444', user.hash).should.false;
-      done();
-    });
-  });
-  it("should fail when password short", function (done) {
+  it("short password should fail", function (done) {
     var form = { name: 'passtet8792', email: 'passtet8792@mail.com', password: '123' };
     local.post('/api/users').send(form).end(function (err,res) {
-      res.error.should.false;
-      should.exist(res.body.err);
-      error.find(res.body.err, error.PASSWORD_RANGE).should.true;
+      expect(res.error).false;
+      expect(res.body.err).exist;
+      expect(error.find(res.body.err, error.PASSWORD_RANGE)).true;
       done();
     });
   });
-  it("should fail when password long", function (done) {
+  it("long password should fail", function (done) {
     var form = { name: 'passtest9909', email: 'passtest9909@mail.com', password: '123456789012345678901234567890123' };
     local.post('/api/users').send(form).end(function (err,res) {
-      res.error.should.false;
-      should.exist(res.body.err);
-      error.find(res.body.err, error.PASSWORD_RANGE).should.true;
+      expect(res.error).false;
+      expect(res.body.err).exist;
+      expect(error.find(res.body.err, error.PASSWORD_RANGE)).true;
       done();
     });
   });
-  it("should success when password 32", function (done) {
+  it("lenth 32 password should success", function (done) {
     var form = { name: 'passtest3344', email: 'passtest3344@mail.com', password: '12345678901234567890123456789012' };
     local.post('/api/users').send(form).end(function (err,res) {
-      res.error.should.false;
-      should.not.exist(res.body.err);
+      expect(res.error).false;
+      expect(res.body.err).not.exist;
       done();
     });
   });

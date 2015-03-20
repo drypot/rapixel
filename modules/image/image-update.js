@@ -14,23 +14,23 @@ var site = require('../image/image-site');
 init.add(function () {
   var app = express2.app;
 
-  app.put('/api/images/:id([0-9]+)', function (req, res) {
-    usera.getUser(res, function (err, user) {
-      if (err) return res.jsonErr(err);
+  app.put('/api/images/:id([0-9]+)', function (req, res, done) {
+    usera.identifyUser(res, function (err, user) {
+      if (err) return done(err);
       var id = parseInt(req.params.id) || 0;
       var form = imagec.getForm(req.body);
       exports.checkUpdatable(id, user, function (err) {
-        if (err) return res.jsonErr(err);
+        if (err) return done(err);
         exports.updateImage(id, form, function (err) {
-          if (err) return res.jsonErr(err);
+          if (err) return done(err);
           res.json({});
         });
       });
     });
   });
 
-  app.get('/images/:id([0-9]+)/update', function (req, res) {
-    usera.getUser(res, function (err, user) {
+  app.get('/images/:id([0-9]+)/update', function (req, res, done) {
+    usera.identifyUser(res, function (err, user) {
       if (err) return res.renderErr(err);
       var id = parseInt(req.params.id) || 0;
       exports.checkUpdatable(id, user, function (err, image) {

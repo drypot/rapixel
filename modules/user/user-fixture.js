@@ -1,4 +1,4 @@
-var should = require('should');
+var expect = require('chai').expect;
 
 var init = require('../base/init');
 var userc = require('../user/user-create');
@@ -6,80 +6,36 @@ var local = require('../main/local');
 
 init.add(function (done) {
   var forms = [
-    { en:'user1', name: 'testuser', email: 'abc@def.com', password: '1234' },
-    { en:'user2', name: 'testuser2', email: 'abc2@def.com', password: '1234' },
-    { en:'user3', name: 'testuser3', email: 'abc3@def.com', password: '1234' },
-    { en:'admin', name: 'testadmin', email: 'admin@def.com', password: '1234', admin: true }
+    { name: 'user1', email: 'abc@def.com', password: '1234' },
+    { name: 'user2', email: 'abc2@def.com', password: '1234' },
+    { name: 'user3', email: 'abc3@def.com', password: '1234' },
+    { name: 'admin', email: 'admin@def.com', password: '1234', admin: true }
   ];
   var i = 0;
   function create() {
     if (i == forms.length) return done();
     var form = forms[i++];
     userc.createUser(form, function (err, user) {
-      should.not.exist(err);
+      expect(err).not.exist;
       user.password = form.password;
-      exports[form.en] = user;
+      exports[form.name] = user;
       setImmediate(create);
     });
   }
   create();
 });
 
+exports.login = function (name, remember, done) {
+  var remember;
+  if (arguments.length == 2) {
+    done = remember;
+    remember = false;
+  }
+  var user = exports[name];
+  var form = { email: user.email, password: user.password, remember: remember };
+  local.post('/api/session').send(form).end(done);
+};
+
 exports.logout = function (done) {
-  local.del('/api/sessions', function (err, res) {
-    should.not.exist(err);
-    res.error.should.false;
-    should.not.exist(res.body.err);
-    done();
-  });
+  local.del('/api/session', done);
 }
-
-exports.loginUser1 = function (done) {
-  var form = { email: exports.user1.email, password: exports.user1.password };
-  local.post('/api/sessions').send(form).end(function (err, res) {
-    should.not.exist(err);
-    res.error.should.false;
-    should.not.exist(res.body.err);
-    done();
-  });
-};
-
-exports.loginUser1WithRemember = function (done) {
-  var form = { email: exports.user1.email, password: exports.user1.password, remember: true };
-  local.post('/api/sessions').send(form).end(function (err, res) {
-    should.not.exist(err);
-    res.error.should.false;
-    should.not.exist(res.body.err);
-    done();
-  });
-};
-
-exports.loginUser2 = function (done) {
-  var form = { email: exports.user2.email, password: exports.user2.password };
-  local.post('/api/sessions').send(form).end(function (err, res) {
-    should.not.exist(err);
-    res.error.should.false;
-    should.not.exist(res.body.err);
-    done();
-  });
-};
-
-exports.loginUser3 = function (done) {
-  var form = { email: exports.user3.email, password: exports.user3.password };
-  local.post('/api/sessions').send(form).end(function (err, res) {
-    should.not.exist(err);
-    res.error.should.false;
-    should.not.exist(res.body.err);
-    done();
-  });
-};
-
-exports.loginAdmin = function (done) {
-  var form = { email: exports.admin.email , password: exports.admin.password };
-  local.post('/api/sessions').send(form).end(function (err, res) {
-    should.not.exist(err);
-    res.error.should.false;
-    should.not.exist(res.body.err);
-    done();
-  });
-};

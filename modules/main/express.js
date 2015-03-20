@@ -1,4 +1,4 @@
-var should = require('should');
+var expect = require('chai').expect;
 var express = require('express');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
@@ -12,7 +12,7 @@ var config = require('../base/config');
 var app;
 
 init.add(function () {
-  app = exports.app = express();
+  app = express();
 
   // Set Middlewares
 
@@ -65,18 +65,28 @@ init.add(function () {
     done();
   });
 
-  if (exports.restoreLocalsUser) {
-    app.use(exports.restoreLocalsUser);
-  }
+  // 보통 init.add + init.tail 로 핸들러 구성 순서를 조율할 수 있으나
+  // 인증 미들웨어는 앞 부분에 위치할 필요가 있어 별로 라우터를 설치해 놓는다.
+  // user/user-auth.js 참고
+  //
+  // 핸들러 추가하는 순서에 원인을 찾을 수 없는 문제가 발생해서 exports.app 라우터를 별로도 둔다.
+  //
+  // 업데이트: user-auth redirect 미들웨어에서 done(err) 를 빼먹는 이유로 발생하던 문제인데
+  // export.app 전용 라우터를 두는 것이 깔끔해 보여서 그냥 두기로.
+  //
 
-  app.get('/api/hello', function (req, res) {
+  app.use(exports.before = express.Router());
+  app.use(exports.app = express.Router());
+  //app.use(exports.after = express.Router());
+  
+  app.get('/api/hello', function (req, res, done) {
     res.json({
       name: config.appName,
       time: Date.now()
     });
   });
 
-  app.get('/error', function (req, res) {
+  app.get('/error', function (req, res, done) {
     var err = new Error('Error Sample Page');
     err.code = 999;
     res.render('main/error', {
@@ -84,31 +94,28 @@ init.add(function () {
     });
   });
 
-});
-
-init.addTail(function () {
-  var emptyMatch = [''];  
   app.use(function (_err, req, res, done) {
     var err = {
       message: _err.message,
       code: _err.code,
       errors: _err.errors,
-      stack: _err.stack
     };
-    // console.log('..........');
-    // console.dir(_err);
-    // console.log('..........');
+    err.stack = ((_err.stack || '').match(/^(?:.*\n){1,8}/m) || [''])[0];
+    if (exports.logError) {
+      console.error('Code: ' + err.code);
+      console.error(err.stack);
+    }
     if (res.locals.api) {
-      err.stack = (_err.stack.match(/^(?:.*\n){1,6}/m) || emptyMatch)[0];
       res.json({ err: err });
     } else {
-      err.stack = (_err.stack.match(/^(?:.*\n){1,6}/m) || emptyMatch)[0].replace(/Error:.+\n/, '');
       res.render('main/error', { err: err });
     }
   });
 
   //app.use(errorHandler(/* {log: false} */));
+});
 
+init.tail(function () {
   app.listen(config.appPort);
   console.log('express: listening ' + config.appPort);
 });

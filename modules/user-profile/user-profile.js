@@ -9,14 +9,14 @@ var site = require('../image/image-site');
 init.add(function () {
   var app = express2.app;
 
-  app.get('/users/:id([0-9]+)', function (req, res) {
+  app.get('/users/:id([0-9]+)', function (req, res, done) {
     var id = parseInt(req.params.id) || 0;
     renderProfile(req, res, id);
   });
 
   app.get('/:name([^/]+)', function (req, res, done) {
     var homel = decodeURIComponent(req.params.name).toLowerCase();
-    userv.getCachedByHome(homel, function (err, user) {
+    usera.getCachedByHome(homel, function (err, user) {
       if (!user) return done();
       renderProfile(req, res, user._id);
     });
@@ -25,7 +25,7 @@ init.add(function () {
 
 function renderProfile(req, res, id) {
   var user = res.locals.user;
-  userv.getCached(id, function (err, tuser) {
+  usera.getCached(id, function (err, tuser) {
     if (err) return res.renderErr(err);
     var params = imagel.getParams(req);
     params.uid = id;

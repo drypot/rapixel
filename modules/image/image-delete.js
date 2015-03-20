@@ -13,14 +13,14 @@ var imageu = require('../image/image-update');
 init.add(function () {
   var app = express2.app;
 
-  app.delete('/api/images/:id([0-9]+)', function (req, res) {
-    usera.getUser(res, function (err, user) {
-      if (err) return res.jsonErr(err);
+  app.delete('/api/images/:id([0-9]+)', function (req, res, done) {
+    usera.identifyUser(res, function (err, user) {
+      if (err) return done(err);
       var id = parseInt(req.params.id) || 0;
       imageu.checkUpdatable(id, user, function (err) {
-        if (err) return res.jsonErr(err);
+        if (err) return done(err);
         delImage(id, function (err) {
-          if (err) return res.jsonErr(err);
+          if (err) return done(err);
           res.json({});
         });
       });

@@ -11,10 +11,10 @@ var site = require('../image/image-site');
 init.add(function () {
   var app = express2.app;
 
-  app.get('/api/images', function (req, res) {
+  app.get('/api/images', function (req, res, done) {
     var params = exports.getParams(req);
     exports.findImages(params, function (err, images, gt, lt) {
-      if (err) return res.jsonErr(err);
+      if (err) return done(err);
       res.json({
         images: images,
         gt: gt,
@@ -23,7 +23,7 @@ init.add(function () {
     });
   });
 
-  app.get('/', function (req, res) {
+  app.get('/', function (req, res, done) {
     var params = exports.getParams(req);
     exports.findImages(params, function (err, images, gt, lt) {
       if (err) return res.renderErr(err);
@@ -52,7 +52,7 @@ exports.findImages = function (params, done) {
 };
 
 function modify(image, done) {
-  userv.getCached(image.uid, function (err, user) {
+  usera.getCached(image.uid, function (err, user) {
     if (err) return done(err);
     image.user = {
       _id: user._id,

@@ -12,6 +12,8 @@ exports = module.exports = function (_opt) {
   return exports;
 };
 
+exports.development = process.env.NODE_ENV != 'production';
+
 init.add(function (done) {
   var path = opt.path || undefined;
 

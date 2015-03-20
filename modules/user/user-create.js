@@ -1,6 +1,3 @@
-var bcrypt = require('bcrypt');
-var crypto = require('crypto');
-
 var init = require('../base/init');
 var error = require('../base/error');
 var express2 = require('../main/express');
@@ -9,30 +6,22 @@ var userb = require('../user/user-base');
 init.add(function () {
   var app = express2.app;
 
-  app.post('/api/users', function (req, res) {
+  app.post('/api/users', function (req, res, done) {
     var form = getForm(req.body);
     createUser(form, function (err, user) {
-      if (err) return res.jsonErr(err);
+      if (err) return done(err);
       res.json({
         id: user._id
       });
     });
   });
 
-  app.get('/users/register', function (req, res) {
+  app.get('/users/register', function (req, res, done) {
     res.render('user/user-create');
   });
 });
 
 var emailx = exports.emailx = /^[a-z0-9-_+.]+@[a-z0-9-]+(\.[a-z0-9-]+)+$/i
-
-var makeHash = exports.makeHash = function (password) {
-  return bcrypt.hashSync(password, 10);
-}
-
-var checkPassword = exports.checkPassword = function (password, hash) {
-  return bcrypt.compareSync(password, hash);
-}
 
 var getForm = exports.getForm = function (body) {
   var form = {};
@@ -57,7 +46,7 @@ var createUser = exports.createUser = function (form, done) {
       home: form.home,
       homel: form.homel,
       email: form.email,
-      hash: makeHash(form.password),
+      hash: userb.makeHash(form.password),
       status: 'v',
       cdate: now,
       adate: now,

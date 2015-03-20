@@ -6,7 +6,7 @@ init.add(function () {
     var $form = formty.getForm('form.main');
     $form.$email.focus();
     $form.$send.click(function () {
-      formty.post('/api/sessions', $form, function () {
+      formty.post('/api/session', $form, function () {
         // formty.method 에서 에러처리 함
         location = '/';
       });
@@ -15,7 +15,7 @@ init.add(function () {
   };
 
   userl.logout = function () {
-    request.del('/api/sessions').end(function (err, res) {
+    request.del('/api/session').end(function (err, res) {
       // formty.method 와 달리 agent 에러는 직접 처리
       err = err || res.error || res.body.err;
       if (err) return showError(err);

@@ -1,4 +1,8 @@
-var should = require('should');
+var chai = require('chai');
+var expect = chai.expect;
+chai.use(require('chai-http'));
+chai.config.includeStack = true;
+
 var fs = require('fs');
 
 var init = require('../base/init');
@@ -19,7 +23,7 @@ before(function (done) {
 });
 
 before(function (done) {
-  userf.loginUser1(done);
+  userf.login('user1', done);
 });
 
 before(function (done) {
@@ -39,9 +43,9 @@ describe("updating", function () {
     this.timeout(30000);
     var form = { files: _files, comment: 'image1' };
     local.post('/api/images').send(form).end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      should.not.exist(res.body.err);
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res.body.err).not.exist;
       should.exist(res.body.ids);
       res.body.ids.length.should.equal(1);
       _id = res.body.ids[0];
@@ -50,7 +54,7 @@ describe("updating", function () {
   });
   it("versions should exist", function (done) {
     imageb.images.findOne({ _id: _id }, function (err, image) {
-      should.not.exist(err);
+      expect(err).not.exist;
       should.exist(image);
       image.fname.should.equal('svg-sample.svg');
       image.format.should.equal('svg');
@@ -73,15 +77,15 @@ describe("updating", function () {
     this.timeout(30000);
     var form = { files: _files, comment: 'image2' };
     local.put('/api/images/' + _id).send(form).end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      should.not.exist(res.body.err);
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res.body.err).not.exist;
       done();
     });
   });
   it("versions should have been modified", function (done) {
     imageb.images.findOne({ _id: _id }, function (err, image) {
-      should.not.exist(err);
+      expect(err).not.exist;
       should.exist(image);
       image.fname.should.equal('svg-sample-2.svg');
       image.format.should.equal('svg');
@@ -108,15 +112,15 @@ describe("updating", function () {
   it("and updated", function (done) {
     var form = { comment: 'updated with no file' };
     local.put('/api/images/' + _id).send(form).end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      should.not.exist(res.body.err);
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res.body.err).not.exist;
       done();
     });
   });
   it("post should have been modifed", function (done) {
     imageb.images.findOne({ _id: _id }, function (err, image) {
-      should.not.exist(err);
+      expect(err).not.exist;
       should.exist(image);
       image.comment.should.equal('updated with no file');
       done();
@@ -143,9 +147,9 @@ describe("updating", function () {
   it("should fail", function (done) {
     var form = { files: _files };
     local.put('/api/images/' + _id).send(form).end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      should.exist(res.body.err);
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res.body.err).exist;
       error.find(res.body.err, error.IMAGE_TYPE).should.true;
       done();
     });
@@ -171,9 +175,9 @@ describe("updating with text file", function () {
   it("should fail", function (done) {
     var form = { files: _files };
     local.put('/api/images/' + _id).send(form).end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      should.exist(res.body.err);
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res.body.err).exist;
       error.find(res.body.err, error.IMAGE_TYPE).should.true;
       done();
     });
@@ -191,14 +195,14 @@ describe("updating by others", function () {
     imageb.images.insert(form, done);
   });
   it("and user2 login", function (done) {
-    userf.loginUser2(done);
+    userf.login('user2', done);
   });
   it("should fail", function (done) {
     var form = { comment: 'xxxx' };
     local.put('/api/images/' + _id).send(form).end(function (err, res) {
-      should.not.exist(err);
-      res.error.should.false;
-      should.exist(res.body.err);
+      expect(err).not.exist;
+      expect(res.error).false;
+      expect(res.body.err).exist;
       error.find(res.body.err, error.NOT_AUTHORIZED).should.true;
       done();
     });

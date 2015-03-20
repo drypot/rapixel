@@ -11,21 +11,21 @@ var site = require('../image/image-site');
 init.add(function () {
   var app = express2.app;
 
-  app.get('/api/images/:id([0-9]+)', function (req, res) {
+  app.get('/api/images/:id([0-9]+)', function (req, res, done) {
     var id = parseInt(req.params.id) || 0;
     incHit(id, req.query.hasOwnProperty('hit'), function (err) {
-      if (err) return res.jsonErr(err);
+      if (err) return done(err);
       findImage(id, function (err, image) {
-        if (err) return res.jsonErr(err);
+        if (err) return done(err);
         res.json(image);
       });
     });
   });
 
-  app.get('/images/:id([0-9]+)', function (req, res) {
+  app.get('/images/:id([0-9]+)', function (req, res, done) {
     var id = parseInt(req.params.id) || 0;
     incHit(id, true, function (err) {
-      if (err) return res.jsonErr(err);
+      if (err) return done(err);
       findImage(id, function (err, image) {
         if (err) return res.renderErr(err);
         var user = res.locals.user;
@@ -39,11 +39,11 @@ init.add(function () {
     });
   });
 
-  app.get('/photos/:id([0-9]+)', function (req, res) {
+  app.get('/photos/:id([0-9]+)', function (req, res, done) {
     res.redirect('/images/' + req.params.id);
   });
 
-  app.get('/drawings/:id([0-9]+)', function (req, res) {
+  app.get('/drawings/:id([0-9]+)', function (req, res, done) {
     res.redirect('/images/' + req.params.id);
   });
 });
@@ -57,7 +57,7 @@ function findImage(id, done) {
   imageb.images.findOne({ _id: id }, function (err, image) {
     if (err) return done(err);
     if (!image) return done(error(error.IMAGE_NOT_EXIST));
-    userv.getCached(image.uid, function (err, user) {
+    usera.getCached(image.uid, function (err, user) {
       if (err) return done(err);
       image.user = {
         _id: user._id,

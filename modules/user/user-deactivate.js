@@ -9,20 +9,20 @@ var useru = require('../user/user-update');
 init.add(function () {
   var app = express2.app;
 
-  app.delete('/api/users/:id([0-9]+)', function (req, res) {
-    usera.getUser(res, function (err, user) {
-      if (err) return res.jsonErr(err);
+  app.delete('/api/users/:id([0-9]+)', function (req, res, done) {
+    usera.identifyUser(res, function (err, user) {
+      if (err) return done(err);
       var id = parseInt(req.params.id) || 0;
       deactivateUser(id, user, function (err) {
-        if (err) return res.jsonErr(err);
+        if (err) return done(err);
         usera.deleteSession(req, res);
         res.json({});
       });
     });
   });
 
-  app.get('/users/deactivate', function (req, res) {
-    usera.getUser(res, function (err, user) {
+  app.get('/users/deactivate', function (req, res, done) {
+    usera.identifyUser(res, function (err, user) {
       if (err) return res.renderErr(err);
       res.render('user/user-deactivate');
     });

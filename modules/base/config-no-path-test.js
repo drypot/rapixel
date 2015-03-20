@@ -1,4 +1,6 @@
-var expect = require('chai').expect;
+var chai = require('chai');
+var expect = chai.expect;
+chai.config.includeStack = true;
 
 var init = require('../base/init');
 var config = require('../base/config');

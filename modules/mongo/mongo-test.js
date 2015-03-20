@@ -1,7 +1,9 @@
-var should = require('should');
+var chai = require('chai');
+var expect = chai.expect;
+chai.config.includeStack = true;
 
 var init = require('../base/init');
-var config = require('../base/config')({ path: 'config/rapixel-test.json' });
+var config = require('../base/config')({ path: 'config/test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
 
 before(function (done) {
@@ -10,6 +12,6 @@ before(function (done) {
 
 describe("db", function () {
   it("should have been opened.", function () {
-    mongo.db.databaseName.should.equal(config.mongoDb);
+    expect(mongo.db.databaseName).equal(config.mongoDb);
   });
 });
