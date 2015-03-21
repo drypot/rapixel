@@ -4,7 +4,10 @@
     nginx:  
         location ~ /(?:css|image|js|lib)/ ->
         location ~ /(?:modules)/
-        
+    
+    node:
+        $ node modules/image-script/rename-org.js --config config/???-live.json 
+
 ## done
 
     $ mv /data2/rapixel/upload/* /data2/rapixel

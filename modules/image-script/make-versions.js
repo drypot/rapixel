@@ -4,9 +4,9 @@ var init = require('../base/init');
 var config = require('../base/config')({ parseArg: true });
 var mongo = require('../mongo/mongo');
 var imageb = require('../image/image-base');
-var imagel = require('../image/image');
 
-// TODO: SHOULD BE UPDATED
+// TODO: 만든지 오래되었다. 코드 정상작동하는지 쓰기 전에 확인.
+//       rename-org.js 참고. 더 최근 코드다.
 
 init.add(function (done) {
   console.log('start rendering.');
