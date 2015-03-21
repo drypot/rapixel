@@ -30,7 +30,6 @@ describe("getting", function () {
   it("given image", function (done) {
     local.post('/api/upload').attach('files', _f1).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       _files = res.body.files;
       done();
@@ -41,7 +40,6 @@ describe("getting", function () {
     var form = { files: _files, comment: 'image1' };
     local.post('/api/images').send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       should.exist(res.body.ids);
       res.body.ids.length.should.equal(1);
@@ -52,7 +50,6 @@ describe("getting", function () {
   it("should success", function (done) {
     local.get('/api/images/' + _pid).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       res.body.hit.should.equal(0);
       done();
@@ -61,7 +58,6 @@ describe("getting", function () {
   it("should success with hit", function (done) {
     local.get('/api/images/' + _pid + '?hit').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       res.body.hit.should.equal(1);
       done();

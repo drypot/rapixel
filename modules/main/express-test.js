@@ -23,7 +23,6 @@ describe("/api/hello", function () {
   it("should return appName", function (done) {
     local.get('/api/hello').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res).json;
       expect(res.body.name).equal(config.appName);
       var stime = parseInt(res.body.time || 0);
@@ -38,9 +37,8 @@ describe("/api/hello", function () {
 describe("undefined url", function () {
   it("should return 404", function (done) {
     local.get('/api/xxx').end(function (err, res) {
-      expect(err).not.exist;
+      expect(err).exist;
       expect(res).status(404); // Not Found
-      expect(res.error.status).equal(404);
       done();
     });
   });
@@ -55,7 +53,6 @@ describe("res.send", function () {
   it("should return html", function (done) {
     local.get('/test/text-html').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res).html;
       expect(res.text).equal('<p>some text</p>');
       done();
@@ -72,7 +69,6 @@ describe("res.json", function () {
   it("should return json", function (done) {
     local.get('/api/json').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res).json;
       expect(res.body.msg).equal('valid json');
       done();
@@ -89,9 +85,8 @@ describe("null", function () {
   it("should return {}", function (done) {
     local.get('/api/null').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res).json;
-      expect(res.body).eql({});
+      expect(res.body).equal(null);
       done();
     });
   });
@@ -105,9 +100,8 @@ describe("no-action", function () {
   });
   it("should return 404", function (done) {
     local.get('/api/test/no-action').end(function (err, res) {
-      expect(err).not.exist;
+      expect(err).exist;
       expect(res).status(404); // Not Found
-      expect(res.error.status).eql(404);
       done();
     });
   });
@@ -122,7 +116,6 @@ describe("api error", function () {
   it("should return json", function (done) {
     local.get('/api/test/invalid-data').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res).json;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.INVALID_DATA)).true;
@@ -140,7 +133,6 @@ describe("page error", function () {
   it("should return html", function (done) {
     local.get('/test/invalid-data').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res).html;
       expect(res.text).match(/.*INVALID_DATA.*/);
       done();
@@ -157,7 +149,6 @@ describe("Cache-Control", function () {
   it("none api request should return Cache-Control: private", function (done) {
     local.get('/test/cache-test').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.get('Cache-Control')).equal('private');
       done();
     });
@@ -165,7 +156,6 @@ describe("Cache-Control", function () {
   it("api should return Cache-Control: no-cache", function (done) {
     local.get('/api/hello').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.get('Cache-Control')).equal('no-cache');
       done();
     });
@@ -185,7 +175,6 @@ describe("echo-query-params", function () {
   it("should success", function (done) {
     local.get('/api/echo-query?p1&p2=123').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body).eql({
         p1: '',
         p2: '123'
@@ -226,7 +215,6 @@ describe("middleware", function () {
     result = {};
     local.get('/api/mw-1-2').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(result.mid1).exist;
       expect(result.mid2).exist;
       expect(result.mid3).exist;
@@ -237,7 +225,6 @@ describe("middleware", function () {
     result = {};
     local.get('/api/mw-1-err-2').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(result.mid1).exist;
       expect(result.mid2).not.exist;
       expect(result.mid3).not.exist;

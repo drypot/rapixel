@@ -40,7 +40,6 @@ describe("deleting", function () {
   it("and image", function (done) {
     local.post('/api/upload').attach('files', _f1).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       _files = res.body.files;
       done();
@@ -51,7 +50,6 @@ describe("deleting", function () {
     var form = { files: _files, comment: 'image1' };
     local.post('/api/images').send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       should.exist(res.body.ids);
       _id = res.body.ids[0];
@@ -64,7 +62,6 @@ describe("deleting", function () {
     fs.existsSync(p).should.true;
     local.del('/api/images/' + _id, function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       fs.existsSync(p).should.false;
       done();
@@ -92,7 +89,6 @@ describe("deleting by admin", function () {
   it("and image", function (done) {
     local.post('/api/upload').attach('files', _f1).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       _files = res.body.files;
       done();
@@ -103,7 +99,6 @@ describe("deleting by admin", function () {
     var form = { files: _files, comment: 'image1' };
     local.post('/api/images').send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       should.exist(res.body.ids);
       _id = res.body.ids[0];
@@ -119,7 +114,6 @@ describe("deleting by admin", function () {
     fs.existsSync(p).should.true;
     local.del('/api/images/' + _id, function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });
@@ -146,7 +140,6 @@ describe("deleting other's image", function () {
   it("and image", function (done) {
     local.post('/api/upload').attach('files', _f1).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       _files = res.body.files;
       done();
@@ -157,7 +150,6 @@ describe("deleting other's image", function () {
     var form = { files: _files, comment: 'hello' };
     local.post('/api/images').send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       should.exist(res.body.ids);
       _id = res.body.ids[0];
@@ -173,7 +165,6 @@ describe("deleting other's image", function () {
     fs.existsSync(p).should.true;
     local.del('/api/images/' + _id, function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       error.find(res.body.err, error.NOT_AUTHORIZED).should.true;
       done();

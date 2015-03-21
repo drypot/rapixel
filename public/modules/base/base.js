@@ -275,7 +275,9 @@ init.add(function() {
           }
           request[method].call(request, url).send(form).end(function (err, res) {
             // 4xx or 5xx response with superagent is not considered an error by default.
-            err = err || res.error; 
+            // err = err || res.error; 
+            //
+            // 1.0 부터 2XX 아 아니면 err 가 만들어진다. 
             if (err) {
               showError(err);
               formty.hideSending($form);

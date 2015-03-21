@@ -47,7 +47,6 @@ describe("user fixture", function () {
   it("session should be clear", function (done) {
     local.get('/api/session').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       expect(res.body.uid).not.exist;
       done();
@@ -56,7 +55,6 @@ describe("user fixture", function () {
   it("login should success", function (done) {
     userf.login('user1', function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       expect(res.body.user.id).equal(userf.user1._id);
       expect(res.body.user.name).equal(userf.user1.name);
@@ -66,7 +64,6 @@ describe("user fixture", function () {
   it("session should be filled", function (done) {
     local.get('/api/session').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       expect(res.body.uid).equal(userf.user1._id);
       done();
@@ -75,7 +72,6 @@ describe("user fixture", function () {
   it("logout should success", function (done) {
     userf.logout(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       expect(res.body).eql({});
       done();
@@ -84,7 +80,6 @@ describe("user fixture", function () {
   it("session should be clear", function (done) {
     local.get('/api/session').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       expect(res.body.uid).not.exist;
       done();
@@ -97,7 +92,6 @@ describe("login", function () {
     var form = { email: 'xxx@xxx.com', password: 'xxxx' };
     local.post('/api/session').send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.EMAIL_NOT_FOUND)).true;
       done();
@@ -107,7 +101,6 @@ describe("login", function () {
     var form = { email: userf.user1.email, password: 'xxxx' };
     local.post('/api/session').send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.PASSWORD_WRONG)).true;
       done();
@@ -122,7 +115,6 @@ describe("accessing user resource", function () {
   it("should success", function (done) {
     local.get('/api/test/user').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });
@@ -133,7 +125,6 @@ describe("accessing user resource", function () {
   it("should fail", function (done) {
     local.get('/api/test/user').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.NOT_AUTHENTICATED)).true;
       done();
@@ -148,7 +139,6 @@ describe("accessing admin resource", function () {
   it("should success", function (done) {
     local.get('/api/test/admin').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     })
@@ -159,7 +149,6 @@ describe("accessing admin resource", function () {
   it("should fail", function (done) {
     local.get('/api/test/admin').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.NOT_AUTHENTICATED)).true;
       done();
@@ -171,7 +160,6 @@ describe("accessing admin resource", function () {
   it("should fail", function (done) {
     local.get('/api/test/admin').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.NOT_AUTHORIZED)).true;
       done();
@@ -187,7 +175,6 @@ describe("identifying without auto login", function () {
   it("should fail", function (done) {
     local.get('/api/test/user').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       done();
     });
@@ -198,7 +185,6 @@ describe("identifying without auto login", function () {
   it("should success", function (done) {
     local.get('/api/test/user').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });
@@ -206,7 +192,6 @@ describe("identifying without auto login", function () {
   it("given new session", function (done) {
     local.del('/api/test/del-session').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });
@@ -214,7 +199,6 @@ describe("identifying without auto login", function () {
   it("should fail", function (done) {
     local.get('/api/test/user').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       done();
     });
@@ -229,7 +213,6 @@ describe("identifying with auto login", function () {
   it("should fail", function (done) {
     local.get('/api/test/user').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       done();
     });
@@ -240,7 +223,6 @@ describe("identifying with auto login", function () {
   it("should success", function (done) {
     local.get('/api/test/user').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });
@@ -248,7 +230,6 @@ describe("identifying with auto login", function () {
   it("given new session", function (done) {
     local.del('/api/test/del-session').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });
@@ -256,7 +237,6 @@ describe("identifying with auto login", function () {
   it("should success", function (done) {
     local.get('/api/test/user').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });
@@ -267,7 +247,6 @@ describe("identifying with auto login", function () {
   it("should fail", function (done) {
     local.get('/api/test/user').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       done();
     })
@@ -290,7 +269,6 @@ describe("identifying with auto login with invalid email", function () {
   it("should fail", function (done) {
     local.get('/api/test/user').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       done();
     });
@@ -301,7 +279,6 @@ describe("identifying with auto login with invalid email", function () {
   it("should success", function (done) {
     local.get('/api/test/user').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });
@@ -309,7 +286,6 @@ describe("identifying with auto login with invalid email", function () {
   it("cookie should be filled", function (done) {
     local.get('/api/test/cookies').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       expect(res.body.email).equal(userf.user1.email);
       done();
@@ -328,7 +304,6 @@ describe("identifying with auto login with invalid email", function () {
   it("given session expired", function (done) {
     local.del('/api/test/del-session').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });
@@ -336,7 +311,6 @@ describe("identifying with auto login with invalid email", function () {
   it("should fail", function (done) {
     local.get('/api/test/user').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       done();
     });
@@ -344,7 +318,6 @@ describe("identifying with auto login with invalid email", function () {
   it("cookie should not be filled", function (done) {
     local.get('/api/test/cookies').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       expect(res.body.email).not.exist;
       done();

@@ -47,7 +47,6 @@ describe("posting", function () {
     var form = { files: _files, comment: 'image1' };
     local.post('/api/images').send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       should.exist(res.body.ids);
       res.body.ids.length.should.equal(1);
@@ -93,7 +92,6 @@ describe("posting", function () {
     var form = { files: _files };
     local.post('/api/images').send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       should.exist(res.body.ids);
       res.body.ids.should.length(config.ticketMax);
@@ -111,7 +109,6 @@ describe("posting", function () {
     var form = { files: _files };
     local.post('/api/images').send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       should.exist(res.body.ids);
       res.body.ids.should.length(0);
@@ -135,7 +132,6 @@ describe("posting", function () {
     var form = { files: _files };
     local.post('/api/images').send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       error.find(res.body.err, error.IMAGE_SIZE).should.true;
       done();
@@ -158,7 +154,6 @@ describe("posting", function () {
     var form = { files: _files };
     local.post('/api/images').send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       error.find(res.body.err, error.IMAGE_TYPE).should.true;
       done();
@@ -174,7 +169,6 @@ describe("posting with no file", function () {
     var form = { };
     local.post('/api/images').send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       error.find(res.body.err, error.IMAGE_NO_FILE).should.true;
       done();

@@ -42,7 +42,6 @@ describe("resetting user", function () {
     var form = { email: _user.email };
     local.post('/api/reset-pass').send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       userb.resets.findOne({ email: _user.email }, function (err, reset) {
         expect(err).not.exist;
@@ -58,7 +57,6 @@ describe("resetting user", function () {
     var form = { email: 'abc.def.xyz' };
     local.post('/api/reset-pass').send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.EMAIL_PATTERN)).true;
       done();
@@ -68,7 +66,6 @@ describe("resetting user", function () {
     var form = { email: 'non-exist@xyz.com' };
     local.post('/api/reset-pass').send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.EMAIL_NOT_EXIST)).true;
       done();
@@ -78,7 +75,6 @@ describe("resetting user", function () {
     var form = { id: '012345678901234567890123', token: _reset.token, password: '4567' };
     local.put('/api/reset-pass').send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.INVALID_DATA)).true;
       done();
@@ -88,7 +84,6 @@ describe("resetting user", function () {
     var form = { id: _reset._id, token: 'xxxxx', password: '4567' };
     local.put('/api/reset-pass').send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.INVALID_DATA)).true;
       done();
@@ -98,7 +93,6 @@ describe("resetting user", function () {
     var form = { id: _reset._id, token: _reset.token, password: '' };
     local.put('/api/reset-pass').send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.PASSWORD_EMPTY)).true;
       done();
@@ -108,7 +102,6 @@ describe("resetting user", function () {
     var form = { id: _reset._id, token: _reset.token, password: 'xx' };
     local.put('/api/reset-pass').send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.PASSWORD_RANGE)).true;
       done();
@@ -118,7 +111,6 @@ describe("resetting user", function () {
     var form = { id: _reset._id, token: _reset.token, password: 'new-pass' };
     local.put('/api/reset-pass').send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });
@@ -156,7 +148,6 @@ describe("resetting admin", function () {
     var form = { email: _user.email };
     local.post('/api/reset-pass').send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       userb.resets.findOne({ email: _user.email }, function (err, reset) {
         expect(err).not.exist;
@@ -172,7 +163,6 @@ describe("resetting admin", function () {
     var form = { id: _reset._id, token: _reset.token, password: 'new-pass' };
     local.put('/api/reset-pass').send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });

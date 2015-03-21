@@ -78,7 +78,7 @@ describe("creating user / name check", function () {
   it("length 2 name should success", function (done) {
     var form = { name: '12', email: 'nametest4783@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
-      expect(res.error).false;
+      expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
     });
@@ -86,7 +86,7 @@ describe("creating user / name check", function () {
   it("length 32 name should success", function (done) {
     var form = { name: '12345678901234567890123456789012', email: 'nametest9928@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
-      expect(res.error).false;
+      expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
     });
@@ -94,7 +94,7 @@ describe("creating user / name check", function () {
   it("empty name should fail", function (done) {
     var form = { name: '', email: 'nametest2243@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
-      expect(res.error).false;
+      expect(err).not.exist;
       expect(error.find(res.body.err, error.NAME_EMPTY)).true;
       done();
     });
@@ -102,7 +102,7 @@ describe("creating user / name check", function () {
   it("length 1 name should fail", function (done) {
     var form = { name: 'a', email: 'nametest3492@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
-      expect(res.error).false;
+      expect(err).not.exist;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.NAME_RANGE)).true;
       done();
@@ -111,7 +111,7 @@ describe("creating user / name check", function () {
   it("long name should fail", function (done) {
     var form = { name: '123456789012345678901234567890123', email: 'nametest7762@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
-      expect(res.error).false;
+      expect(err).not.exist;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.NAME_RANGE)).true;
       done();
@@ -130,7 +130,7 @@ describe("creating user / email check", function () {
   it("duped mail1@mail.com should fail", function (done) {
     var form = { name: 'mailtest8724', email: 'mail1@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
-      expect(res.error).false;
+      expect(err).not.exist;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.EMAIL_DUPE)).true;
       done();
@@ -139,7 +139,7 @@ describe("creating user / email check", function () {
   it("different case should success", function (done) {
     var form = { name: 'mailtest0098', email: 'Mail1@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
-      expect(res.error).false;
+      expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
     });
@@ -147,7 +147,7 @@ describe("creating user / email check", function () {
   it("invalid email should fail", function (done) {
     var form = { name: 'mailtest9938', email: 'abc.mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
-      expect(res.error).false;
+      expect(err).not.exist;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.EMAIL_PATTERN)).true;
       done();
@@ -156,7 +156,7 @@ describe("creating user / email check", function () {
   it("invalid email should fail", function (done) {
     var form = { name: 'mailtest2342', email: 'abc*xyz@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
-      expect(res.error).false;
+      expect(err).not.exist;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.EMAIL_PATTERN)).true;
       done();
@@ -165,7 +165,7 @@ describe("creating user / email check", function () {
   it("dash should success", function (done) {
     var form = { name: 'mailtest1124', email: '-a-b-c_d-e-f@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
-      expect(res.error).false;
+      expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
     });
@@ -173,7 +173,7 @@ describe("creating user / email check", function () {
   it("+ should success", function (done) {
     var form = { name: 'mailtest5836', email: 'abc+xyz@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
-      expect(res.error).false;
+      expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
     });
@@ -197,7 +197,7 @@ describe("creating user / password check", function () {
   it("short password should fail", function (done) {
     var form = { name: 'passtet8792', email: 'passtet8792@mail.com', password: '123' };
     local.post('/api/users').send(form).end(function (err,res) {
-      expect(res.error).false;
+      expect(err).not.exist;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.PASSWORD_RANGE)).true;
       done();
@@ -206,7 +206,7 @@ describe("creating user / password check", function () {
   it("long password should fail", function (done) {
     var form = { name: 'passtest9909', email: 'passtest9909@mail.com', password: '123456789012345678901234567890123' };
     local.post('/api/users').send(form).end(function (err,res) {
-      expect(res.error).false;
+      expect(err).not.exist;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.PASSWORD_RANGE)).true;
       done();
@@ -215,7 +215,7 @@ describe("creating user / password check", function () {
   it("lenth 32 password should success", function (done) {
     var form = { name: 'passtest3344', email: 'passtest3344@mail.com', password: '12345678901234567890123456789012' };
     local.post('/api/users').send(form).end(function (err,res) {
-      expect(res.error).false;
+      expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
     });

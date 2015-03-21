@@ -44,7 +44,6 @@ describe("updating", function () {
     var form = { files: _files, comment: 'image1' };
     local.post('/api/images').send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       should.exist(res.body.ids);
       res.body.ids.length.should.equal(1);
@@ -78,7 +77,6 @@ describe("updating", function () {
     var form = { files: _files, comment: 'image2' };
     local.put('/api/images/' + _id).send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });
@@ -113,7 +111,6 @@ describe("updating", function () {
     var form = { comment: 'updated with no file' };
     local.put('/api/images/' + _id).send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });
@@ -148,7 +145,6 @@ describe("updating", function () {
     var form = { files: _files };
     local.put('/api/images/' + _id).send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       error.find(res.body.err, error.IMAGE_TYPE).should.true;
       done();
@@ -176,7 +172,6 @@ describe("updating with text file", function () {
     var form = { files: _files };
     local.put('/api/images/' + _id).send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       error.find(res.body.err, error.IMAGE_TYPE).should.true;
       done();
@@ -201,7 +196,6 @@ describe("updating by others", function () {
     var form = { comment: 'xxxx' };
     local.put('/api/images/' + _id).send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       error.find(res.body.err, error.NOT_AUTHORIZED).should.true;
       done();

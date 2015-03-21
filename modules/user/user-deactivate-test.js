@@ -36,14 +36,13 @@ describe("deactivating self", function () {
   it("accessing should success", function (done) {
     local.get('/api/test/user').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     })
   });
   it("given user1 deactivated", function (done) {
     local.del('/api/users/' + userf.user1._id).end(function (err, res) {
-      expect(res.error).false;
+      expect(err).not.exist;
       expect(res.body.err).not.exist;
       userb.users.findOne({ _id: userf.user1._id }, function (err, user) {
         expect(err).not.exist;
@@ -55,7 +54,6 @@ describe("deactivating self", function () {
   it("accessing should fail (because logged out)", function (done) {
     local.get('/api/test/user').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.NOT_AUTHENTICATED)).true;
       done();
@@ -70,7 +68,6 @@ describe("deactivating with no login", function () {
   it("should fail", function (done) {
     local.del('/api/users/' + userf.user2._id).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.NOT_AUTHENTICATED)).true;
       done();
@@ -85,7 +82,6 @@ describe("deactivating other", function () {
   it("deactivating user3 should fail", function (done) {
     local.del('/api/users/' + userf.user3._id).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.NOT_AUTHORIZED)).true;
       done();
@@ -100,7 +96,6 @@ describe("deactivating by admin", function () {
   it("should success", function (done) {
     local.del('/api/users/' + userf.user3._id).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });

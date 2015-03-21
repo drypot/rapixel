@@ -17,7 +17,8 @@ init.add(function () {
   userl.logout = function () {
     request.del('/api/session').end(function (err, res) {
       // formty.method 와 달리 agent 에러는 직접 처리
-      err = err || res.error || res.body.err;
+      //err = err || res.error || res.body.err;
+      err = err || res.body.err;
       if (err) return showError(err);
       console.log('logged out');
       location = '/';
@@ -86,7 +87,8 @@ init.add(function () {
     });
     $('#dea-confirm-btn').click(function () {
       request.del('/api/users/' + user.id).end(function (err, res) {
-        err = err || res.error || res.body.err;
+        //err = err || res.error || res.body.err;
+        err = err || res.body.err;
         if (err) return showError(err);
         location = '/';
       });

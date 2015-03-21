@@ -32,7 +32,6 @@ describe("updating user / permission", function () {
   it("given new user", function (done) {
     local.post('/api/users').send(_user).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       _user._id = res.body.id;
       done();
@@ -42,7 +41,6 @@ describe("updating user / permission", function () {
     var form = { email: _user.email, password: _user.password };
     local.post('/api/session').send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });
@@ -51,7 +49,6 @@ describe("updating user / permission", function () {
     var form = { name: 'testauth', home: 'testauth', email: 'testauth@mail.com' };
     local.put('/api/users/' + _user._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });
@@ -63,7 +60,6 @@ describe("updating user / permission", function () {
     var form = { name: 'testauth', home: 'testauth', email: 'testauth@mail.com' };
     local.put('/api/users/' + _user._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.NOT_AUTHORIZED)).true;
       done();
@@ -76,7 +72,6 @@ describe("updating user / permission", function () {
     var form = { name: 'testauth', home: 'testauth', email: 'testauth@mail.com' };
     local.put('/api/users/' + _user._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });
@@ -85,7 +80,6 @@ describe("updating user / permission", function () {
     var form = { name: 'testauth3', home: 'testauth3', email: 'testauth3@mail.com' };
     local.put('/api/users/' + 999).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(error.find(res.body.err, error.USER_NOT_FOUND)).true;
       done();
     });
@@ -97,7 +91,6 @@ describe("updating user / name", function () {
   it("given user", function (done) {
     local.post('/api/users').send(_user).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       _user._id = res.body.id;
       done();
@@ -107,7 +100,6 @@ describe("updating user / name", function () {
     var form = { email: _user.email, password: _user.password };
     local.post('/api/session').send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });
@@ -116,7 +108,6 @@ describe("updating user / name", function () {
     var form = { name: 'NameTest-NEW', home: 'NameTest', email: 'nametest@mail.com', password: '1234' };
     local.put('/api/users/' + _user._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       userb.users.findOne({ _id: _user._id }, function (err, user) {
         expect(err).not.exist;
@@ -131,7 +122,6 @@ describe("updating user / name", function () {
     var form = { name: 'NAME1', home: 'NameTest', email: 'nametest@mail.com', password: '1234' };
     local.put('/api/users/' + _user._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.NAME_DUPE)).true;
       done();
@@ -141,7 +131,6 @@ describe("updating user / name", function () {
     var form = { name: 'HOME1', home: 'NameTest', email: 'nametest@mail.com', password: '1234' };
     local.put('/api/users/' + _user._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.NAME_DUPE)).true;
       done();
@@ -151,7 +140,6 @@ describe("updating user / name", function () {
     var form = { name: '', home: 'NameTest', email: 'nametest@mail.com', password: '1234' };
     local.put('/api/users/' + _user._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(error.find(res.body.err, error.NAME_EMPTY)).true;
       done();
     });
@@ -160,7 +148,6 @@ describe("updating user / name", function () {
     var form = { name: 'u', home: 'NameTest', email: 'nametest@mail.com', password: '1234' };
     local.put('/api/users/' + _user._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(error.find(res.body.err, error.NAME_RANGE)).true;
       done();
     });
@@ -169,7 +156,6 @@ describe("updating user / name", function () {
     var form = { name: 'uu', home: 'NameTest', email: 'nametest@mail.com', password: '1234' };
     local.put('/api/users/' + _user._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });
@@ -178,7 +164,6 @@ describe("updating user / name", function () {
     var form = { name: '123456789012345678901234567890123', home: 'NameTest', email: 'nametest@mail.com', password: '1234' };
     local.put('/api/users/' + _user._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(error.find(res.body.err, error.NAME_RANGE)).true;
       done();
     });
@@ -187,7 +172,6 @@ describe("updating user / name", function () {
     var form = { name: '12345678901234567890123456789012', home: 'NameTest', email: 'nametest@mail.com', password: '1234' };
     local.put('/api/users/' + _user._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });
@@ -199,7 +183,6 @@ describe("updating user / home", function () {
   it("given new user", function (done) {
     local.post('/api/users').send(_user).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       _user._id = res.body.id;
       done();
@@ -209,7 +192,6 @@ describe("updating user / home", function () {
     var form = { email: _user.email, password: _user.password };
     local.post('/api/session').send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });
@@ -218,7 +200,6 @@ describe("updating user / home", function () {
     var form = { name: 'HomeTest', home: 'HomeTest-NEW', email: 'hometest@mail.com', password: '1234' };
     local.put('/api/users/' + _user._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       userb.users.findOne({ _id: _user._id }, function (err, user) {
         expect(err).not.exist;
@@ -234,7 +215,6 @@ describe("updating user / home", function () {
     var form = { name: 'HomeTest', home: 'HOME1', email: 'hometest@mail.com', password: '1234' };
     local.put('/api/users/' + _user._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.HOME_DUPE)).true;
       done();
@@ -244,7 +224,6 @@ describe("updating user / home", function () {
     var form = { name: 'HomeTest', home: 'NAME1', email: 'hometest@mail.com', password: '1234' };
     local.put('/api/users/' + _user._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.HOME_DUPE)).true;
       done();
@@ -254,7 +233,6 @@ describe("updating user / home", function () {
     var form = { name: 'HomeTest', home: '', email: 'hometest@mail.com', password: '1234' };
     local.put('/api/users/' + _user._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(error.find(res.body.err, error.HOME_EMPTY)).true;
       done();
     });
@@ -263,7 +241,6 @@ describe("updating user / home", function () {
     var form = { name: 'HomeTest', home: 'h', email: 'hometest@mail.com', password: '1234' };
     local.put('/api/users/' + _user._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(error.find(res.body.err, error.HOME_RANGE)).true;
       done();
     });
@@ -272,7 +249,6 @@ describe("updating user / home", function () {
     var form = { name: 'HomeTest', home: 'hh', email: 'hometest@mail.com', password: '1234' };
     local.put('/api/users/' + _user._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });
@@ -281,7 +257,6 @@ describe("updating user / home", function () {
     var form = { name: 'HomeTest', home: '123456789012345678901234567890123', email: 'hometest@mail.com', password: '1234' };
     local.put('/api/users/' + _user._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(error.find(res.body.err, error.HOME_RANGE)).true;
       done();
     });
@@ -290,7 +265,6 @@ describe("updating user / home", function () {
     var form = { name: 'HomeTest', home: '1234567890123456789012345678901H', email: 'hometest@mail.com', password: '1234' };
     local.put('/api/users/' + _user._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });
@@ -302,7 +276,6 @@ describe("updating user / email", function () {
   it("given new user", function (done) {
     local.post('/api/users').send(_user).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       _user._id = res.body.id;
       done();
@@ -312,7 +285,6 @@ describe("updating user / email", function () {
     var form = { email: _user.email, password: _user.password };
     local.post('/api/session').send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });
@@ -321,7 +293,6 @@ describe("updating user / email", function () {
     var form = { name: 'mailtest', home: 'mailtest', email: 'mailtest-new@mail.com', password: '1234' };
     local.put('/api/users/' + _user._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       userb.users.findOne({ _id: _user._id }, function (err, user) {
         expect(err).not.exist;
@@ -335,7 +306,6 @@ describe("updating user / email", function () {
     var form = { name: 'mailtest', home: 'mailtest', email: 'mail1@mail.com', password: '1234' };
     local.put('/api/users/' + _user._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(error.find(res.body.err, error.EMAIL_DUPE)).true;
       done();
     });
@@ -344,7 +314,6 @@ describe("updating user / email", function () {
     var form = { name: 'mailtest', home: 'mailtest', email: 'abc.mail.com', password: '1234' };
     local.put('/api/users/' + _user._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(error.find(res.body.err, error.EMAIL_PATTERN)).true;
       done();
     });
@@ -356,7 +325,6 @@ describe("updating user / password", function () {
   it("given new user", function (done) {
     local.post('/api/users').send(_user).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       _user._id = res.body.id;
       done();
@@ -366,7 +334,6 @@ describe("updating user / password", function () {
     var form = { email: _user.email, password: _user.password };
     local.post('/api/session').send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });
@@ -375,7 +342,6 @@ describe("updating user / password", function () {
     var form = { name: 'pwtest', home: 'pwtest', email: 'pwtest@mail.com', password: '5678' };
     local.put('/api/users/' + _user._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       userb.users.findOne({ _id: _user._id }, function (err, user) {
         expect(err).not.exist;
@@ -389,7 +355,6 @@ describe("updating user / password", function () {
     var form = { name: 'pwtest', home: 'pwtest', email: 'pwtest@mail.com' };
     local.put('/api/users/' + _user._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       userb.users.findOne({ _id: _user._id }, function (err, user) {
         expect(err).not.exist;
@@ -403,7 +368,6 @@ describe("updating user / password", function () {
     var form = { name: 'pwtest', home: 'pwtest', email: 'pwtest@mail.com', password: '123' };
     local.put('/api/users/' + _user._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(error.find(res.body.err, error.PASSWORD_RANGE)).true;
       done();
     });
@@ -412,7 +376,6 @@ describe("updating user / password", function () {
     var form = { name: 'pwtest', home: 'pwtest', email: 'pwtest@mail.com', password: '123456789012345678901234567890123' };
     local.put('/api/users/' + _user._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(error.find(res.body.err, error.PASSWORD_RANGE)).true;
       done();
     });
@@ -421,7 +384,6 @@ describe("updating user / password", function () {
     var form = { name: 'pwtest', home: 'pwtest', email: 'pwtest@mail.com', password: '12345678901234567890123456789012' };
     local.put('/api/users/' + _user._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });
@@ -432,7 +394,7 @@ describe("updating user / profile", function () {
   var _user = { name: 'pftest', email: 'pftest@mail.com', password: '1234', profile: 'profile' };
   it("given new user", function (done) {
     local.post('/api/users').send(_user).end(function (err,res) {
-      expect(res.error).false;
+      expect(err).not.exist;
       expect(res.body.err).not.exist;
       _user._id = res.body.id;
       done();
@@ -442,7 +404,6 @@ describe("updating user / profile", function () {
     var form = { email: _user.email, password: _user.password };
     local.post('/api/session').send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });
@@ -451,7 +412,6 @@ describe("updating user / profile", function () {
     var form = { name: 'pftest', home: 'pftest', email: 'pftest@mail.com', profile: 'profile-new' };
     local.put('/api/users/' + _user._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       userb.users.findOne({ _id: _user._id }, function (err, user) {
         expect(err).not.exist;
@@ -468,7 +428,6 @@ describe("updating user / cache", function () {
   it("given new user", function (done) {
     local.post('/api/users').send(_user).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       _user._id = res.body.id;
       done();
@@ -478,7 +437,6 @@ describe("updating user / cache", function () {
     var form = { email: _user.email, password: _user.password };
     local.post('/api/session').send(form).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });
@@ -496,7 +454,6 @@ describe("updating user / cache", function () {
     var form = { name: 'cachetest-new', home: 'home-new', email: 'cachetest-new@mail.com' };
     local.put('/api/users/' + _user._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       usera.getCached(_user._id, function (err, user) {
         expect(err).not.exist;

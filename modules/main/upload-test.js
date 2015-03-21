@@ -34,7 +34,6 @@ describe("parsing json", function () {
   it("should success", function (done) {
     local.post('/api/test/upload-json').send({'field': 'abc'}).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       expect(res.body.files).not.exist;
       expect(res.body.field).equal('abc');
@@ -56,7 +55,6 @@ describe("parsing form", function () {
   it("should success", function (done) {
     local.post('/api/test/upload-form').field('field', 'abc').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       expect(res.body.files).eql({});
       expect(res.body.field).equal('abc');
@@ -79,7 +77,6 @@ describe("parsing one file", function () {
   it("should success", function (done) {
     local.post('/api/test/upload-one').field('field', 'abc').attach('files', f1).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       expect(res.body.files.files[0].safeFilename).equal('upload-fixture1.txt');
       expect(res.body.field).equal('abc');
@@ -106,7 +103,6 @@ describe("parsing two files", function () {
   it("should success", function (done) {
     local.post('/api/test/upload-two').field('field', 'abc').attach('files', f1).attach('files', f2).end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       expect(res.body.files.files[0].safeFilename).equal('upload-fixture1.txt');
       expect(res.body.files.files[1].safeFilename).equal('upload-fixture2.txt');
@@ -120,9 +116,7 @@ describe("parsing two files", function () {
   });
 });
 
-// superagent 0.21 에서는 attach 파일명 지정이 안 되고
-// 1.0 부터는 err 처리 방식이 바뀌었다. 임시로 skip.
-describe.skip("parsing irregular filename", function () {
+describe("parsing irregular filename", function () {
   var f1 = 'modules/main/upload-fixture1.txt';
   var p1;
   it("given handler", function () {
@@ -136,7 +130,6 @@ describe.skip("parsing irregular filename", function () {
   it("should success", function (done) {
     local.post('/api/test/upload-irregular').field('field', 'abc').attach('files', f1, 'file<>()[]_-=.txt.%$#@!&.txt').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.error).false;
       expect(res.body.err).not.exist;
       expect(res.body.files.files[0].safeFilename).equal('file__()[]_-=.txt.%$#@!&.txt');
       expect(res.body.field).equal('abc');

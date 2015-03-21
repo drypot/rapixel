@@ -18,7 +18,8 @@ init.add(function () {
     });
     $('#del-confirm-btn').click(function () {
       request.del('/api/images/' + image._id).end(function (err, res) {
-        err = err || res.error || res.body.err;
+        //err = err || res.error || res.body.err;
+        err = err || res.body.err;
         if (err) return showError(res.body.err);
         location = '/';
       });
