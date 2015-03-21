@@ -2,7 +2,7 @@ var exec = require('child_process').exec;
 
 var init = require('../base/init');
 var error = require('../base/error');
-var fs2 = require('../base/fs');
+var fsp = require('../base/fs');
 var config = require('../base/config');
 var mongo = require('../mongo/mongo');
 
@@ -23,7 +23,7 @@ var imageId;
 init.add(function (done) {
   imageDir = exports.imageDir = config.uploadDir + '/public/images'
   imageUrl = config.uploadUrl + '/images';
-  fs2.makeDirs(imageDir, done);
+  fsp.makeDirs(imageDir, done);
 });
 
 init.add(function (done) {
@@ -50,11 +50,11 @@ exports.newId = function () {
 };
 
 exports.getImageDir = function (id) {
-  return fs2.makeDeepPath(imageDir, id, 3);
+  return fsp.makeDeepPath(imageDir, id, 3);
 };
 
 exports.getImageUrl = function (id) {
-  return fs2.makeDeepPath(imageUrl, id, 3)
+  return fsp.makeDeepPath(imageUrl, id, 3)
 }
 
 exports.getOriginalPath = function (dir, id, format) {

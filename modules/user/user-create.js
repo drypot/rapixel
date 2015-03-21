@@ -1,12 +1,10 @@
 var init = require('../base/init');
 var error = require('../base/error');
-var express2 = require('../main/express');
+var exp = require('../main/express');
 var userb = require('../user/user-base');
 
 init.add(function () {
-  var core = express2.core;
-
-  core.post('/api/users', function (req, res, done) {
+  exp.core.post('/api/users', function (req, res, done) {
     var form = getForm(req.body);
     createUser(form, function (err, user) {
       if (err) return done(err);
@@ -16,7 +14,7 @@ init.add(function () {
     });
   });
 
-  core.get('/users/register', function (req, res, done) {
+  exp.core.get('/users/register', function (req, res, done) {
     res.render('user/user-create');
   });
 });

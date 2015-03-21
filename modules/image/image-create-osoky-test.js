@@ -7,10 +7,10 @@ var fs = require('fs');
 
 var init = require('../base/init');
 var error = require('../base/error');
-var fs2 = require('../base/fs');
+var fsp = require('../base/fs');
 var config = require('../base/config')({ path: 'config/osoky-test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
-var express2 = require('../main/express');
+var exp = require('../main/express');
 var upload = require('../upload/upload');
 var userf = require('../user/user-fixture');
 var imageb = require('../image/image-base');
@@ -26,7 +26,7 @@ before(function (done) {
 });
 
 before(function (done) {
-  fs2.emptyDir(imageb.imageDir, done);
+  fsp.emptyDir(imageb.imageDir, done);
 });
 
 describe("posting", function () {

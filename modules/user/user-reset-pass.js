@@ -4,15 +4,13 @@ var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config');
 var mongo = require('../mongo/mongo');
-var express2 = require('../main/express');
+var exp = require('../main/express');
 var mailer = require('../mail/mailer');
 var userb = require('../user/user-base');
 var userc = require('../user/user-create');
 
 init.add(function () {
-  var core = express2.core;
-
-  core.post('/api/reset-pass', function (req, res, done) {
+  exp.core.post('/api/reset-pass', function (req, res, done) {
     var form = getForm1(req);
     step1(form, function (err) {
       if (err) return done(err);
@@ -20,7 +18,7 @@ init.add(function () {
     });
   });
 
-  core.put('/api/reset-pass', function (req, res, done) {
+  exp.core.put('/api/reset-pass', function (req, res, done) {
     var form = getForm2(req);
     step2(form, function (err) {
       if (err) return done(err);
@@ -28,7 +26,7 @@ init.add(function () {
     });
   });
 
-  core.get('/users/reset-pass', function (req, res, done) {
+  exp.core.get('/users/reset-pass', function (req, res, done) {
     res.render('user/user-reset-pass');
   });
 });

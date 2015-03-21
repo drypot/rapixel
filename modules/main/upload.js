@@ -3,9 +3,9 @@ var path = require('path');
 
 var init = require('../base/init');
 var config = require('../base/config');
-var fs2 = require('../base/fs');
+var fsp = require('../base/fs');
 var _multiparty = require('connect-multiparty');
-var express2 = require('../main/express');
+var exp = require('../main/express');
 
 var tmpDir;
 var multiparty;
@@ -14,9 +14,9 @@ init.add(function (done) {
   console.log('upload: ' + config.uploadDir);
   multiparty = _multiparty({ uploadDir: config.uploadDir + '/tmp' });
   tmpDir = config.uploadDir + '/tmp',
-  fs2.makeDirs(tmpDir, function (err) {
+  fsp.makeDirs(tmpDir, function (err) {
     if (err) return done(err);
-    fs2.emptyDir(tmpDir, done);
+    fsp.emptyDir(tmpDir, done);
   });
 });
 
@@ -55,7 +55,7 @@ exports.handler = function (inner) {
         req.files[key].forEach(function (file) {
           paths.push(file.path);
           if (file.originalFilename.trim() /* && file.size */) {
-            file.safeFilename = fs2.safeFilename(path.basename(file.originalFilename));
+            file.safeFilename = fsp.safeFilename(path.basename(file.originalFilename));
           } else {
             file.safeFilename = path.basename(file.path);
           }

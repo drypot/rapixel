@@ -3,8 +3,8 @@ var fs = require('fs');
 var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config');
-var fs2 = require('../base/fs');
-var express2 = require('../main/express');
+var fsp = require('../base/fs');
+var exp = require('../main/express');
 var upload = require('../upload/upload');
 var usera = require('../user/user-auth');
 var imageb = require('../image/image-base');
@@ -12,9 +12,7 @@ var imagec = require('../image/image-create');
 var site = require('../image/image-site');
 
 init.add(function () {
-  var core = express2.core;
-
-  core.put('/api/images/:id([0-9]+)', function (req, res, done) {
+  exp.core.put('/api/images/:id([0-9]+)', function (req, res, done) {
     usera.identifyUser(res, function (err, user) {
       if (err) return done(err);
       var id = parseInt(req.params.id) || 0;
@@ -29,7 +27,7 @@ init.add(function () {
     });
   });
 
-  core.get('/images/:id([0-9]+)/update', function (req, res, done) {
+  exp.core.get('/images/:id([0-9]+)/update', function (req, res, done) {
     usera.identifyUser(res, function (err, user) {
       if (err) return done(err);
       var id = parseInt(req.params.id) || 0;
@@ -63,9 +61,9 @@ exports.updateImage = function(id, form, _done) {
     return site.checkImageMeta(file.tpath, function (err, meta) {
       if (err) return done(err);
       var dir = imageb.getImageDir(id);
-      fs2.removeDirs(dir, function (err) {
+      fsp.removeDirs(dir, function (err) {
         if (err) return done(err);
-        fs2.makeDirs(dir, function (err) {
+        fsp.makeDirs(dir, function (err) {
           if (err) return done(err);
           var org = imageb.getOriginalPath(dir, id, meta.format);
           fs.rename(file.tpath, org, function (err) {

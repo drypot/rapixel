@@ -1,6 +1,6 @@
 var init = require('../base/init');
 var config = require('../base/config');
-var express2 = require('../main/express');
+var exp = require('../main/express');
 
 require('../image/image-create');
 require('../image/image-view');

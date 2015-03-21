@@ -7,7 +7,7 @@ var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config')({ path: 'config/test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
-var express2 = require('../main/express');
+var exp = require('../main/express');
 var userb = require('../user/user-base');
 var usera = require('../user/user-auth');
 var userf = require('../user/user-fixture');
@@ -15,9 +15,7 @@ var userd = require('../user/user-deactivate');
 var local = require('../main/local');
 
 init.add(function () {
-  var core = express2.core;
-
-  core.get('/api/test/user', function (req, res, done) {
+  exp.core.get('/api/test/user', function (req, res, done) {
     usera.identifyUser(res, function (err, user) {
       if (err) return done(err);
       res.json({});

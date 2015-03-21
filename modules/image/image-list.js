@@ -1,17 +1,15 @@
 var init = require('../base/init');
-var util2 = require('../base/util');
+var utilp = require('../base/util');
 var error = require('../base/error');
 var config = require('../base/config');
 var mongo = require('../mongo/mongo');
-var express2 = require('../main/express');
+var exp = require('../main/express');
 var userv = require('../user/user-view');
 var imageb = require('../image/image-base');
 var site = require('../image/image-site');
 
 init.add(function () {
-  var core = express2.core;
-
-  core.get('/api/images', function (req, res, done) {
+  exp.core.get('/api/images', function (req, res, done) {
     var params = exports.getParams(req);
     exports.findImages(params, function (err, images, gt, lt) {
       if (err) return done(err);
@@ -23,7 +21,7 @@ init.add(function () {
     });
   });
 
-  core.get('/', function (req, res, done) {
+  exp.core.get('/', function (req, res, done) {
     var params = exports.getParams(req);
     exports.findImages(params, function (err, images, gt, lt) {
       if (err) return done(err);
@@ -31,8 +29,8 @@ init.add(function () {
         images: images,
         showName: site.showListName,
         suffix: site.thumbnailSuffix,
-        gtUrl: gt ? util2.makeUrl(('/'), { gt: gt }) : undefined,
-        ltUrl: lt ? util2.makeUrl(('/'), { lt: lt }) : undefined
+        gtUrl: gt ? utilp.makeUrl(('/'), { gt: gt }) : undefined,
+        ltUrl: lt ? utilp.makeUrl(('/'), { lt: lt }) : undefined
       });
     });
   });
@@ -60,7 +58,7 @@ function modify(image, done) {
       home: user.home
     };
     image.dir = imageb.getImageUrl(image._id);
-    image.cdateStr = util2.toDateTimeString(image.cdate);
+    image.cdateStr = utilp.toDateTimeString(image.cdate);
     done(null, image);
   });
 }

@@ -1,14 +1,11 @@
 var init = require('../base/init');
 var error = require('../base/error');
-var express2 = require('../main/express');
+var exp = require('../main/express');
 var userb = require('../user/user-base');
 
 init.add(function () {
-  var core = express2.core;
-  var before = express2.before;
-
   /* restore locals.user. */
-  before.use(function (req, res, done) {
+  exp.before.use(function (req, res, done) {
     if (req.session.uid) {
       getCached(req.session.uid, function (err, user) {
         if (err) {
@@ -23,7 +20,7 @@ init.add(function () {
     }
   });
 
-  core.get('/api/session', function (req, res, done) {
+  exp.core.get('/api/session', function (req, res, done) {
     var obj = {
       uid : req.session.uid
     };
@@ -37,7 +34,7 @@ init.add(function () {
     res.json(obj);
   });
 
-  core.post('/api/session', function (req, res, done) {
+  exp.core.post('/api/session', function (req, res, done) {
     createSessionForm(req, res, function (err, user) {
       if (err) return done(err);
       res.json({
@@ -49,21 +46,18 @@ init.add(function () {
     });
   });
 
-  core.delete('/api/session', function (req, res, done) {
+  exp.core.delete('/api/session', function (req, res, done) {
     exports.deleteSession(req, res);
     res.json({});
   });
 
-  core.get('/users/login', function (req, res, done) {
+  exp.core.get('/users/login', function (req, res, done) {
     res.render('user/user-auth-login');
   });
 });
 
 init.tail(function () {
-  var app = express2.app;
-
-  console.log('init 222');
-  app.use(function (err, req, res, done) {
+  exp.app.use(function (err, req, res, done) {
     if (!res.locals.api && err.code == error.NOT_AUTHENTICATED.code) {
       res.redirect('/users/login');
     } else {

@@ -3,17 +3,15 @@ var fs = require('fs');
 var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config');
-var fs2 = require('../base/fs');
-var express2 = require('../main/express');
+var fsp = require('../base/fs');
+var exp = require('../main/express');
 var upload = require('../upload/upload');
 var usera = require('../user/user-auth');
 var imageb = require('../image/image-base');
 var site = require('../image/image-site');
 
 init.add(function () {
-  var core = express2.core;
-
-  core.post('/api/images', function (req, res, done) {
+  exp.core.post('/api/images', function (req, res, done) {
     usera.identifyUser(res, function (err, user) {
       if (err) return done(err);
       var form = getForm(req.body);
@@ -26,7 +24,7 @@ init.add(function () {
     });
   });
 
-  core.get('/images/new', function (req, res, done) {
+  exp.core.get('/images/new', function (req, res, done) {
     usera.identifyUser(res, function (err, user) {
       if (err) return done(err);
       var now = new Date();
@@ -103,7 +101,7 @@ function createImage(form, file, user, done) {
     if (err) return done(err);
     var id = imageb.newId();
     var dir = imageb.getImageDir(id);
-    fs2.makeDirs(dir, function (err) {
+    fsp.makeDirs(dir, function (err) {
       if (err) return done(err);
       var org = imageb.getOriginalPath(dir, id, meta.format);
       fs.rename(file.tpath, org, function (err) {

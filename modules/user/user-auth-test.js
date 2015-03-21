@@ -7,33 +7,28 @@ var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config')({ path: 'config/test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
-var express2 = require('../main/express');
+var exp = require('../main/express');
 var userb = require('../user/user-base');
 var usera = require('../user/user-auth');
 var userf = require('../user/user-fixture');
 var local = require('../main/local');
 
-var core;
-
 init.add(function () {
-  core = express2.core;
-  //express2.logError = true;
-
-  core.get('/api/test/user', function (req, res, done) {
+  exp.core.get('/api/test/user', function (req, res, done) {
     usera.identifyUser(res, function (err, user) {
       if (err) return done(err);
       res.json({});
     });
   });
 
-  core.get('/api/test/admin', function (req, res, done) {
+  exp.core.get('/api/test/admin', function (req, res, done) {
     usera.identifyAdmin(res, function (err, user) {
       if (err) return done(err);
       res.json({});
     });
   });  
 
-  core.delete('/api/test/del-session', function (req, res, done) {
+  exp.core.delete('/api/test/del-session', function (req, res, done) {
     req.session.destroy();
     res.json({});
   });
@@ -255,7 +250,7 @@ describe("identifying with auto login", function () {
 
 describe("identifying with auto login with invalid email", function () {
   it("given handler", function () {
-    core.get('/api/test/cookies', function (req, res, done) {
+    exp.core.get('/api/test/cookies', function (req, res, done) {
       res.json({
         email: req.cookies.email,
         password: req.cookies.password
@@ -327,10 +322,10 @@ describe("identifying with auto login with invalid email", function () {
 
 describe("redirecting to login page", function () {
   it("given handler", function (done) {
-    core.get('/test/public', function (req, res, done) {
+    exp.core.get('/test/public', function (req, res, done) {
       res.send('public');
     });
-    core.get('/test/private', function (req, res, done) {
+    exp.core.get('/test/private', function (req, res, done) {
       usera.identifyUser(res, function (err, user) {
         if (err) return done(err);
         res.send('private');

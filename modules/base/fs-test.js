@@ -4,7 +4,7 @@ chai.config.includeStack = true;
 
 var fs = require('fs');
 
-var fs2 = require('../base/fs');
+var fsp = require('../base/fs');
 
 var testdir = 'tmp/fs-test';
 
@@ -37,7 +37,7 @@ describe("removeDirs", function () {
     expect(fs.existsSync(testdir + '/sub1/f1.txt')).true;
     expect(fs.existsSync(testdir + '/sub2/f2.txt')).true;
     expect(fs.existsSync(testdir + '/sub2/sub3/f3.txt')).true;
-    fs2.removeDirs(testdir + '/sub2/f2.txt', function (err) {
+    fsp.removeDirs(testdir + '/sub2/f2.txt', function (err) {
       if (err) return done(err);
       expect(fs.existsSync(testdir + '/sub1')).true;
       expect(fs.existsSync(testdir + '/sub2')).true;
@@ -55,7 +55,7 @@ describe("removeDirs", function () {
     expect(fs.existsSync(testdir + '/sub1/f1.txt')).true;
     expect(fs.existsSync(testdir + '/sub2/f2.txt')).true;
     expect(fs.existsSync(testdir + '/sub2/sub3/f3.txt')).true;
-    fs2.removeDirs(testdir + '/sub1', function (err) {
+    fsp.removeDirs(testdir + '/sub1', function (err) {
       if (err) return done(err);
       expect(fs.existsSync(testdir + '/sub1')).false;
       expect(fs.existsSync(testdir + '/sub2')).true;
@@ -73,7 +73,7 @@ describe("removeDirs", function () {
     expect(fs.existsSync(testdir + '/sub1/f1.txt')).true;
     expect(fs.existsSync(testdir + '/sub2/f2.txt')).true;
     expect(fs.existsSync(testdir + '/sub2/sub3/f3.txt')).true;
-    fs2.removeDirs(testdir + '/sub2', function (err) {
+    fsp.removeDirs(testdir + '/sub2', function (err) {
       if (err) return done(err);
       expect(fs.existsSync(testdir + '/sub1')).true;
       expect(fs.existsSync(testdir + '/sub2')).false;
@@ -100,7 +100,7 @@ describe("emtpyDir", function () {
     });
   });
   it("should success", function (done) {
-    fs2.emptyDir(testdir, function (err) {
+    fsp.emptyDir(testdir, function (err) {
       if (err) return done(err);
       fs.readdir(testdir, function (err, files) {
         if (err) return done(err);
@@ -113,11 +113,11 @@ describe("emtpyDir", function () {
 
 describe("makeDirs", function () {
   before(function (done) {
-    fs2.emptyDir(testdir, done);
+    fsp.emptyDir(testdir, done);
   });
   it("can make dir", function (done) {
     expect(fs.existsSync(testdir + '/sub1')).be.false;
-    fs2.makeDirs(testdir, 'sub1', function (err, dir) {
+    fsp.makeDirs(testdir, 'sub1', function (err, dir) {
       expect(err).not.exist;
       expect(dir).equal(testdir + '/sub1');
       expect(fs.existsSync(testdir + '/sub1')).be.true;
@@ -126,7 +126,7 @@ describe("makeDirs", function () {
   });
   it("can make dir in existing dir", function (done) {
     expect(fs.existsSync(testdir + '/sub1/sub2')).be.false;
-    fs2.makeDirs(testdir, 'sub1', 'sub2', function (err, dir) {
+    fsp.makeDirs(testdir, 'sub1', 'sub2', function (err, dir) {
       expect(err).not.exist;
       expect(dir).equal(testdir + '/sub1/sub2');
       expect(fs.existsSync(testdir + '/sub1/sub2')).be.true;
@@ -135,7 +135,7 @@ describe("makeDirs", function () {
   });
   it("can make dirs with array ", function (done) {
     expect(fs.existsSync(testdir + '/ary1/ary2/ary3')).be.false;
-    fs2.makeDirs(testdir, [ 'ary1', 'ary2', 'ary3' ], function (err, dir) {
+    fsp.makeDirs(testdir, [ 'ary1', 'ary2', 'ary3' ], function (err, dir) {
       expect(err).not.exist;
       expect(dir).equal(testdir + '/ary1/ary2/ary3');
       expect(fs.existsSync(testdir + '/ary1/ary2/ary3')).be.true;
@@ -144,7 +144,7 @@ describe("makeDirs", function () {
   });
   it("can make dirs with string ", function (done) {
     expect(fs.existsSync(testdir + '/str1/str2/str3')).be.false;
-    fs2.makeDirs(testdir, 'str1/str2/str3', function (err, dir) {
+    fsp.makeDirs(testdir, 'str1/str2/str3', function (err, dir) {
       expect(err).not.exist;
       expect(dir).equal(testdir + '/str1/str2/str3');
       expect(fs.existsSync(testdir + '/str1/str2/str3')).be.true;
@@ -153,7 +153,7 @@ describe("makeDirs", function () {
   });
   it("can make dirs with string and array ", function (done) {
     expect(fs.existsSync(testdir + '/c1/c2/c3/c4/c5')).be.false;
-    fs2.makeDirs(testdir, 'c1', [ 'c2', 'c3' ], 'c4/c5', function (err, dir) {
+    fsp.makeDirs(testdir, 'c1', [ 'c2', 'c3' ], 'c4/c5', function (err, dir) {
       expect(err).not.exist;
       expect(dir).equal(testdir + '/c1/c2/c3/c4/c5');
       expect(fs.existsSync(testdir + '/c1/c2/c3/c4/c5')).be.true;
@@ -177,7 +177,7 @@ describe("safeFilename", function () {
       [ "이상한 '한글' 이름을 가진 파일", "이상한 '한글' 이름을 가진 파일" ]
     ];
     table.forEach(function (pair) {
-      var a = fs2.safeFilename(pair[0]);
+      var a = fsp.safeFilename(pair[0]);
       var b = pair[1];
       if (a !== b) console.log(pair);
       expect((a == b)).true;
@@ -187,13 +187,13 @@ describe("safeFilename", function () {
 
 describe("makeDeepPath", function () {
   it("should success", function () {
-    expect(fs2.makeDeepPath('tmp', 1, 3)).equal('tmp/0/0/1');
-    expect(fs2.makeDeepPath('tmp', 999, 3)).equal('tmp/0/0/999');
-    expect(fs2.makeDeepPath('tmp', 1000, 3)).equal('tmp/0/1/0');
-    expect(fs2.makeDeepPath('tmp', 1999, 3)).equal('tmp/0/1/999');
-    expect(fs2.makeDeepPath('tmp', 999999, 3)).equal('tmp/0/999/999');
-    expect(fs2.makeDeepPath('tmp', 1999999, 3)).equal('tmp/1/999/999');
-    expect(fs2.makeDeepPath('tmp', 999999999, 3)).equal('tmp/999/999/999');
-    expect(fs2.makeDeepPath('tmp', 9999999999, 3)).equal('tmp/9999/999/999');
+    expect(fsp.makeDeepPath('tmp', 1, 3)).equal('tmp/0/0/1');
+    expect(fsp.makeDeepPath('tmp', 999, 3)).equal('tmp/0/0/999');
+    expect(fsp.makeDeepPath('tmp', 1000, 3)).equal('tmp/0/1/0');
+    expect(fsp.makeDeepPath('tmp', 1999, 3)).equal('tmp/0/1/999');
+    expect(fsp.makeDeepPath('tmp', 999999, 3)).equal('tmp/0/999/999');
+    expect(fsp.makeDeepPath('tmp', 1999999, 3)).equal('tmp/1/999/999');
+    expect(fsp.makeDeepPath('tmp', 999999999, 3)).equal('tmp/999/999/999');
+    expect(fsp.makeDeepPath('tmp', 9999999999, 3)).equal('tmp/9999/999/999');
   });
 });

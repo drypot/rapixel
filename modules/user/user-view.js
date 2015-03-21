@@ -1,13 +1,11 @@
 var init = require('../base/init');
 var error = require('../base/error');
-var express2 = require('../main/express');
+var exp = require('../main/express');
 var userb = require('../user/user-base');
 var usera = require('../user/user-auth');
 
 init.add(function () {
-  var core = express2.core;
-
-  core.get('/api/users/:id([0-9]+)', function (req, res, done) {
+  exp.core.get('/api/users/:id([0-9]+)', function (req, res, done) {
     var id = parseInt(req.params.id) || 0;
     var user = res.locals.user
     usera.getCached(id, function (err, _tuser) {
