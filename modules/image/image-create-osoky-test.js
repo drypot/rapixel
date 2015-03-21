@@ -63,7 +63,7 @@ describe("posting", function () {
       image.vers.should.eql([ 800, 768, 720, 640 ]);
       should.exist(image.cdate);
       image.comment.should.equal('image1');
-      var dir = imageb.getImageDir(_id);
+      var dir = imageb.getVersionDir(_id);
       fs.existsSync(imageb.getVersionPath(dir, _id, 900)).should.be.false;
       fs.existsSync(imageb.getVersionPath(dir, _id, 800)).should.be.true;
       fs.existsSync(imageb.getVersionPath(dir, _id, 768)).should.be.true;
@@ -109,7 +109,7 @@ describe("posting", function () {
       image.vers.should.eql([ 720, 640 ]);
       should.exist(image.cdate);
       image.comment.should.equal('image3');
-      var dir = imageb.getImageDir(_id);
+      var dir = imageb.getVersionDir(_id);
       fs.existsSync(imageb.getVersionPath(dir, _id, 768)).should.be.false;
       fs.existsSync(imageb.getVersionPath(dir, _id, 720)).should.be.true;
       fs.existsSync(imageb.getVersionPath(dir, _id, 640)).should.be.true;
@@ -127,7 +127,7 @@ describe("posting", function () {
       image.vers.should.eql([ 720, 640 ]);
       should.exist(image.cdate);
       image.comment.should.equal('image3');
-      var dir = imageb.getImageDir(_id);
+      var dir = imageb.getVersionDir(_id);
       fs.existsSync(imageb.getVersionPath(dir, _id, 768)).should.be.false;
       fs.existsSync(imageb.getVersionPath(dir, _id, 720)).should.be.true;
       fs.existsSync(imageb.getVersionPath(dir, _id, 640)).should.be.true;

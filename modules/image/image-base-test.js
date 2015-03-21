@@ -12,33 +12,33 @@ before(function (done) {
 });
 
 describe("identify", function () {
-  it("should fail with invalid path", function (done) {
+  it("invalid path should fail", function (done) {
     imageb.identify('xxxx', function (err, meta) {
-      should.exist(err);
+      expect(err).exist;
       done();
     })
   });
-  it("should fail with non image file", function (done) {
-    imageb.identify('readme.md', function (err, meta) {
-      should.exist(err);
+  it("non image should fail", function (done) {
+    imageb.identify('README.md', function (err, meta) {
+      expect(err).exist;
       done();
     })
   });
-  it("should success with jpeg", function (done) {
+  it("jpeg should success", function (done) {
     imageb.identify('samples/5120x2880-169.jpg', function (err, meta) {
       expect(err).not.exist;
-      meta.format.should.equal('jpeg');
-      meta.width.should.equal(5120);
-      meta.height.should.equal(2880);
+      expect(meta.format).equal('jpeg');
+      expect(meta.width).equal(5120);
+      expect(meta.height).equal(2880);
       done();
     });
   });
-  it("should success with svg", function (done) {
+  it("svg should success", function (done) {
     imageb.identify('samples/svg-sample.svg', function (err, meta) {
       expect(err).not.exist;
-      meta.format.should.equal('svg');
-      meta.width.should.equal(1000);
-      meta.height.should.equal(1000);
+      expect(meta.format).equal('svg');
+      expect(meta.width).equal(1000);
+      expect(meta.height).equal(1000);
       done();
     });
   });

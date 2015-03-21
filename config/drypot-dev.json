@@ -3,16 +3,16 @@
   "appDesc": "Simply vectors",
   "appType": "drypot",
 
-  "frontUrl": "http://drypot.local:8080",
+  "mainSiteUrl": "http://drypot.local:8080",
 
   "appPort": 8040,
   "cookieSecret": "o;iejf832ndvs",
 
-  "uploadUrl": "http://file.drypot.local:8080",
+  "uploadSiteUrl": "http://file.drypot.local:8080",
   "uploadDir": "upload/drypot",
   "uploadMax": 10,
 
-  "mongoDb": "drypot",
+  "mongodb": "drypot",
 
   "mailServer": "",
 

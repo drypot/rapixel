@@ -67,7 +67,7 @@ function step1(form, done) {
             text:
               '\n' +
               'Open the following URL to reset your password.\n\n' +
-              config.frontUrl + '/users/reset-pass?step=3&id=' + reset._id + '&t=' + reset.token + '\n\n' +
+              config.mainSiteUrl + '/users/reset-pass?step=3&id=' + reset._id + '&t=' + reset.token + '\n\n' +
               config.appName
           };
           mailer.send(mail, done);

@@ -3,16 +3,16 @@
   "appDesc": "4K images",
   "appType": "rapixel",
 
-  "frontUrl": "http://rapixel.local:8080",
+  "mainSiteUrl": "http://rapixel.local:8080",
 
   "appPort": 8021,
   "cookieSecret": "o;iejf832ndvs",
 
-  "uploadUrl": "http://file.rapixel.local:8080",
+  "uploadSiteUrl": "http://file.rapixel.local:8080",
   "uploadDir": "upload/rapixel-test",
   "uploadMax": 10,
 
-  "mongoDb": "rapixel-test",
+  "mongodb": "rapixel-test",
 
   "mailServer": "",
 

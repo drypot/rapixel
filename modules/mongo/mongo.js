@@ -19,7 +19,7 @@ init.add(function (done) {
   var server = new Server('localhost', 27017, { auto_reconnect: true } );
   var client = new MongoClient(server);
   client.open(function (err) {
-    db = exports.db = client.db(config.mongoDb);
+    db = exports.db = client.db(config.mongodb);
     console.log('mongo: ' + db.databaseName);
     if (config.mongoUser) {
       return db.authenticate(config.mongoUser, config.mongoPassword, function(err, res) {

@@ -14,7 +14,7 @@ init.run(function (err) {
       if (err) return done(err);
       if (!image) return done();
       var id = image._id;
-      var dir = imageb.getImageDir(id);
+      var dir = imageb.getVersionDir(id);
       var oname = dir + '/' + id + '-org.' + image.format;    
       var nname = dir + '/' + id + '.' + image.format;
       //console.log(oname + ' -> ' + nname);

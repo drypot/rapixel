@@ -100,10 +100,10 @@ function createImage(form, file, user, done) {
   site.checkImageMeta(file.tpath, function (err, meta) {
     if (err) return done(err);
     var id = imageb.newId();
-    var dir = imageb.getImageDir(id);
+    var dir = imageb.getVersionDir(id);
     fsp.makeDirs(dir, function (err) {
       if (err) return done(err);
-      var org = imageb.getOriginalPath(dir, id, meta.format);
+      var org = imageb.getOrgPath(id, meta.format);
       fs.rename(file.tpath, org, function (err) {
         if (err) return done(err);
         site.makeVersions(org, meta, dir, id, function (err, vers) {

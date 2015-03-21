@@ -57,7 +57,7 @@ function modify(image, done) {
       name: user.name,
       home: user.home
     };
-    image.dir = imageb.getImageUrl(image._id);
+    image.dir = imageb.getVersionUrlBase(image._id);
     image.cdateStr = utilp.toDateTimeString(image.cdate);
     done(null, image);
   });

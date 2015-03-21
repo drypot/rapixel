@@ -60,12 +60,12 @@ exports.updateImage = function(id, form, _done) {
   if (file) {
     return site.checkImageMeta(file.tpath, function (err, meta) {
       if (err) return done(err);
-      var dir = imageb.getImageDir(id);
+      var dir = imageb.getVersionDir(id);
       fsp.removeDirs(dir, function (err) {
         if (err) return done(err);
         fsp.makeDirs(dir, function (err) {
           if (err) return done(err);
-          var org = imageb.getOriginalPath(dir, id, meta.format);
+          var org = imageb.getOrgPath(id, meta.format);
           fs.rename(file.tpath, org, function (err) {
             if (err) return done(err);
             site.makeVersions(org, meta, dir, id, function (err, vers) {

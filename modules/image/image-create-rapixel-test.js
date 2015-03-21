@@ -66,7 +66,7 @@ describe("posting", function () {
       image.vers.should.eql([ 3840, 2880, 2560, 2048, 1920, 1680, 1440, 1366, 1280, 1136, 1024, 960, 640 ]);
       should.exist(image.cdate);
       image.comment.should.equal('image1');
-      var dir = imageb.getImageDir(_id);
+      var dir = imageb.getVersionDir(_id);
       fs.existsSync(imageb.getVersionPath(dir, _id, 5120)).should.be.false;
       fs.existsSync(imageb.getVersionPath(dir, _id, 3840)).should.be.true;
       fs.existsSync(imageb.getVersionPath(dir, _id, 1280)).should.be.true;

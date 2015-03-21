@@ -6,7 +6,7 @@ var mongo = require('../mongo/mongo');
 var imageb = require('../image/image-base');
 
 // TODO: 만든지 오래되었다. 코드 정상작동하는지 쓰기 전에 확인.
-//       rename-org.js 참고. 더 최근 코드다.
+//       image-update.js, rename-org.js 참고. 더 최근 코드다.
 
 init.add(function (done) {
   console.log('start rendering.');
@@ -17,12 +17,12 @@ init.add(function (done) {
       if (err) return done(err);
       if (image) {
         var id = image._id;
-        var dir = imagel.getImageDir(id);
-        imagel.removeVersions(dir, function (err) {
+        var dir = imageb.getVersionDir(id);
+        imageb.removeVersions(dir, function (err) {
           if (err) return done(err);
-          var org = imagel.getOriginalPath(dir, id, image.format);
+          var org = imageb.getOrgPath(id, image.format);
           process.stdout.write(id + ' ');
-          imagel.makeVersions(id, dir, org, image.width, function (err, vers) {
+          imageb.makeVersions(id, dir, org, image.width, function (err, vers) {
             if (err) return done(err);
             var fields = {
               $set : { vers: vers }

@@ -127,11 +127,11 @@ exports.safeFilename = function (name) {
   return safe;
 };
 
-exports.makeDeepPath = function (base, id, iter) {
+exports.makeDeepPath = function (id, iter) {
   var path = '';
   for (iter--; iter > 0; iter--) {
     path = '/' + id % 1000 + path;
     id = Math.floor(id / 1000);
   }
-  return base + '/' + id + path;
+  return id + path;
 }

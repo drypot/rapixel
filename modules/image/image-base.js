@@ -15,14 +15,14 @@ init.add(function () {
 });
 
 var imageDir;
-var imageUrl;
+var imageDirUrl;
 
 var images;
 var imageId;
 
 init.add(function (done) {
   imageDir = exports.imageDir = config.uploadDir + '/public/images'
-  imageUrl = config.uploadUrl + '/images';
+  imageDirUrl = config.uploadSiteUrl + '/images';
   fsp.makeDirs(imageDir, done);
 });
 
@@ -49,21 +49,22 @@ exports.newId = function () {
   return ++imageId;
 };
 
-exports.getImageDir = function (id) {
-  return fsp.makeDeepPath(imageDir, id, 3);
+var getVersionDir = exports.getVersionDir = function (id) {
+  return imageDir + '/' + fsp.makeDeepPath(id, 3);
 };
 
-exports.getImageUrl = function (id) {
-  return fsp.makeDeepPath(imageUrl, id, 3)
-}
-
-exports.getOriginalPath = function (dir, id, format) {
-  return dir + '/' + id + '-org.' + format;
+exports.getVersionUrlBase = function (id) {
+  return imageDirUrl + '/' + fsp.makeDeepPath(id, 3)
 }
 
 exports.getVersionPath = function (dir, id, width) {
   return dir + '/' + id + '-' + width + '.jpg';
 };
+
+exports.getOrgPath = function (id, format) {
+  return getVersionDir(id) + '/' + id + '.' + format;
+}
+
 
 exports.identify = function (fname, done) {
   exec('identify -format "%m %w %h" ' + fname, function (err, stdout, stderr) {

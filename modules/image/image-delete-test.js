@@ -57,7 +57,7 @@ describe("deleting", function () {
     });
   });
   it("and deleted", function (done) {
-    var dir = imageb.getImageDir(_id);
+    var dir = imageb.getVersionDir(_id);
     var p = imageb.getVersionPath(dir, _id, 3840);
     fs.existsSync(p).should.true;
     local.del('/api/images/' + _id, function (err, res) {
@@ -68,7 +68,7 @@ describe("deleting", function () {
     });
   });
   it("version should not exist", function (done) {
-    var dir = imageb.getImageDir(_id);
+    var dir = imageb.getVersionDir(_id);
     var p = imageb.getVersionPath(dir, _id, 3840);
     fs.existsSync(p).should.false;
     imageb.images.findOne({ _id: _id }, function (err, image) {
@@ -109,7 +109,7 @@ describe("deleting by admin", function () {
     userf.login('admin', done);
   });
   it("and deleted", function (done) {
-    var dir = imageb.getImageDir(_id);
+    var dir = imageb.getVersionDir(_id);
     var p = imageb.getVersionPath(dir, _id, 3840);
     fs.existsSync(p).should.true;
     local.del('/api/images/' + _id, function (err, res) {
@@ -119,7 +119,7 @@ describe("deleting by admin", function () {
     });
   });
   it("version should not exist", function (done) {
-    var dir = imageb.getImageDir(_id);
+    var dir = imageb.getVersionDir(_id);
     var p = imageb.getVersionPath(dir, _id, 3840);
     fs.existsSync(p).should.false;
     imageb.images.findOne({ _id: _id }, function (err, image) {
@@ -160,7 +160,7 @@ describe("deleting other's image", function () {
     userf.login('user2', done);
   });
   it("deleting should fail", function (done) {
-    var dir = imageb.getImageDir(_id);
+    var dir = imageb.getVersionDir(_id);
     var p = imageb.getVersionPath(dir, _id, 3840);
     fs.existsSync(p).should.true;
     local.del('/api/images/' + _id, function (err, res) {
@@ -171,7 +171,7 @@ describe("deleting other's image", function () {
     });
   });
   it("version should exist", function (done) {
-    var dir = imageb.getImageDir(_id);
+    var dir = imageb.getVersionDir(_id);
     var p = imageb.getVersionPath(dir, _id, 3840);
     fs.existsSync(p).should.true;
     imageb.images.findOne({ _id: _id }, function (err, image) {

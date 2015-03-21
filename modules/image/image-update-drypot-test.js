@@ -61,8 +61,7 @@ describe("updating", function () {
       should.not.exist(image.vers);
       should.exist(image.cdate);
       image.comment.should.equal('image1');
-      var dir = imageb.getImageDir(_id);
-      fs.existsSync(imageb.getOriginalPath(dir, _id, 'svg')).should.be.true;
+      fs.existsSync(imageb.getOrgPath(_id, 'svg')).should.be.true;
       done();
     });
   });
@@ -91,8 +90,7 @@ describe("updating", function () {
       should.not.exist(image.vers);
       should.exist(image.cdate);
       image.comment.should.equal('image2');
-      var dir = imageb.getImageDir(_id);
-      fs.existsSync(imageb.getOriginalPath(dir, _id, 'svg')).should.be.true;
+      fs.existsSync(imageb.getOrgPath(_id, 'svg')).should.be.true;
       done();
     });
   });

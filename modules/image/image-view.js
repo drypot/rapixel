@@ -62,7 +62,7 @@ function findImage(id, done) {
         name: user.name,
         home: user.home
       };
-      image.dir = imageb.getImageUrl(image._id);
+      image.dir = imageb.getVersionUrlBase(image._id);
       image.cdateStr = utilp.toDateTimeString(image.cdate);
       image.cdate = image.cdate.getTime();
       done(null, image);

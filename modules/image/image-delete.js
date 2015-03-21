@@ -29,7 +29,7 @@ init.add(function () {
 function delImage(id, done) {
   imageb.images.remove({ _id: id }, function (err, cnt) {
     if (err) return done(err);
-    fsp.removeDirs(imageb.getImageDir(id), function (err) {
+    fsp.removeDirs(imageb.getVersionDir(id), function (err) {
       if (err) return done(err);
       done();
     });

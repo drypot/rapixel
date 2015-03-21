@@ -187,13 +187,13 @@ describe("safeFilename", function () {
 
 describe("makeDeepPath", function () {
   it("should success", function () {
-    expect(fsp.makeDeepPath('tmp', 1, 3)).equal('tmp/0/0/1');
-    expect(fsp.makeDeepPath('tmp', 999, 3)).equal('tmp/0/0/999');
-    expect(fsp.makeDeepPath('tmp', 1000, 3)).equal('tmp/0/1/0');
-    expect(fsp.makeDeepPath('tmp', 1999, 3)).equal('tmp/0/1/999');
-    expect(fsp.makeDeepPath('tmp', 999999, 3)).equal('tmp/0/999/999');
-    expect(fsp.makeDeepPath('tmp', 1999999, 3)).equal('tmp/1/999/999');
-    expect(fsp.makeDeepPath('tmp', 999999999, 3)).equal('tmp/999/999/999');
-    expect(fsp.makeDeepPath('tmp', 9999999999, 3)).equal('tmp/9999/999/999');
+    expect(fsp.makeDeepPath(1, 3)).equal('0/0/1');
+    expect(fsp.makeDeepPath(999, 3)).equal('0/0/999');
+    expect(fsp.makeDeepPath(1000, 3)).equal('0/1/0');
+    expect(fsp.makeDeepPath(1999, 3)).equal('0/1/999');
+    expect(fsp.makeDeepPath(999999, 3)).equal('0/999/999');
+    expect(fsp.makeDeepPath(1999999, 3)).equal('1/999/999');
+    expect(fsp.makeDeepPath(999999999, 3)).equal('999/999/999');
+    expect(fsp.makeDeepPath(9999999999, 3)).equal('9999/999/999');
   });
 });

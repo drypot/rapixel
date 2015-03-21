@@ -12,6 +12,6 @@ before(function (done) {
 
 describe("db", function () {
   it("should have been opened.", function () {
-    expect(mongo.db.databaseName).equal(config.mongoDb);
+    expect(mongo.db.databaseName).equal(config.mongodb);
   });
 });
