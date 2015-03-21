@@ -3,7 +3,6 @@ var error = require('../base/error');
 var express2 = require('../main/express');
 var userb = require('../user/user-base');
 var userc = require('../user/user-create');
-var userv = require('../user/user-view');
 var usera = require('../user/user-auth');
 
 init.add(function () {
@@ -23,12 +22,12 @@ init.add(function () {
 
   app.get('/users/:id([0-9]+)/update', function (req, res, done) {
     usera.identifyUser(res, function (err, user) {
-      if (err) return res.renderErr(err);
+      if (err) return done(err);
       var id = parseInt(req.params.id) || 0;
-      exports.checkUpdatable(id, user, function (err) {
-        if (err) return res.renderErr(err);
+      checkUpdatable(id, user, function (err) {
+        if (err) return done(err);
         usera.getCached(id, function (err, tuser) {
-          if (err) return res.renderErr(err);
+          if (err) return done(err);
           res.render('user/user-update', {
             tuser: tuser
           });
@@ -39,7 +38,7 @@ init.add(function () {
 });
 
 function updateUser(id, user, form, done) {
-  exports.checkUpdatable(id, user, function (err) {
+  checkUpdatable(id, user, function (err) {
     if (err) return done(err);
     form.namel = form.name.toLowerCase();
     form.homel = form.home.toLowerCase();
@@ -61,14 +60,14 @@ function updateUser(id, user, form, done) {
         if (!cnt) {
           return done(error(error.USER_NOT_FOUND));
         }
-        userv.deleteCache(id);
+        usera.deleteCache(id);
         done();
       });
     });
   });
 };
 
-exports.checkUpdatable = function (id, user, done) {
+var checkUpdatable = exports.checkUpdatable = function (id, user, done) {
   if (user._id != id && !user.admin) {
     return done(error(error.NOT_AUTHORIZED))
   }

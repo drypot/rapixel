@@ -2,6 +2,7 @@ var init = require('../base/init');
 var error = require('../base/error');
 var express2 = require('../main/express');
 var userb = require('../user/user-base');
+var usera = require('../user/user-auth');
 
 init.add(function () {
   var app = express2.app;
@@ -9,7 +10,7 @@ init.add(function () {
   app.get('/api/users/:id([0-9]+)', function (req, res, done) {
     var id = parseInt(req.params.id) || 0;
     var user = res.locals.user
-    getCached(id, function (err, _tuser) {
+    usera.getCached(id, function (err, _tuser) {
       if (err) return done(err);
       var tuser;
       if (user && user.admin) {

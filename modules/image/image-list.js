@@ -26,7 +26,7 @@ init.add(function () {
   app.get('/', function (req, res, done) {
     var params = exports.getParams(req);
     exports.findImages(params, function (err, images, gt, lt) {
-      if (err) return res.renderErr(err);
+      if (err) return done(err);
       res.render('image/image-list', {
         images: images,
         showName: site.showListName,

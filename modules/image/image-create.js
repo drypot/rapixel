@@ -28,7 +28,7 @@ init.add(function () {
 
   app.get('/images/new', function (req, res, done) {
     usera.identifyUser(res, function (err, user) {
-      if (err) return res.renderErr(err);
+      if (err) return done(err);
       var now = new Date();
       getTicketCount(now, user, function (err, count, hours) {
         res.render('image/image-create', {

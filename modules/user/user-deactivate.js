@@ -2,7 +2,6 @@ var init = require('../base/init');
 var error = require('../base/error');
 var express2 = require('../main/express');
 var userb = require('../user/user-base');
-var userv = require('../user/user-view');
 var usera = require('../user/user-auth');
 var useru = require('../user/user-update');
 
@@ -23,7 +22,7 @@ init.add(function () {
 
   app.get('/users/deactivate', function (req, res, done) {
     usera.identifyUser(res, function (err, user) {
-      if (err) return res.renderErr(err);
+      if (err) return done(err);
       res.render('user/user-deactivate');
     });
   });
@@ -37,7 +36,7 @@ function deactivateUser(id, user, done) {
       if (!cnt) {
         return done(error(error.USER_NOT_FOUND));
       }
-      userv.deleteCache(id);
+      usera.deleteCache(id);
       done();
     });
   });

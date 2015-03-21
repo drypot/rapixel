@@ -9,20 +9,19 @@ var config = require('../base/config')({ path: 'config/test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
 var express2 = require('../main/express');
 var usera = require('../user/user-auth');
-var userc = require('../user/user-create');
 var userv = require('../user/user-view');
 var userf = require('../user/user-fixture');
-
 var local = require('../main/local');
 
 before(function (done) {
   init.run(done);
 });
 
-describe("finding user", function () {
+describe.only("finding user", function () {
   var _user = { name: 'test', email: 'test@def.com', password: '1234'  };
   it("given new user", function (done) {
     local.post('/api/users').send(_user).end(function (err, res) {
+      expect(err).not.exist;
       expect(res.error).false;
       expect(res.body.err).not.exist;
       _user._id = res.body.id;
@@ -32,47 +31,48 @@ describe("finding user", function () {
   it("given login", function (done) {
     var form = { email: _user.email, password: _user.password };
     local.post('/api/session').send(form).end(function (err, res) {
+      expect(err).not.exist;
       expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });
   });
-  it("should return email", function (done) {
+  it("should success with email field", function (done) {
     local.get('/api/users/' + _user._id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.error).false;
       expect(res.body.err).not.exist;
-      res.body.user._id.should.equal(_user._id);
-      res.body.user.name.should.equal(_user.name);
-      res.body.user.email.should.equal(_user.email);
+      expect(res.body.user._id).equal(_user._id);
+      expect(res.body.user.name).equal(_user.name);
+      expect(res.body.user.email).equal(_user.email);
       done();
     });
   });
   it("given other's login", function (done) {
     userf.login('user2', done);
   });
-  it("should not return email", function (done) {
+  it("should success without email", function (done) {
     local.get('/api/users/' + _user._id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.error).false;
       expect(res.body.err).not.exist;
-      res.body.user._id.should.equal(_user._id);
-      res.body.user.name.should.equal(_user.name);
-      should.not.exist(res.body.user.email);
+      expect(res.body.user._id).equal(_user._id);
+      expect(res.body.user.name).equal(_user.name);
+      expect(res.body.user.email).not.exist;
       done();
     });
   });
   it("given admin login", function (done) {
     userf.login('admin', done);
   });
-  it("should return email", function (done) {
+  it("should success with email", function (done) {
     local.get('/api/users/' + _user._id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.error).false;
       expect(res.body.err).not.exist;
-      res.body.user._id.should.equal(_user._id);
-      res.body.user.name.should.equal(_user.name);
-      res.body.user.email.should.equal(_user.email);
+      expect(res.body.user._id).equal(_user._id);
+      expect(res.body.user.name).equal(_user.name);
+      expect(res.body.user.email).equal(_user.email);
       done();
     });
   });
@@ -84,15 +84,15 @@ describe("finding user", function () {
       done();
     })
   });
-  it("should not return email", function (done) {
+  it("should success without email", function (done) {
     local.get('/api/users/' + _user._id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.error).false;
       expect(res.body.err).not.exist;
-      res.body.user._id.should.equal(_user._id);
-      res.body.user.name.should.equal(_user.name);
-      res.body.user.profile.should.equal('');
-      should.not.exist(res.body.user.email);
+      expect(res.body.user._id).equal(_user._id);
+      expect(res.body.user.name).equal(_user.name);
+      expect(res.body.user.profile).equal('');
+      expect(res.body.user.email).not.exist;
       done();
     });
   });
@@ -101,8 +101,9 @@ describe("finding user", function () {
       expect(err).not.exist;
       expect(res.error).false;
       expect(res.body.err).exist;
-      error.find(res.body.err, error.USER_NOT_FOUND).should.true;
+      expect(error.find(res.body.err, error.USER_NOT_FOUND)).true;
       done();
     });
   });
 });
+

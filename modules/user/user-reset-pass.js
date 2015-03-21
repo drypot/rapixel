@@ -13,7 +13,7 @@ init.add(function () {
   var app = express2.app;
 
   app.post('/api/reset-pass', function (req, res, done) {
-    var form = getStep1Form(req);
+    var form = getForm1(req);
     step1(form, function (err) {
       if (err) return done(err);
       res.json({});
@@ -21,7 +21,7 @@ init.add(function () {
   });
 
   app.put('/api/reset-pass', function (req, res, done) {
-    var form = getStep2Form(req);
+    var form = getForm2(req);
     step2(form, function (err) {
       if (err) return done(err);
       res.json({});
@@ -33,7 +33,7 @@ init.add(function () {
   });
 });
 
-function getStep1Form(req) {
+function getForm1(req) {
   var form = {};
   form.email = String(req.body.email || '').trim();
   return form;
@@ -79,7 +79,7 @@ function step1(form, done) {
   });
 };
 
-function getStep2Form(req) {
+function getForm2(req) {
   var form = {};
   form.id = String(req.body.id || '').trim();
   form.token = String(req.body.token || '').trim();

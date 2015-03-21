@@ -31,10 +31,10 @@ init.add(function () {
 
   app.get('/images/:id([0-9]+)/update', function (req, res, done) {
     usera.identifyUser(res, function (err, user) {
-      if (err) return res.renderErr(err);
+      if (err) return done(err);
       var id = parseInt(req.params.id) || 0;
       exports.checkUpdatable(id, user, function (err, image) {
-        if (err) return res.renderErr(err);
+        if (err) return done(err);
         res.render('image/image-update', {
           image: image
         });

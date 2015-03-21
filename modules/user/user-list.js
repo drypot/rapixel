@@ -9,7 +9,7 @@ init.add(function () {
 
   app.get('/users', function (req, res, done) {
     userb.users.count(function (err, count) {
-      if (err) return res.renderErr(err);
+      if (err) return done(err);
       res.render('user/user-list', { count: count });
     });
   });

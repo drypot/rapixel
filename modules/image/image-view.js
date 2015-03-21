@@ -27,7 +27,7 @@ init.add(function () {
     incHit(id, true, function (err) {
       if (err) return done(err);
       findImage(id, function (err, image) {
-        if (err) return res.renderErr(err);
+        if (err) return done(err);
         var user = res.locals.user;
         res.render('image/image-view', {
           image: image,

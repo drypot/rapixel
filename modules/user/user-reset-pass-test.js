@@ -13,7 +13,6 @@ var express2 = require('../main/express');
 var userb = require('../user/user-base');
 var userf = require('../user/user-fixture');
 var userp = require('../user/user-reset-pass');
-
 var local = require('../main/local');
 
 before(function (done) {
@@ -22,7 +21,7 @@ before(function (done) {
 
 describe("resets collection", function () {
   it("should exist", function () {
-    should.exist(userb.resets);
+    expect(userb.resets).exist;
   });
 });
 
@@ -32,104 +31,109 @@ describe("resetting user", function () {
   before(function () {
     _user = userf.user1;
   });
-  it("should success old password", function (done) {
+  it("old password should be ok", function (done) {
     userb.users.findOne({ email: _user.email }, function (err, user) {
       expect(err).not.exist;
-      userb.checkPassword(_user.password, user.hash).should.true;
+      expect(userb.checkPassword(_user.password, user.hash)).true;
       done();
     });
   });
-  it("given new reset request", function (done) {
+  it("reset request should success", function (done) {
     var form = { email: _user.email };
     local.post('/api/reset-pass').send(form).end(function (err, res) {
+      expect(err).not.exist;
       expect(res.error).false;
       expect(res.body.err).not.exist;
-      done();
+      userb.resets.findOne({ email: _user.email }, function (err, reset) {
+        expect(err).not.exist;
+        expect(reset._id).exist;
+        expect(reset.token).exist;
+        expect(reset.email).equal(_user.email);
+        _reset = reset;
+        done();
+      });
     });
   });
-  it("can be checked", function (done) {
-    userb.resets.findOne({ email: _user.email }, function (err, reset) {
-      expect(err).not.exist;
-      should.exist(reset._id);
-      should.exist(reset.token);
-      (reset.email == _user.email).should.true;
-      _reset = reset;
-      done();
-    });
-  });
-  it("should fail with invalid email", function (done) {
+  it("invalid email should fail", function (done) {
     var form = { email: 'abc.def.xyz' };
     local.post('/api/reset-pass').send(form).end(function (err, res) {
+      expect(err).not.exist;
       expect(res.error).false;
       expect(res.body.err).exist;
-      error.find(res.body.err, error.EMAIL_PATTERN).should.true;
+      expect(error.find(res.body.err, error.EMAIL_PATTERN)).true;
       done();
     });
   });
-  it("should fail with non-exist email", function (done) {
+  it("unregistered email should fail", function (done) {
     var form = { email: 'non-exist@xyz.com' };
     local.post('/api/reset-pass').send(form).end(function (err, res) {
+      expect(err).not.exist;
       expect(res.error).false;
       expect(res.body.err).exist;
-      error.find(res.body.err, error.EMAIL_NOT_EXIST).should.true;
+      expect(error.find(res.body.err, error.EMAIL_NOT_EXIST)).true;
       done();
     });
   });
-  it("should fail with invalid id", function (done) {
+  it("invalid id should fail", function (done) {
     var form = { id: '012345678901234567890123', token: _reset.token, password: '4567' };
     local.put('/api/reset-pass').send(form).end(function (err, res) {
+      expect(err).not.exist;
       expect(res.error).false;
       expect(res.body.err).exist;
-      error.find(res.body.err, error.INVALID_DATA).should.true;
+      expect(error.find(res.body.err, error.INVALID_DATA)).true;
       done();
     });
   });
-  it("should fail with invalid token", function (done) {
+  it("invalid token should fail", function (done) {
     var form = { id: _reset._id, token: 'xxxxx', password: '4567' };
     local.put('/api/reset-pass').send(form).end(function (err, res) {
+      expect(err).not.exist;
       expect(res.error).false;
       expect(res.body.err).exist;
-      error.find(res.body.err, error.INVALID_DATA).should.true;
+      expect(error.find(res.body.err, error.INVALID_DATA)).true;
       done();
     });
   });
-  it("should fail with invalid password", function (done) {
+  it("invalid password should fail", function (done) {
     var form = { id: _reset._id, token: _reset.token, password: '' };
     local.put('/api/reset-pass').send(form).end(function (err, res) {
+      expect(err).not.exist;
       expect(res.error).false;
       expect(res.body.err).exist;
-      error.find(res.body.err, error.PASSWORD_EMPTY).should.true;
+      expect(error.find(res.body.err, error.PASSWORD_EMPTY)).true;
       done();
     });
   });
-  it("should fail with invalid password", function (done) {
+  it("invalid password should fail", function (done) {
     var form = { id: _reset._id, token: _reset.token, password: 'xx' };
     local.put('/api/reset-pass').send(form).end(function (err, res) {
+      expect(err).not.exist;
       expect(res.error).false;
       expect(res.body.err).exist;
-      error.find(res.body.err, error.PASSWORD_RANGE).should.true;
+      expect(error.find(res.body.err, error.PASSWORD_RANGE)).true;
       done();
     });
   });
   it("should success", function (done) {
     var form = { id: _reset._id, token: _reset.token, password: 'new-pass' };
     local.put('/api/reset-pass').send(form).end(function (err, res) {
+      expect(err).not.exist;
       expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });
   });
-  it("should fail old password", function (done) {
+  it("old password should fail", function (done) {
     userb.users.findOne({ email: _user.email }, function (err, user) {
       expect(err).not.exist;
-      userb.checkPassword(_user.password, user.hash).should.false;
+      expect(userb.checkPassword(_user.password, user.hash)).false;
       done();
     });
   });
-  it("should success new password", function (done) {
+  it("new password should success", function (done) {
     userb.users.findOne({ email: _user.email }, function (err, user) {
       expect(err).not.exist;
-      userb.checkPassword('new-pass', user.hash).should.true;
+      expect(userb.checkPassword('new-pass', user.hash)).true;
       done();
     });
   });
@@ -141,50 +145,49 @@ describe("resetting admin", function () {
   before(function () {
     _user = userf.admin;
   });
-  it("should success old password", function (done) {
+  it("old password should success", function (done) {
     userb.users.findOne({ email: _user.email }, function (err, user) {
       expect(err).not.exist;
-      userb.checkPassword(_user.password, user.hash).should.true;
+      expect(userb.checkPassword(_user.password, user.hash)).true;
       done();
     });
   });
-  it("given new reset request", function (done) {
+  it("given reset request", function (done) {
     var form = { email: _user.email };
     local.post('/api/reset-pass').send(form).end(function (err, res) {
+      expect(err).not.exist;
       expect(res.error).false;
       expect(res.body.err).not.exist;
-      done();
-    });
-  });
-  it("can be checked", function (done) {
-    userb.resets.findOne({ email: _user.email }, function (err, reset) {
-      expect(err).not.exist;
-      should.exist(reset._id);
-      should.exist(reset.token);
-      (reset.email == _user.email).should.true;
-      _reset = reset;
-      done();
+      userb.resets.findOne({ email: _user.email }, function (err, reset) {
+        expect(err).not.exist;
+        expect(reset._id).exist;
+        expect(reset.token).exist;
+        expect((reset.email == _user.email)).true;
+        _reset = reset;
+        done();
+      });
     });
   });
   it("should success", function (done) {
     var form = { id: _reset._id, token: _reset.token, password: 'new-pass' };
     local.put('/api/reset-pass').send(form).end(function (err, res) {
+      expect(err).not.exist;
       expect(res.error).false;
       expect(res.body.err).not.exist;
       done();
     });
   });
-  it("should success old password (password not changed)", function (done) {
+  it("old password should success", function (done) {
     userb.users.findOne({ email: _user.email }, function (err, user) {
       expect(err).not.exist;
-      userb.checkPassword(_user.password, user.hash).should.true;
+      expect(userb.checkPassword(_user.password, user.hash)).true;
       done();
     });
   });
-  it("should fail new password", function (done) {
+  it("new password should fail", function (done) {
     userb.users.findOne({ email: _user.email }, function (err, user) {
       expect(err).not.exist;
-      userb.checkPassword('new-pass', user.hash).should.false;
+      expect(userb.checkPassword('new-pass', user.hash)).false;
       done();
     });
   });

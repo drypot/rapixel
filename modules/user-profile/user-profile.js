@@ -26,11 +26,11 @@ init.add(function () {
 function renderProfile(req, res, id) {
   var user = res.locals.user;
   usera.getCached(id, function (err, tuser) {
-    if (err) return res.renderErr(err);
+    if (err) return done(err);
     var params = imagel.getParams(req);
     params.uid = id;
     imagel.findImages(params, function (err, images, gt, lt) {
-      if (err) return res.renderErr(err);
+      if (err) return done(err);
       res.render('user-profile/user-profile', {
         tuser: tuser,
         updatable: user && (user.admin || user._id === id),
