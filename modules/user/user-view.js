@@ -5,9 +5,9 @@ var userb = require('../user/user-base');
 var usera = require('../user/user-auth');
 
 init.add(function () {
-  var app = express2.app;
+  var core = express2.core;
 
-  app.get('/api/users/:id([0-9]+)', function (req, res, done) {
+  core.get('/api/users/:id([0-9]+)', function (req, res, done) {
     var id = parseInt(req.params.id) || 0;
     var user = res.locals.user
     usera.getCached(id, function (err, _tuser) {

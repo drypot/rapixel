@@ -9,10 +9,10 @@ var config = require('../base/config')({ path: 'config/test.json' });
 var express2 = require('../main/express');
 var local = require('../main/local');
 
-var app;
+var core;
 
 init.add(function () {
-  app = express2.app;
+  core = express2.core;
 });
 
 before(function (done) {
@@ -46,7 +46,7 @@ describe("undefined url", function () {
 
 describe("res.send", function () {
   it("given handler", function () {
-    app.get('/test/text-html', function (req, res, done) {
+    core.get('/test/text-html', function (req, res, done) {
       res.send('<p>some text</p>');
     });
   });
@@ -62,7 +62,7 @@ describe("res.send", function () {
 
 describe("res.json", function () {
   it("given handler", function () {
-    app.get('/api/json', function (req, res, done) {
+    core.get('/api/json', function (req, res, done) {
       res.json({ msg: 'valid json' });
     });
   });
@@ -78,7 +78,7 @@ describe("res.json", function () {
 
 describe("null", function () {
   it("given handler", function () {
-    app.get('/api/null', function (req, res, done) {
+    core.get('/api/null', function (req, res, done) {
       res.json(null);
     });
   });
@@ -94,7 +94,7 @@ describe("null", function () {
 
 describe("no-action", function () {
   it("given handler", function () {
-    app.get('/api/test/no-action', function (req, res, done) {
+    core.get('/api/test/no-action', function (req, res, done) {
       done();
     });
   });
@@ -109,7 +109,7 @@ describe("no-action", function () {
 
 describe("api error", function () {
   it("given handler", function () {
-    app.get('/api/test/invalid-data', function (req, res, done) {
+    core.get('/api/test/invalid-data', function (req, res, done) {
        done(error(error.INVALID_DATA));
     });
   });
@@ -126,7 +126,7 @@ describe("api error", function () {
 
 describe("page error", function () {
   it("given handler", function () {
-    app.get('/test/invalid-data', function (req, res, done) {
+    core.get('/test/invalid-data', function (req, res, done) {
        done(error(error.INVALID_DATA));
     });
   });
@@ -142,7 +142,7 @@ describe("page error", function () {
 
 describe("Cache-Control", function () {
   it("given handler", function () {
-    app.get('/test/cache-test', function (req, res, done) {
+    core.get('/test/cache-test', function (req, res, done) {
        res.send('<p>muse be cached</p>');
      });
   });
@@ -164,7 +164,7 @@ describe("Cache-Control", function () {
 
 describe("echo-query-params", function () {
   it("given handler", function () {
-    app.get('/api/echo-query', function (req, res, done) {
+    core.get('/api/echo-query', function (req, res, done) {
       var obj = {};
       for(var p in req.query) {
         obj[p] = req.query[p];
@@ -201,12 +201,12 @@ describe("middleware", function () {
       done(new Error("some error"));
     }
     
-    app.get('/api/mw-1-2', mid1, mid2, function (req, res, done) {
+    core.get('/api/mw-1-2', mid1, mid2, function (req, res, done) {
       result.mid3 = 'ok';
       res.json({});
     });
 
-    app.get('/api/mw-1-err-2', mid1, miderr, mid2, function (req, res, done) {
+    core.get('/api/mw-1-err-2', mid1, miderr, mid2, function (req, res, done) {
       result.mid3 = 'ok';
       res.json({});
     });

@@ -12,7 +12,7 @@ var config = require('../base/config');
 var app;
 
 init.add(function () {
-  app = express();
+  app = exports.app = express();
 
   // Set Middlewares
 
@@ -69,16 +69,13 @@ init.add(function () {
   // 인증 미들웨어는 앞 부분에 위치할 필요가 있어 별로 라우터를 설치해 놓는다.
   // user/user-auth.js 참고
   //
-  // 핸들러 추가하는 순서에 원인을 찾을 수 없는 문제가 발생해서 exports.app 라우터를 별로도 둔다.
-  //
-  // 업데이트: user-auth redirect 미들웨어에서 done(err) 를 빼먹는 이유로 발생하던 문제인데
-  // export.app 전용 라우터를 두는 것이 깔끔해 보여서 그냥 두기로.
-  //
+  // 테스트케이스에서 인스턴스가 기동한 후 핸들러를 추가하는 경우가 있어 core 를 도입.
 
   app.use(exports.before = express.Router());
-  app.use(exports.app = express.Router());
-  //app.use(exports.after = express.Router());
-  
+  app.use(exports.core = express.Router());
+});
+
+init.tail(function () {
   app.get('/api/hello', function (req, res, done) {
     res.json({
       name: config.appName,
@@ -94,6 +91,7 @@ init.add(function () {
     });
   });
 
+  /* error handler */
   app.use(function (_err, req, res, done) {
     var err = {
       message: _err.message,
@@ -113,9 +111,7 @@ init.add(function () {
   });
 
   //app.use(errorHandler(/* {log: false} */));
-});
 
-init.tail(function () {
   app.listen(config.appPort);
   console.log('express: listening ' + config.appPort);
 });

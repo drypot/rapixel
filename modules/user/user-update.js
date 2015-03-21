@@ -6,9 +6,9 @@ var userc = require('../user/user-create');
 var usera = require('../user/user-auth');
 
 init.add(function () {
-  var app = express2.app;
+  var core = express2.core;
 
-  app.put('/api/users/:id([0-9]+)', function (req, res, done) {
+  core.put('/api/users/:id([0-9]+)', function (req, res, done) {
     usera.identifyUser(res, function (err, user) {
       if (err) return done(err);
       var id = parseInt(req.params.id) || 0;
@@ -20,7 +20,7 @@ init.add(function () {
     });
   });
 
-  app.get('/users/:id([0-9]+)/update', function (req, res, done) {
+  core.get('/users/:id([0-9]+)/update', function (req, res, done) {
     usera.identifyUser(res, function (err, user) {
       if (err) return done(err);
       var id = parseInt(req.params.id) || 0;

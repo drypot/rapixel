@@ -5,9 +5,9 @@ var express2 = require('../main/express');
 var userb = require('../user/user-base');
 
 init.add(function () {
-  var app = express2.app;
+  var core = express2.core;
 
-  app.get('/users', function (req, res, done) {
+  core.get('/users', function (req, res, done) {
     userb.users.count(function (err, count) {
       if (err) return done(err);
       res.render('user/user-list', { count: count });

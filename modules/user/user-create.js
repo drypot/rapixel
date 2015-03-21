@@ -4,9 +4,9 @@ var express2 = require('../main/express');
 var userb = require('../user/user-base');
 
 init.add(function () {
-  var app = express2.app;
+  var core = express2.core;
 
-  app.post('/api/users', function (req, res, done) {
+  core.post('/api/users', function (req, res, done) {
     var form = getForm(req.body);
     createUser(form, function (err, user) {
       if (err) return done(err);
@@ -16,7 +16,7 @@ init.add(function () {
     });
   });
 
-  app.get('/users/register', function (req, res, done) {
+  core.get('/users/register', function (req, res, done) {
     res.render('user/user-create');
   });
 });

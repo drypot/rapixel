@@ -4,9 +4,11 @@ var express2 = require('../main/express');
 var userb = require('../user/user-base');
 
 init.add(function () {
-  var app = express2.app;
+  var core = express2.core;
+  var before = express2.before;
 
-  express2.before.use(function (req, res, done) {
+  /* restore locals.user. */
+  before.use(function (req, res, done) {
     if (req.session.uid) {
       getCached(req.session.uid, function (err, user) {
         if (err) {
@@ -21,7 +23,7 @@ init.add(function () {
     }
   });
 
-  app.get('/api/session', function (req, res, done) {
+  core.get('/api/session', function (req, res, done) {
     var obj = {
       uid : req.session.uid
     };
@@ -35,7 +37,7 @@ init.add(function () {
     res.json(obj);
   });
 
-  app.post('/api/session', function (req, res, done) {
+  core.post('/api/session', function (req, res, done) {
     createSessionForm(req, res, function (err, user) {
       if (err) return done(err);
       res.json({
@@ -47,12 +49,12 @@ init.add(function () {
     });
   });
 
-  app.delete('/api/session', function (req, res, done) {
+  core.delete('/api/session', function (req, res, done) {
     exports.deleteSession(req, res);
     res.json({});
   });
 
-  app.get('/users/login', function (req, res, done) {
+  core.get('/users/login', function (req, res, done) {
     res.render('user/user-auth-login');
   });
 });
@@ -60,6 +62,7 @@ init.add(function () {
 init.tail(function () {
   var app = express2.app;
 
+  console.log('init 222');
   app.use(function (err, req, res, done) {
     if (!res.locals.api && err.code == error.NOT_AUTHENTICATED.code) {
       res.redirect('/users/login');

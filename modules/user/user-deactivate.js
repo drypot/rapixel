@@ -6,9 +6,9 @@ var usera = require('../user/user-auth');
 var useru = require('../user/user-update');
 
 init.add(function () {
-  var app = express2.app;
+  var core = express2.core;
 
-  app.delete('/api/users/:id([0-9]+)', function (req, res, done) {
+  core.delete('/api/users/:id([0-9]+)', function (req, res, done) {
     usera.identifyUser(res, function (err, user) {
       if (err) return done(err);
       var id = parseInt(req.params.id) || 0;
@@ -20,7 +20,7 @@ init.add(function () {
     });
   });
 
-  app.get('/users/deactivate', function (req, res, done) {
+  core.get('/users/deactivate', function (req, res, done) {
     usera.identifyUser(res, function (err, user) {
       if (err) return done(err);
       res.render('user/user-deactivate');

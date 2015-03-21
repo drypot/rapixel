@@ -7,14 +7,14 @@ var imagel = require('../image/image-list');
 var site = require('../image/image-site');
 
 init.add(function () {
-  var app = express2.app;
+  var core = express2.core;
 
-  app.get('/users/:id([0-9]+)', function (req, res, done) {
+  core.get('/users/:id([0-9]+)', function (req, res, done) {
     var id = parseInt(req.params.id) || 0;
     renderProfile(req, res, id);
   });
 
-  app.get('/:name([^/]+)', function (req, res, done) {
+  core.get('/:name([^/]+)', function (req, res, done) {
     var homel = decodeURIComponent(req.params.name).toLowerCase();
     usera.getCachedByHome(homel, function (err, user) {
       if (!user) return done();

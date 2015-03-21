@@ -15,9 +15,9 @@ var userd = require('../user/user-deactivate');
 var local = require('../main/local');
 
 init.add(function () {
-  var app = express2.app;
+  var core = express2.core;
 
-  app.get('/api/test/user', function (req, res, done) {
+  core.get('/api/test/user', function (req, res, done) {
     usera.identifyUser(res, function (err, user) {
       if (err) return done(err);
       res.json({});

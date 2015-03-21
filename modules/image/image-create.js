@@ -11,9 +11,9 @@ var imageb = require('../image/image-base');
 var site = require('../image/image-site');
 
 init.add(function () {
-  var app = express2.app;
+  var core = express2.core;
 
-  app.post('/api/images', function (req, res, done) {
+  core.post('/api/images', function (req, res, done) {
     usera.identifyUser(res, function (err, user) {
       if (err) return done(err);
       var form = getForm(req.body);
@@ -26,7 +26,7 @@ init.add(function () {
     });
   });
 
-  app.get('/images/new', function (req, res, done) {
+  core.get('/images/new', function (req, res, done) {
     usera.identifyUser(res, function (err, user) {
       if (err) return done(err);
       var now = new Date();

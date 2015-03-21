@@ -9,9 +9,9 @@ var imageb = require('../image/image-base');
 var site = require('../image/image-site');
 
 init.add(function () {
-  var app = express2.app;
+  var core = express2.core;
 
-  app.get('/api/images', function (req, res, done) {
+  core.get('/api/images', function (req, res, done) {
     var params = exports.getParams(req);
     exports.findImages(params, function (err, images, gt, lt) {
       if (err) return done(err);
@@ -23,7 +23,7 @@ init.add(function () {
     });
   });
 
-  app.get('/', function (req, res, done) {
+  core.get('/', function (req, res, done) {
     var params = exports.getParams(req);
     exports.findImages(params, function (err, images, gt, lt) {
       if (err) return done(err);

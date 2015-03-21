@@ -12,9 +12,9 @@ var imagec = require('../image/image-create');
 var site = require('../image/image-site');
 
 init.add(function () {
-  var app = express2.app;
+  var core = express2.core;
 
-  app.put('/api/images/:id([0-9]+)', function (req, res, done) {
+  core.put('/api/images/:id([0-9]+)', function (req, res, done) {
     usera.identifyUser(res, function (err, user) {
       if (err) return done(err);
       var id = parseInt(req.params.id) || 0;
@@ -29,7 +29,7 @@ init.add(function () {
     });
   });
 
-  app.get('/images/:id([0-9]+)/update', function (req, res, done) {
+  core.get('/images/:id([0-9]+)/update', function (req, res, done) {
     usera.identifyUser(res, function (err, user) {
       if (err) return done(err);
       var id = parseInt(req.params.id) || 0;

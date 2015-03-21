@@ -13,10 +13,10 @@ var express2 = require('../main/express');
 var upload = require('../main/upload');
 var local = require('../main/local');
 
-var app;
+var core;
 
 init.add(function () {
-  app = express2.app;
+  core = express2.core;
 });
 
 before(function (done) {
@@ -25,7 +25,7 @@ before(function (done) {
 
 describe("parsing json", function () {
   it("given handler", function () {
-    app.post('/api/test/upload-json', upload.handler(function (req, res, done) {
+    core.post('/api/test/upload-json', upload.handler(function (req, res, done) {
       expect(req).json;
       res.json({files: req.files, field: req.body.field});
       done();
@@ -44,7 +44,7 @@ describe("parsing json", function () {
 
 describe("parsing form", function () {
   it("given handler", function () {
-    app.post('/api/test/upload-form', upload.handler(function (req, res, done) {
+    core.post('/api/test/upload-form', upload.handler(function (req, res, done) {
       // RegExp 기능이 github 에는 커밋되어 있으나 npm 패키지엔 아직 적용이 안 되어 있다.
       // expect(req).header('content-type', /multipart/);
       expect(req.header('content-type')).contain('multipart');
@@ -67,7 +67,7 @@ describe("parsing one file", function () {
   var f1 = 'modules/main/upload-fixture1.txt';
   var p1;
   it("given handler", function () {
-    app.post('/api/test/upload-one', upload.handler(function (req, res, done) {
+    core.post('/api/test/upload-one', upload.handler(function (req, res, done) {
       p1 = req.files.files[0].path;
       expect(fs.existsSync(p1)).true;
       res.json({files: req.files, field: req.body.field});
@@ -91,7 +91,7 @@ describe("parsing two files", function () {
   var f2 = 'modules/main/upload-fixture2.txt';
   var p1, p2;
   it("given handler", function () {
-    app.post('/api/test/upload-two', upload.handler(function (req, res, done) {
+    core.post('/api/test/upload-two', upload.handler(function (req, res, done) {
       p1 = req.files.files[0].path;
       p2 = req.files.files[1].path;
       expect(fs.existsSync(p1)).true;
@@ -120,7 +120,7 @@ describe("parsing irregular filename", function () {
   var f1 = 'modules/main/upload-fixture1.txt';
   var p1;
   it("given handler", function () {
-    app.post('/api/test/upload-irregular', upload.handler(function (req, res, done) {
+    core.post('/api/test/upload-irregular', upload.handler(function (req, res, done) {
       p1 = req.files.files[0].path;
       expect(fs.existsSync(p1)).true;
       res.json({files: req.files, field: req.body.field});

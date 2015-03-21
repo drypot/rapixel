@@ -13,27 +13,27 @@ var usera = require('../user/user-auth');
 var userf = require('../user/user-fixture');
 var local = require('../main/local');
 
-var app;
+var core;
 
 init.add(function () {
-  app = express2.app;
+  core = express2.core;
   //express2.logError = true;
 
-  app.get('/api/test/user', function (req, res, done) {
+  core.get('/api/test/user', function (req, res, done) {
     usera.identifyUser(res, function (err, user) {
       if (err) return done(err);
       res.json({});
     });
   });
 
-  app.get('/api/test/admin', function (req, res, done) {
+  core.get('/api/test/admin', function (req, res, done) {
     usera.identifyAdmin(res, function (err, user) {
       if (err) return done(err);
       res.json({});
     });
   });  
 
-  app.delete('/api/test/del-session', function (req, res, done) {
+  core.delete('/api/test/del-session', function (req, res, done) {
     req.session.destroy();
     res.json({});
   });
@@ -255,7 +255,7 @@ describe("identifying with auto login", function () {
 
 describe("identifying with auto login with invalid email", function () {
   it("given handler", function () {
-    app.get('/api/test/cookies', function (req, res, done) {
+    core.get('/api/test/cookies', function (req, res, done) {
       res.json({
         email: req.cookies.email,
         password: req.cookies.password
@@ -325,3 +325,32 @@ describe("identifying with auto login with invalid email", function () {
   });
 });
 
+describe("redirecting to login page", function () {
+  it("given handler", function (done) {
+    core.get('/test/public', function (req, res, done) {
+      res.send('public');
+    });
+    core.get('/test/private', function (req, res, done) {
+      usera.identifyUser(res, function (err, user) {
+        if (err) return done(err);
+        res.send('private');
+      })
+    });
+    done();
+  });
+  it("public should success", function (done) {
+    local.get('/test/public').end(function (err, res) {
+      expect(err).not.exist;
+      expect(res.text).equal('public');
+      done();
+    });
+  });
+  it("private should success", function (done) {
+    local.get('/test/private').redirects(0).end(function (err, res) {
+      expect(err).exist;
+      expect(res).status(302); // Moved Temporarily 
+      expect(res).header('location', '/users/login');
+      done();
+    });
+  });
+});

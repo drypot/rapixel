@@ -10,9 +10,9 @@ var userb = require('../user/user-base');
 var userc = require('../user/user-create');
 
 init.add(function () {
-  var app = express2.app;
+  var core = express2.core;
 
-  app.post('/api/reset-pass', function (req, res, done) {
+  core.post('/api/reset-pass', function (req, res, done) {
     var form = getForm1(req);
     step1(form, function (err) {
       if (err) return done(err);
@@ -20,7 +20,7 @@ init.add(function () {
     });
   });
 
-  app.put('/api/reset-pass', function (req, res, done) {
+  core.put('/api/reset-pass', function (req, res, done) {
     var form = getForm2(req);
     step2(form, function (err) {
       if (err) return done(err);
@@ -28,7 +28,7 @@ init.add(function () {
     });
   });
 
-  app.get('/users/reset-pass', function (req, res, done) {
+  core.get('/users/reset-pass', function (req, res, done) {
     res.render('user/user-reset-pass');
   });
 });

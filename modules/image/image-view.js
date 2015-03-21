@@ -9,9 +9,9 @@ var imageb = require('../image/image-base');
 var site = require('../image/image-site');
 
 init.add(function () {
-  var app = express2.app;
+  var core = express2.core;
 
-  app.get('/api/images/:id([0-9]+)', function (req, res, done) {
+  core.get('/api/images/:id([0-9]+)', function (req, res, done) {
     var id = parseInt(req.params.id) || 0;
     incHit(id, req.query.hasOwnProperty('hit'), function (err) {
       if (err) return done(err);
@@ -22,7 +22,7 @@ init.add(function () {
     });
   });
 
-  app.get('/images/:id([0-9]+)', function (req, res, done) {
+  core.get('/images/:id([0-9]+)', function (req, res, done) {
     var id = parseInt(req.params.id) || 0;
     incHit(id, true, function (err) {
       if (err) return done(err);
@@ -39,11 +39,11 @@ init.add(function () {
     });
   });
 
-  app.get('/photos/:id([0-9]+)', function (req, res, done) {
+  core.get('/photos/:id([0-9]+)', function (req, res, done) {
     res.redirect('/images/' + req.params.id);
   });
 
-  app.get('/drawings/:id([0-9]+)', function (req, res, done) {
+  core.get('/drawings/:id([0-9]+)', function (req, res, done) {
     res.redirect('/images/' + req.params.id);
   });
 });
