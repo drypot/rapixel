@@ -1,5 +1,13 @@
-for var in $(find ${1-modules} -name "*-test.js"); do
-  echo mocha $var
-  mocha $var
-  if [ $? -ne 0 ]; then break; fi
+for arg in ${@-modules}; do
+  if [ -f $arg ]; then
+    echo mocha $arg
+    mocha $arg
+  else
+    for path in $(find ${arg} -name "*-test.js"); do
+      echo mocha $path
+      mocha $path
+      if [ $? -ne 0 ]; then break; fi
+    done
+  fi
 done
+
