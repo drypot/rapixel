@@ -11,11 +11,10 @@ var fsp = require('../base/fs');
 var config = require('../base/config')({ path: 'config/test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
 var exp = require('../main/express');
-var upload = require('../upload/upload');
+var upload = require('../main/upload');
 var userf = require('../user/user-fixture');
 var imageb = require('../image/image-base');
 var imagec = require('../image/image-create');
-
 var local = require('../main/local');
 
 before(function (done) {
@@ -30,147 +29,86 @@ before(function (done) {
   fsp.emptyDir(imageb.imageDir, done);
 });
 
-describe("posting", function () {
-  var _files;
-  var _ids;
+describe("posting one image", function () {
+  var _id;
   before(function (done) {
     imageb.images.remove(done);
   });
-  it("given one image", function (done) {
-    local.upload('samples/3840x2160-169.jpg', function (err, files) {
-      _files = files;
-      done(err);
-    });
-  });
-  it("and posted", function (done) {
+  it("should success", function (done) {
     this.timeout(30000);
-    var form = { files: _files, comment: 'image1' };
-    local.post('/api/images').send(form).end(function (err, res) {
+    local.post('/api/images').field('comment', 'image1').attach('files', 'samples/3840x2160-169.jpg').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
-      should.exist(res.body.ids);
-      res.body.ids.length.should.equal(1);
+      expect(res.body.ids).exist;
+      expect(res.body.ids.length).equal(1);
+      _id = res.body.ids[0];
+      done();
+    });
+  });
+  it("image should exist", function (done) {
+    imageb.images.findOne({ _id: _id }, function (err, image) {
+      expect(err).not.exist;
+      expect(image._id).equal(_id);
+      expect(image.uid).equal(userf.user1._id);
+      expect(image.fname).equal('3840x2160-169.jpg');
+      expect(image.format).equal('jpeg');
+      expect(image.width).equal(3840);
+      expect(image.vers).eql([ 3840, 2880, 2560, 2048, 1920, 1680, 1440, 1366, 1280, 1136, 1024, 960, 640 ]);
+      expect(image.cdate).exist;
+      expect(image.comment).equal('image1');
+      var dir = new imageb.ImageDir(_id);
+      expect(fs.existsSync(dir.getVersionPath(5120))).be.false;
+      expect(fs.existsSync(dir.getVersionPath(3840))).be.true;
+      expect(fs.existsSync(dir.getVersionPath(1280))).be.true;
+      expect(fs.existsSync(dir.getVersionPath(640))).be.true;
+      done();
+    });
+  });
+});
+
+describe("posting max images", function () {
+  var _ids;
+  before(function (done) {
+    imageb.images.remove(done);
+  }); 
+  it("should success", function (done) {
+    this.timeout(30000);
+    var post = local.post('/api/images').field('comment', 'max images');
+    for (var i = 0; i < config.ticketMax; i++) {
+      post.attach('files', 'samples/3840x2160-169.jpg');
+    }
+    post.end(function (err, res) {
+      expect(err).not.exist;
+      expect(res.body.err).not.exist;
+      expect(res.body.ids).exist;
+      expect(res.body.ids).length(config.ticketMax);
       _ids = res.body.ids;
       done();
     });
   });
-  it("versions should exist", function (done) {
-    var _id = _ids[0];
-    imageb.images.findOne({ _id: _id }, function (err, image) {
-      expect(err).not.exist;
-      image._id.should.equal(_id);
-      image.uid.should.equal(userf.user1._id);
-      image.fname.should.equal('3840x2160-169.jpg');
-      image.format.should.equal('jpeg');
-      image.width.should.equal(3840);
-      image.vers.should.eql([ 3840, 2880, 2560, 2048, 1920, 1680, 1440, 1366, 1280, 1136, 1024, 960, 640 ]);
-      should.exist(image.cdate);
-      image.comment.should.equal('image1');
-      var dir = imageb.getVersionDir(_id);
-      fs.existsSync(imageb.getVersionPath(dir, _id, 5120)).should.be.false;
-      fs.existsSync(imageb.getVersionPath(dir, _id, 3840)).should.be.true;
-      fs.existsSync(imageb.getVersionPath(dir, _id, 1280)).should.be.true;
-      fs.existsSync(imageb.getVersionPath(dir, _id, 640)).should.be.true;
-      done();
-    });
-  });
-});
-
-describe("posting", function () {
-  var _files;
-  before(function (done) {
-    imageb.images.remove(done);
-  }); 
-  it("given max images", function (done) {
-    local.upload('samples/3840x2160-169.jpg', config.ticketMax, function (err, files) {
-      _files = files;
-      done(err);
-    });
-  });
-  it("and posted", function (done) {
+  it("posting one more should fail", function (done) {
     this.timeout(30000);
-    var form = { files: _files };
-    local.post('/api/images').send(form).end(function (err, res) {
+    local.post('/api/images').attach('files', 'samples/3840x2160-169.jpg').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
-      should.exist(res.body.ids);
-      res.body.ids.should.length(config.ticketMax);
+      expect(res.body.ids).exist;
+      expect(res.body.ids.length).equal(0);
       done();
     });
   });
-  it("and given one more", function (done) {
-    local.upload('samples/3840x2160-169.jpg', function (err, files) {
-      _files = files;
-      done(err);
-    });
-  });
-  it("should recive empty ids", function (done) {
+});
+
+describe("posting small image", function () {
+  var _files;
+  before(function (done) {
+    imageb.images.remove(done);
+  }); 
+  it("should fail", function (done) {
     this.timeout(30000);
-    var form = { files: _files };
-    local.post('/api/images').send(form).end(function (err, res) {
-      expect(err).not.exist;
-      expect(res.body.err).not.exist;
-      should.exist(res.body.ids);
-      res.body.ids.should.length(0);
-      done();
-    });
-  });
-});
-
-describe("posting", function () {
-  var _files;
-  before(function (done) {
-    imageb.images.remove(done);
-  });
-  it("given small image", function (done) {
-    local.upload('samples/2880x1620-169.jpg', function (err, files) {
-      _files = files;
-      done(err);
-    });
-  });
-  it("should fail", function (done) {
-    var form = { files: _files };
-    local.post('/api/images').send(form).end(function (err, res) {
+    local.post('/api/images').attach('files', 'samples/2880x1620-169.jpg').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
-      error.find(res.body.err, error.IMAGE_SIZE).should.true;
-      done();
-    });
-  });
-});
-
-describe("posting", function () {
-  var _files;
-  before(function (done) {
-    imageb.images.remove(done);
-  }); 
-  it("given text file", function (done) {
-    local.upload('modules/main/upload-fixture1.txt', function (err, files) {
-      _files = files;
-      done(err);
-    });
-  });
-  it("should fail", function (done) {
-    var form = { files: _files };
-    local.post('/api/images').send(form).end(function (err, res) {
-      expect(err).not.exist;
-      expect(res.body.err).exist;
-      error.find(res.body.err, error.IMAGE_TYPE).should.true;
-      done();
-    });
-  });
-});
-
-describe("posting with no file", function () {
-  before(function (done) {
-    imageb.images.remove(done);
-  }); 
-  it("should fail", function (done) {
-    var form = { };
-    local.post('/api/images').send(form).end(function (err, res) {
-      expect(err).not.exist;
-      expect(res.body.err).exist;
-      error.find(res.body.err, error.IMAGE_NO_FILE).should.true;
+      expect(error.find(res.body.err, error.IMAGE_SIZE)).true;
       done();
     });
   });

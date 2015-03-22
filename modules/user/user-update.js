@@ -7,10 +7,10 @@ var usera = require('../user/user-auth');
 
 init.add(function () {
   exp.core.put('/api/users/:id([0-9]+)', function (req, res, done) {
-    usera.identifyUser(res, function (err, user) {
+    usera.checkUser(res, function (err, user) {
       if (err) return done(err);
       var id = parseInt(req.params.id) || 0;
-      var form = userc.getForm(req.body);
+      var form = userc.getForm(req);
       updateUser(id, user, form, function (err) {
         if (err) return done(err);
         res.json({});
@@ -19,7 +19,7 @@ init.add(function () {
   });
 
   exp.core.get('/users/:id([0-9]+)/update', function (req, res, done) {
-    usera.identifyUser(res, function (err, user) {
+    usera.checkUser(res, function (err, user) {
       if (err) return done(err);
       var id = parseInt(req.params.id) || 0;
       checkUpdatable(id, user, function (err) {

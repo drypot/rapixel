@@ -13,10 +13,9 @@ init.run(function (err) {
     cursor.nextObject(function (err, image) {
       if (err) return done(err);
       if (!image) return done();
-      var id = image._id;
-      var dir = imageb.getVersionDir(id);
-      var oname = dir + '/' + id + '-org.' + image.format;    
-      var nname = dir + '/' + id + '.' + image.format;
+      var dir = new imageb.ImageDir(image._id, image.format).dir;
+      var oname = dir + '/' + image._id + '.' + image.format;    
+      var nname = dir + '/' + image._id + '-org.' + image.format;
       //console.log(oname + ' -> ' + nname);
       fs.renameSync(oname, nname);
       setImmediate(read);

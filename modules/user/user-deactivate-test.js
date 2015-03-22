@@ -16,7 +16,7 @@ var local = require('../main/local');
 
 init.add(function () {
   exp.core.get('/api/test/user', function (req, res, done) {
-    usera.identifyUser(res, function (err, user) {
+    usera.checkUser(res, function (err, user) {
       if (err) return done(err);
       res.json({});
     });

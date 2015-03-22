@@ -15,14 +15,14 @@ var local = require('../main/local');
 
 init.add(function () {
   exp.core.get('/api/test/user', function (req, res, done) {
-    usera.identifyUser(res, function (err, user) {
+    usera.checkUser(res, function (err, user) {
       if (err) return done(err);
       res.json({});
     });
   });
 
   exp.core.get('/api/test/admin', function (req, res, done) {
-    usera.identifyAdmin(res, function (err, user) {
+    usera.checkAdmin(res, function (err, user) {
       if (err) return done(err);
       res.json({});
     });
@@ -326,7 +326,7 @@ describe("redirecting to login page", function () {
       res.send('public');
     });
     exp.core.get('/test/private', function (req, res, done) {
-      usera.identifyUser(res, function (err, user) {
+      usera.checkUser(res, function (err, user) {
         if (err) return done(err);
         res.send('private');
       })

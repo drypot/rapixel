@@ -37,9 +37,9 @@ exports.checkImageMeta = function (path, done) {
   });
 };
 
-exports.makeVersions = function (org, meta, dir, id, done) {
+exports.makeVersions = function (dir, meta, done) {
   var shorter = meta.shorter;
-  var cmd = 'convert ' + org;
+  var cmd = 'convert ' + dir.orgPath;
   cmd += ' -quality 92';
   cmd += ' -gravity center';
   cmd += ' -auto-orient';
@@ -68,9 +68,9 @@ exports.makeVersions = function (org, meta, dir, id, done) {
       circled = true;
     }
     if (i == _vers.length - 1) {
-      cmd += ' ' + imageb.getVersionPath(dir, id, ver);
+      cmd += ' ' + dir.getVersionPath(ver);
     } else {
-      cmd += ' -write ' + imageb.getVersionPath(dir, id, ver);
+      cmd += ' -write ' + dir.getVersionPath(ver);
     }
   }
   exec(cmd, function (err) {

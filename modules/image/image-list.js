@@ -4,14 +4,14 @@ var error = require('../base/error');
 var config = require('../base/config');
 var mongo = require('../mongo/mongo');
 var exp = require('../main/express');
-var userv = require('../user/user-view');
+var usera = require('../user/user-auth');
 var imageb = require('../image/image-base');
 var site = require('../image/image-site');
 
 init.add(function () {
   exp.core.get('/api/images', function (req, res, done) {
-    var params = exports.getParams(req);
-    exports.findImages(params, function (err, images, gt, lt) {
+    var params = getParams(req);
+    findImages(params, function (err, images, gt, lt) {
       if (err) return done(err);
       res.json({
         images: images,
@@ -22,8 +22,8 @@ init.add(function () {
   });
 
   exp.core.get('/', function (req, res, done) {
-    var params = exports.getParams(req);
-    exports.findImages(params, function (err, images, gt, lt) {
+    var params = getParams(req);
+    findImages(params, function (err, images, gt, lt) {
       if (err) return done(err);
       res.render('image/image-list', {
         images: images,
@@ -36,7 +36,7 @@ init.add(function () {
   });
 });
 
-exports.getParams = function (req) {
+var getParams = exports.getParams = function (req) {
   var params = {};
   params.lt = parseInt(req.query.lt) || 0;
   params.gt = params.lt ? 0 : parseInt(req.query.gt) || 0;
@@ -44,12 +44,12 @@ exports.getParams = function (req) {
   return params;
 };
 
-exports.findImages = function (params, done) {
+var findImages = exports.findImages = function (params, done) {
   var query = params.uid ? { uid: params.uid } : {};
-  mongo.findPage(imageb.images, query, params.gt, params.lt, params.ps, modify, done);
+  mongo.findPage(imageb.images, query, params.gt, params.lt, params.ps, filter, done);
 };
 
-function modify(image, done) {
+function filter(image, done) {
   usera.getCached(image.uid, function (err, user) {
     if (err) return done(err);
     image.user = {
@@ -57,7 +57,7 @@ function modify(image, done) {
       name: user.name,
       home: user.home
     };
-    image.dir = imageb.getVersionUrlBase(image._id);
+    image.dir = imageb.getUrlBase(image._id);
     image.cdateStr = utilp.toDateTimeString(image.cdate);
     done(null, image);
   });

@@ -20,7 +20,7 @@ exports.checkImageMeta = function (path, done) {
   });
 };
 
-exports.makeVersions = function (org, meta, dir, id, done) {
+exports.makeVersions = function (dir, meta, done) {
   done(null, null);
 };
 

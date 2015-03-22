@@ -1,6 +1,7 @@
 var expect = require('chai').expect;
 
 var init = require('../base/init');
+var usera = require('../user/user-auth');
 var userc = require('../user/user-create');
 var local = require('../main/local');
 

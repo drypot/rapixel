@@ -7,7 +7,7 @@ var useru = require('../user/user-update');
 
 init.add(function () {
   exp.core.delete('/api/users/:id([0-9]+)', function (req, res, done) {
-    usera.identifyUser(res, function (err, user) {
+    usera.checkUser(res, function (err, user) {
       if (err) return done(err);
       var id = parseInt(req.params.id) || 0;
       deactivateUser(id, user, function (err) {
@@ -19,7 +19,7 @@ init.add(function () {
   });
 
   exp.core.get('/users/deactivate', function (req, res, done) {
-    usera.identifyUser(res, function (err, user) {
+    usera.checkUser(res, function (err, user) {
       if (err) return done(err);
       res.render('user/user-deactivate');
     });

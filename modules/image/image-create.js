@@ -5,27 +5,30 @@ var error = require('../base/error');
 var config = require('../base/config');
 var fsp = require('../base/fs');
 var exp = require('../main/express');
-var upload = require('../upload/upload');
+var upload = require('../main/upload');
 var usera = require('../user/user-auth');
 var imageb = require('../image/image-base');
 var site = require('../image/image-site');
 
 init.add(function () {
-  exp.core.post('/api/images', function (req, res, done) {
-    usera.identifyUser(res, function (err, user) {
+  exp.core.post('/api/images', upload.handler(function (req, res, done) {
+    usera.checkUser(res, function (err, user) {
       if (err) return done(err);
-      var form = getForm(req.body);
+      var form = getForm(req);
       createImages(form, user, function (err, ids) {
         if (err) return done(err);
         res.json({
           ids: ids
         });
+        // 오류 없이 처리되었다면 임시파일들은 정상보관되었을 것이기 때문에
+        // done() 을 호출해서 임시파일 삭제를 안 해도 되긴 하다.
+        done();
       });
     });
-  });
+  }));
 
   exp.core.get('/images/new', function (req, res, done) {
-    usera.identifyUser(res, function (err, user) {
+    usera.checkUser(res, function (err, user) {
       if (err) return done(err);
       var now = new Date();
       getTicketCount(now, user, function (err, count, hours) {
@@ -39,11 +42,12 @@ init.add(function () {
   });
 });
 
-var getForm = exports.getForm = function (body) {
+var getForm = exports.getForm = function (req) {
+  var body = req.body;
   var form = {};
   form.now = new Date();
   form.comment = body.comment || '';
-  form.files = upload.normalizeFilenames(body.files);
+  form.files = req.files && req.files.files || [];
   return form;
 }
 
@@ -69,8 +73,7 @@ var getTicketCount = exports.getTicketCount = function(now, user, done) {
   });
 };
 
-var createImages = exports.createImages = function(form, user, _done) {
-  var done = upload.deleter(form.files, _done);
+function createImages(form, user, done) {
   if (!form.files.length) {
     return done(error(error.IMAGE_NO_FILE));
   }
@@ -97,16 +100,15 @@ var createImages = exports.createImages = function(form, user, _done) {
 };
 
 function createImage(form, file, user, done) {
-  site.checkImageMeta(file.tpath, function (err, meta) {
+  site.checkImageMeta(file.path, function (err, meta) {
     if (err) return done(err);
     var id = imageb.newId();
-    var dir = imageb.getVersionDir(id);
-    fsp.makeDirs(dir, function (err) {
+    var dir = new imageb.ImageDir(id, meta.format);
+    fsp.makeDirs(dir.dir, function (err) {
       if (err) return done(err);
-      var org = imageb.getOrgPath(id, meta.format);
-      fs.rename(file.tpath, org, function (err) {
+      fs.rename(file.path, dir.orgPath, function (err) {
         if (err) return done(err);
-        site.makeVersions(org, meta, dir, id, function (err, vers) {
+        site.makeVersions(dir, meta, function (err, vers) {
           if (err) return done(err);
           var image = {
             _id: id,

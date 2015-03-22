@@ -10,11 +10,10 @@ var error = require('../base/error');
 var config = require('../base/config')({ path: 'config/test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
 var exp = require('../main/express');
-var upload = require('../upload/upload');
+var upload = require('../main/upload');
 var userf = require('../user/user-fixture');
 var imageb = require('../image/image-base');
 var imagec = require('../image/image-create');
-
 var local = require('../main/local');
 
 before(function (done) {
@@ -51,7 +50,7 @@ describe("getTicketCount", function () {
   it("should return ticketMax", function (done) {
     imagec.getTicketCount(_now, userf.user1, function (err, count, hours) {
       expect(err).not.exist;
-      count.should.equal(config.ticketMax);
+      expect(count).equal(config.ticketMax);
       done();
     });
   });
@@ -61,7 +60,7 @@ describe("getTicketCount", function () {
   it("should return ticketMax", function (done) {
     imagec.getTicketCount(_now, userf.user1, function (err, count, hours) {
       expect(err).not.exist;
-      count.should.equal(config.ticketMax);
+      expect(count).equal(config.ticketMax);
       done();
     });
   });
@@ -71,7 +70,7 @@ describe("getTicketCount", function () {
   it("should return (ticketMax - 1)", function (done) {
     imagec.getTicketCount(_now, userf.user1, function (err, count, hours) {
       expect(err).not.exist;
-      count.should.equal(config.ticketMax - 1);
+      expect(count).equal(config.ticketMax - 1);
       done();
     });
   });
@@ -84,9 +83,40 @@ describe("getTicketCount", function () {
   it("should return 0 and hours", function (done) {
     imagec.getTicketCount(_now, userf.user1, function (err, count, hours) {
       expect(err).not.exist;
-      count.should.equal(0);
-      hours.should.equal(3);
+      expect(count).equal(0);
+      expect(hours).equal(3);
       done();
     });
   });
 });
+
+describe("posting text", function () {
+  before(function (done) {
+    imageb.images.remove(done);
+  });
+  it("should fail", function (done) {
+    this.timeout(30000);
+    local.post('/api/images').attach('files', 'modules/main/upload-fixture1.txt').end(function (err, res) {
+      expect(err).not.exist;
+      expect(res.body.err).exist;
+      expect(error.find(res.body.err, error.IMAGE_TYPE)).true;
+      done();
+    });
+  });
+});
+
+describe("posting no file", function () {
+  before(function (done) {
+    imageb.images.remove(done);
+  }); 
+  it("should fail", function (done) {
+    var form = { };
+    local.post('/api/images').send(form).end(function (err, res) {
+      expect(err).not.exist;
+      expect(res.body.err).exist;
+      expect(error.find(res.body.err, error.IMAGE_NO_FILE)).true;
+      done();
+    });
+  });
+});
+

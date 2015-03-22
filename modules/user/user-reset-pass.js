@@ -78,10 +78,11 @@ function step1(form, done) {
 };
 
 function getForm2(req) {
+  var body = req.body;
   var form = {};
-  form.id = String(req.body.id || '').trim();
-  form.token = String(req.body.token || '').trim();
-  form.password = String(req.body.password || '').trim();
+  form.id = String(body.id || '').trim();
+  form.token = String(body.token || '').trim();
+  form.password = String(body.password || '').trim();
   return form;
 }
 

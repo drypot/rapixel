@@ -5,7 +5,7 @@ var userb = require('../user/user-base');
 
 init.add(function () {
   exp.core.post('/api/users', function (req, res, done) {
-    var form = getForm(req.body);
+    var form = getForm(req);
     createUser(form, function (err, user) {
       if (err) return done(err);
       res.json({
@@ -21,7 +21,8 @@ init.add(function () {
 
 var emailx = exports.emailx = /^[a-z0-9-_+.]+@[a-z0-9-]+(\.[a-z0-9-]+)+$/i
 
-var getForm = exports.getForm = function (body) {
+var getForm = exports.getForm = function (req) {
+  var body = req.body;
   var form = {};
   form.name = String(body.name || '').trim();
   form.home = String(body.home || '').trim();

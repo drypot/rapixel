@@ -197,7 +197,7 @@ exports.deleteSession = function (req, res, done) {
 
 /* identify */
 
-exports.identifyUser = function (res, done) {
+exports.checkUser = function (res, done) {
   var user = res.locals.user;
   if (!user) {
     return done(error(error.NOT_AUTHENTICATED));
@@ -205,7 +205,7 @@ exports.identifyUser = function (res, done) {
   done(null, user);
 };
 
-exports.identifyAdmin = function (res, done) {
+exports.checkAdmin = function (res, done) {
   var user = res.locals.user;
   if (!user) {
     return done(error(error.NOT_AUTHENTICATED));

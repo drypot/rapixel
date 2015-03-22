@@ -87,22 +87,10 @@ describe("toDateTimeString", function () {
 
 describe("makeUrl", function () {
   it("should success", function () {
-    var url = utilp.makeUrl('http://localhost/test');
-    expect(url).equal('http://localhost/test');
-  });
-  it("should success", function () {
-    var params = {
-      a: 10
-    };
-    var url = utilp.makeUrl('http://localhost/test', params);
-    expect(url).equal('http://localhost/test?a=10');
-  });
-  it("should success", function () {
-    var params = {
-      a: 10,
-      b: 'big'
-    };
-    var url = utilp.makeUrl('http://localhost/test', params);
-    expect(url).equal('http://localhost/test?a=10&b=big');
+    var params = { a: 10 };
+    var params2 = { a: 10, b: 'big'};
+    expect(utilp.makeUrl('http://localhost/test')).equal('http://localhost/test');
+    expect(utilp.makeUrl('http://localhost/test', params)).equal('http://localhost/test?a=10');
+    expect(utilp.makeUrl('http://localhost/test', params2)).equal('http://localhost/test?a=10&b=big');
   });
 });

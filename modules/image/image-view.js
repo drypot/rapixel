@@ -3,8 +3,8 @@ var utilp = require('../base/util');
 var error = require('../base/error');
 var config = require('../base/config');
 var exp = require('../main/express');
-var upload = require('../upload/upload');
-var userv = require('../user/user-view');
+var upload = require('../main/upload');
+var usera = require('../user/user-auth');
 var imageb = require('../image/image-base');
 var site = require('../image/image-site');
 
@@ -62,7 +62,7 @@ function findImage(id, done) {
         name: user.name,
         home: user.home
       };
-      image.dir = imageb.getVersionUrlBase(image._id);
+      image.dir = imageb.getUrlBase(image._id);
       image.cdateStr = utilp.toDateTimeString(image.cdate);
       image.cdate = image.cdate.getTime();
       done(null, image);

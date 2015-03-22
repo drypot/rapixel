@@ -11,11 +11,10 @@ var fsp = require('../base/fs');
 var config = require('../base/config')({ path: 'config/drypot-test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
 var exp = require('../main/express');
-var upload = require('../upload/upload');
+var upload = require('../main/upload');
 var userf = require('../user/user-fixture');
 var imageb = require('../image/image-base');
 var imageu = require('../image/image-update');
-
 var local = require('../main/local');
 
 before(function (done) {
@@ -30,102 +29,59 @@ before(function (done) {
   fsp.emptyDir(imageb.imageDir, done);
 });
 
-describe("updating", function () {
+describe("updating with new image", function () {
   var _id;
-  var _files;
-  it("given image", function (done) {
-    local.upload('samples/svg-sample.svg', function (err, files) {
-      _files = files;
-      done(err);
-    });
-  });
-  it("and posted", function (done) {
+  it("given post", function (done) {
     this.timeout(30000);
-    var form = { files: _files, comment: 'image1' };
-    local.post('/api/images').send(form).end(function (err, res) {
+    local.post('/api/images').field('comment', 'image1').attach('files', 'samples/svg-sample.svg').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
-      should.exist(res.body.ids);
-      res.body.ids.length.should.equal(1);
+      expect(res.body.ids).exist;
+      expect(res.body.ids.length).equal(1);
       _id = res.body.ids[0];
       done();
     });
   });
-  it("versions should exist", function (done) {
+  it("can be checked", function (done) {
     imageb.images.findOne({ _id: _id }, function (err, image) {
       expect(err).not.exist;
-      should.exist(image);
-      image.fname.should.equal('svg-sample.svg');
-      image.format.should.equal('svg');
-      should.not.exist(image.width);
-      should.not.exist(image.vers);
-      should.exist(image.cdate);
-      image.comment.should.equal('image1');
-      fs.existsSync(imageb.getOrgPath(_id, 'svg')).should.be.true;
+      expect(image).exist;
+      expect(image.fname).equal('svg-sample.svg');
+      expect(image.format).equal('svg');
+      expect(image.width).not.exist;
+      expect(image.vers).not.exist;
+      expect(image.cdate).exist;
+      expect(image.comment).equal('image1');
+      expect(fs.existsSync(new imageb.ImageDir(_id, 'svg').orgPath)).be.true;
       done();
     });
   });
-  it("given image 2", function (done) {
-    local.upload('samples/svg-sample-2.svg', function (err, files) {
-      _files = files;
-      done(err);
-    });
-  });
-  it("and updated", function (done) {
+  it("should success", function (done) {
     this.timeout(30000);
-    var form = { files: _files, comment: 'image2' };
-    local.put('/api/images/' + _id).send(form).end(function (err, res) {
+    local.put('/api/images/' + _id).field('comment', 'image2').attach('files', 'samples/svg-sample-2.svg').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
     });
   });
-  it("versions should have been modified", function (done) {
+  it("can be checked", function (done) {
     imageb.images.findOne({ _id: _id }, function (err, image) {
       expect(err).not.exist;
-      should.exist(image);
-      image.fname.should.equal('svg-sample-2.svg');
-      image.format.should.equal('svg');
-      should.not.exist(image.width);
-      should.not.exist(image.vers);
-      should.exist(image.cdate);
-      image.comment.should.equal('image2');
-      fs.existsSync(imageb.getOrgPath(_id, 'svg')).should.be.true;
+      expect(image).exist;
+      expect(image.fname).equal('svg-sample-2.svg');
+      expect(image.format).equal('svg');
+      expect(image.width).not.exist;
+      expect(image.vers).not.exist;
+      expect(image.cdate).exist;
+      expect(image.comment).equal('image2');
+      expect(fs.existsSync(new imageb.ImageDir(_id, 'svg').orgPath)).be.true;
       done();
     });
   });
 });
 
-describe("updating", function () {
+describe("updating with jpeg", function () {
   var _id;
-  it("give post with no file", function (done) {
-    var form = {
-      _id: _id = imageb.newId(),
-      uid: userf.user1._id
-    };
-    imageb.images.insert(form, done);
-  });
-  it("and updated", function (done) {
-    var form = { comment: 'updated with no file' };
-    local.put('/api/images/' + _id).send(form).end(function (err, res) {
-      expect(err).not.exist;
-      expect(res.body.err).not.exist;
-      done();
-    });
-  });
-  it("post should have been modifed", function (done) {
-    imageb.images.findOne({ _id: _id }, function (err, image) {
-      expect(err).not.exist;
-      should.exist(image);
-      image.comment.should.equal('updated with no file');
-      done();
-    });
-  });
-});
-
-describe("updating", function () {
-  var _id;
-  var _files;
   it("given post", function (done) {
     var form = {
       _id: _id = imageb.newId(),
@@ -133,69 +89,12 @@ describe("updating", function () {
     };
     imageb.images.insert(form, done);
   });
-  it("and new jpeg", function (done) {
-    local.upload('samples/1136x640-169.jpg', function (err, files) {
-      _files = files;
-      done(err);
-    });
-  });
   it("should fail", function (done) {
-    var form = { files: _files };
-    local.put('/api/images/' + _id).send(form).end(function (err, res) {
+    this.timeout(30000);
+    local.put('/api/images/' + _id).attach('files', 'samples/1136x640-169.jpg').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
-      error.find(res.body.err, error.IMAGE_TYPE).should.true;
-      done();
-    });
-  });
-});
-
-describe("updating with text file", function () {
-  var _id;
-  var _files;
-  it("given post", function (done) {
-    var form = {
-      _id: _id = imageb.newId(),
-      uid: userf.user1._id
-    };
-    imageb.images.insert(form, done);
-  });
-  it("and new text file", function (done) {
-    local.upload('modules/main/upload-fixture1.txt', function (err, files) {
-      _files = files;
-      done(err);
-    });
-  });
-  it("should fail", function (done) {
-    var form = { files: _files };
-    local.put('/api/images/' + _id).send(form).end(function (err, res) {
-      expect(err).not.exist;
-      expect(res.body.err).exist;
-      error.find(res.body.err, error.IMAGE_TYPE).should.true;
-      done();
-    });
-  });
-});
-
-describe("updating by others", function () {
-  var _id;
-  var _files;
-  it("given post", function (done) {
-    var form = {
-      _id: _id = imageb.newId(),
-      uid: userf.user1._id
-    };
-    imageb.images.insert(form, done);
-  });
-  it("and user2 login", function (done) {
-    userf.login('user2', done);
-  });
-  it("should fail", function (done) {
-    var form = { comment: 'xxxx' };
-    local.put('/api/images/' + _id).send(form).end(function (err, res) {
-      expect(err).not.exist;
-      expect(res.body.err).exist;
-      error.find(res.body.err, error.NOT_AUTHORIZED).should.true;
+      expect(error.find(res.body.err, error.IMAGE_TYPE)).true;
       done();
     });
   });
