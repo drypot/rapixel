@@ -31,25 +31,28 @@ describe("deactivating self", function () {
   it("given user1 login", function (done) {
     userf.login('user1', done);
   });
-  it("accessing should success", function (done) {
+  it("checkUser should success", function (done) {
     local.get('/api/test/user').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
     })
   });
-  it("given user1 deactivated", function (done) {
+  it("should success", function (done) {
     local.del('/api/users/' + userf.user1._id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
-      userb.users.findOne({ _id: userf.user1._id }, function (err, user) {
-        expect(err).not.exist;
-        expect(user.status == 'd').true;
-        done();
-      });
+      done();
     });
   });
-  it("accessing should fail (because logged out)", function (done) {
+  it("can be checked", function (done) {
+    userb.users.findOne({ _id: userf.user1._id }, function (err, user) {
+      expect(err).not.exist;
+      expect(user.status == 'd').true;
+      done();
+    });
+  });
+  it("checkUser should fail (because logged off)", function (done) {
     local.get('/api/test/user').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
@@ -77,7 +80,7 @@ describe("deactivating other", function () {
   it("given user2 login", function (done) {
     userf.login('user2', done);
   });
-  it("deactivating user3 should fail", function (done) {
+  it("deactivating other should fail", function (done) {
     local.del('/api/users/' + userf.user3._id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
@@ -87,7 +90,7 @@ describe("deactivating other", function () {
   });
 });
 
-describe("deactivating by admin", function () {
+describe("deactivating other by admin", function () {
   it("given admin login", function (done) {
     userf.login('admin', done);
   });

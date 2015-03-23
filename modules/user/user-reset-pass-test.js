@@ -19,12 +19,6 @@ before(function (done) {
   init.run(done);
 });
 
-describe("resets collection", function () {
-  it("should exist", function () {
-    expect(userb.resets).exist;
-  });
-});
-
 describe("resetting user", function () {
   var _user;
   var _reset;
@@ -39,23 +33,24 @@ describe("resetting user", function () {
     });
   });
   it("reset request should success", function (done) {
-    var form = { email: _user.email };
-    local.post('/api/reset-pass').send(form).end(function (err, res) {
+    local.post('/api/reset-pass').send({ email: _user.email }).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
-      userb.resets.findOne({ email: _user.email }, function (err, reset) {
-        expect(err).not.exist;
-        expect(reset._id).exist;
-        expect(reset.token).exist;
-        expect(reset.email).equal(_user.email);
-        _reset = reset;
-        done();
-      });
+      done();
+    });
+  });
+  it("can be checked", function (done) {
+    userb.resets.findOne({ email: _user.email }, function (err, reset) {
+      expect(err).not.exist;
+      expect(reset._id).exist;
+      expect(reset.token).exist;
+      expect(reset.email).equal(_user.email);
+      _reset = reset;
+      done();
     });
   });
   it("invalid email should fail", function (done) {
-    var form = { email: 'abc.def.xyz' };
-    local.post('/api/reset-pass').send(form).end(function (err, res) {
+    local.post('/api/reset-pass').send({ email: 'abc.def.xyz' }).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.EMAIL_PATTERN)).true;
@@ -63,8 +58,7 @@ describe("resetting user", function () {
     });
   });
   it("unregistered email should fail", function (done) {
-    var form = { email: 'non-exist@xyz.com' };
-    local.post('/api/reset-pass').send(form).end(function (err, res) {
+    local.post('/api/reset-pass').send({ email: 'non-exist@xyz.com' }).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.EMAIL_NOT_EXIST)).true;
@@ -149,14 +143,17 @@ describe("resetting admin", function () {
     local.post('/api/reset-pass').send(form).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
-      userb.resets.findOne({ email: _user.email }, function (err, reset) {
-        expect(err).not.exist;
-        expect(reset._id).exist;
-        expect(reset.token).exist;
-        expect((reset.email == _user.email)).true;
-        _reset = reset;
-        done();
-      });
+      done();
+    });
+  });
+  it("can be checked", function (done) {
+    userb.resets.findOne({ email: _user.email }, function (err, reset) {
+      expect(err).not.exist;
+      expect(reset._id).exist;
+      expect(reset.token).exist;
+      expect((reset.email == _user.email)).true;
+      _reset = reset;
+      done();
     });
   });
   it("should success", function (done) {

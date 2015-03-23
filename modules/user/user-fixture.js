@@ -1,11 +1,12 @@
 var expect = require('chai').expect;
 
 var init = require('../base/init');
+var userb = require('../user/user-base');
 var usera = require('../user/user-auth');
 var userc = require('../user/user-create');
 var local = require('../main/local');
 
-init.add(function (done) {
+init.add(exports.recreate = function (done) {
   var forms = [
     { name: 'user1', email: 'abc@def.com', password: '1234' },
     { name: 'user2', email: 'abc2@def.com', password: '1234' },
@@ -23,7 +24,10 @@ init.add(function (done) {
       setImmediate(create);
     });
   }
-  create();
+  userb.users.remove(function (err) {
+    if (err) return done(err);
+    create();
+  });
 });
 
 exports.login = function (name, remember, done) {
