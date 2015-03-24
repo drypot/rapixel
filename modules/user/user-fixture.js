@@ -8,10 +8,10 @@ var local = require('../main/local');
 
 init.add(exports.recreate = function (done) {
   var forms = [
-    { name: 'user1', email: 'abc@def.com', password: '1234' },
-    { name: 'user2', email: 'abc2@def.com', password: '1234' },
-    { name: 'user3', email: 'abc3@def.com', password: '1234' },
-    { name: 'admin', email: 'admin@def.com', password: '1234', admin: true }
+    { name: 'user1', email: 'user1@mail.com', password: '1234' },
+    { name: 'user2', email: 'user2@mail.com', password: '1234' },
+    { name: 'user3', email: 'user3@mail.com', password: '1234' },
+    { name: 'admin', email: 'admin@mail.com', password: '1234', admin: true }
   ];
   var i = 0;
   function create() {
@@ -24,6 +24,7 @@ init.add(exports.recreate = function (done) {
       setImmediate(create);
     });
   }
+  usera.resetCache();
   userb.users.remove(function (err) {
     if (err) return done(err);
     create();

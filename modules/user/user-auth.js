@@ -8,10 +8,7 @@ init.add(function () {
   exp.before.use(function (req, res, done) {
     if (req.session.uid) {
       getCached(req.session.uid, function (err, user) {
-        if (err) {
-          req.session.destroy();
-          return done(err);
-        }
+        if (err) return req.session.regenerate(done);
         res.locals.user = user;
         done();
       });
@@ -111,6 +108,11 @@ exports.deleteCache = function (id) {
     delete users[id];
     delete usersByHome[user.homel];
   }
+}
+
+exports.resetCache = function () {
+  users = [];
+  usersByHome = {};
 }
 
 /* session */
