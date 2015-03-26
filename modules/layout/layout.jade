@@ -13,8 +13,8 @@ html
 
     link(rel="stylesheet", href="/modules/bower/bootstrap/dist/css/bootstrap.min.css")
     link(rel="stylesheet", href="/modules/bower/bootstrap/dist/css/bootstrap-theme.min.css")
-    link(rel="stylesheet", href="/modules/layout/base.css")
-    link(rel="stylesheet", href="/modules/layout/" + appType + ".css")
+    link(rel="stylesheet", href="/modules/css/base.css")
+    link(rel="stylesheet", href="/modules/css/" + appType + ".css")
 
     //-//if lt IE 9
     //-  script(src="/modules/bower/html5shiv.js")
@@ -22,17 +22,16 @@ html
 
     script(src="/modules/bower/json2/json2.js")
     script(src="/modules/bower/jquery/dist/jquery.min.js")
-    script(src="/modules/bower/jquery.iframe-transport/jquery.iframe-transport.js")
-    script(src="/modules/bower/superagent/superagent.js")
+    //script(src="/modules/bower/superagent/lib/client.js")
     script(src="/modules/bower/bootstrap/dist/js/bootstrap.min.js")
     
     script.
       window.appType = '!{appType}';
       window.user = !{locals.user ? JSON.stringify({ id: user._id, name: user.name }) : 'undefined'};
 
-    script(src="/modules/base/base.js")
-    script(src="/modules/user/user.js")
-    script(src="/modules/image/image.js")
+    script(src="/modules/js/base.js")
+    script(src="/modules/js/user.js")
+    script(src="/modules/js/image.js")
 
   body
 
@@ -61,6 +60,8 @@ html
         .hidden-input
           input(type='file', multiple='multiple')
         button.btn.btn-default Select
+    //- IE 는 file input 컨트롤을 직접 클릭해야 반응한다.
+    //- 투명하게 만들어 커스텀 컨트롤 위에 띄우는 방법도 있던데 지저분하므로 패스.
     #file-input-templ-msie.hide
       .file
         input(type='file')

@@ -18,6 +18,23 @@ init.add(function (done) {
     if (err) return done(err);
     fsp.emptyDir(tmpDir, done);
   });
+
+  if (config.development) {
+    exp.core.get('/upload-test', function (req, res) {
+      res.render('main/upload-test');
+    });
+
+    exp.core.post('/api/upload-test', exports.handler(function (req, res, done) {
+      req.body.files = [];
+      if (req.files) {
+        req.files.files.forEach(function (file) {
+          req.body.files.push(file.path);
+        })
+      }
+      res.json(req.body);
+      done();
+    }));
+  }
 });
 
 exports.handler = function (inner) {
@@ -48,6 +65,9 @@ exports.handler = function (inner) {
       //   } 
       // ]}
 
+
+      // org fname size 0 인 경우는 어떻게 할까?
+      var files = [];
       for (var key in req.files) {
         if (!Array.isArray(req.files[key])) {
           req.files[key] = [req.files[key]];

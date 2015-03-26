@@ -1,5 +1,5 @@
 
-init.add(function () {
+$(function () {
   window.imagel = {};
 
   imagel.initImageView = function (image) {

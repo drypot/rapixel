@@ -1,52 +1,12 @@
-var request = superagent;
+window.msie = /msie/.test(navigator.userAgent.toLowerCase());
 
-(function () {
-  // for IE 7
-
-  if (!window.localStorage) {
-    window.localStorage = {
-      getItem: function () {},
-      setItem: function () {},
-      removeItem: function () {}
-    }
-    window.sessionStorage = {
-      getItem: function () {},
-      setItem: function () {},
-      removeItem: function () {}
-    }
+if (!window.console) {
+  window.console = {
+    log: function () {}
   }
+}
 
-  if (!window.console) {
-    window.console = {
-      log: function () {}
-    }
-  }
-
-  window.msie = /msie/.test(navigator.userAgent.toLowerCase());
-})();
-
-(function () {
-  window.init = {};
-
-  var funcs = [];
-
-  window.init.add = function (func) {
-    funcs.push(func);
-  };
-
-  $(function () {
-    console.log('init:');
-
-    var i = 0;
-    var len = funcs.length;
-
-    for (i = 0; i < len; i++) {
-      funcs[i]();
-    }
-  });
-})();
-
-init.add(function () {
+$(function () {
   window.error = {};
 
   function define(code, msg) {
@@ -63,10 +23,9 @@ init.add(function () {
   define('NOT_AUTHORIZED', '사용 권한이 없습니다.');
 });
 
-init.add(function () {
+$(function () {
   window.$window = $(window);
   window.$document = $(document);
-  window.$content = $('#content');
 
   window.url = {};
   window.url.pathnames = window.location.pathname.slice(1).split('/');
@@ -83,7 +42,7 @@ init.add(function () {
   })();
 });
 
-init.add(function () {
+$(function () {
   var patterns = [
     { // url
       pattern: /(https?:\/\/[^ "'><)\n\r]+)/g,
@@ -113,7 +72,7 @@ init.add(function () {
 });
 
 
-init.add(function() {
+$(function() {
   var $modal = $('#error-modal');
   var $title = $modal.find('.modal-title');
   var $body = $modal.find('.modal-body');
@@ -122,7 +81,7 @@ init.add(function() {
     $title.text(err.message);
     var body = '';
     if (err.stack) {
-      body += '<p>System Error ' + err.stack.replace(/Error:.+\n/, '').replace(/\n/g, '<br>') + '</p>';
+      body += '<p>' + err.stack.replace(/Error:.+\n/, '').replace(/\n/g, '<br>') + '</p>';
     }
     if (err.detail) {
       body += '<pre>' + err.detail.replace(/\n/g, '<br>') + '</pre>';
@@ -137,9 +96,10 @@ init.add(function() {
   };
 });
 
-init.add(function() {
+$(function() {
   window.formty = {};
 
+  /* checkbox 이름에는 [] 이 딸 붙는다. */
   var namex = /[^\[]+/;
 
   formty.getForm = function (sel) {
@@ -151,42 +111,9 @@ init.add(function() {
       }
     });
     if ($form.$send) {
-      $form.$send.button();
+      /** ?? **/ $form.$send.button();
     }
     return $form;
-  };
-
-  formty.toObject = function ($form) {
-    var obj = {};
-    $form.find('input, textarea, select').each(function () {
-      if (this.name && !this.disabled) {
-        var $this = $(this);
-        var name = this.name.match(namex)[0];
-        var braket = this.name.length != name.length;
-        if (this.type == 'checkbox') {
-          if (braket) {
-            if ($this.prop('checked')) {
-              if (obj[name]) {
-                obj[name].push($this.val());
-              } else {
-                obj[name] = [$this.val()];
-              }
-            }
-          } else {
-            obj[name] = $this.prop('checked');
-          }
-          return;
-        }
-        if (this.type == 'file') {
-          return;
-        }
-        obj[name] = $this.val();
-      }
-    });
-    for (var key in $form.extra) {
-      obj[key] = $form.extra[key];
-    }
-    return obj;
   };
 
   formty.initFileGroup = function ($form, name, adder) {
@@ -258,49 +185,171 @@ init.add(function() {
 
   // gen http methods
 
-  ['post', 'get', 'put', 'del'].forEach(function (method) {
+  // ['post', 'put'].forEach(function (method) {
+  //   formty[method] = (function (method) {
+  //     return function (url, $form, done) {
+  //       formty.clearAlerts($form);
+  //       formty.showSending($form);
+  //       var req = superagent[method].call(superagent, url);
+  //       var form = formty.toObject($form);
+  //       var attached = false;
+  //       $('input[type=file]', $form).each(function () {
+  //         var name = $(this).val();
+  //         if (name) {
+  //           console.log('name');
+  //           attached = true;
+  //           req.attach('files', name);
+  //         }
+  //       });
+  //       if (attached) {
+  //         // json 으로 못 보내고 multipart 의 field 로 보낼 때 checkbox[...] 처리는? 
+  //         // 다음에 닥치면 확인.
+  //         req.field('json', JSON.stringify(form));
+  //       } else {
+  //         return;
+  //       }
+  //       req.end(function (err, res) {
+  //         // 4xx or 5xx response with superagent is not considered an error by default.
+  //         // err = err || res.error; 
+  //         //
+  //         // 1.0 부터 2XX 아 아니면 err 가 만들어진다. 
+  //         if (err) {
+  //           showError(err);
+  //           formty.hideSending($form);
+  //           return;
+  //         }
+  //         if (res.body.err) {
+  //           if (res.body.err.code === error.INVALID_FORM.code) {
+  //             formty.addAlerts($form, res.body.err.errors);
+  //             formty.hideSending($form);
+  //             return;
+  //           }
+  //           showError(res.body.err);
+  //           formty.hideSending($form);
+  //           return;
+  //         }
+  //         // formty.hideSending($form) 을 부르지 않는다.
+  //         // 보통 페이지 이동이 일어나므로 버튼을 바꿀 필요가 없다.
+  //         done(null, res);
+  //       });
+  //     };
+  //   })(method)
+  // });
+
+  window.request = {};
+  ['post', 'put', 'get', 'del'].forEach(function (method) {
+    request[method] = (function (method) {
+      return function (url, obj, extra, done) {
+        if (typeof obj == 'function') {
+          done = obj;
+          obj = extra = null;
+        } else if (typeof extra == 'function') {
+          done = extra;
+          extra = null;
+        }
+        var data;
+        var ctype;
+        if (obj instanceof jQuery) {
+          data = new FormData(obj[0]);
+          for (var key in extra) {
+            data.append(key, extra[key]);
+          }
+        } else if (obj) {
+          data = JSON.stringify(obj);
+          ctype = 'application/json';
+        }
+        var req = new XMLHttpRequest();
+        req.open(method, url);
+        req.onload = onload;
+        if (ctype) {
+          req.setRequestHeader('Content-Type', ctype);
+        }
+        console.log('req.send');
+        console.log({
+          method: method,
+          url: url,
+          obj: obj,
+          extra: extra,
+          data: data,
+          ctype: ctype
+        })
+        req.send(data);
+
+        function onload() {
+          if (req.status == 200) {
+            done(null, { 
+              req: req, 
+              body: JSON.parse(req.responseText) || {} 
+            });
+          } else {
+            done(new Error(req.statusText));
+          }
+        }
+      };
+    })(method);
+  });
+
+  ['post', 'put'].forEach(function (method) {
     formty[method] = (function (method) {
-      return function (url, $form, done) {
-        var form = formty.toObject($form);
+      return function (url, $form, extra, done) {
         formty.clearAlerts($form);
         formty.showSending($form);
-        formty.sendFiles($form, function (err, res) {
+        request[method].call(request, url, $form, extra, function (err, res) {
           if (err) {
             showError(err);
             formty.hideSending($form);
             return;
           }
-          for (var key in res.body) {
-            form[key] = res.body[key];
+          if (res.body.err) {
+            if (res.body.err.code === error.INVALID_FORM.code) {
+              formty.addAlerts($form, res.body.err.errors);
+              formty.hideSending($form);
+              return;
+            }
+            showError(res.body.err);
+            formty.hideSending($form);
+            return;
           }
-          request[method].call(request, url).send(form).end(function (err, res) {
-            // 4xx or 5xx response with superagent is not considered an error by default.
-            // err = err || res.error; 
-            //
-            // 1.0 부터 2XX 아 아니면 err 가 만들어진다. 
-            if (err) {
-              showError(err);
-              formty.hideSending($form);
-              return;
-            }
-            if (res.body.err) {
-              if (res.body.err.code === error.INVALID_FORM.code) {
-                formty.addAlerts($form, res.body.err.errors);
-                formty.hideSending($form);
-                return;
-              }
-              showError(res.body.err);
-              formty.hideSending($form);
-              return;
-            }
-            // formty.hideSending($form) 을 부르지 않는다.
-            // 보통 페이지 이동이 일어나므로 버튼을 바꿀 필요가 없다.
-            done(null, res);
-          });
+          // formty.hideSending($form) 을 부르지 않는다.
+          // 보통 페이지 이동이 일어나므로 버튼을 바꿀 필요가 없다.
+          done(null, res);
         });
       };
-    })(method)
+    })(method);
   });
+
+  function toObject($form) {
+    var obj = {};
+    $form.find('input, textarea, select').each(function () {
+      if (this.name && !this.disabled) {
+        var $this = $(this);
+        var name = this.name.match(namex)[0];
+        var braket = this.name.length != name.length;
+        if (this.type == 'checkbox') {
+          if (braket) {
+            if ($this.prop('checked')) {
+              if (obj[name]) {
+                obj[name].push($this.val());
+              } else {
+                obj[name] = [$this.val()];
+              }
+            }
+          } else {
+            obj[name] = $this.prop('checked');
+          }
+          return;
+        }
+        if (this.type == 'file') {
+          return;
+        }
+        obj[name] = $this.val();
+      }
+    });
+    for (var key in $form.extra) {
+      obj[key] = $form.extra[key];
+    }
+    return obj;
+  };
 
   formty.showSending = function ($form) {
     if ($form.$send) {

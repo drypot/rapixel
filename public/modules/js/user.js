@@ -1,5 +1,5 @@
 
-init.add(function () {
+$(function () {
   window.userl = {};
 
   userl.initLogin = function () {
@@ -97,7 +97,7 @@ init.add(function () {
   };
 });
 
-init.add(function () {
+$(function () {
   $('#logout-btn').click(function () {
     userl.logout();
     return false;
