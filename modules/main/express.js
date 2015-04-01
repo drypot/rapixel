@@ -83,6 +83,14 @@ init.tail(function () {
     });
   });
 
+  app.all('/api/echo', function (req, res, done) {
+    res.json({
+      query: req.query,
+      body: req.body,
+      method: req.method
+    });
+  });
+
   app.get('/error', function (req, res, done) {
     var err = new Error('Error Sample Page');
     err.code = 999;

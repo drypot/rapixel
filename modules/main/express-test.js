@@ -13,7 +13,7 @@ before(function (done) {
   init.run(done);
 });
 
-describe("/api/hello", function () {
+describe("hello", function () {
   it("should return appName", function (done) {
     local.get('/api/hello').end(function (err, res) {
       expect(err).not.exist;
@@ -28,9 +28,36 @@ describe("/api/hello", function () {
   });
 });
 
-describe("undefined url", function () {
+describe("echo", function () {
+  it("get should success", function (done) {
+    local.get('/api/echo?p1&p2=123').end(function (err, res) {
+      expect(err).not.exist;
+      expect(res.body.method).equal('GET');
+      expect(res.body.query).eql({ p1: '', p2: '123' });
+      done();
+    });
+  });
+  it("post should success", function (done) {
+    local.post('/api/echo').send({ p1: '', p2: '123' }).end(function (err, res) {
+      expect(err).not.exist;
+      expect(res.body.method).equal('POST');
+      expect(res.body.body).eql({ p1: '', p2: '123' });
+      done();
+    });
+  });
+  it("delete should success", function (done) {
+    local.del('/api/echo').end(function (err, res) {
+      expect(err).not.exist;
+      expect(res.body.method).equal('DELETE');
+      done();
+    });
+  });
+});
+
+
+describe("undefined", function () {
   it("should return 404", function (done) {
-    local.get('/api/xxx').end(function (err, res) {
+    local.get('/api/test/undefined-url').end(function (err, res) {
       expect(err).exist;
       expect(res).status(404); // Not Found
       done();
@@ -38,30 +65,14 @@ describe("undefined url", function () {
   });
 });
 
-describe("res.send", function () {
+describe("json object", function () {
   it("given handler", function () {
-    exp.core.get('/test/text-html', function (req, res, done) {
-      res.send('<p>some text</p>');
-    });
-  });
-  it("should return html", function (done) {
-    local.get('/test/text-html').end(function (err, res) {
-      expect(err).not.exist;
-      expect(res).html;
-      expect(res.text).equal('<p>some text</p>');
-      done();
-    });
-  });
-});
-
-describe("res.json", function () {
-  it("given handler", function () {
-    exp.core.get('/api/json', function (req, res, done) {
+    exp.core.get('/api/test/object', function (req, res, done) {
       res.json({ msg: 'valid json' });
     });
   });
   it("should return json", function (done) {
-    local.get('/api/json').end(function (err, res) {
+    local.get('/api/test/object').end(function (err, res) {
       expect(err).not.exist;
       expect(res).json;
       expect(res.body.msg).equal('valid json');
@@ -70,14 +81,30 @@ describe("res.json", function () {
   });
 });
 
-describe("null", function () {
+describe("json string", function () {
   it("given handler", function () {
-    exp.core.get('/api/null', function (req, res, done) {
+    exp.core.get('/api/test/string', function (req, res, done) {
+      res.json('hi');
+    });
+  });
+  it("should return json", function (done) {
+    local.get('/api/test/string').end(function (err, res) {
+      expect(err).not.exist;
+      expect(res).json;
+      expect(res.body).equal('hi');
+      done();
+    });
+  });
+});
+
+describe("json null", function () {
+  it("given handler", function () {
+    exp.core.get('/api/test/null', function (req, res, done) {
       res.json(null);
     });
   });
   it("should return {}", function (done) {
-    local.get('/api/null').end(function (err, res) {
+    local.get('/api/test/null').end(function (err, res) {
       expect(err).not.exist;
       expect(res).json;
       expect(res.body).equal(null);
@@ -101,7 +128,7 @@ describe("no-action", function () {
   });
 });
 
-describe("api error", function () {
+describe("json error", function () {
   it("given handler", function () {
     exp.core.get('/api/test/invalid-data', function (req, res, done) {
        done(error(error.INVALID_DATA));
@@ -118,7 +145,23 @@ describe("api error", function () {
   });
 });
 
-describe("page error", function () {
+describe("html", function () {
+  it("given handler", function () {
+    exp.core.get('/test/html', function (req, res, done) {
+      res.send('<p>some text</p>');
+    });
+  });
+  it("should return html", function (done) {
+    local.get('/test/html').end(function (err, res) {
+      expect(err).not.exist;
+      expect(res).html;
+      expect(res.text).equal('<p>some text</p>');
+      done();
+    });
+  });
+});
+
+describe("html error", function () {
   it("given handler", function () {
     exp.core.get('/test/invalid-data', function (req, res, done) {
        done(error(error.INVALID_DATA));
@@ -134,7 +177,7 @@ describe("page error", function () {
   });
 });
 
-describe("Cache-Control", function () {
+describe("cache control", function () {
   it("given handler", function () {
     exp.core.get('/test/cache-test', function (req, res, done) {
        res.send('<p>muse be cached</p>');
@@ -151,28 +194,6 @@ describe("Cache-Control", function () {
     local.get('/api/hello').end(function (err, res) {
       expect(err).not.exist;
       expect(res.get('Cache-Control')).equal('no-cache');
-      done();
-    });
-  });
-});
-
-describe("echo-query-params", function () {
-  it("given handler", function () {
-    exp.core.get('/api/echo-query', function (req, res, done) {
-      var obj = {};
-      for(var p in req.query) {
-        obj[p] = req.query[p];
-      }
-      res.json(obj);
-    });
-  });
-  it("should success", function (done) {
-    local.get('/api/echo-query?p1&p2=123').end(function (err, res) {
-      expect(err).not.exist;
-      expect(res.body).eql({
-        p1: '',
-        p2: '123'
-      });
       done();
     });
   });
@@ -195,19 +216,19 @@ describe("middleware", function () {
       done(new Error("some error"));
     }
     
-    exp.core.get('/api/mw-1-2', mid1, mid2, function (req, res, done) {
+    exp.core.get('/api/test/mw-1-2', mid1, mid2, function (req, res, done) {
       result.mid3 = 'ok';
       res.json({});
     });
 
-    exp.core.get('/api/mw-1-err-2', mid1, miderr, mid2, function (req, res, done) {
+    exp.core.get('/api/test/mw-1-err-2', mid1, miderr, mid2, function (req, res, done) {
       result.mid3 = 'ok';
       res.json({});
     });
   });
   it("mw-1-2 should return 1, 2", function (done) {
     result = {};
-    local.get('/api/mw-1-2').end(function (err, res) {
+    local.get('/api/test/mw-1-2').end(function (err, res) {
       expect(err).not.exist;
       expect(result.mid1).exist;
       expect(result.mid2).exist;
@@ -217,7 +238,7 @@ describe("middleware", function () {
   });
   it("mw-1-err-2 should return 1, 2", function (done) {
     result = {};
-    local.get('/api/mw-1-err-2').end(function (err, res) {
+    local.get('/api/test/mw-1-err-2').end(function (err, res) {
       expect(err).not.exist;
       expect(result.mid1).exist;
       expect(result.mid2).not.exist;
