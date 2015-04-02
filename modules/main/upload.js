@@ -22,14 +22,22 @@ init.add(function (done) {
       res.render('main/upload-test');
     });
 
-    exp.core.post('/api/upload-test', exports.handler(function (req, res, done) {
-      req.body.files = [];
+    exp.core.all('/api/echo-upload', exports.handler(function (req, res, done) {
+      var paths = [];
       if (req.files) {
-        req.files.files.forEach(function (file) {
-          req.body.files.push(file.path);
-        })
+        Object.keys(req.files).forEach(function (field) {
+          req.files[field].forEach(function (file) {
+            paths.push(file.originalFilename);
+          });
+        });
       }
-      res.json(req.body);
+      res.json({
+        method: req.method,
+        rtype: req.header('content-type'),
+        query: req.query,
+        body: req.body,
+        files: paths
+      });
       done();
     }));
   }

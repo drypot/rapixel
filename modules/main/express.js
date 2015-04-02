@@ -85,9 +85,10 @@ init.tail(function () {
 
   app.all('/api/echo', function (req, res, done) {
     res.json({
+      method: req.method,
+      rtype: req.header('content-type'),
       query: req.query,
-      body: req.body,
-      method: req.method
+      body: req.body
     });
   });
 
