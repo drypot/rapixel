@@ -3,8 +3,14 @@
 ##
     nginx:  
         location ~ /(?:css|image|js|lib)/ ->
-        location ~ /(?:modules)/
-    
+
+            location /modules/ {
+            }
+
+            location /modules/bower/ {
+              alias /Users/drypot/projects/rapixel/website/bower_components;
+            }
+        
 ## done
 
     $ mv /data2/rapixel/upload/* /data2/rapixel
