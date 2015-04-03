@@ -5,12 +5,12 @@ block title
 
 block content
   script.
-    init.add(function () {
+    $(function () {
       userl.initLogin();
     });
 
   if query.hasOwnProperty('newuser')
-    .page-title
+    .section.page-title
       h1 Thank you
 
     .section
@@ -19,23 +19,24 @@ block content
       | You can login with your email and password.
 
   else
-    .page-title
+    .section.page-title
       h1 Login
 
-  form.main
-    .sub-section
-      .form-group
-        label.control-label Email
-        input.form-control(name="email", type="text")
-      .form-group
-        label.control-label Password
-        input.form-control(name="password", type="password")
-      .form-group
-        label Remember
-        br
-        input(name="remember", type="checkbox") 
-    .sub-section
-      button.btn.btn-primary(name='send', data-loading-text='Sending') Send
+  .section
+    form.main
+      .sub-section
+        .form-group
+          label.control-label Email
+          input.form-control(name="email", type="text")
+        .form-group
+          label.control-label Password
+          input.form-control(name="password", type="password")
+        .form-group
+          label Remember
+          br
+          input(name="remember", type="checkbox") 
+      .sub-section
+        button.btn.btn-primary(name='send', data-loading-text='Sending') Send
 
   .section
     a(href='/users/reset-pass') Reset Password

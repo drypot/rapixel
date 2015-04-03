@@ -92,7 +92,7 @@ init.tail(function () {
     });
   });
 
-  app.get('/error', function (req, res, done) {
+  app.get('/dev/error', function (req, res, done) {
     var err = new Error('Error Sample Page');
     err.code = 999;
     res.render('main/error', {

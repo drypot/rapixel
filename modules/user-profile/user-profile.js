@@ -2,7 +2,7 @@ var init = require('../base/init');
 var utilp = require('../base/util');
 var error = require('../base/error');
 var exp = require('../main/express');
-var userv = require('../user/user-view');
+var usera = require('../user/user-auth');
 var imagel = require('../image/image-list');
 var site = require('../image/image-site');
 

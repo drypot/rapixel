@@ -6,27 +6,28 @@ block title
 block content
 
   script.
-    init.add(function() {
+    $(function() {
       imagel.initUpdateForm(!{JSON.stringify(image)});
     });
 
-  .page-title
+  .section.page-title
     h1 Update Image
 
-  form.main
-    .sub-section
-      .form-group
-        label Image
-        .file-group
-        if appType == 'drypot'
-          p.help-block
-            | Only SVG files.
-    .sub-section
-      .form-group
-        label Comment
-        textarea.form-control(name='comment', rows=7) #{image.comment}
-    .sub-section
-      button.btn.btn-primary(name='send', data-loading-text='Sending') Send
+  .section
+    form.main
+      .sub-section
+        .form-group
+          label Image
+          .file-group
+          if appType == 'drypot'
+            p.help-block
+              | Only SVG files.
+      .sub-section
+        .form-group
+          label Comment
+          textarea.form-control(name='comment', rows=7) #{image.comment}
+      .sub-section
+        button.btn.btn-primary(name='send', data-loading-text='Sending') Send
 
   .section
     if appType == 'rapixel'

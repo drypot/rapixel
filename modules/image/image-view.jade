@@ -6,7 +6,7 @@ block title
 block content
 
   script.
-    init.add(function() {
+    $(function() {
       imagel.initImageView(!{JSON.stringify(image)});
     });
 
@@ -17,7 +17,7 @@ block content
       img.low-res(src=image.dir + '/' + image._id + '-640.jpg')
       img.hi-res
 
-  .image-info
+  .section.image-info
     .sub-section
       .uname
         a(href='/' + encodeURIComponent(image.user.home)) #{image.user.name}

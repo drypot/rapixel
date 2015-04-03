@@ -5,30 +5,30 @@ block title
 
 block content
 
-  .site-title
+  .section.site-title
     h1
       a(href="/") #{appName}
     .desc #{appDesc}
 
   if !gtUrl
     if locals.user
-      .top-links
+      .section.top-links
         a(href="/images/new") Upload
         a(href="/users/" + user._id) Profile
         a#logout-btn(href="/users/logout") Logout
     else
-      .top-links
+      .section.top-links
         a(href="/users/login") Login
         a(href="/users/register") Register
 
-    //-.news
+    //- .section.news
         | Update: Can change user address at profile.
 
   if locals.gtUrl
-    .pager-prev
+    .section.pager-prev
       a(href=gtUrl) Previous
 
-  .images
+  .section.images
     for image in images
       .box
         .image
@@ -39,6 +39,5 @@ block content
             a(href='/' + encodeURIComponent(image.user.home)) #{image.user.name}
 
   if locals.ltUrl
-    .pager-next
+    .section.pager-next
       a(href=ltUrl) Next
-

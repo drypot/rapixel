@@ -111,33 +111,31 @@ $(function () {
     this._url = url;
   }
 
-  XHR.prototype.data = function (obj) {
-    this._data = obj;
+  XHR.prototype.object = function (obj) {
+    this._obj = obj;
     return this;
   }
 
   XHR.prototype.form = function (form) {
-    this._form = form instanceof jQuery ? form[0] : form;
+    this._form = form;
     return this;
   }
 
-  XHR.prototype.send = function (done) {
-    var data;
-    var ctype;
-    if (this._form) {
-      data = new FormData(this._form);
-      for (var key in this._data) {
-        data.append(key, this._data[key]);
-      }
-    } else if (this._data) {
-      data = JSON.stringify(this._data);
-      ctype = 'application/json';
-    }
+  XHR.prototype.end = function (done) {
     var xhr = new XMLHttpRequest();
     xhr.open(this._method, this._url);
     xhr.onload = onload;
-    if (ctype) {
-      xhr.setRequestHeader('Content-Type', ctype);
+
+    var data;
+    var _form = this._form;
+    if (_form) {
+      data = new FormData(_form instanceof jQuery ? _form[0] : _form);
+      for (var key in this._obj) {
+        data.append(key, this._obj[key]);
+      }
+    } else if (this._obj) {
+      data = JSON.stringify(this._obj);
+      xhr.setRequestHeader('Content-Type', 'application/json');
     }
     xhr.send(data);
 
@@ -193,10 +191,20 @@ $(function() {
 
   ['post', 'put'].forEach(function (method) {
     formty[method] = (function (method) {
-      return function (url, $form, extra, done) {
+      return function (url, $form, obj, done) {
+        if (typeof obj == 'function') {
+          done = obj;
+          obj = null;
+        }
         formty.clearAlerts($form);
         formty.showSending($form);
-        xhr[method].call(xhr, url).form($form).data(extra).send(function (err, res) {
+        var req = xhr[method].call(xhr, url);
+        if ($form.find('input[type="file"]').length) {
+          req.form($form).object(obj);
+        } else {
+          req.object(getObject($form, obj));
+        }
+        req.end(function (err, res) {
           if (err) {
             showError(err);
             formty.hideSending($form);
@@ -219,6 +227,39 @@ $(function() {
       };
     })(method);
   });
+
+  function getObject($form, _obj) {
+    var obj = {};
+    $form.find('input, textarea, select').each(function () {
+      if (this.name && !this.disabled) {
+        var $this = $(this);
+        var name = this.name.match(namex)[0];
+        var braket = this.name.length != name.length;
+        if (this.type == 'checkbox') {
+          if (braket) {
+            if ($this.prop('checked')) {
+              if (obj[name]) {
+                obj[name].push($this.val());
+              } else {
+                obj[name] = [$this.val()];
+              }
+            }
+          } else {
+            obj[name] = $this.prop('checked');
+          }
+          return;
+        }
+        if (this.type == 'file') {
+          return;
+        }
+        obj[name] = $this.val();
+      }
+    });
+    for (var key in _obj) {
+      obj[key] = _obj[key];
+    }
+    return obj;
+  }
 
   formty.showSending = function ($form) {
     if ($form.$send) {

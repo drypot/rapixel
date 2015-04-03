@@ -18,8 +18,8 @@ init.add(function (done) {
   });
 
   if (config.development) {
-    exp.core.get('/upload-test', function (req, res) {
-      res.render('main/upload-test');
+    exp.core.get('/dev/upload', function (req, res) {
+      res.render('main/upload');
     });
 
     exp.core.all('/api/echo-upload', exports.handler(function (req, res, done) {

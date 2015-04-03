@@ -5,7 +5,7 @@ block title
 
 block content
 
-  .page-title
+  .section.page-title
     h1 Upload
 
   if !ticketCount
@@ -16,25 +16,26 @@ block content
 
   else
     script.
-      init.add(function() {
+      $(function() {
         imagel.initNewForm();
       });
 
-    form.main
-      .sub-section
-        .form-group
-          label Image
-          .file-group
-          p.help-block
-            | You can upload #{ticketCount} more images today.
-            br
-            if appType == 'drypot'
-              | Only SVG files.
-        .form-group
-          label Comment
-          textarea.form-control(name='comment', rows=7)
-      .sub-section
-        button.btn.btn-primary(name='send', data-loading-text='Sending') Send
+    .section
+      form.main
+        .sub-section
+          .form-group
+            label Image
+            .file-group
+            p.help-block
+              | You can upload #{ticketCount} more images today.
+              br
+              if appType == 'drypot'
+                | Only SVG files.
+          .form-group
+            label Comment
+            textarea.form-control(name='comment', rows=7)
+        .sub-section
+          button.btn.btn-primary(name='send', data-loading-text='Sending') Send
 
     .section
       if appType == 'rapixel'
