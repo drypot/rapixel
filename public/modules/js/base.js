@@ -96,9 +96,9 @@ $(function() {
 });
 
 $(function () {
-  window.xhr = {};
+  window.request = {};
   ['post', 'put', 'get', 'del'].forEach(function (method) {
-    xhr[method] = (function (method) {
+    request[method] = (function (method) {
       return function (url) {
         if (method == 'del') method = 'delete';
         return new XHR(method, url);
@@ -198,7 +198,7 @@ $(function() {
         }
         formty.clearAlerts($form);
         formty.showSending($form);
-        var req = xhr[method].call(xhr, url);
+        var req = request[method].call(request, url);
         if ($form.find('input[type="file"]').length) {
           req.form($form).object(obj);
         } else {

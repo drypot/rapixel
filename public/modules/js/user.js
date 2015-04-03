@@ -15,7 +15,7 @@ $(function () {
   };
 
   userl.logout = function () {
-    xhr.del('/api/session').end(function (err, res) {
+    request.del('/api/session').end(function (err, res) {
       err = err || res.body.err;
       if (err) return showError(err);
       console.log('logged out');
@@ -46,13 +46,9 @@ $(function () {
 
   userl.initResetPassStep3 = function () {
     var $form = formty.getForm('form.main');
-    $form.extra = {
-      id: url.query.id,
-      token: url.query.t
-    };
     $form.$password.focus();
     $form.$send.click(function () {
-      formty.put('/api/reset-pass', $form, function () {
+      formty.put('/api/reset-pass', $form, { id: url.query.id, token: url.query.t }, function () {
         location = '/users/login';
       });
       return false;
@@ -85,7 +81,6 @@ $(function () {
     });
     $('#dea-confirm-btn').click(function () {
       request.del('/api/users/' + user.id).end(function (err, res) {
-        //err = err || res.error || res.body.err;
         err = err || res.body.err;
         if (err) return showError(err);
         location = '/';

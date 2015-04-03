@@ -17,11 +17,6 @@ body {
   margin-bottom: 30px;
 }
 .page-title {
-  max-width: 640px;
-  margin: 0 auto;
-  margin-bottom: 50px;
-  padding: 0px 8px;
-  text-align: center;
   margin-top: 55px;
 }
 .page-title a {
@@ -34,11 +29,6 @@ body {
   text-decoration: none;
 }
 .site-title {
-  max-width: 640px;
-  margin: 0 auto;
-  margin-bottom: 50px;
-  padding: 0px 8px;
-  text-align: center;
   margin-top: 55px;
 }
 .site-title a {
@@ -58,11 +48,6 @@ body {
   font-size: 21.6px;
 }
 .page-footer {
-  max-width: 640px;
-  margin: 0 auto;
-  margin-bottom: 50px;
-  padding: 0px 8px;
-  text-align: center;
   margin-top: 80px;
   margin-bottom: 80px;
 }
@@ -82,48 +67,22 @@ body {
 .page-footer .home a {
   font-size: 36px;
   font-weight: 500;
-}
-.top-links {
-  max-width: 640px;
-  margin: 0 auto;
-  margin-bottom: 50px;
-  padding: 0px 8px;
-  text-align: center;
+  text-decoration: none;
 }
 .top-links a {
   padding-left: 10px;
   padding-right: 10px;
 }
 .news {
-  max-width: 640px;
-  margin: 0 auto;
-  margin-bottom: 50px;
-  padding: 0px 8px;
-  text-align: center;
   margin-top: 50px 0.4;
 }
 .pager-prev {
-  max-width: 640px;
-  margin: 0 auto;
-  margin-bottom: 50px;
-  padding: 0px 8px;
-  text-align: center;
   line-height: 1;
 }
 .pager-next {
-  max-width: 640px;
-  margin: 0 auto;
-  margin-bottom: 50px;
-  padding: 0px 8px;
-  text-align: center;
   line-height: 1;
 }
 .images {
-  max-width: 640px;
-  margin: 0 auto;
-  margin-bottom: 50px;
-  padding: 0px 8px;
-  text-align: center;
   padding-left: 0px;
 }
 .images a {
@@ -163,11 +122,6 @@ body {
   max-height: 100%;
 }
 .image-info {
-  max-width: 640px;
-  margin: 0 auto;
-  margin-bottom: 50px;
-  padding: 0px 8px;
-  text-align: center;
   margin-top: 15px;
 }
 .image-info a {
@@ -191,24 +145,8 @@ body {
   color: #b3b3b3;
 }
 form.main {
-  max-width: 640px;
-  margin: 0 auto;
-  margin-bottom: 50px;
-  padding: 0px 8px;
-  text-align: center;
   width: 384px;
-}
-form.main .file-group .files .file .hidden-input {
-  position: absolute;
-  top: -999px;
-  width: 0px;
-  height: 0px;
-}
-form.main .file-group .files .file button {
-  width: 100%;
-}
-form.main .file-group .files .file input[type=file] {
-  display: inline-block;
+  margin: 0 auto;
 }
 form.main textarea {
   font-family: monospace;
