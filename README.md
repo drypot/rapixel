@@ -15,7 +15,7 @@ Image gallery running following sites.
 
 ## History
 
-2015.03.01 2 년만에 라이브러리 업데이트
+2015.03.01 2 년만에 업데이트, 전반적인 코드 질 개선
 
 2013.08.28 Drypot, Osoky 코드를 Rapixel 코드로 통합
 
