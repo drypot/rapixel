@@ -17,7 +17,7 @@ block content
   else
     script.
       $(function() {
-        imagel.initNewForm();
+        imagel.initNew();
       });
 
     .section
@@ -25,7 +25,9 @@ block content
         .sub-section
           .form-group
             label Image
-            .file-group
+            .panel.panel-default
+              .panel-body
+                input(type='file', name='files', multiple='multiple')
             p.help-block
               | You can upload #{ticketCount} more images today.
               br
@@ -35,9 +37,13 @@ block content
             label Comment
             textarea.form-control(name='comment', rows=7)
         .sub-section
-          button.btn.btn-primary(name='send', data-loading-text='Sending') Send
+          button.btn.btn-primary(name='send', data-loading-text='Sending') Upload
 
     .section
+      | IE 10 or above required.
+      br
+      | You must be copyright owner.
+      br
       if appType == 'rapixel'
         | Image must be larger than 3840x2160 pixels.
         br
@@ -47,6 +53,3 @@ block content
         br
         | Max file size is 10MB.
         br
-      | IE 10 or above required.
-      br
-      | You must be copyright owner.

@@ -7,7 +7,7 @@ block content
 
   script.
     $(function() {
-      imagel.initUpdateForm(!{JSON.stringify(image)});
+      imagel.initUpdate(!{JSON.stringify(image)});
     });
 
   .section.page-title
@@ -18,7 +18,9 @@ block content
       .sub-section
         .form-group
           label Image
-          .file-group
+          .panel.panel-default
+            .panel-body
+              input(type='file', name='files', multiple='multiple')
           if appType == 'drypot'
             p.help-block
               | Only SVG files.
@@ -27,9 +29,13 @@ block content
           label Comment
           textarea.form-control(name='comment', rows=7) #{image.comment}
       .sub-section
-        button.btn.btn-primary(name='send', data-loading-text='Sending') Send
+        button.btn.btn-primary(name='send', data-loading-text='Sending') Update
 
   .section
+    | IE 10 or above required.
+    br
+    | You must be copyright owner.
+    br
     if appType == 'rapixel'
       | Image must be larger than 3840x2160 pixels.
       br
@@ -38,5 +44,4 @@ block content
       | Recommended sizes are 5120x2880 or 3840x2160.
       br
       | Max file size is 10MB.
-      br
-    | You must be copyright owner.
+ 

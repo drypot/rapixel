@@ -2,7 +2,7 @@
 $(function () {
   window.imagel = {};
 
-  imagel.initImageView = function (image) {
+  imagel.initView = function (image) {
     renderImage(image);
 
     var $comment = $('.image-info .comment');
@@ -81,9 +81,8 @@ $(function () {
     return $window.width();
   }
 
-  imagel.initNewForm = function () {
+  imagel.initNew = function () {
     var $form = formty.getForm('form.main');
-    formty.initFileGroup($form, 'files');
     $form.$send.click(function (err, res) {
       formty.post('/api/images', $form, function () {
         location = '/';
@@ -92,9 +91,8 @@ $(function () {
     });
   };
 
-  imagel.initUpdateForm = function (image) {
+  imagel.initUpdate = function (image) {
     var $form = formty.getForm('form.main');
-    formty.initFileGroup($form, 'files');
     $form.$send.click(function (err, res) {
       formty.put('/api/images/' + image._id, $form, function () {
         location = '/images/' + image._id;
