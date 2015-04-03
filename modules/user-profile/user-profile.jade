@@ -15,11 +15,11 @@ block content
 
   .section
     if !gtUrl
-      #profile-text.sub-section.card
+      #profile-text.sub-section.box
         | !{jade.escape(tuser.profile).replace(/\n/g, "<br>")}
 
       if updatable
-        .sub-section.card.top-links
+        .sub-section.box.top-links
           a(href='/users/' + tuser._id + '/update') Update Profile
 
   if images.length

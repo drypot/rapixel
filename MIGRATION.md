@@ -8,7 +8,7 @@
             }
 
             location /modules/bower/ {
-              alias /Users/drypot/projects/rapixel/website/bower_components;
+              alias /Users/drypot/projects/rapixel/website/bower_components/;
             }
         
 ## done

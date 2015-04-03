@@ -98,7 +98,7 @@ body {
   .section;
   .black-link;
   padding-left: 0px;
-  .card {
+  .box {
     margin-bottom: @margin * 0.9;
     img {
       max-width: 100%; // for mobile
@@ -110,7 +110,7 @@ body {
 
 @media (max-width: 768px) {
   .images {
-    .card {
+    .box {
       margin-bottom: @margin * 0.4;
     }
   }
@@ -166,26 +166,6 @@ form.main {
   .section;
   width: @width * 0.6;
 
-  .file-group {
-    .files {
-      .file {
-        .hidden-input {
-          position:absolute;
-          top: -999px;
-          width: 0px;
-          height: 0px;
-        }
-        button {
-          width:100%;
-        }
-        // for ie
-        input[type=file] {
-          display: inline-block;
-        }
-      }
-    }
-  }
-  
   textarea {
     font-family: monospace;
   }

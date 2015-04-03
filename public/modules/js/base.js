@@ -71,7 +71,6 @@ $(function () {
   };
 });
 
-
 $(function() {
   var $modal = $('#error-modal');
   var $title = $modal.find('.modal-title');
@@ -96,6 +95,65 @@ $(function() {
   };
 });
 
+$(function () {
+  window.xhr = {};
+  ['post', 'put', 'get', 'del'].forEach(function (method) {
+    xhr[method] = (function (method) {
+      return function (url) {
+        if (method == 'del') method = 'delete';
+        return new XHR(method, url);
+      }
+    })(method);
+  });
+
+  function XHR(method, url) {
+    this._method = method;
+    this._url = url;
+  }
+
+  XHR.prototype.data = function (obj) {
+    this._data = obj;
+    return this;
+  }
+
+  XHR.prototype.form = function (form) {
+    this._form = form instanceof jQuery ? form[0] : form;
+    return this;
+  }
+
+  XHR.prototype.send = function (done) {
+    var data;
+    var ctype;
+    if (this._form) {
+      data = new FormData(this._form);
+      for (var key in this._data) {
+        data.append(key, this._data[key]);
+      }
+    } else if (this._data) {
+      data = JSON.stringify(this._data);
+      ctype = 'application/json';
+    }
+    var xhr = new XMLHttpRequest();
+    xhr.open(this._method, this._url);
+    xhr.onload = onload;
+    if (ctype) {
+      xhr.setRequestHeader('Content-Type', ctype);
+    }
+    xhr.send(data);
+
+    function onload() {
+      if (xhr.status == 200) {
+        done(null, { 
+          xhr: xhr, 
+          body: JSON.parse(xhr.responseText) || {} 
+        });
+      } else {
+        done(new Error(xhr.statusText));
+      }
+    }
+  };
+});
+
 $(function() {
   window.formty = {};
 
@@ -110,191 +168,35 @@ $(function() {
         $form['$' + name] = $(this);
       }
     });
-    if ($form.$send) {
-      /** ?? **/ $form.$send.button();
-    }
+
+    // 무슨 의미인지 잊음;
+    // if ($form.$send) {
+    //   $form.$send.button();
+    // }
+    
     return $form;
   };
 
-  formty.initFileGroup = function ($form, name, adder) {
-    var $fileTempl = $('#file-input-templ').children(0);
-    var $fileTemplIE = $('#file-input-templ-msie').children(0);
-    var $fileGroup = $form.find('.file-group');
-    var $files = $('<div/>').addClass('files');
-    var $adder = $('<div/>').addClass('glyphicon glyphicon-plus');
-
-    $fileGroup.append($files);
-    if (adder) {
-      $fileGroup.append($adder);
-    }
-    function addFileInput() {
-      var $set = msie ? $fileTemplIE.clone(): $fileTempl.clone();
-
-      var $file = $set.find('input[type="file"]');
-      $file.attr('name', name);
-
-      if (!msie) {
-        var $btn = $set.find('button');
-        $btn.click(function () {
-          $file.click();
-          return false;
-        });
-        $file.on('change', function () {
-          var files = $file[0].files;
-          var text = files.length + ' files selected';
-          $btn.text(text);
-        });
-      }
-      $files.append($set);
-    }
-
-    addFileInput();
-
-    $adder.click(function () {
-      addFileInput();
-      return false;
-    });
-  };
-
-  formty.sendFiles = function ($form, done) {
-    var files = $('input[type=file]', $form).filter(function () {
-      return $(this).val();
-    });
-    if (files.length) {
-      console.log('sending ' + files.length + ' files.');
-      $.ajax('/api/upload?rtype=html', {
-        dataType: 'json',
-        method: 'POST',
-        files: files,
-        iframe: true,
-        success: function(data, textStatus, jqXHR) {
-          done(null, { body: data });
-        },
-        error:function (jqXHR, textStatus, errorThrown) {
-          var err = {
-            message: "Uploading Error",
-            detail: jqXHR.responseText
-          };
-          done(err);
-        }
+  formty.initFileFieldAdder = function ($form) {
+    $form.find('.file-inputs').each(function () {
+      var $inputs = $(this);
+      var $input = $inputs.children().first();
+      var $adder =  $inputs.find('.adder');
+      var $adderBtn = $('<button>').addClass('btn btn-default glyphicon glyphicon-plus');
+      $adderBtn.click(function () {
+        $input.clone().insertBefore($adder);
+        return false;
       });
-      return;
-    }
-    done(null, { body: {} });
+      $adderBtn.appendTo($adder);
+    });
   };
-
-  // gen http methods
-
-  // ['post', 'put'].forEach(function (method) {
-  //   formty[method] = (function (method) {
-  //     return function (url, $form, done) {
-  //       formty.clearAlerts($form);
-  //       formty.showSending($form);
-  //       var req = superagent[method].call(superagent, url);
-  //       var form = formty.toObject($form);
-  //       var attached = false;
-  //       $('input[type=file]', $form).each(function () {
-  //         var name = $(this).val();
-  //         if (name) {
-  //           console.log('name');
-  //           attached = true;
-  //           req.attach('files', name);
-  //         }
-  //       });
-  //       if (attached) {
-  //         // json 으로 못 보내고 multipart 의 field 로 보낼 때 checkbox[...] 처리는? 
-  //         // 다음에 닥치면 확인.
-  //         req.field('json', JSON.stringify(form));
-  //       } else {
-  //         return;
-  //       }
-  //       req.end(function (err, res) {
-  //         // 4xx or 5xx response with superagent is not considered an error by default.
-  //         // err = err || res.error; 
-  //         //
-  //         // 1.0 부터 2XX 아 아니면 err 가 만들어진다. 
-  //         if (err) {
-  //           showError(err);
-  //           formty.hideSending($form);
-  //           return;
-  //         }
-  //         if (res.body.err) {
-  //           if (res.body.err.code === error.INVALID_FORM.code) {
-  //             formty.addAlerts($form, res.body.err.errors);
-  //             formty.hideSending($form);
-  //             return;
-  //           }
-  //           showError(res.body.err);
-  //           formty.hideSending($form);
-  //           return;
-  //         }
-  //         // formty.hideSending($form) 을 부르지 않는다.
-  //         // 보통 페이지 이동이 일어나므로 버튼을 바꿀 필요가 없다.
-  //         done(null, res);
-  //       });
-  //     };
-  //   })(method)
-  // });
-
-  window.request = {};
-  ['post', 'put', 'get', 'del'].forEach(function (method) {
-    request[method] = (function (method) {
-      return function (url, obj, extra, done) {
-        if (typeof obj == 'function') {
-          done = obj;
-          obj = extra = null;
-        } else if (typeof extra == 'function') {
-          done = extra;
-          extra = null;
-        }
-        var data;
-        var ctype;
-        if (obj instanceof jQuery) {
-          data = new FormData(obj[0]);
-          for (var key in extra) {
-            data.append(key, extra[key]);
-          }
-        } else if (obj) {
-          data = JSON.stringify(obj);
-          ctype = 'application/json';
-        }
-        var req = new XMLHttpRequest();
-        req.open(method, url);
-        req.onload = onload;
-        if (ctype) {
-          req.setRequestHeader('Content-Type', ctype);
-        }
-        console.log('req.send');
-        console.log({
-          method: method,
-          url: url,
-          obj: obj,
-          extra: extra,
-          data: data,
-          ctype: ctype
-        })
-        req.send(data);
-
-        function onload() {
-          if (req.status == 200) {
-            done(null, { 
-              req: req, 
-              body: JSON.parse(req.responseText) || {} 
-            });
-          } else {
-            done(new Error(req.statusText));
-          }
-        }
-      };
-    })(method);
-  });
 
   ['post', 'put'].forEach(function (method) {
     formty[method] = (function (method) {
       return function (url, $form, extra, done) {
         formty.clearAlerts($form);
         formty.showSending($form);
-        request[method].call(request, url, $form, extra, function (err, res) {
+        xhr[method].call(xhr, url).form($form).data(extra).send(function (err, res) {
           if (err) {
             showError(err);
             formty.hideSending($form);
@@ -317,39 +219,6 @@ $(function() {
       };
     })(method);
   });
-
-  function toObject($form) {
-    var obj = {};
-    $form.find('input, textarea, select').each(function () {
-      if (this.name && !this.disabled) {
-        var $this = $(this);
-        var name = this.name.match(namex)[0];
-        var braket = this.name.length != name.length;
-        if (this.type == 'checkbox') {
-          if (braket) {
-            if ($this.prop('checked')) {
-              if (obj[name]) {
-                obj[name].push($this.val());
-              } else {
-                obj[name] = [$this.val()];
-              }
-            }
-          } else {
-            obj[name] = $this.prop('checked');
-          }
-          return;
-        }
-        if (this.type == 'file') {
-          return;
-        }
-        obj[name] = $this.val();
-      }
-    });
-    for (var key in $form.extra) {
-      obj[key] = $form.extra[key];
-    }
-    return obj;
-  };
 
   formty.showSending = function ($form) {
     if ($form.$send) {

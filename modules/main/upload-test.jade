@@ -11,14 +11,28 @@ block content
   script.
     $(function() {
       var $form = formty.getForm('form.main');
-      formty.initFileGroup($form, 'files');
+      formty.initFileFieldAdder($form);
       $form.$send.click(function () {
-        console.log('post start')
-        formty.post('/api/upload-test', $form, { extra1: '1234' }, function (err, res) {
-          console.log('res.body');
-          console.log(res.body);
+        console.log('post start');
+        
+        // xhr.del('/api/echo-upload?abc=123').data({ def: 566 })/*.form($form)*/.send(function (err, res) {
+        //   console.log('post done');
+        //   console.log(err);
+        //   console.log(res.body);
+        //   console.log(res.body.query);
+        //   console.log(res.body.body);
+        //   console.log(res.body.files);
+        // });
+
+        formty.post('/api/echo-upload', $form, { extra1: '1234' }, function (err, res) {
           console.log('post done');
+          console.log(err);
+          console.log(res.body);
+          console.log(res.body.query);
+          console.log(res.body.body);
+          console.log(res.body.files);
         });
+
         return false;
       });
     });
@@ -27,7 +41,13 @@ block content
     .sub-section
       .form-group
         label Image
-        .file-group
+        .panel.panel-default
+          .panel-body
+            .file-inputs
+              input(type='file', name='files', multiple='multiple')
+              input(type='file', name='files', multiple='multiple')
+              input(type='file', name='files', multiple='multiple')
+              .adder
       .form-group
         label Comment
         textarea.form-control(name='comment', rows=7)

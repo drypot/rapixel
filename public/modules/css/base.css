@@ -129,16 +129,16 @@ body {
 .images a {
   color: #333333;
 }
-.images .card {
+.images .box {
   margin-bottom: 45px;
 }
-.images .card img {
+.images .box img {
   max-width: 100%;
   max-height: 100%;
   margin-bottom: 5px;
 }
 @media (max-width: 768px) {
-  .images .card {
+  .images .box {
     margin-bottom: 20px;
   }
 }

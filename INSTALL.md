@@ -19,7 +19,11 @@ Mac 개발환경용 Nginx 설정 예
         proxy_set_header Host $http_host;
       }
 
-      location ~ /(?:css|image|js|lib)/ {
+      location /modules/ {
+      }
+
+      location /modules/bower/ {
+        alias /Users/drypot/projects/rapixel/website/bower_components/;
       }
     }
 
