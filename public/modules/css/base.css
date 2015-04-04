@@ -104,22 +104,22 @@ body {
 .image-view {
   text-align: center;
 }
-.image-view img.low-res {
+.image-view img {
   cursor: pointer;
-  max-width: 100%;
 }
-.image-view img.hi-res {
-  cursor: pointer;
-  display: block;
-  position: absolute;
-  z-index: 10;
-  max-width: none;
-}
-.image-view img.svg {
-  cursor: pointer;
+:-webkit-full-screen {
   width: 100%;
-  max-width: 100%;
-  max-height: 100%;
+  height: 100%;
+}
+:-ms-fullscreen {
+  background: white;
+  width: 100%;
+  height: 100%;
+}
+:fullscreen {
+  background: white;
+  width: 100%;
+  height: 100%;
 }
 .image-info {
   margin-top: 15px;

@@ -12,12 +12,15 @@ block content
 
   .image-view
     if svg
-      img.svg(src=image.dir + '/' + image._id + '-org.svg')
+      img(src=image.dir + '/' + image._id + '-org.svg')
     else
-      img.low-res(src=image.dir + '/' + image._id + '-640.jpg')
-      img.hi-res
+      img(style='background: url(' + image.dir + '/' + image._id + '-640.jpg); background-size: cover;')
 
   .section.image-info
+    .sub-section(style='display: none')
+      a#fs(href='')
+        span.glyphicon.glyphicon-fullscreen
+
     .sub-section
       .uname
         a(href='/' + encodeURIComponent(image.user.home)) #{image.user.name}

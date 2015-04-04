@@ -5,6 +5,11 @@ block title
 
 block content
 
+  script.
+    $(function() {
+      imagel.initList();
+    });
+
   .section.site-title
     h1
       a(href="/") #{appName}
@@ -31,12 +36,10 @@ block content
   .section.images
     for image in images
       .box
-        .image
-          a(href='/images/' + image._id)
-            img(src=image.dir + '/' + image._id + suffix)
+        a.image(href='/images/' + image._id)
+          img(src=image.dir + '/' + image._id + suffix)
         if showName
-          .uname
-            a(href='/' + encodeURIComponent(image.user.home)) #{image.user.name}
+          a.uname(href='/' + encodeURIComponent(image.user.home)) #{image.user.name}
 
   if locals.ltUrl
     .section.pager-next

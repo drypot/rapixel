@@ -5,3 +5,6 @@
   margin-top: -5px;
   margin-bottom: -5px;
 }
+.image-view img {
+  max-width: 100%;
+}

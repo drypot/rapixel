@@ -293,3 +293,26 @@ $(function() {
     }
   }
 });
+
+$(function () {
+  window.fullscreen = {};
+
+  fullscreen.enabled = 
+    document.fullscreenEnabled || 
+    document.webkitFullscreenEnabled || 
+    document.mozFullScreenEnabled ||
+    document.msFullscreenEnabled;
+
+  fullscreen.request = function (obj) {
+    ( obj.requestFullscreen ||
+      obj.webkitRequestFullscreen ||
+      obj.mozRequestFullScreen ||
+      obj.msRequestFullscreen
+    ).call(obj);
+  };
+
+  fullscreen.onchange = function (handler) {
+    $document.on("fullscreenchange", handler);
+  }
+
+});

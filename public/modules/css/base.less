@@ -113,25 +113,28 @@ body {
 
 .image-view {
   text-align: center;
-  img.low-res {
-    cursor: pointer;
-    max-width: 100%; // for mobile
-  }
-  img.hi-res {
+  img {
     cursor:pointer;
-    display: block;
-    position: absolute;
-    z-index: 10;
-    max-width: none;
-  }
-  img.svg {
-    cursor: pointer;
-    width: 100%;
-    max-width: 100%; // for mobile
-    max-height: 100%;
   }
 }
- 
+
+:-webkit-full-screen {
+  width: 100%;
+  height: 100%;
+}
+
+:-ms-fullscreen {
+  background: white;
+  width: 100%;
+  height: 100%;
+}
+
+:fullscreen {
+  background: white;
+  width: 100%;
+  height: 100%;
+}
+
 .image-info {
   .black-link;
   margin-top: @margin * 0.3;

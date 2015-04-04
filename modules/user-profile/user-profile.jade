@@ -7,6 +7,7 @@ block content
   script.
     $(function () {
       userl.initProfile();
+      imagel.initList();
     });
 
   .section.page-title
@@ -29,10 +30,9 @@ block content
 
     .section.images
       for image in images
-        .image
-          .img
-            a(href='/images/' + image._id)
-              img(src=image.dir + '/' + image._id + suffix)
+        .box
+          a.image(href='/images/' + image._id)
+            img(src=image.dir + '/' + image._id + suffix)
 
     if locals.ltUrl
       .section.pager-next
