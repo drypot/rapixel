@@ -10,12 +10,12 @@ var error = require('../base/error');
 var fsp = require('../base/fs');
 var config = require('../base/config')({ path: 'config/drypot-test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
-var exp = require('../main/express');
-var upload = require('../main/upload');
+var exp = require('../express/express');
+var upload = require('../express/upload');
 var userf = require('../user/user-fixture');
 var imageb = require('../image/image-base');
 var imageu = require('../image/image-update');
-var local = require('../main/local');
+var local = require('../express/local');
 
 before(function (done) {
   init.run(done);

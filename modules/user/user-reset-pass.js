@@ -4,7 +4,7 @@ var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config');
 var mongo = require('../mongo/mongo');
-var exp = require('../main/express');
+var exp = require('../express/express');
 var mailer = require('../mail/mailer');
 var userb = require('../user/user-base');
 var userc = require('../user/user-create');
@@ -67,7 +67,7 @@ function step1(form, done) {
             text:
               '\n' +
               'Open the following URL to reset your password.\n\n' +
-              config.mainSiteUrl + '/users/reset-pass?step=3&id=' + reset._id + '&t=' + reset.token + '\n\n' +
+              config.mainSite + '/users/reset-pass?step=3&id=' + reset._id + '&t=' + reset.token + '\n\n' +
               config.appName
           };
           mailer.send(mail, done);

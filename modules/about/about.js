@@ -1,5 +1,5 @@
 var init = require('../base/init');
-var exp = require('../main/express');
+var exp = require('../express/express');
 
 init.add(function () {
   exp.core.get('/company', function (req, res, done) {

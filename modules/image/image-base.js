@@ -22,7 +22,7 @@ var imageId;
 
 init.add(function (done) {
   imageDir = exports.imageDir = config.uploadDir + '/public/images'
-  imageDirUrl = config.uploadSiteUrl + '/images';
+  imageDirUrl = config.uploadSite + '/images';
   fsp.makeDirs(imageDir, done);
 });
 

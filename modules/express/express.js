@@ -95,7 +95,7 @@ init.tail(function () {
   app.get('/dev/error', function (req, res, done) {
     var err = new Error('Error Sample Page');
     err.code = 999;
-    res.render('main/error', {
+    res.render('express/error', {
       err: err
     });
   });
@@ -115,7 +115,7 @@ init.tail(function () {
     if (res.locals.api) {
       res.json({ err: err });
     } else {
-      res.render('main/error', { err: err });
+      res.render('express/error', { err: err });
     }
   });
 

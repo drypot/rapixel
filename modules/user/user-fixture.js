@@ -4,7 +4,7 @@ var init = require('../base/init');
 var userb = require('../user/user-base');
 var usera = require('../user/user-auth');
 var userc = require('../user/user-create');
-var local = require('../main/local');
+var local = require('../express/local');
 
 init.add(exports.recreate = function (done) {
   var forms = [

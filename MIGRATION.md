@@ -10,7 +10,9 @@
             location /modules/bower/ {
               alias /Users/drypot/projects/rapixel/website/bower_components/;
             }
-        
+    
+    ftp copy config.json files.
+
 ## done
 
     $ mv /data2/rapixel/upload/* /data2/rapixel

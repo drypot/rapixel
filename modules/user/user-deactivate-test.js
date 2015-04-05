@@ -7,12 +7,12 @@ var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config')({ path: 'config/test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
-var exp = require('../main/express');
+var exp = require('../express/express');
 var userb = require('../user/user-base');
 var usera = require('../user/user-auth');
 var userf = require('../user/user-fixture');
 var userd = require('../user/user-deactivate');
-var local = require('../main/local');
+var local = require('../express/local');
 
 init.add(function () {
   exp.core.get('/api/test/user', function (req, res, done) {

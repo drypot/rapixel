@@ -1,7 +1,7 @@
 var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config');
-var exp = require('../main/express');
+var exp = require('../express/express');
 var userb = require('../user/user-base');
 
 init.add(function () {

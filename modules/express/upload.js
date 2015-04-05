@@ -5,7 +5,7 @@ var init = require('../base/init');
 var config = require('../base/config');
 var fsp = require('../base/fs');
 var multiparty = require('multiparty');
-var exp = require('../main/express');
+var exp = require('../express/express');
 
 var tmpDir;
 
@@ -19,7 +19,7 @@ init.add(function (done) {
 
   if (config.development) {
     exp.core.get('/dev/upload', function (req, res) {
-      res.render('main/upload');
+      res.render('express/upload');
     });
 
     exp.core.all('/api/echo-upload', exports.handler(function (req, res, done) {

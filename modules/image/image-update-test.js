@@ -10,12 +10,12 @@ var error = require('../base/error');
 var fsp = require('../base/fs');
 var config = require('../base/config')({ path: 'config/test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
-var exp = require('../main/express');
-var upload = require('../main/upload');
+var exp = require('../express/express');
+var upload = require('../express/upload');
 var userf = require('../user/user-fixture');
 var imageb = require('../image/image-base');
 var imageu = require('../image/image-update');
-var local = require('../main/local');
+var local = require('../express/local');
 
 before(function (done) {
   init.run(done);
@@ -62,7 +62,7 @@ describe("updating with text file", function () {
   });
   it("should fail", function (done) {
     this.timeout(30000);
-    local.put('/api/images/' + _id).attach('files', 'modules/main/upload-fixture1.txt').end(function (err, res) {
+    local.put('/api/images/' + _id).attach('files', 'modules/express/upload-fixture1.txt').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.IMAGE_TYPE)).true;

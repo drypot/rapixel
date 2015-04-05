@@ -7,12 +7,12 @@ var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config')({ path: 'config/test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
-var exp = require('../main/express');
-var upload = require('../main/upload');
+var exp = require('../express/express');
+var upload = require('../express/upload');
 var userf = require('../user/user-fixture');
 var imageb = require('../image/image-base');
 var imagel = require('../image/image-list');
-var local = require('../main/local');
+var local = require('../express/local');
 
 before(function (done) {
   init.run(done);

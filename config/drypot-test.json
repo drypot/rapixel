@@ -3,12 +3,12 @@
   "appDesc": "Simply vectors",
   "appType": "drypot",
 
-  "mainSiteUrl": "http://drypot.local:8080",
+  "mainSite": "http://drypot.local:8080",
 
   "appPort": 8041,
   "cookieSecret": "o;iejf832ndvs",
 
-  "uploadSiteUrl": "http://file.drypot.local:8080",
+  "uploadSite": "http://file.drypot.local:8080",
   "uploadDir": "upload/drypot-test",
   "uploadMax": 10,
 

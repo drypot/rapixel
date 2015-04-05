@@ -6,8 +6,8 @@ chai.config.includeStack = true;
 var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config')({ path: 'config/test.json' });
-var exp = require('../main/express');
-var local = require('../main/local');
+var exp = require('../express/express');
+var local = require('../express/local');
 
 before(function (done) {
   init.run(done);

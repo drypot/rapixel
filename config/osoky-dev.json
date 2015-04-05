@@ -3,12 +3,12 @@
   "appDesc": "Your randos",
   "appType": "osoky",
 
-  "mainSiteUrl": "http://osoky.local:8080",
+  "mainSite": "http://osoky.local:8080",
 
   "appPort": 8030,
   "cookieSecret": "o;iejf832ndvs",
 
-  "uploadSiteUrl": "http://file.osoky.local:8080",
+  "uploadSite": "http://file.osoky.local:8080",
   "uploadDir": "upload/osoky",
   "uploadMax": 10,
 

@@ -1,5 +1,3 @@
-window.msie = /msie/.test(navigator.userAgent.toLowerCase());
-
 if (!window.console) {
   window.console = {
     log: function () {}
