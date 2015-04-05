@@ -17,7 +17,7 @@ init.add(function (done) {
     fsp.emptyDir(tmpDir, done);
   });
 
-  if (config.development) {
+  if (config.dev) {
     exp.core.get('/dev/upload', function (req, res) {
       res.render('express/upload');
     });
