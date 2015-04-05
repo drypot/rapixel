@@ -148,6 +148,9 @@ form.main {
   width: 384px;
   margin: 0 auto;
 }
+form.main input[type=file] {
+  width: 100%;
+}
 form.main textarea {
   font-family: monospace;
 }
