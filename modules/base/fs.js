@@ -1,7 +1,8 @@
 var fs = require('fs');
 var path = require('path');
+var fsp = exports;
 
-exports.makeDirs = function () {
+fsp.makeDirs = function () {
   var done = arguments[arguments.length - 1];
   var subs = arguments;
   var p = null;
@@ -61,7 +62,7 @@ function makeDirsString(p, done) {
   });
 }
 
-exports.removeDirs = function removeDirs(p, done) {
+fsp.removeDirs = function removeDirs(p, done) {
   fs.stat(p, function (err, stat) {
     if (err) return done(err);
     if(stat.isFile()) {
@@ -93,7 +94,7 @@ exports.removeDirs = function removeDirs(p, done) {
   });
 };
 
-exports.emptyDir = function (p, done) {
+fsp.emptyDir = function (p, done) {
   fs.readdir(p, function (err, fnames) {
     if (err) return done(err);
     var i = 0;
@@ -102,7 +103,7 @@ exports.emptyDir = function (p, done) {
         return done();
       }
       var fname = fnames[i++];
-      exports.removeDirs(p + '/' + fname, function (err) {
+      fsp.removeDirs(p + '/' + fname, function (err) {
         setImmediate(unlink);
       });
     }
@@ -110,7 +111,7 @@ exports.emptyDir = function (p, done) {
   });
 };
 
-exports.safeFilename = function (name) {
+fsp.safeFilename = function (name) {
   var i = 0;
   var len = name.length;
   var safe = '';
@@ -127,7 +128,7 @@ exports.safeFilename = function (name) {
   return safe;
 };
 
-exports.makeDeepPath = function (id, iter) {
+fsp.makeDeepPath = function (id, iter) {
   var path = '';
   for (iter--; iter > 0; iter--) {
     path = '/' + id % 1000 + path;

@@ -1,4 +1,5 @@
 var util = require('util');
+var init = exports;
 
 process.on('uncaughtException', function (err) {
   console.error(err.stack);
@@ -14,20 +15,20 @@ process.on('uncaughtException', function (err) {
 var funcs = [];
 var tails = [];
 
-exports.reset = function () {
+init.reset = function () {
   funcs = [];
   tails = [];
 }
 
-exports.add = function (func) {
+init.add = function (func) {
   funcs.push(func);
 };
 
-exports.tail = function (func) {
+init.tail = function (func) {
   tails.unshift(func);
 };
 
-exports.run = function (done) {
+init.run = function (done) {
   var i = 0;
 
   done = done || function (err) {

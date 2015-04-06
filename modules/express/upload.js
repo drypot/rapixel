@@ -6,6 +6,7 @@ var config = require('../base/config');
 var fsp = require('../base/fs');
 var multiparty = require('multiparty');
 var exp = require('../express/express');
+var upload = exports;
 
 var tmpDir;
 
@@ -22,7 +23,7 @@ init.add(function (done) {
       res.render('express/upload');
     });
 
-    exp.core.all('/api/echo-upload', exports.handler(function (req, res, done) {
+    exp.core.all('/api/echo-upload', upload.handler(function (req, res, done) {
       var paths = [];
       if (req.files) {
         Object.keys(req.files).forEach(function (field) {
@@ -43,7 +44,7 @@ init.add(function (done) {
   }
 });
 
-exports.handler = function (inner) {
+upload.handler = function (inner) {
   return function (req, res, done) {
     if (req._body) return inner(req, res, done);
 

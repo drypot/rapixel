@@ -8,35 +8,34 @@ var redisStore = require('connect-redis')(session);
 var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config');
-
-var app;
+var exp = exports;
 
 init.add(function () {
-  app = exports.app = express();
+  exp.app = express();
 
   // Set Middlewares
 
-  app.disable('x-powered-by');
-  app.locals.pretty = true;
-  app.locals.appName = config.appName;
-  app.locals.appDesc = config.appDesc;
-  app.locals.appType = config.appType;
+  exp.app.disable('x-powered-by');
+  exp.app.locals.pretty = true;
+  exp.app.locals.appName = config.appName;
+  exp.app.locals.appDesc = config.appDesc;
+  exp.app.locals.appType = config.appType;
 
-  app.engine('jade', require('jade').renderFile);
-  app.set('view engine', 'jade');
-  app.set('views', 'modules');
+  exp.app.engine('jade', require('jade').renderFile);
+  exp.app.set('view engine', 'jade');
+  exp.app.set('views', 'modules');
 
-  app.use(cookieParser());
-  app.use(session({ 
+  exp.app.use(cookieParser());
+  exp.app.use(session({ 
     store: new redisStore({ ttl: 1800 /* 단위: 초. 30 분 */ }), 
     resave: false,
     saveUninitialized: false,
     secret: config.cookieSecret
   }));
-  app.use(bodyParser.urlencoded({ extended: false }));
-  app.use(bodyParser.json());
+  exp.app.use(bodyParser.urlencoded({ extended: false }));
+  exp.app.use(bodyParser.json());
 
-  app.use(function (req, res, done) {
+  exp.app.use(function (req, res, done) {
     res.locals.query = req.query;
     
     // Response 의 Content-Type 을 지정할 방법을 마련해 두어야한다.
@@ -65,25 +64,22 @@ init.add(function () {
     done();
   });
 
-  // 보통 init.add + init.tail 로 핸들러 구성 순서를 조율할 수 있으나
-  // 인증 미들웨어는 앞 부분에 위치할 필요가 있어 별도 라우터를 설치해 놓는다.
-  // user/user-base.js 참고
-  //
+  // exp.before: 인증 미들웨어용
+  // exp.after: redirect to login page 용
   // 테스트케이스에서 인스턴스가 기동한 후 핸들러를 추가하는 경우가 있어 core 를 도입.
 
-  app.use(exports.before = express.Router());
-  app.use(exports.core = express.Router());
-});
+  exp.app.use(exp.before = express.Router());
+  exp.app.use(exp.core = express.Router());
+  exp.app.use(exp.after = express.Router());
 
-init.tail(function () {
-  app.get('/api/hello', function (req, res, done) {
+  exp.app.get('/api/hello', function (req, res, done) {
     res.json({
       name: config.appName,
       time: Date.now()
     });
   });
 
-  app.all('/api/echo', function (req, res, done) {
+  exp.app.all('/api/echo', function (req, res, done) {
     res.json({
       method: req.method,
       rtype: req.header('content-type'),
@@ -92,23 +88,26 @@ init.tail(function () {
     });
   });
 
-  app.get('/dev/error', function (req, res, done) {
-    var err = new Error('Error Sample Page');
-    err.code = 999;
-    res.render('express/error', {
-      err: err
+  if (config.dev) {
+    exp.app.get('/dev/error', function (req, res, done) {
+      var err = new Error('Error Sample Page');
+      err.code = 999;
+      res.render('express/error', {
+        err: err
+      });
     });
-  });
+  }
 
-  /* error handler */
-  app.use(function (_err, req, res, done) {
+  // error handler
+
+  exp.app.use(function (_err, req, res, done) {
     var err = {
       message: _err.message,
       code: _err.code,
       errors: _err.errors,
     };
     err.stack = ((_err.stack || '').match(/^(?:.*\n){1,8}/m) || [''])[0];
-    if (exports.logError) {
+    if (exp.logError) {
       console.error('Code: ' + err.code);
       console.error(err.stack);
     }
@@ -119,8 +118,9 @@ init.tail(function () {
     }
   });
 
-  //app.use(errorHandler(/* {log: false} */));
+});
 
-  app.listen(config.appPort);
+init.tail(function () {
+  exp.app.listen(config.appPort);
   console.log('express: listening ' + config.appPort);
 });

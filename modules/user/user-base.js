@@ -4,7 +4,7 @@ var crypto = require('crypto');
 var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config');
-var mongo = require('../mongo/mongo');
+var mdbp = require('../mongo/mongo');
 var exp = require('../express/express');
 
 init.add(function () {
@@ -48,7 +48,7 @@ init.add(function () {
 var users;
 
 init.add(function (done) {
-  users = exports.users = mongo.db.collection("users");
+  users = exports.users = mdbp.db.collection("users");
   users.ensureIndex({ email: 1 }, function (err) {
     if (err) return done(err);
     users.ensureIndex({ namel: 1 }, function (err) {
@@ -184,16 +184,19 @@ init.add(function () {
   exp.core.get('/users/login', function (req, res, done) {
     res.render('user/user-base-login');
   });
+
 });
 
 init.tail(function () {
-  exp.app.use(function (err, req, res, done) {
+
+  exp.after.use(function (err, req, res, done) {
     if (!res.locals.api && err.code == error.NOT_AUTHENTICATED.code) {
       res.redirect('/users/login');
     } else {
       done(err);
     }
   });
+
 });
 
 function createSessionAuto(req, res, done) {
@@ -208,9 +211,11 @@ function createSessionAuto(req, res, done) {
 
   var email = req.cookies.email;
   var password = req.cookies.password;
+  
   if (!email || !password) {
     return done();
   }
+
   findUser(email, password, function (err, user) {
     if (err) {
       res.clearCookie('email');

@@ -2,7 +2,7 @@ var init = require('../base/init');
 var utilp = require('../base/util');
 var error = require('../base/error');
 var config = require('../base/config');
-var mongo = require('../mongo/mongo');
+var mdbp = require('../mongo/mongo');
 var exp = require('../express/express');
 var userb = require('../user/user-base');
 var imageb = require('../image/image-base');
@@ -46,7 +46,7 @@ var getParams = exports.getParams = function (req) {
 
 var findImages = exports.findImages = function (params, done) {
   var query = params.uid ? { uid: params.uid } : {};
-  mongo.findPage(imageb.images, query, params.gt, params.lt, params.ps, filter, done);
+  mdbp.findPage(imageb.images, query, params.gt, params.lt, params.ps, filter, done);
 };
 
 function filter(image, done) {

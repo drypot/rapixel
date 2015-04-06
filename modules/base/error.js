@@ -1,18 +1,17 @@
 var expect = require('chai').expect;
-
 var init = require('../base/init');
 
-exports = module.exports = function (ec /* error const */) {
+var error = exports = module.exports = function (ec /* error const */) {
   var err;
   if (Array.isArray(ec)) {
-    err = new Error(exports.INVALID_FORM.message);
-    err.code = exports.INVALID_FORM.code;
+    err = new Error(error.INVALID_FORM.message);
+    err.code = error.INVALID_FORM.code;
     err.errors = ec;
     return err;
   }
   if (ec.field) {
-    err = new Error(exports.INVALID_FORM.message);
-    err.code = exports.INVALID_FORM.code;
+    err = new Error(error.INVALID_FORM.message);
+    err.code = error.INVALID_FORM.code;
     err.errors = [ec];
     return err;
   }
@@ -29,13 +28,13 @@ exports = module.exports = function (ec /* error const */) {
 };
 
 init.add(function () {
-  exports.define('INVALID_DATA', '비정상적인 값이 입력되었습니다.');
-  exports.define('INVALID_FORM', '*');
+  error.define('INVALID_DATA', '비정상적인 값이 입력되었습니다.');
+  error.define('INVALID_FORM', '*');
 });
 
-exports.define = function (code, msg, field) {
-  expect(exports[code]).not.exist;
-  var ec = exports[code] = {
+error.define = function (code, msg, field) {
+  expect(error[code]).not.exist;
+  var ec = error[code] = {
     code: code,
     message: msg
   };
@@ -44,8 +43,8 @@ exports.define = function (code, msg, field) {
   }
 };
 
-exports.find = function (err, ec) {
-  if (err.code == exports.INVALID_FORM.code) {
+error.find = function (err, ec) {
+  if (err.code == error.INVALID_FORM.code) {
     for (var i = 0; i < err.errors.length; i++) {
       var e = err.errors[i];
       if (e.code == ec.code && e.field == ec.field && e.message == ec.message) {

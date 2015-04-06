@@ -1,11 +1,12 @@
+var utilp = exports;
 
-exports.defineMethod = function (con, methodName, fn) {
+utilp.defineMethod = function (con, methodName, fn) {
   Object.defineProperty(
     con, methodName, { value : fn, writable: true, enumerable: false, configurable: true}
   );
 }
 
-exports.find = function (a, fn) {
+utilp.find = function (a, fn) {
   for (var i = 0; i < a.length; i++) {
     var item = a[i];
     if (fn(item)) return item;
@@ -13,7 +14,7 @@ exports.find = function (a, fn) {
   return null;
 };
 
-exports.mergeObject = function () {
+utilp.mergeObject = function () {
   var tar = arguments[0];
   for (var i = 1; i < arguments.length; i++) {
     var src = arguments[i];
@@ -23,7 +24,7 @@ exports.mergeObject = function () {
   }
 }
 
-exports.mergeArray = function () {
+utilp.mergeArray = function () {
   var tar = arguments[0];
   var fn = arguments[arguments.length -1];
   for (var a = 1; a < arguments.length - 1; a++) {
@@ -44,7 +45,7 @@ exports.mergeArray = function () {
 // 마지막 인자 콜백을 바로 호출. 
 // 테스트 디버깅 용으로 만들었던 듯.
 
-exports.pass = function () {
+utilp.pass = function () {
   arguments[arguments.length - 1]();
 }
 
@@ -56,12 +57,12 @@ function pad(number) {
   return r;
 }
 
-exports.toDateTimeString = function (d) {
+utilp.toDateTimeString = function (d) {
   return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + ' ' +
     pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
 };
 
-exports.makeUrl = function(url, params) {
+utilp.makeUrl = function(url, params) {
   var qm;
 
   for(var p in params) {

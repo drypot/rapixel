@@ -1,18 +1,17 @@
 var fs = require('fs');
-
 var init = require('../base/init');
 
 var opt = {};
 var argv = [];
 
-exports = module.exports = function (_opt) {
+var config = exports = module.exports = function (_opt) {
   for(var p in _opt) {
     opt[p] = _opt[p];
   }
-  return exports;
+  return config;
 };
 
-exports.dev = process.env.NODE_ENV != 'production';
+config.dev = process.env.NODE_ENV != 'production';
 
 init.add(function (done) {
   var path = opt.path || undefined;
@@ -36,7 +35,7 @@ init.add(function (done) {
     if (err) return done(err);
     var _config = JSON.parse(data);
     for(var p in _config) {
-      exports[p] = _config[p];
+      config[p] = _config[p];
     }
     done();
   });
