@@ -145,17 +145,21 @@ exports.resetCache = function () {
 // session
 
 init.add(function () {
-  /* restore locals.user. */
+
   exp.before.use(function (req, res, done) {
-    if (req.session.uid) {
-      getCached(req.session.uid, function (err, user) {
-        if (err) return req.session.regenerate(done);
-        res.locals.user = user;
-        done();
+    createSessionAuto(req, res, done);
+  });
+
+  exp.core.post('/api/session', function (req, res, done) {
+    createSessionForm(req, res, function (err, user) {
+      if (err) return done(err);
+      res.json({
+        user: {
+          id: user._id,
+          name: user.name
+        }
       });
-    } else {
-      createSessionAuto(req, res, done);
-    }
+    });
   });
 
   exp.core.get('/api/session', function (req, res, done) {
@@ -172,20 +176,8 @@ init.add(function () {
     res.json(obj);
   });
 
-  exp.core.post('/api/session', function (req, res, done) {
-    createSessionForm(req, res, function (err, user) {
-      if (err) return done(err);
-      res.json({
-        user: {
-          id: user._id,
-          name: user.name
-        }
-      });
-    });
-  });
-
   exp.core.delete('/api/session', function (req, res, done) {
-    exports.deleteSession(req, res);
+    deleteSession(req, res);
     res.json({});
   });
 
@@ -204,6 +196,31 @@ init.tail(function () {
   });
 });
 
+function createSessionAuto(req, res, done) {
+  if (req.session.uid) {
+    getCached(req.session.uid, function (err, user) {
+      if (err) return req.session.regenerate(done);
+      res.locals.user = user;
+      done();
+    });
+    return;
+  }
+
+  var email = req.cookies.email;
+  var password = req.cookies.password;
+  if (!email || !password) {
+    return done();
+  }
+  findUser(email, password, function (err, user) {
+    if (err) {
+      res.clearCookie('email');
+      res.clearCookie('password');
+      return done();
+    }
+    createSession(req, res, user, done);
+  });
+}
+
 function createSessionForm(req, res, done) {
   var form = {};
   form.email = String(req.body.email || '').trim();
@@ -221,29 +238,20 @@ function createSessionForm(req, res, done) {
         httpOnly: true
       });
     }
-    createSession(req, user, function (err) {
-      if (err) return done(err);
-      done(null, user);
-    });
+    createSession(req, res, user, done);
   });
 };
 
-function createSessionAuto(req, res, done) {
-  var email = req.cookies.email;
-  var password = req.cookies.password;
-  if (!email || !password) {
-    return done();
-  }
-  findUser(email, password, function (err, user) {
-    if (err) {
-      res.clearCookie('email');
-      res.clearCookie('password');
-      return done();
-    }
-    createSession(req, user, function (err) {
+function createSession(req, res, user, done) {
+  req.session.regenerate(function (err) {
+    if (err) return done(err);
+    var now = new Date();
+    users.update({_id: user._id}, {$set: {adate: now}}, function (err) {
       if (err) return done(err);
+      user.adate = now;
+      req.session.uid = user._id;
       res.locals.user = user;
-      done();
+      done(null, user);
     });
   });
 }
@@ -265,20 +273,7 @@ function findUser(email, password, done) {
   });
 };
 
-function createSession(req, user, done) {
-  req.session.regenerate(function (err) {
-    if (err) return done(err);
-    var now = new Date();
-    users.update({_id: user._id}, {$set: {adate: now}}, function (err) {
-      if (err) return done(err);
-      user.adate = now;
-      req.session.uid = user._id;
-      done();
-    });
-  });
-}
-
-exports.deleteSession = function (req, res, done) {
+var deleteSession = exports.deleteSession = function (req, res, done) {
   res.clearCookie('email');
   res.clearCookie('password');
   req.session.destroy();
