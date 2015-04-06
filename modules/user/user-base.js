@@ -202,7 +202,7 @@ init.tail(function () {
       done(err);
     }
   });
-})
+});
 
 function createSessionForm(req, res, done) {
   var form = {};
