@@ -6,14 +6,14 @@ var config = require('../base/config');
 var fsp = require('../base/fs');
 var exp = require('../express/express');
 var upload = require('../express/upload');
-var usera = require('../user/user-auth');
+var userb = require('../user/user-base');
 var imageb = require('../image/image-base');
 var imagec = require('../image/image-create');
 var site = require('../image/image-site');
 
 init.add(function () {
   exp.core.put('/api/images/:id([0-9]+)', upload.handler(function (req, res, done) {
-    usera.checkUser(res, function (err, user) {
+    userb.checkUser(res, function (err, user) {
       if (err) return done(err);
       var id = parseInt(req.params.id) || 0;
       var form = imagec.getForm(req);
@@ -29,7 +29,7 @@ init.add(function () {
   }));
 
   exp.core.get('/images/:id([0-9]+)/update', function (req, res, done) {
-    usera.checkUser(res, function (err, user) {
+    userb.checkUser(res, function (err, user) {
       if (err) return done(err);
       var id = parseInt(req.params.id) || 0;
       checkUpdatable(id, user, function (err, image) {

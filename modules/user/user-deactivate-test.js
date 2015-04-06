@@ -9,14 +9,13 @@ var config = require('../base/config')({ path: 'config/test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
 var exp = require('../express/express');
 var userb = require('../user/user-base');
-var usera = require('../user/user-auth');
 var userf = require('../user/user-fixture');
 var userd = require('../user/user-deactivate');
 var local = require('../express/local');
 
 init.add(function () {
   exp.core.get('/api/test/user', function (req, res, done) {
-    usera.checkUser(res, function (err, user) {
+    userb.checkUser(res, function (err, user) {
       if (err) return done(err);
       res.json({});
     });

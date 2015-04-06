@@ -2,7 +2,7 @@ var init = require('../base/init');
 var utilp = require('../base/util');
 var error = require('../base/error');
 var exp = require('../express/express');
-var usera = require('../user/user-auth');
+var userb = require('../user/user-base');
 var imagel = require('../image/image-list');
 var site = require('../image/image-site');
 
@@ -14,7 +14,7 @@ init.add(function () {
 
   exp.core.get('/:name([^/]+)', function (req, res, done) {
     var homel = decodeURIComponent(req.params.name).toLowerCase();
-    usera.getCachedByHome(homel, function (err, user) {
+    userb.getCachedByHome(homel, function (err, user) {
       if (!user) return done();
       renderProfile(req, res, user._id);
     });
@@ -23,7 +23,7 @@ init.add(function () {
 
 function renderProfile(req, res, id) {
   var user = res.locals.user;
-  usera.getCached(id, function (err, tuser) {
+  userb.getCached(id, function (err, tuser) {
     if (err) return done(err);
     var params = imagel.getParams(req);
     params.uid = id;

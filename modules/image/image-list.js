@@ -4,7 +4,7 @@ var error = require('../base/error');
 var config = require('../base/config');
 var mongo = require('../mongo/mongo');
 var exp = require('../express/express');
-var usera = require('../user/user-auth');
+var userb = require('../user/user-base');
 var imageb = require('../image/image-base');
 var site = require('../image/image-site');
 
@@ -50,7 +50,7 @@ var findImages = exports.findImages = function (params, done) {
 };
 
 function filter(image, done) {
-  usera.getCached(image.uid, function (err, user) {
+  userb.getCached(image.uid, function (err, user) {
     if (err) return done(err);
     image.user = {
       _id: user._id,

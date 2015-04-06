@@ -4,7 +4,7 @@ var error = require('../base/error');
 var config = require('../base/config');
 var exp = require('../express/express');
 var upload = require('../express/upload');
-var usera = require('../user/user-auth');
+var userb = require('../user/user-base');
 var imageb = require('../image/image-base');
 var site = require('../image/image-site');
 
@@ -55,7 +55,7 @@ function findImage(id, done) {
   imageb.images.findOne({ _id: id }, function (err, image) {
     if (err) return done(err);
     if (!image) return done(error(error.IMAGE_NOT_EXIST));
-    usera.getCached(image.uid, function (err, user) {
+    userb.getCached(image.uid, function (err, user) {
       if (err) return done(err);
       image.user = {
         _id: user._id,

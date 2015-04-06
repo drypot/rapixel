@@ -11,7 +11,6 @@ var config = require('../base/config')({ path: 'config/test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
 var exp = require('../express/express');
 var userb = require('../user/user-base');
-var usera = require('../user/user-auth');
 var useru = require('../user/user-update');
 var userf = require('../user/user-fixture');
 var local = require('../express/local');
@@ -333,7 +332,7 @@ describe("updating cache", function () {
   });
   it("given cache loaded", function (done) {
     var user = userf.user1;
-    usera.getCached(user._id, function (err, user) {
+    userb.getCached(user._id, function (err, user) {
       expect(err).not.exist;
       expect(user.name).equal(user.name);
       expect(user.home).equal(user.home);
@@ -350,7 +349,7 @@ describe("updating cache", function () {
     });
   });
   it("can be checked", function (done) {
-    usera.getCached(userf.user1._id, function (err, user) {
+    userb.getCached(userf.user1._id, function (err, user) {
       expect(err).not.exist;
       expect(user.name).equal('Name1');
       expect(user.home).equal('Home1');

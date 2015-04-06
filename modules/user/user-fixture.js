@@ -2,8 +2,6 @@ var expect = require('chai').expect;
 
 var init = require('../base/init');
 var userb = require('../user/user-base');
-var usera = require('../user/user-auth');
-var userc = require('../user/user-create');
 var local = require('../express/local');
 
 init.add(exports.recreate = function (done) {
@@ -17,14 +15,31 @@ init.add(exports.recreate = function (done) {
   function create() {
     if (i == forms.length) return done();
     var form = forms[i++];
-    userc.createUser(form, function (err, user) {
+    var now = new Date();
+    var user = {
+      _id: userb.newId(),
+      name: form.name,
+      namel: form.name,
+      home: form.name,
+      homel: form.name,
+      email: form.email,
+      hash: userb.makeHash(form.password),
+      status: 'v',
+      cdate: now,
+      adate: now,
+      profile: '',
+    };
+    if (form.admin) {
+      user.admin = true;
+    }
+    userb.users.insert(user, function (err) {
       expect(err).not.exist;
       user.password = form.password;
-      exports[form.name] = user;
+      exports[user.name] = user;
       setImmediate(create);
     });
   }
-  usera.resetCache();
+  userb.resetCache();
   userb.users.remove(function (err) {
     if (err) return done(err);
     create();

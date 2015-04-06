@@ -40,7 +40,7 @@ describe("resetting user", function () {
     });
   });
   it("can be checked", function (done) {
-    userb.resets.findOne({ email: _user.email }, function (err, reset) {
+    userp.resets.findOne({ email: _user.email }, function (err, reset) {
       expect(err).not.exist;
       expect(reset._id).exist;
       expect(reset.token).exist;
@@ -147,7 +147,7 @@ describe("resetting admin", function () {
     });
   });
   it("can be checked", function (done) {
-    userb.resets.findOne({ email: _user.email }, function (err, reset) {
+    userp.resets.findOne({ email: _user.email }, function (err, reset) {
       expect(err).not.exist;
       expect(reset._id).exist;
       expect(reset.token).exist;

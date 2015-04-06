@@ -3,11 +3,10 @@ var error = require('../base/error');
 var exp = require('../express/express');
 var userb = require('../user/user-base');
 var userc = require('../user/user-create');
-var usera = require('../user/user-auth');
 
 init.add(function () {
   exp.core.put('/api/users/:id([0-9]+)', function (req, res, done) {
-    usera.checkUser(res, function (err, user) {
+    userb.checkUser(res, function (err, user) {
       if (err) return done(err);
       var id = parseInt(req.params.id) || 0;
       var form = userc.getForm(req);
@@ -19,12 +18,12 @@ init.add(function () {
   });
 
   exp.core.get('/users/:id([0-9]+)/update', function (req, res, done) {
-    usera.checkUser(res, function (err, user) {
+    userb.checkUser(res, function (err, user) {
       if (err) return done(err);
       var id = parseInt(req.params.id) || 0;
       checkUpdatable(id, user, function (err) {
         if (err) return done(err);
-        usera.getCached(id, function (err, tuser) {
+        userb.getCached(id, function (err, tuser) {
           if (err) return done(err);
           res.render('user/user-update', {
             tuser: tuser
@@ -58,7 +57,7 @@ function updateUser(id, user, form, done) {
         if (!cnt) {
           return done(error(error.USER_NOT_FOUND));
         }
-        usera.deleteCache(id);
+        userb.deleteCache(id);
         done();
       });
     });

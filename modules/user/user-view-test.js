@@ -8,9 +8,10 @@ var error = require('../base/error');
 var config = require('../base/config')({ path: 'config/test.json' });
 var mongo = require('../mongo/mongo')({ dropDatabase: true });
 var exp = require('../express/express');
-var usera = require('../user/user-auth');
+var userb = require('../user/user-base');
 var userv = require('../user/user-view');
 var userf = require('../user/user-fixture');
+var userc = require('../user/user-create');
 var local = require('../express/local');
 
 before(function (done) {

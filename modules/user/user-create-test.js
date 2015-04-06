@@ -10,7 +10,6 @@ var mongo = require('../mongo/mongo')({ dropDatabase: true });
 var exp = require('../express/express');
 var userb = require('../user/user-base');
 var userc = require('../user/user-create');
-
 var local = require('../express/local');
 
 before(function (done) {

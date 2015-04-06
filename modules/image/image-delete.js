@@ -6,13 +6,13 @@ var config = require('../base/config');
 var fsp = require('../base/fs');
 var exp = require('../express/express');
 var upload = require('../express/upload');
-var usera = require('../user/user-auth');
+var userb = require('../user/user-base');
 var imageb = require('../image/image-base');
 var imageu = require('../image/image-update');
 
 init.add(function () {
   exp.core.delete('/api/images/:id([0-9]+)', function (req, res, done) {
-    usera.checkUser(res, function (err, user) {
+    userb.checkUser(res, function (err, user) {
       if (err) return done(err);
       var id = parseInt(req.params.id) || 0;
       imageu.checkUpdatable(id, user, function (err) {
