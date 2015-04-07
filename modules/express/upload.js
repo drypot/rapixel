@@ -19,11 +19,11 @@ init.add(function (done) {
   });
 
   if (config.dev) {
-    exp.core.get('/dev/upload', function (req, res) {
+    exp.core.get('/test/upload', function (req, res) {
       res.render('express/upload');
     });
 
-    exp.core.all('/api/echo-upload', upload.handler(function (req, res, done) {
+    exp.core.all('/api/test/echo-upload', upload.handler(function (req, res, done) {
       var paths = [];
       if (req.files) {
         Object.keys(req.files).forEach(function (field) {

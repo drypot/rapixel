@@ -26,11 +26,6 @@ init.add(function () {
       res.json({});
     });
   });  
-
-  exp.core.delete('/api/test/del-session', function (req, res, done) {
-    req.session.destroy();
-    res.json({});
-  });
 });
 
 before(function (done) {
@@ -194,7 +189,7 @@ describe("identifying without auto login", function () {
     });
   });
   it("given new session", function (done) {
-    local.del('/api/test/del-session').end(function (err, res) {
+    local.post('/api/test/destroy-session').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
@@ -232,7 +227,7 @@ describe("identifying with auto login", function () {
     });
   });
   it("given new session", function (done) {
-    local.del('/api/test/del-session').end(function (err, res) {
+    local.post('/api/test/destroy-session').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
@@ -306,7 +301,7 @@ describe("identifying with auto login with invalid email", function () {
     });
   });
   it("given session expired", function (done) {
-    local.del('/api/test/del-session').end(function (err, res) {
+    local.post('/api/test/destroy-session').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();

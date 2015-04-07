@@ -199,6 +199,56 @@ describe("cache control", function () {
   });
 });
 
+describe("session", function () {
+  it("given handler", function () {
+    exp.core.put('/api/test/session', function (req, res) {
+      for (var key in req.body) {
+        req.session[key] = req.body[key];
+      }
+      res.json({});
+    });
+
+    exp.core.get('/api/test/session', function (req, res) {
+      var obj = {};
+      for (var i = 0; i < req.body.length; i++) {
+        var key = req.body[i];
+        obj[key] = req.session[key];
+      }
+      res.json(obj);
+    });
+  });
+  it("post should success", function (done) {
+    local.put('/api/test/session').send({ book: 'book1', price: 11 }).end(function (err, res) {
+      expect(err).not.exist;
+      expect(res.body.err).not.exist;
+      done();
+    });
+  });
+  it("get should success", function (done) {
+    local.get('/api/test/session').send([ 'book', 'price' ]).end(function (err, res) {
+      expect(err).not.exist;
+      expect(res.body).property('book', 'book1');
+      expect(res.body).property('price', 11);
+      done();
+    });
+  });
+  it("given session destroied", function (done) {
+    local.post('/api/test/destroy-session').end(function (err, res) {
+      expect(err).not.exist;
+      expect(res.body.err).not.exist;
+      done();
+    });
+  });
+  it("get should fail", function (done) {
+    local.get('/api/test/session').send([ 'book', 'price' ]).end(function (err, res) {
+      expect(err).not.exist;
+      expect(res.body).not.property('book');
+      expect(res.body).not.property('price');
+      done();
+    });
+  });
+});
+
 describe("middleware", function () {
   var result;
   it("given handlers", function () {

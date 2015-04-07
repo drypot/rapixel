@@ -15,7 +15,7 @@ block content
       $form.$send.click(function () {
         console.log('post start');
         
-        // request.del('/api/echo-upload?abc=123').object({ def: 566 })/*.form($form)*/.end(function (err, res) {
+        // request.del('/api/test/echo-upload?abc=123').object({ def: 566 })/*.form($form)*/.end(function (err, res) {
         //   console.log('post done');
         //   console.log(err);
         //   console.log(res.body);
@@ -24,7 +24,7 @@ block content
         //   console.log(res.body.files);
         // });
 
-        formty.post('/api/echo-upload', $form, { extra1: '1234' }, function (err, res) {
+        formty.post('/api/test/echo-upload', $form, { extra1: '1234' }, function (err, res) {
           console.log('post done');
           console.log(err);
           console.log(res.body);

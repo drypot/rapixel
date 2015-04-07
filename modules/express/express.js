@@ -93,12 +93,17 @@ init.add(function () {
   });
 
   if (config.dev) {
-    exp.app.get('/dev/error', function (req, res, done) {
+    exp.app.get('/test/error', function (req, res, done) {
       var err = new Error('Error Sample Page');
       err.code = 999;
       res.render('express/error', {
         err: err
       });
+    });
+
+    exp.core.post('/api/test/destroy-session', function (req, res, done) {
+      req.session.destroy();
+      res.json({});
     });
   }
 
