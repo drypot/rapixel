@@ -1,11 +1,11 @@
 var init = require('../base/init');
 var config = require('../base/config');
-var mdbp = require('../mongo/mongo');
+var mongop = require('../mongo/mongo');
 var imageb = require('../image/image-base');
 
 init.run(function (err) {
   var col = imageb.images
-  mdbp.forEach(col, function (obj, done) {
+  mongop.forEach(col, function (obj, done) {
     if (obj.comment == undefined) {
       process.stdout.write(obj._id + 'u ');
       var fields = {};
@@ -17,6 +17,6 @@ init.run(function (err) {
   }, function (err) {
     if (err) throw err;
     console.log('done');
-    mdbp.db.close();
+    mongop.db.close();
   });
 });

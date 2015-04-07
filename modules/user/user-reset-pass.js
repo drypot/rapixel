@@ -3,7 +3,7 @@ var crypto = require('crypto');
 var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config');
-var mdbp = require('../mongo/mongo');
+var mongop = require('../mongo/mongo');
 var exp = require('../express/express');
 var mailer = require('../mail/mailer');
 var userb = require('../user/user-base');
@@ -12,7 +12,7 @@ var userc = require('../user/user-create');
 var resets;
 
 init.add(function (done) {
-  resets = exports.resets = mdbp.db.collection("resets");
+  resets = exports.resets = mongop.db.collection("resets");
   resets.ensureIndex({ email: 1 }, done);
 });
 
@@ -89,7 +89,7 @@ function step2(form, done) {
   if (errors.length) {
     return done(error(errors));
   }
-  resets.findOne({ _id: new mdbp.ObjectID(form.id) }, function (err, reset) {
+  resets.findOne({ _id: new mongop.ObjectID(form.id) }, function (err, reset) {
     if (err) return done(err);
     if (!reset) {
       return done(error(error.INVALID_DATA));

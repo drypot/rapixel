@@ -4,7 +4,7 @@ var crypto = require('crypto');
 var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config');
-var mdbp = require('../mongo/mongo');
+var mongop = require('../mongo/mongo');
 var exp = require('../express/express');
 
 init.add(function () {
@@ -48,7 +48,7 @@ init.add(function () {
 var users;
 
 init.add(function (done) {
-  users = exports.users = mdbp.db.collection("users");
+  users = exports.users = mongop.db.collection("users");
   users.ensureIndex({ email: 1 }, function (err) {
     if (err) return done(err);
     users.ensureIndex({ namel: 1 }, function (err) {

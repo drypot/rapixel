@@ -2,7 +2,7 @@ var fs = require('fs');
 
 var init = require('../base/init');
 var config = require('../base/config')({ parseArg: true });
-var mdbp = require('../mongo/mongo');
+var mongop = require('../mongo/mongo');
 var imageb = require('../image/image-base');
 
 // TODO: 만든지 오래되었다. 누더기 상태. 다시 만들어야한다.
@@ -68,5 +68,5 @@ function removeVersions(dir, done) {
 
 init.run(function (err) {
   if (err) throw err;
-  mdbp.db.close();
+  mongop.db.close();
 });

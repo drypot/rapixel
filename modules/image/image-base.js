@@ -4,7 +4,7 @@ var init = require('../base/init');
 var error = require('../base/error');
 var fsp = require('../base/fs');
 var config = require('../base/config');
-var mdbp = require('../mongo/mongo');
+var mongop = require('../mongo/mongo');
 
 init.add(function () {
   error.define('IMAGE_NOT_EXIST', '파일이 없습니다.');
@@ -27,7 +27,7 @@ init.add(function (done) {
 });
 
 init.add(function (done) {
-  images = exports.images = mdbp.db.collection("images");
+  images = exports.images = mongop.db.collection("images");
   images.ensureIndex({ uid: 1, _id: -1 }, done);
 });
 

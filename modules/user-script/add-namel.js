@@ -1,10 +1,10 @@
 var init = require('../base/init');
 var config = require('../base/config');
-var mdbp = require('../mongo/mongo');
+var mongop = require('../mongo/mongo');
 var userb = require('../user/user-base');
 
 init.run(function (err) {
-  mdbp.forEach(userb.users, function (user, done) {
+  mongop.forEach(userb.users, function (user, done) {
     if (!user.namel) {
       process.stdout.write(user._id + 'u ');
       var fields = {};
@@ -21,6 +21,6 @@ init.run(function (err) {
   }, function (err) {
     if (err) throw err;
     console.log('done');
-    mdbp.db.close();
+    mongop.db.close();
   });
 });

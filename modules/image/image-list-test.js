@@ -6,7 +6,7 @@ chai.config.includeStack = true;
 var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config')({ path: 'config/test.json' });
-var mdbp = require('../mongo/mongo')({ dropDatabase: true });
+var mongop = require('../mongo/mongo')({ dropDatabase: true });
 var exp = require('../express/express');
 var upload = require('../express/upload');
 var userf = require('../user/user-fixture');
@@ -22,11 +22,10 @@ before(function (done) {
   userf.login('user1', done);
 });
 
-describe("preparing dummy", function (done) {
-  var size = 10;
-  it("should success", function (done) {
+describe("listing", function (done) {
+  it("given 10 images", function (done) {
     var images = [];
-    for (var i = 0; i < size; i++) {
+    for (var i = 0; i < 10; i++) {
       var image = {
         _id: imageb.newId(),
         uid: userf.user1._id,
@@ -37,17 +36,7 @@ describe("preparing dummy", function (done) {
     };
     imageb.images.insert(images, done);    
   });
-  it("can be counted", function (done) {
-    imageb.images.count(function (err, c) {
-      expect(err).not.exist;
-      expect(c).equal(size);
-      done();
-    })
-  });
-});
-
-describe("listing", function () {
-  it("big page should success", function (done) {
+  it("page size 99 should success", function (done) {
     var query = {
       ps: 99
     }
@@ -94,7 +83,7 @@ describe("listing", function () {
       done();
     });
   });
-  it("page with lt should success", function (done) {
+  it("last page should success", function (done) {
     var query = {
       lt: 3, ps: 4
     }
@@ -124,7 +113,7 @@ describe("listing", function () {
       done();
     });
   });
-  it("page 1 with gt should success", function (done) {
+  it("first page should success", function (done) {
     var query = {
       gt: 6, ps: 4
     };

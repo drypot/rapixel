@@ -1,25 +1,25 @@
-var mdb = require('mongodb');
+var mongo = require('mongodb');
 
 var init = require('../base/init');
 var config = require('../base/config');
 
 var opt = {};
 
-var mdbp = exports = module.exports = function (_opt) {
+var mongop = exports = module.exports = function (_opt) {
   for(var p in _opt) {
     opt[p] = _opt[p];
   }
-  return mdbp;
+  return mongop;
 };
 
 init.add(function (done) {
-  var server = new mdb.Server('localhost', 27017, { auto_reconnect: true } );
-  var client = new mdb.MongoClient(server);
+  var server = new mongo.Server('localhost', 27017, { auto_reconnect: true } );
+  var client = new mongo.MongoClient(server);
   client.open(function (err) {
-    mdbp.db = client.db(config.mongodb);
-    console.log('mongo: ' + mdbp.db.databaseName);
+    mongop.db = client.db(config.mongodb);
+    console.log('mongo: ' + mongop.db.databaseName);
     if (config.mongoUser) {
-      return mdbp.db.authenticate(config.mongoUser, config.mongoPassword, function(err, res) {
+      return mongop.db.authenticate(config.mongoUser, config.mongoPassword, function(err, res) {
         if (err) return done(err);
         done();
       });
@@ -30,7 +30,7 @@ init.add(function (done) {
 
 init.add(function (done) {
   if (opt.dropDatabase) {
-    return mdbp.db.dropDatabase(function (err) {
+    return mongop.db.dropDatabase(function (err) {
       if (err) return done(err);
       console.log('mongo: dropped db');
       done() 
@@ -39,9 +39,11 @@ init.add(function (done) {
   done();
 });
 
-mdbp.ObjectID = mdb.ObjectID;
+mongop.ObjectID = mongo.ObjectID;
 
-mdbp.findPage = function (col, query, gt, lt, ps, filter, done) {
+// _id 를 숫자로 쓰는 컬렉션만 페이징할 수 있다.
+
+mongop.findPage = function (col, query, gt, lt, ps, filter, done) {
   
   readPage(getCursor());
 
@@ -122,7 +124,7 @@ mdbp.findPage = function (col, query, gt, lt, ps, filter, done) {
 
 };
 
-mdbp.forEach = function (col, doit, done) {
+mongop.forEach = function (col, doit, done) {
   var cursor = col.find();
   (function read() {
     cursor.nextObject(function (err, obj) {
