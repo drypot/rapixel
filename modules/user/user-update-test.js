@@ -32,7 +32,7 @@ describe("updating user", function () {
     });
   });
   it("given login", function (done) {
-    local.post('/api/session').send({ email: 'name@mail.com', password: '1234' }).end(function (err, res) {
+    local.post('/api/users/login').send({ email: 'name@mail.com', password: '1234' }).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();

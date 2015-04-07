@@ -30,7 +30,7 @@ describe("finding user", function () {
   });
   it("given login", function (done) {
     var form = { email: _user.email, password: _user.password };
-    local.post('/api/session').send(form).end(function (err, res) {
+    local.post('/api/users/login').send(form).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
@@ -73,7 +73,7 @@ describe("finding user", function () {
     });
   });
   it("given no login", function (done) {
-    local.del('/api/session', function (err, res) {
+    userf.logout(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();

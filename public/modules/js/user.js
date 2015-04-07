@@ -1,4 +1,3 @@
-
 $(function () {
   window.userl = {};
 
@@ -6,7 +5,7 @@ $(function () {
     var $form = formty.getForm('form.main');
     $form.$email.focus();
     $form.$send.click(function () {
-      formty.post('/api/session', $form, function () {
+      formty.post('/api/users/login', $form, function () {
         // formty.method 에서 에러처리 함
         location = '/';
       });
@@ -15,7 +14,7 @@ $(function () {
   };
 
   userl.logout = function () {
-    request.del('/api/session').end(function (err, res) {
+    request.post('/api/users/logout').end(function (err, res) {
       err = err || res.body.err;
       if (err) return showError(err);
       console.log('logged out');

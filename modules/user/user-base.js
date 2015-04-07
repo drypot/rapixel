@@ -141,7 +141,7 @@ userb.resetCache = function () {
 
 // session
 
-exp.core.post('/api/session', function (req, res, done) {
+exp.core.post('/api/users/login', function (req, res, done) {
   createSessionForm(req, res, function (err, user) {
     if (err) return done(err);
     res.json({
@@ -153,7 +153,7 @@ exp.core.post('/api/session', function (req, res, done) {
   });
 });
 
-exp.core.get('/api/session', function (req, res, done) {
+exp.core.get('/api/users/login', function (req, res, done) {
   var obj = {
     uid : req.session.uid
   };
@@ -167,7 +167,7 @@ exp.core.get('/api/session', function (req, res, done) {
   res.json(obj);
 });
 
-exp.core.delete('/api/session', function (req, res, done) {
+exp.core.post('/api/users/logout', function (req, res, done) {
   userb.deleteSession(req, res);
   res.json({});
 });
@@ -197,14 +197,11 @@ function createSessionAuto(req, res, done) {
     });
     return;
   }
-
   var email = req.cookies.email;
   var password = req.cookies.password;
-  
   if (!email || !password) {
     return done();
   }
-
   findUser(email, password, function (err, user) {
     if (err) {
       res.clearCookie('email');

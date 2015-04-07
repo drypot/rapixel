@@ -54,9 +54,9 @@ userf.login = function (name, remember, done) {
   }
   var user = exports[name];
   var form = { email: user.email, password: user.password, remember: remember };
-  local.post('/api/session').send(form).end(done);
+  local.post('/api/users/login').send(form).end(done);
 };
 
 userf.logout = function (done) {
-  local.del('/api/session', done);
+  local.post('/api/users/logout', done);
 }

@@ -49,7 +49,7 @@ describe("newId", function () {
 
 describe("user fixture", function () {
   it("session should be clear", function (done) {
-    local.get('/api/session').end(function (err, res) {
+    local.get('/api/users/login').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       expect(res.body.uid).not.exist;
@@ -66,7 +66,7 @@ describe("user fixture", function () {
     })
   });
   it("session should be filled", function (done) {
-    local.get('/api/session').end(function (err, res) {
+    local.get('/api/users/login').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       expect(res.body.uid).equal(userf.user1._id);
@@ -82,7 +82,7 @@ describe("user fixture", function () {
     })
   });
   it("session should be clear", function (done) {
-    local.get('/api/session').end(function (err, res) {
+    local.get('/api/users/login').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       expect(res.body.uid).not.exist;
@@ -94,7 +94,7 @@ describe("user fixture", function () {
 describe("login", function () {
   it("invalid email should fail", function (done) {
     var form = { email: 'xxx@xxx.com', password: 'xxxx' };
-    local.post('/api/session').send(form).end(function (err, res) {
+    local.post('/api/users/login').send(form).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.EMAIL_NOT_FOUND)).true;
@@ -103,7 +103,7 @@ describe("login", function () {
   });
   it("invalid password should fail", function (done) {
     var form = { email: userf.user1.email, password: 'xxxx' };
-    local.post('/api/session').send(form).end(function (err, res) {
+    local.post('/api/users/login').send(form).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(error.find(res.body.err, error.PASSWORD_WRONG)).true;
