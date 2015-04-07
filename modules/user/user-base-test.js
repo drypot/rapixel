@@ -42,12 +42,12 @@ describe("newId", function () {
   });
 });
 
-describe("user fixture", function () {
+describe("login", function () {
   it("session should be clear", function (done) {
     local.get('/api/users/login').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.body.err).not.exist;
-      expect(res.body.uid).not.exist;
+      expect(res.body.err).exist;
+      expect(error.find(res.body.err, error.NOT_AUTHENTICATED)).true;
       done();
     });
   });
@@ -64,7 +64,7 @@ describe("user fixture", function () {
     local.get('/api/users/login').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
-      expect(res.body.uid).equal(userf.user1._id);
+      expect(res.body.user.id).equal(userf.user1._id);
       done();
     });
   });
@@ -72,21 +72,17 @@ describe("user fixture", function () {
     userf.logout(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
-      expect(res.body).eql({});
       done();
     })
   });
   it("session should be clear", function (done) {
     local.get('/api/users/login').end(function (err, res) {
       expect(err).not.exist;
-      expect(res.body.err).not.exist;
-      expect(res.body.uid).not.exist;
+      expect(res.body.err).exist;
+      expect(error.find(res.body.err, error.NOT_AUTHENTICATED)).true;
       done();
     });
   });
-});
-
-describe("login", function () {
   it("invalid email should fail", function (done) {
     var form = { email: 'xxx@xxx.com', password: 'xxxx' };
     local.post('/api/users/login').send(form).end(function (err, res) {

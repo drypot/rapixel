@@ -154,17 +154,15 @@ exp.core.post('/api/users/login', function (req, res, done) {
 });
 
 exp.core.get('/api/users/login', function (req, res, done) {
-  var obj = {
-    uid : req.session.uid
-  };
-  var user = res.locals.user;
-  if (user) {
-    obj.user = {
-      id: user._id,
-      name: user.name        
-    }
-  }
-  res.json(obj);
+  userb.checkUser(res, function (err, user) {
+    if (err) return done(err);
+    res.json({
+      user: {
+        id: user._id,
+        name: user.name        
+      }
+    });
+  });
 });
 
 exp.core.post('/api/users/logout', function (req, res, done) {
