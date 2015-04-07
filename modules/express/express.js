@@ -70,8 +70,8 @@ init.add(function () {
   // exp.after: redirect to login page 용
   // 테스트케이스에서 인스턴스가 기동한 후 핸들러를 추가하는 경우가 있어 core 를 도입.
 
-  if (exp.autoLoginHandler) {
-    exp.app.use(exp.autoLoginHandler);
+  if (exp.autoLogin) {
+    exp.app.use(exp.autoLogin);
   }
 
   exp.app.use(exp.core);
@@ -104,8 +104,8 @@ init.add(function () {
 
   // error handler
 
-  if (exp.redirectToLoginHandler) {
-    exp.app.use(exp.redirectToLoginHandler);
+  if (exp.redirectToLogin) {
+    exp.app.use(exp.redirectToLogin);
   }
 
   exp.app.use(function (_err, req, res, done) {

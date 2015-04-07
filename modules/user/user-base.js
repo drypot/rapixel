@@ -176,11 +176,11 @@ exp.core.get('/users/login', function (req, res, done) {
   res.render('user/user-base-login');
 });
 
-exp.autoLoginHandler = function (req, res, done) {
+exp.autoLogin = function (req, res, done) {
   createSessionAuto(req, res, done);
 };
 
-exp.redirectToLoginHandler = function (err, req, res, done) {
+exp.redirectToLogin = function (err, req, res, done) {
   if (!res.locals.api && err.code == error.NOT_AUTHENTICATED.code) {
     res.redirect('/users/login');
   } else {
