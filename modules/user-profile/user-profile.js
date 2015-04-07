@@ -6,18 +6,16 @@ var userb = require('../user/user-base');
 var imagel = require('../image/image-list');
 var site = require('../image/image-site');
 
-init.add(function () {
-  exp.core.get('/users/:id([0-9]+)', function (req, res, done) {
-    var id = parseInt(req.params.id) || 0;
-    renderProfile(req, res, id);
-  });
+exp.core.get('/users/:id([0-9]+)', function (req, res, done) {
+  var id = parseInt(req.params.id) || 0;
+  renderProfile(req, res, id);
+});
 
-  exp.core.get('/:name([^/]+)', function (req, res, done) {
-    var homel = decodeURIComponent(req.params.name).toLowerCase();
-    userb.getCachedByHome(homel, function (err, user) {
-      if (!user) return done();
-      renderProfile(req, res, user._id);
-    });
+exp.core.get('/:name([^/]+)', function (req, res, done) {
+  var homel = decodeURIComponent(req.params.name).toLowerCase();
+  userb.getCachedByHome(homel, function (err, user) {
+    if (!user) return done();
+    renderProfile(req, res, user._id);
   });
 });
 

@@ -6,49 +6,46 @@ var error = require('../base/error');
 var config = require('../base/config');
 var mongop = require('../mongo/mongo');
 var exp = require('../express/express');
+var userb = exports;
 
-init.add(function () {
-  error.define('NOT_AUTHENTICATED', '먼저 로그인해 주십시오.');
-  error.define('NOT_AUTHORIZED', '사용 권한이 없습니다.');
-  error.define('USER_NOT_FOUND', '사용자를 찾을 수 없습니다.');
-  error.define('RESET_TIMEOUT', '비밀번호 초기화 토큰 유효시간이 지났습니다.');
+// login errors
 
-  // user register
+error.define('NOT_AUTHENTICATED', '먼저 로그인해 주십시오.');
+error.define('NOT_AUTHORIZED', '사용 권한이 없습니다.');
+error.define('USER_NOT_FOUND', '사용자를 찾을 수 없습니다.');
+error.define('EMAIL_NOT_FOUND', '등록되지 않은 이메일입니다.', 'email');
+error.define('ACCOUNT_DEACTIVATED', '사용중지된 계정입니다.', 'email');
+error.define('PASSWORD_WRONG', '비밀번호가 틀렸습니다.', 'password');
 
-  error.define('NAME_EMPTY', '이름을 입력해 주십시오.', 'name');
-  error.define('NAME_RANGE', '이름 길이는 2 ~ 32 글자입니다.', 'name');
-  error.define('NAME_DUPE', '이미 등록되어 있는 이름입니다.', 'name');
+// register errors
 
-  error.define('HOME_EMPTY', '개인 주소를 입력해 주십시오.', 'home');
-  error.define('HOME_RANGE', '개인 주소 길이는 2 ~ 32 글자입니다.', 'home');
-  error.define('HOME_DUPE', '이미 등록되어 있는 개인 주소입니다.', 'home');
+error.define('NAME_EMPTY', '이름을 입력해 주십시오.', 'name');
+error.define('NAME_RANGE', '이름 길이는 2 ~ 32 글자입니다.', 'name');
+error.define('NAME_DUPE', '이미 등록되어 있는 이름입니다.', 'name');
 
-  error.define('EMAIL_EMPTY', '이메일 주소를 입력해 주십시오.', 'email');
-  error.define('EMAIL_RANGE', '이메일 주소 길이는 8 ~ 64 글자입니다.', 'email');
-  error.define('EMAIL_PATTERN', '이메일 형식이 잘못되었습니다.', 'email');
-  error.define('EMAIL_DUPE', '이미 등록되어 있는 이메일입니다.', 'email');
+error.define('HOME_EMPTY', '개인 주소를 입력해 주십시오.', 'home');
+error.define('HOME_RANGE', '개인 주소 길이는 2 ~ 32 글자입니다.', 'home');
+error.define('HOME_DUPE', '이미 등록되어 있는 개인 주소입니다.', 'home');
 
-  error.define('PASSWORD_EMPTY', '비밀번호를 입력해 주십시오.', 'password');
-  error.define('PASSWORD_RANGE', '비밀번호 길이는 4 ~ 32 글자입니다.', 'password');
+error.define('EMAIL_EMPTY', '이메일 주소를 입력해 주십시오.', 'email');
+error.define('EMAIL_RANGE', '이메일 주소 길이는 8 ~ 64 글자입니다.', 'email');
+error.define('EMAIL_PATTERN', '이메일 형식이 잘못되었습니다.', 'email');
+error.define('EMAIL_DUPE', '이미 등록되어 있는 이메일입니다.', 'email');
 
-  // user login
+error.define('PASSWORD_EMPTY', '비밀번호를 입력해 주십시오.', 'password');
+error.define('PASSWORD_RANGE', '비밀번호 길이는 4 ~ 32 글자입니다.', 'password');
 
-  error.define('EMAIL_NOT_FOUND', '등록되지 않은 이메일입니다.', 'email');
-  error.define('ACCOUNT_DEACTIVATED', '사용중지된 계정입니다.', 'email');
-  error.define('PASSWORD_WRONG', '비밀번호가 틀렸습니다.', 'password');
+// password reset errors
 
-  // request reset
-
-  error.define('EMAIL_NOT_EXIST', '등록되지 않은 이메일입니다.', 'email');
-});
-
+error.define('EMAIL_NOT_EXIST', '등록되지 않은 이메일입니다.', 'email');
+error.define('RESET_TIMEOUT', '비밀번호 초기화 토큰 유효시간이 지났습니다.');
 
 // users collection
 
 var users;
 
 init.add(function (done) {
-  users = exports.users = mongop.db.collection("users");
+  users = userb.users = mongop.db.collection("users");
   users.ensureIndex({ email: 1 }, function (err) {
     if (err) return done(err);
     users.ensureIndex({ namel: 1 }, function (err) {
@@ -60,13 +57,9 @@ init.add(function (done) {
 
 // userId
 
+var userId;
+
 init.add(function (done) {
-  var userId;
-
-  exports.newId = function () {
-    return ++userId;
-  };
-
   var opt = {
     fields: { _id: 1 },
     sort: { _id: -1 },
@@ -80,13 +73,17 @@ init.add(function (done) {
   });
 });
 
+userb.newId = function () {
+  return ++userId;
+};
+
 // bcrypt hash
 
-exports.makeHash = function (password) {
+userb.makeHash = function (password) {
   return bcrypt.hashSync(password, 10);
 }
 
-var checkPassword = exports.checkPassword = function (password, hash) {
+var checkPassword = userb.checkPassword = function (password, hash) {
   return bcrypt.compareSync(password, hash);
 }
 
@@ -100,7 +97,7 @@ function cache(user) {
   usersByHome[user.homel] = user;
 }
 
-var getCached = exports.getCached = function (id, done) {
+userb.getCached = function (id, done) {
   var user = usersById[id];
   if (user) {
     return done(null, user);
@@ -113,7 +110,7 @@ var getCached = exports.getCached = function (id, done) {
   });
 };
 
-exports.getCachedByHome = function (homel, done) {
+userb.getCachedByHome = function (homel, done) {
   var user = usersByHome[homel];
   if (user) {
     return done(null, user);
@@ -129,7 +126,7 @@ exports.getCachedByHome = function (homel, done) {
   });
 };
 
-exports.deleteCache = function (id) {
+userb.deleteCache = function (id) {
   var user = usersById[id];
   if (user) {
     delete usersById[id];
@@ -137,71 +134,63 @@ exports.deleteCache = function (id) {
   }
 }
 
-exports.resetCache = function () {
+userb.resetCache = function () {
   usersById = [];
   usersByHome = {};
 }
 
 // session
 
-init.add(function () {
-
-  exp.before.use(function (req, res, done) {
-    createSessionAuto(req, res, done);
-  });
-
-  exp.core.post('/api/session', function (req, res, done) {
-    createSessionForm(req, res, function (err, user) {
-      if (err) return done(err);
-      res.json({
-        user: {
-          id: user._id,
-          name: user.name
-        }
-      });
+exp.core.post('/api/session', function (req, res, done) {
+  createSessionForm(req, res, function (err, user) {
+    if (err) return done(err);
+    res.json({
+      user: {
+        id: user._id,
+        name: user.name
+      }
     });
   });
-
-  exp.core.get('/api/session', function (req, res, done) {
-    var obj = {
-      uid : req.session.uid
-    };
-    var user = res.locals.user;
-    if (user) {
-      obj.user = {
-        id: user._id,
-        name: user.name        
-      }
-    }
-    res.json(obj);
-  });
-
-  exp.core.delete('/api/session', function (req, res, done) {
-    deleteSession(req, res);
-    res.json({});
-  });
-
-  exp.core.get('/users/login', function (req, res, done) {
-    res.render('user/user-base-login');
-  });
-
 });
 
-init.tail(function () {
-
-  exp.after.use(function (err, req, res, done) {
-    if (!res.locals.api && err.code == error.NOT_AUTHENTICATED.code) {
-      res.redirect('/users/login');
-    } else {
-      done(err);
+exp.core.get('/api/session', function (req, res, done) {
+  var obj = {
+    uid : req.session.uid
+  };
+  var user = res.locals.user;
+  if (user) {
+    obj.user = {
+      id: user._id,
+      name: user.name        
     }
-  });
-
+  }
+  res.json(obj);
 });
+
+exp.core.delete('/api/session', function (req, res, done) {
+  userb.deleteSession(req, res);
+  res.json({});
+});
+
+exp.core.get('/users/login', function (req, res, done) {
+  res.render('user/user-base-login');
+});
+
+exp.autoLoginHandler = function (req, res, done) {
+  createSessionAuto(req, res, done);
+};
+
+exp.redirectToLoginHandler = function (err, req, res, done) {
+  if (!res.locals.api && err.code == error.NOT_AUTHENTICATED.code) {
+    res.redirect('/users/login');
+  } else {
+    done(err);
+  }
+};
 
 function createSessionAuto(req, res, done) {
   if (req.session.uid) {
-    getCached(req.session.uid, function (err, user) {
+    userb.getCached(req.session.uid, function (err, user) {
       if (err) return req.session.regenerate(done);
       res.locals.user = user;
       done();
@@ -278,13 +267,13 @@ function findUser(email, password, done) {
   });
 };
 
-var deleteSession = exports.deleteSession = function (req, res, done) {
+userb.deleteSession = function (req, res, done) {
   res.clearCookie('email');
   res.clearCookie('password');
   req.session.destroy();
 };
 
-exports.checkUser = function (res, done) {
+userb.checkUser = function (res, done) {
   var user = res.locals.user;
   if (!user) {
     return done(error(error.NOT_AUTHENTICATED));
@@ -292,7 +281,7 @@ exports.checkUser = function (res, done) {
   done(null, user);
 };
 
-exports.checkAdmin = function (res, done) {
+userb.checkAdmin = function (res, done) {
   var user = res.locals.user;
   if (!user) {
     return done(error(error.NOT_AUTHENTICATED));
@@ -301,4 +290,11 @@ exports.checkAdmin = function (res, done) {
     return done(error(error.NOT_AUTHORIZED));
   }
   done(null, user);
+};
+
+userb.checkUpdatable = function (id, user, done) {
+  if (user._id != id && !user.admin) {
+    return done(error(error.NOT_AUTHORIZED))
+  }
+  done();
 };

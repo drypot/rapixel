@@ -9,40 +9,39 @@ var upload = require('../express/upload');
 var userb = require('../user/user-base');
 var imageb = require('../image/image-base');
 var site = require('../image/image-site');
+var imagec = exports;
 
-init.add(function () {
-  exp.core.post('/api/images', upload.handler(function (req, res, done) {
-    userb.checkUser(res, function (err, user) {
+exp.core.post('/api/images', upload.handler(function (req, res, done) {
+  userb.checkUser(res, function (err, user) {
+    if (err) return done(err);
+    var form = imagec.getForm(req);
+    createImages(form, user, function (err, ids) {
       if (err) return done(err);
-      var form = getForm(req);
-      createImages(form, user, function (err, ids) {
-        if (err) return done(err);
-        res.json({
-          ids: ids
-        });
-        // 오류 없이 처리되었다면 임시파일들은 정상보관되었을 것이기 때문에
-        // done() 을 호출해서 임시파일 삭제를 안 해도 되긴 하다.
-        done();
+      res.json({
+        ids: ids
       });
+      // 오류 없이 처리되었다면 임시파일들은 정상보관되었을 것이기 때문에
+      // done() 을 호출해서 임시파일 삭제를 안 해도 되긴 하다.
+      done();
     });
-  }));
+  });
+}));
 
-  exp.core.get('/images/new', function (req, res, done) {
-    userb.checkUser(res, function (err, user) {
-      if (err) return done(err);
-      var now = new Date();
-      getTicketCount(now, user, function (err, count, hours) {
-        res.render('image/image-create', {
-          ticketMax: config.ticketMax,
-          ticketCount: count,
-          hours: hours
-        });
+exp.core.get('/images/new', function (req, res, done) {
+  userb.checkUser(res, function (err, user) {
+    if (err) return done(err);
+    var now = new Date();
+    imagec.getTicketCount(now, user, function (err, count, hours) {
+      res.render('image/image-create', {
+        ticketMax: config.ticketMax,
+        ticketCount: count,
+        hours: hours
       });
     });
   });
 });
 
-var getForm = exports.getForm = function (req) {
+imagec.getForm = function (req) {
   var body = req.body;
   var form = {};
   form.now = new Date();
@@ -51,7 +50,7 @@ var getForm = exports.getForm = function (req) {
   return form;
 }
 
-var getTicketCount = exports.getTicketCount = function(now, user, done) {
+imagec.getTicketCount = function(now, user, done) {
   var count = config.ticketMax;
   var hours;
   var opt = {
@@ -84,7 +83,7 @@ function createImages(form, user, done) {
       return done(null, ids);
     }
     var file = form.files[i++];
-    getTicketCount(form.now, user, function (err, count, hours) {
+    imagec.getTicketCount(form.now, user, function (err, count, hours) {
       if (err) return done(err);
       if (!count) {
         return done(null, ids);

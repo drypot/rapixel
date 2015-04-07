@@ -8,6 +8,7 @@ var exp = require('../express/express');
 var mailer = require('../mail/mailer');
 var userb = require('../user/user-base');
 var userc = require('../user/user-create');
+var userp = exports;
 
 var resets;
 
@@ -16,31 +17,29 @@ init.add(function (done) {
   resets.ensureIndex({ email: 1 }, done);
 });
 
-init.add(function () {
-  exp.core.post('/api/reset-pass', function (req, res, done) {
-    var form = {};
-    form.email = String(req.body.email || '').trim();
-    step1(form, function (err) {
-      if (err) return done(err);
-      res.json({});
-    });
+exp.core.post('/api/reset-pass', function (req, res, done) {
+  var form = {};
+  form.email = String(req.body.email || '').trim();
+  step1(form, function (err) {
+    if (err) return done(err);
+    res.json({});
   });
+});
 
-  exp.core.put('/api/reset-pass', function (req, res, done) {
-    var body = req.body;
-    var form = {};
-    form.id = String(body.id || '').trim();
-    form.token = String(body.token || '').trim();
-    form.password = String(body.password || '').trim();
-    step2(form, function (err) {
-      if (err) return done(err);
-      res.json({});
-    });
+exp.core.put('/api/reset-pass', function (req, res, done) {
+  var body = req.body;
+  var form = {};
+  form.id = String(body.id || '').trim();
+  form.token = String(body.token || '').trim();
+  form.password = String(body.password || '').trim();
+  step2(form, function (err) {
+    if (err) return done(err);
+    res.json({});
   });
+});
 
-  exp.core.get('/users/reset-pass', function (req, res, done) {
-    res.render('user/user-reset-pass');
-  });
+exp.core.get('/users/reset-pass', function (req, res, done) {
+  res.render('user/user-reset-pass');
 });
 
 function step1(form, done) {

@@ -7,36 +7,35 @@ var exp = require('../express/express');
 var userb = require('../user/user-base');
 var imageb = require('../image/image-base');
 var site = require('../image/image-site');
+var imagel = exports;
 
-init.add(function () {
-  exp.core.get('/api/images', function (req, res, done) {
-    var params = getParams(req);
-    findImages(params, function (err, images, gt, lt) {
-      if (err) return done(err);
-      res.json({
-        images: images,
-        gt: gt,
-        lt: lt
-      });
-    });
-  });
-
-  exp.core.get('/', function (req, res, done) {
-    var params = getParams(req);
-    findImages(params, function (err, images, gt, lt) {
-      if (err) return done(err);
-      res.render('image/image-list', {
-        images: images,
-        showName: site.showListName,
-        suffix: site.thumbnailSuffix,
-        gtUrl: gt ? utilp.makeUrl(('/'), { gt: gt }) : undefined,
-        ltUrl: lt ? utilp.makeUrl(('/'), { lt: lt }) : undefined
-      });
+exp.core.get('/api/images', function (req, res, done) {
+  var params = imagel.getParams(req);
+  imagel.findImages(params, function (err, images, gt, lt) {
+    if (err) return done(err);
+    res.json({
+      images: images,
+      gt: gt,
+      lt: lt
     });
   });
 });
 
-var getParams = exports.getParams = function (req) {
+exp.core.get('/', function (req, res, done) {
+  var params = imagel.getParams(req);
+  imagel.findImages(params, function (err, images, gt, lt) {
+    if (err) return done(err);
+    res.render('image/image-list', {
+      images: images,
+      showName: site.showListName,
+      suffix: site.thumbnailSuffix,
+      gtUrl: gt ? utilp.makeUrl(('/'), { gt: gt }) : undefined,
+      ltUrl: lt ? utilp.makeUrl(('/'), { lt: lt }) : undefined
+    });
+  });
+});
+
+imagel.getParams = function (req) {
   var params = {};
   params.lt = parseInt(req.query.lt) || 0;
   params.gt = params.lt ? 0 : parseInt(req.query.gt) || 0;
@@ -44,7 +43,7 @@ var getParams = exports.getParams = function (req) {
   return params;
 };
 
-var findImages = exports.findImages = function (params, done) {
+imagel.findImages = function (params, done) {
   var query = params.uid ? { uid: params.uid } : {};
   mongop.findPage(imageb.images, query, params.gt, params.lt, params.ps, filter, done);
 };

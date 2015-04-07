@@ -27,11 +27,6 @@ var error = exports = module.exports = function (ec /* error const */) {
   return err;
 };
 
-init.add(function () {
-  error.define('INVALID_DATA', '비정상적인 값이 입력되었습니다.');
-  error.define('INVALID_FORM', '*');
-});
-
 error.define = function (code, msg, field) {
   expect(error[code]).not.exist;
   var ec = error[code] = {
@@ -58,3 +53,6 @@ error.find = function (err, ec) {
   }
   return false;
 }
+
+error.define('INVALID_DATA', '비정상적인 값이 입력되었습니다.');
+error.define('INVALID_FORM', '*');

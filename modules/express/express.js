@@ -10,6 +10,8 @@ var error = require('../base/error');
 var config = require('../base/config');
 var exp = exports;
 
+exp.core = express.Router();
+
 init.add(function () {
   exp.app = express();
 
@@ -68,9 +70,11 @@ init.add(function () {
   // exp.after: redirect to login page 용
   // 테스트케이스에서 인스턴스가 기동한 후 핸들러를 추가하는 경우가 있어 core 를 도입.
 
-  exp.app.use(exp.before = express.Router());
-  exp.app.use(exp.core = express.Router());
-  exp.app.use(exp.after = express.Router());
+  if (exp.autoLoginHandler) {
+    exp.app.use(exp.autoLoginHandler);
+  }
+
+  exp.app.use(exp.core);
 
   exp.app.get('/api/hello', function (req, res, done) {
     res.json({
@@ -99,6 +103,10 @@ init.add(function () {
   }
 
   // error handler
+
+  if (exp.redirectToLoginHandler) {
+    exp.app.use(exp.redirectToLoginHandler);
+  }
 
   exp.app.use(function (_err, req, res, done) {
     var err = {

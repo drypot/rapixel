@@ -2,26 +2,25 @@ var init = require('../base/init');
 var error = require('../base/error');
 var exp = require('../express/express');
 var userb = require('../user/user-base');
+var userc = exports;
 
-init.add(function () {
-  exp.core.post('/api/users', function (req, res, done) {
-    var form = getForm(req);
-    createUser(form, function (err, user) {
-      if (err) return done(err);
-      res.json({
-        id: user._id
-      });
+exp.core.post('/api/users', function (req, res, done) {
+  var form = userc.getForm(req);
+  createUser(form, function (err, user) {
+    if (err) return done(err);
+    res.json({
+      id: user._id
     });
-  });
-
-  exp.core.get('/users/register', function (req, res, done) {
-    res.render('user/user-create');
   });
 });
 
-var emailx = exports.emailx = /^[a-z0-9-_+.]+@[a-z0-9-]+(\.[a-z0-9-]+)+$/i
+exp.core.get('/users/register', function (req, res, done) {
+  res.render('user/user-create');
+});
 
-var getForm = exports.getForm = function (req) {
+userc.emailx = /^[a-z0-9-_+.]+@[a-z0-9-]+(\.[a-z0-9-]+)+$/i
+
+userc.getForm = function (req) {
   var body = req.body;
   var form = {};
   form.name = String(body.name || '').trim();
@@ -32,10 +31,10 @@ var getForm = exports.getForm = function (req) {
   return form;
 }
 
-var createUser = exports.createUser = function (form, done) {
+function createUser(form, done) {
   form.home = form.name;
   form.homel = form.namel = form.name.toLowerCase();
-  checkForm(form, 0, function (err) {
+  userc.checkForm(form, 0, function (err) {
     if (err) return done(err);
     var now = new Date();
     var user = {
@@ -62,7 +61,7 @@ var createUser = exports.createUser = function (form, done) {
   });
 };
 
-var checkForm = exports.checkForm = function (form, id, done) {
+userc.checkForm = function (form, id, done) {
   var errors = [];
   var creating = id == 0;
 
@@ -78,10 +77,10 @@ var checkForm = exports.checkForm = function (form, id, done) {
     errors.push(error.HOME_RANGE);
   }
 
-  checkFormEmail(form, errors);
+  userc.checkFormEmail(form, errors);
 
   if (creating || form.password.length) {
-    checkFormPassword(form, errors);
+    userc.checkFormPassword(form, errors);
   }
 
   countUsersByName(form.namel, id, function (err, cnt) {
@@ -132,23 +131,20 @@ function countUsersByEmail(email, id, done) {
   userb.users.count(q, done);
 };
 
-var checkFormEmail = exports.checkFormEmail = function (form, errors) {
+userc.checkFormEmail = function (form, errors) {
   if (!form.email.length) {
     errors.push(error.EMAIL_EMPTY);
   } else if (form.email.length > 64 || form.email.length < 8) {
     errors.push(error.EMAIL_RANGE);
-  } else if (!emailx.test(form.email)) {
+  } else if (!userc.emailx.test(form.email)) {
     errors.push(error.EMAIL_PATTERN);
   }
 }
 
-var checkFormPassword = exports.checkFormPassword = function (form, errors) {
+userc.checkFormPassword = function (form, errors) {
   if (!form.password.length) {
     errors.push(error.PASSWORD_EMPTY);
   } else if (form.password.length > 32 || form.password.length < 4) {
     errors.push(error.PASSWORD_RANGE);
   }
 }
-
-
-

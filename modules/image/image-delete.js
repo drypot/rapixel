@@ -10,17 +10,15 @@ var userb = require('../user/user-base');
 var imageb = require('../image/image-base');
 var imageu = require('../image/image-update');
 
-init.add(function () {
-  exp.core.delete('/api/images/:id([0-9]+)', function (req, res, done) {
-    userb.checkUser(res, function (err, user) {
+exp.core.delete('/api/images/:id([0-9]+)', function (req, res, done) {
+  userb.checkUser(res, function (err, user) {
+    if (err) return done(err);
+    var id = parseInt(req.params.id) || 0;
+    imageu.checkUpdatable(id, user, function (err) {
       if (err) return done(err);
-      var id = parseInt(req.params.id) || 0;
-      imageu.checkUpdatable(id, user, function (err) {
+      delImage(id, function (err) {
         if (err) return done(err);
-        delImage(id, function (err) {
-          if (err) return done(err);
-          res.json({});
-        });
+        res.json({});
       });
     });
   });

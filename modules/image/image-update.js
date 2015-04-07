@@ -10,39 +10,38 @@ var userb = require('../user/user-base');
 var imageb = require('../image/image-base');
 var imagec = require('../image/image-create');
 var site = require('../image/image-site');
+var imageu = exports;
 
-init.add(function () {
-  exp.core.put('/api/images/:id([0-9]+)', upload.handler(function (req, res, done) {
-    userb.checkUser(res, function (err, user) {
+exp.core.put('/api/images/:id([0-9]+)', upload.handler(function (req, res, done) {
+  userb.checkUser(res, function (err, user) {
+    if (err) return done(err);
+    var id = parseInt(req.params.id) || 0;
+    var form = imagec.getForm(req);
+    imageu.checkUpdatable(id, user, function (err) {
       if (err) return done(err);
-      var id = parseInt(req.params.id) || 0;
-      var form = imagec.getForm(req);
-      checkUpdatable(id, user, function (err) {
+      updateImage(id, form, function (err) {
         if (err) return done(err);
-        updateImage(id, form, function (err) {
-          if (err) return done(err);
-          res.json({});
-          done();
-        });
+        res.json({});
+        done();
       });
     });
-  }));
+  });
+}));
 
-  exp.core.get('/images/:id([0-9]+)/update', function (req, res, done) {
-    userb.checkUser(res, function (err, user) {
+exp.core.get('/images/:id([0-9]+)/update', function (req, res, done) {
+  userb.checkUser(res, function (err, user) {
+    if (err) return done(err);
+    var id = parseInt(req.params.id) || 0;
+    imageu.checkUpdatable(id, user, function (err, image) {
       if (err) return done(err);
-      var id = parseInt(req.params.id) || 0;
-      checkUpdatable(id, user, function (err, image) {
-        if (err) return done(err);
-        res.render('image/image-update', {
-          image: image
-        });
+      res.render('image/image-update', {
+        image: image
       });
     });
   });
 });
 
-var checkUpdatable = exports.checkUpdatable = function (id, user, done) {
+imageu.checkUpdatable = function (id, user, done) {
   imageb.images.findOne({ _id: id }, function (err, image) {
     if (err) return done(err);
     if (!image) {
@@ -55,7 +54,7 @@ var checkUpdatable = exports.checkUpdatable = function (id, user, done) {
   });
 }
 
-var updateImage = exports.updateImage = function(id, form, done) {
+function updateImage(id, form, done) {
   var file = form.files[0];
   if (!file) {
     var fields = {};

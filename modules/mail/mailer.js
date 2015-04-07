@@ -2,6 +2,7 @@ var nodemailer = require("nodemailer");
 
 var init = require('../base/init');
 var config = require('../base/config');
+var mailer = exports;
 
 var transport;
 
@@ -19,7 +20,7 @@ init.add(function () {
   }
 });
 
-exports.send = function (opt, done) {
+mailer.send = function (opt, done) {
   if (transport) {
     return transport.sendMail(opt, done);
   }

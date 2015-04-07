@@ -8,42 +8,40 @@ var userb = require('../user/user-base');
 var imageb = require('../image/image-base');
 var site = require('../image/image-site');
 
-init.add(function () {
-  exp.core.get('/api/images/:id([0-9]+)', function (req, res, done) {
-    var id = parseInt(req.params.id) || 0;
-    incHit(id, req.query.hasOwnProperty('hit'), function (err) {
+exp.core.get('/api/images/:id([0-9]+)', function (req, res, done) {
+  var id = parseInt(req.params.id) || 0;
+  incHit(id, req.query.hasOwnProperty('hit'), function (err) {
+    if (err) return done(err);
+    findImage(id, function (err, image) {
       if (err) return done(err);
-      findImage(id, function (err, image) {
-        if (err) return done(err);
-        res.json(image);
+      res.json(image);
+    });
+  });
+});
+
+exp.core.get('/images/:id([0-9]+)', function (req, res, done) {
+  var id = parseInt(req.params.id) || 0;
+  incHit(id, true, function (err) {
+    if (err) return done(err);
+    findImage(id, function (err, image) {
+      if (err) return done(err);
+      var user = res.locals.user;
+      res.render('image/image-view', {
+        image: image,
+        svg: site.svg,
+        updatable: user && (image.user._id == user._id || user.admin),
+        imageView: true
       });
     });
   });
+});
 
-  exp.core.get('/images/:id([0-9]+)', function (req, res, done) {
-    var id = parseInt(req.params.id) || 0;
-    incHit(id, true, function (err) {
-      if (err) return done(err);
-      findImage(id, function (err, image) {
-        if (err) return done(err);
-        var user = res.locals.user;
-        res.render('image/image-view', {
-          image: image,
-          svg: site.svg,
-          updatable: user && (image.user._id == user._id || user.admin),
-          imageView: true
-        });
-      });
-    });
-  });
+exp.core.get('/photos/:id([0-9]+)', function (req, res, done) {
+  res.redirect('/images/' + req.params.id);
+});
 
-  exp.core.get('/photos/:id([0-9]+)', function (req, res, done) {
-    res.redirect('/images/' + req.params.id);
-  });
-
-  exp.core.get('/drawings/:id([0-9]+)', function (req, res, done) {
-    res.redirect('/images/' + req.params.id);
-  });
+exp.core.get('/drawings/:id([0-9]+)', function (req, res, done) {
+  res.redirect('/images/' + req.params.id);
 });
 
 function incHit(id, hit, done) {
