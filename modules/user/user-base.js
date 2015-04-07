@@ -139,7 +139,7 @@ userb.resetCache = function () {
   usersByHome = {};
 }
 
-// session
+// login
 
 exp.core.post('/api/users/login', function (req, res, done) {
   login(req, res, function (err, user) {

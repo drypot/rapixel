@@ -162,60 +162,21 @@ describe("accessing admin resource", function () {
   });
 });
 
-describe("identifying without auto login", function () {
-  it("given test session", function (done) {
-    local.newSession();
-    done();
+describe("auto login", function () {
+  it("given new (cookie clean) Agent",function () {
+    local.newAgent();
   });
-  it("should fail", function (done) {
+  it("access should fail", function (done) {
     local.get('/api/test/user').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       done();
     });
   });
-  it("given user session", function (done) {
-    userf.login('user1', done);
-  });
-  it("should success", function (done) {
-    local.get('/api/test/user').end(function (err, res) {
-      expect(err).not.exist;
-      expect(res.body.err).not.exist;
-      done();
-    });
-  });
-  it("given new session", function (done) {
-    local.post('/api/test/destroy-session').end(function (err, res) {
-      expect(err).not.exist;
-      expect(res.body.err).not.exist;
-      done();
-    });
-  });
-  it("should fail", function (done) {
-    local.get('/api/test/user').end(function (err, res) {
-      expect(err).not.exist;
-      expect(res.body.err).exist;
-      done();
-    });
-  });
-});
-
-describe("identifying with auto login", function () {
-  it("given new sesssion",function (done) {
-    local.newSession();
-    done();
-  });
-  it("should fail", function (done) {
-    local.get('/api/test/user').end(function (err, res) {
-      expect(err).not.exist;
-      expect(res.body.err).exist;
-      done();
-    });
-  });
-  it("given user session with auto login", function (done) {
+  it("given login with auto login", function (done) {
     userf.login('user1', true, done);
   });
-  it("should success", function (done) {
+  it("access should success", function (done) {
     local.get('/api/test/user').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
@@ -229,7 +190,7 @@ describe("identifying with auto login", function () {
       done();
     });
   });
-  it("should success", function (done) {
+  it("access should success", function (done) {
     local.get('/api/test/user').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
@@ -239,7 +200,7 @@ describe("identifying with auto login", function () {
   it("given logged out", function (done) {
     userf.logout(done);
   });
-  it("should fail", function (done) {
+  it("access should fail", function (done) {
     local.get('/api/test/user').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
@@ -248,30 +209,21 @@ describe("identifying with auto login", function () {
   });
 });
 
-describe("identifying with auto login with invalid email", function () {
-  it("given handler", function () {
-    exp.core.get('/api/test/cookies', function (req, res, done) {
-      res.json({
-        email: req.cookies.email,
-        password: req.cookies.password
-      });
-    });
+describe("auto login with invalid email", function () {
+  it("given new (cookie clean) Agent",function () {
+    local.newAgent();
   });
-  it("given new sesssion",function (done) {
-    local.newSession();
-    done();
-  });
-  it("should fail", function (done) {
+  it("access should fail", function (done) {
     local.get('/api/test/user').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       done();
     });
   });
-  it("given user session with auto login", function (done) {
+  it("given login with auto login", function (done) {
     userf.login('user1', true, done);
   });
-  it("should success", function (done) {
+  it("access should success", function (done) {
     local.get('/api/test/user').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
@@ -296,7 +248,7 @@ describe("identifying with auto login with invalid email", function () {
       done();
     });
   });
-  it("given session expired", function (done) {
+  it("given new session", function (done) {
     local.post('/api/test/destroy-session').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
@@ -310,7 +262,7 @@ describe("identifying with auto login with invalid email", function () {
       done();
     });
   });
-  it("cookie should not be filled", function (done) {
+  it("cookie should be destroied", function (done) {
     local.get('/api/test/cookies').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;

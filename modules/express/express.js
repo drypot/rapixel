@@ -92,20 +92,22 @@ init.add(function () {
     });
   });
 
-  if (config.dev) {
-    exp.app.get('/test/error', function (req, res, done) {
-      var err = new Error('Error Sample Page');
-      err.code = 999;
-      res.render('express/error', {
-        err: err
-      });
+  exp.app.get('/test/error', function (req, res, done) {
+    var err = new Error('Error Sample Page');
+    err.code = 999;
+    res.render('express/error', {
+      err: err
     });
+  });
 
-    exp.core.post('/api/test/destroy-session', function (req, res, done) {
-      req.session.destroy();
-      res.json({});
-    });
-  }
+  exp.core.post('/api/test/destroy-session', function (req, res, done) {
+    req.session.destroy();
+    res.json({});
+  });
+
+  exp.core.get('/api/test/cookies', function (req, res, done) {
+    res.json(req.cookies);
+  });
 
   // error handler
 

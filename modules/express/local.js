@@ -6,7 +6,7 @@ var config = require('../base/config');
 // 각 모듈별로 supertest 류의 라이브러리를 각자 생성해서 사용하면 세션 공유에 문제가 발생한다.
 // 세션을 별도 공용 모듈에서 유지해야한다.
 
-exports.newSession = function () {
+exports.newAgent = function () {
   request = require('superagent').agent();
 };
 
