@@ -142,7 +142,7 @@ userb.resetCache = function () {
 // session
 
 exp.core.post('/api/users/login', function (req, res, done) {
-  createSessionForm(req, res, function (err, user) {
+  login(req, res, function (err, user) {
     if (err) return done(err);
     res.json({
       user: {
@@ -168,7 +168,7 @@ exp.core.get('/api/users/login', function (req, res, done) {
 });
 
 exp.core.post('/api/users/logout', function (req, res, done) {
-  userb.deleteSession(req, res);
+  userb.logout(req, res);
   res.json({});
 });
 
@@ -177,7 +177,7 @@ exp.core.get('/users/login', function (req, res, done) {
 });
 
 exp.autoLogin = function (req, res, done) {
-  createSessionAuto(req, res, done);
+  autoLogin(req, res, done);
 };
 
 exp.redirectToLogin = function (err, req, res, done) {
@@ -188,7 +188,7 @@ exp.redirectToLogin = function (err, req, res, done) {
   }
 };
 
-function createSessionAuto(req, res, done) {
+function autoLogin(req, res, done) {
   if (req.session.uid) {
     userb.getCached(req.session.uid, function (err, user) {
       if (err) return req.session.regenerate(done);
@@ -212,7 +212,7 @@ function createSessionAuto(req, res, done) {
   });
 }
 
-function createSessionForm(req, res, done) {
+function login(req, res, done) {
   var form = {};
   form.email = String(req.body.email || '').trim();
   form.password = String(req.body.password || '').trim();
@@ -264,7 +264,7 @@ function findUser(email, password, done) {
   });
 };
 
-userb.deleteSession = function (req, res, done) {
+userb.logout = function (req, res, done) {
   res.clearCookie('email');
   res.clearCookie('password');
   req.session.destroy();

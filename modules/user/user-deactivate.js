@@ -9,7 +9,7 @@ exp.core.delete('/api/users/:id([0-9]+)', function (req, res, done) {
     var id = parseInt(req.params.id) || 0;
     deactivateUser(id, user, function (err) {
       if (err) return done(err);
-      userb.deleteSession(req, res);
+      userb.logout(req, res);
       res.json({});
     });
   });
