@@ -13,15 +13,16 @@ error.define('IMAGE_NO_FILE', '아미지 파일이 첨부되지 않았습니다.
 error.define('IMAGE_SIZE', '이미지의 가로, 세로 크기가 너무 작습니다.', 'files');
 error.define('IMAGE_TYPE', '인식할 수 없는 파일입니다.', 'files');
 
+var imageId;
+
 init.add(function (done) {
   imageb.images = mongop.db.collection('images');
   imageb.images.ensureIndex({ uid: 1, _id: -1 }, done);
 });
 
-var imageId;
-
 init.add(function (done) {
   mongop.getLastId(imageb.images, function (err, id) {
+    if (err) return done(err);
     imageId = id;
     console.log('image-base: image id = ' + imageId);
     done();
