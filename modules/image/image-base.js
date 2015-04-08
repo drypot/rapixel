@@ -21,14 +21,8 @@ init.add(function (done) {
 var imageId;
 
 init.add(function (done) {
-  var opt = {
-    fields: { _id: 1 },
-    sort: { _id: -1 },
-    limit: 1
-  };
-  imageb.images.find({}, opt).nextObject(function (err, obj) {
-    if (err) return done(err);
-    imageId = obj ? obj._id : 0;
+  mongop.getLastId(imageb.images, function (err, id) {
+    imageId = id;
     console.log('image-base: image id = ' + imageId);
     done();
   });

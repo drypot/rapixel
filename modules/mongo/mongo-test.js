@@ -110,16 +110,30 @@ describe('paging', function () {
   });
 });
 
-// describe('getLastId', function () {
-//   var col;
-//   if("given ")
-//   it('given 10 records', function (done) {
-//     col = mongop.db.collection('testpaging');
-//     var list = [];
-//     for (var i = 0; i < 10; i++) {
-//       list.push({ _id: i + 1});
-//     };
-//     col.insert(list, done);    
-//   });
-
-// });
+describe('getLastId', function () {
+  var col;
+  it('given empty collection', function () {
+    col = mongop.db.collection('testlastid');
+  });
+  it('should success', function (done) {
+    mongop.getLastId(col, function (err, id) {
+      expect(err).not.exist;
+      expect(id).equal(0);
+      done();
+    });
+  });
+  it('given 10 records', function (done) {
+    var list = [];
+    for (var i = 0; i < 10; i++) {
+      list.push({ _id: i + 1});
+    };
+    col.insert(list, done);    
+  });
+  it('should success', function (done) {
+    mongop.getLastId(col, function (err, id) {
+      expect(err).not.exist;
+      expect(id).equal(10);
+      done();
+    });
+  });
+});

@@ -58,14 +58,8 @@ init.add(function (done) {
 var userId;
 
 init.add(function (done) {
-  var opt = {
-    fields: { _id: 1 },
-    sort: { _id: -1 },
-    limit: 1
-  };
-  userb.users.find({}, opt).nextObject(function (err, obj) {
-    if (err) return done(err);
-    userId = obj ? obj._id : 0;
+  mongop.getLastId(userb.users, function (err, id) {
+    userId = id;
     console.log('user-base: user id = ' + userId);
     done();
   });
