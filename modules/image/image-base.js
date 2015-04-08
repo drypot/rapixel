@@ -13,11 +13,9 @@ error.define('IMAGE_NO_FILE', '아미지 파일이 첨부되지 않았습니다.
 error.define('IMAGE_SIZE', '이미지의 가로, 세로 크기가 너무 작습니다.', 'files');
 error.define('IMAGE_TYPE', '인식할 수 없는 파일입니다.', 'files');
 
-var images;
-
 init.add(function (done) {
-  images = imageb.images = mongop.db.collection("images");
-  images.ensureIndex({ uid: 1, _id: -1 }, done);
+  imageb.images = mongop.db.collection("imageb.images");
+  imageb.images.ensureIndex({ uid: 1, _id: -1 }, done);
 });
 
 var imageId;
@@ -28,7 +26,7 @@ init.add(function (done) {
     sort: { _id: -1 },
     limit: 1
   };
-  images.find({}, opt).nextObject(function (err, obj) {
+  imageb.images.find({}, opt).nextObject(function (err, obj) {
     if (err) return done(err);
     imageId = obj ? obj._id : 0;
     console.log('image-base: image id = ' + imageId);
@@ -50,9 +48,15 @@ imageb.newId = function () {
 // DB 없이 파일명으로 검색에 편리.
 
 init.add(function (done) {
-  var imageDir = imageb.imageDir = config.uploadDir + '/public/images'
-
+  var imageDir = config.uploadDir + '/public/images';
+  
   fsp.makeDirs(imageDir, done);
+  
+  if (config.dev) {
+    imageb.emptyImageDir = function (done) {
+      fsp.emptyDir(imageDir, done);
+    }
+  }
 
   imageb.ImagePath = function (id, format) {
     this.id = id;
@@ -66,10 +70,8 @@ init.add(function (done) {
     return this.dir + '/' + this.id + '-' + width + '.jpg';
   }
 
-  var imageDirUrl = config.uploadSite + '/images';
-
   imageb.getUrlBase = function (id) {
-    return imageDirUrl + '/' + fsp.makeDeepPath(id, 3)
+    return config.uploadSite + '/images/' + fsp.makeDeepPath(id, 3)
   }
 });
 

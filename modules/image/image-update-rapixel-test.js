@@ -26,7 +26,7 @@ before(function (done) {
 });
 
 before(function (done) {
-  fsp.emptyDir(imageb.imageDir, done);
+  imageb.emptyImageDir(done);
 });
 
 describe("updating with image", function () {

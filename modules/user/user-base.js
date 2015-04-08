@@ -42,15 +42,13 @@ error.define('RESET_TIMEOUT', '비밀번호 초기화 토큰 유효시간이 지
 
 // users collection
 
-var users;
-
 init.add(function (done) {
-  users = userb.users = mongop.db.collection("users");
-  users.ensureIndex({ email: 1 }, function (err) {
+  userb.users = mongop.db.collection("users");
+  userb.users.ensureIndex({ email: 1 }, function (err) {
     if (err) return done(err);
-    users.ensureIndex({ namel: 1 }, function (err) {
+    userb.users.ensureIndex({ namel: 1 }, function (err) {
       if (err) return done(err);
-      users.ensureIndex({ homel: 1 }, done);
+      userb.users.ensureIndex({ homel: 1 }, done);
     });
   });
 });
@@ -65,7 +63,7 @@ init.add(function (done) {
     sort: { _id: -1 },
     limit: 1
   };
-  users.find({}, opt).nextObject(function (err, obj) {
+  userb.users.find({}, opt).nextObject(function (err, obj) {
     if (err) return done(err);
     userId = obj ? obj._id : 0;
     console.log('user-base: user id = ' + userId);
@@ -102,7 +100,7 @@ userb.getCached = function (id, done) {
   if (user) {
     return done(null, user);
   }
-  users.findOne({ _id: id }, function (err, user) {
+  userb.users.findOne({ _id: id }, function (err, user) {
     if (err) return done(err);
     if (!user) return done(error(error.USER_NOT_FOUND));
     cache(user);
@@ -115,7 +113,7 @@ userb.getCachedByHome = function (homel, done) {
   if (user) {
     return done(null, user);
   }
-  users.findOne({ homel: homel }, function (err, user) {
+  userb.users.findOne({ homel: homel }, function (err, user) {
     if (err) return done(err);
     if (!user) {
       // 사용자 프로필 URL 검색에 주로 사용되므로 error 생성은 패스한다.
@@ -235,7 +233,7 @@ function createSession(req, res, user, done) {
   req.session.regenerate(function (err) {
     if (err) return done(err);
     var now = new Date();
-    users.update({_id: user._id}, {$set: {adate: now}}, function (err) {
+    userb.users.update({_id: user._id}, {$set: {adate: now}}, function (err) {
       if (err) return done(err);
       user.adate = now;
       req.session.uid = user._id;
@@ -246,7 +244,7 @@ function createSession(req, res, user, done) {
 }
 
 function findUser(email, password, done) {
-  users.findOne({ email: email }, function (err, user) {
+  userb.users.findOne({ email: email }, function (err, user) {
     if (err) return done(err);
     if (!user) {
       return done(error(error.EMAIL_NOT_FOUND));
