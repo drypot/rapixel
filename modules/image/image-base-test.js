@@ -11,7 +11,7 @@ before(function (done) {
   init.run(done);
 });
 
-describe("images collection", function () {
+describe("images", function () {
   it("should exist", function () {
     expect(imageb.images).exist;
   });
@@ -19,9 +19,7 @@ describe("images collection", function () {
 
 describe("newId", function () {
   it("should success", function () {
-    var a = imageb.newId();
-    var b = imageb.newId();
-    expect(b).equal(a + 1);
+    expect(imageb.newId() < imageb.newId()).true;
   });
 });
 

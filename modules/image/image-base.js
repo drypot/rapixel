@@ -20,6 +20,8 @@ init.add(function (done) {
   images.ensureIndex({ uid: 1, _id: -1 }, done);
 });
 
+var imageId;
+
 init.add(function (done) {
   var opt = {
     fields: { _id: 1 },
@@ -28,14 +30,15 @@ init.add(function (done) {
   };
   images.find({}, opt).nextObject(function (err, obj) {
     if (err) return done(err);
-    var imageId = obj ? obj._id : 0;
-    imageb.newId = function () {
-      return ++imageId;
-    };
+    imageId = obj ? obj._id : 0;
     console.log('image-base: image id = ' + imageId);
     done();
   });
 });
+
+imageb.newId = function () {
+  return ++imageId;
+};
 
 // 원본과 버젼이 같은 디렉토리에 저장된다는 것을 전제로 작명하였다.
 // 원본과 버젼이 같은 디렉토리에 있는 것이 좋을 것 같다.

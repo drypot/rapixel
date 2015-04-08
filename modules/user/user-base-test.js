@@ -32,13 +32,15 @@ before(function (done) {
   init.run(done);
 });
 
+describe("users", function () {
+  it("should exist", function () {
+    expect(userb.users).exist;
+  });
+});
+
 describe("newId", function () {
   it("should success", function () {
-    var id1 = userb.newId();
-    var id1 = userb.newId();
-    var id2 = userb.newId();
-    var id2 = userb.newId();
-    expect(id1 < id2).true;
+    expect(userb.newId() < userb.newId()).true;
   });
 });
 
