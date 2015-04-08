@@ -29,12 +29,12 @@ before(function (done) {
   imageb.emptyImageDir(done);
 });
 
-describe("posting one image", function () {
+describe('posting one image', function () {
   var _id;
   before(function (done) {
     imageb.images.remove(done);
   });
-  it("should success", function (done) {
+  it('should success', function (done) {
     this.timeout(30000);
     local.post('/api/images').field('comment', 'image1').attach('files', 'samples/1440x810-169.jpg').end(function (err, res) {
       expect(err).not.exist;
@@ -45,7 +45,7 @@ describe("posting one image", function () {
       done();
     });
   });
-  it("image should exist", function (done) {
+  it('image should exist', function (done) {
     imageb.images.findOne({ _id: _id }, function (err, image) {
       expect(err).not.exist;
       expect(image._id).equal(_id);
@@ -66,12 +66,12 @@ describe("posting one image", function () {
   });
 });
 
-describe("posting max images", function () {
+describe('posting max images', function () {
   var _ids;
   before(function (done) {
     imageb.images.remove(done);
   }); 
-  it("should success", function (done) {
+  it('should success', function (done) {
     this.timeout(30000);
     var post = local.post('/api/images').field('comment', 'max images');
     for (var i = 0; i < config.ticketMax; i++) {
@@ -86,7 +86,7 @@ describe("posting max images", function () {
       done();
     });
   });
-  it("first versions should exist", function (done) {
+  it('first versions should exist', function (done) {
     var _id = _ids[0];
     imageb.images.findOne({ _id: _id }, function (err, image) {
       expect(err).not.exist;
@@ -104,7 +104,7 @@ describe("posting max images", function () {
       done();
     });
   });
-  it("third versions should exist", function (done) {
+  it('third versions should exist', function (done) {
     var _id = _ids[2];
     imageb.images.findOne({ _id: _id }, function (err, image) {
       expect(err).not.exist;
@@ -122,7 +122,7 @@ describe("posting max images", function () {
       done();
     });
   });
-  it("posting one more should fail", function (done) {
+  it('posting one more should fail', function (done) {
     this.timeout(30000);
     local.post('/api/images').attach('files', 'samples/1136x640-169.jpg').end(function (err, res) {
       expect(err).not.exist;
@@ -134,12 +134,12 @@ describe("posting max images", function () {
   });
 });
 
-describe("posting small image", function () {
+describe('posting small image', function () {
   var _files;
   before(function (done) {
     imageb.images.remove(done);
   }); 
-  it("should fail", function (done) {
+  it('should fail', function (done) {
     this.timeout(30000);
     local.post('/api/images').attach('files', 'samples/640x360-169.jpg').end(function (err, res) {
       expect(err).not.exist;

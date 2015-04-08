@@ -1,4 +1,4 @@
-var nodemailer = require("nodemailer");
+var nodemailer = require('nodemailer');
 
 var init = require('../base/init');
 var config = require('../base/config');

@@ -14,8 +14,8 @@ before(function () {
   error.define('PASSWORD_EMPTY', '비밀번호를 입력해 주십시오.', 'password');
 });
 
-describe("error(error)", function () {
-  it("should success", function () {
+describe('error(error)', function () {
+  it('should success', function () {
     var err = error(error.INVALID_DATA);
     expect(err.code).equal(error.INVALID_DATA.code);
     expect(err.message).equal(error.INVALID_DATA.message);
@@ -23,8 +23,8 @@ describe("error(error)", function () {
   });
 });
 
-describe("defining duplicated", function () {
-  it("should fail", function (done) {
+describe('defining duplicated', function () {
+  it('should fail', function (done) {
     expect(function() {
       error.define('NAME_DUPE', '이미 등록되어 있는 이름입니다.', 'name');
     }).throw();
@@ -32,8 +32,8 @@ describe("defining duplicated", function () {
   });  
 });
 
-describe("error(field errors)", function () {
-  it("should success", function () {
+describe('error(field errors)', function () {
+  it('should success', function () {
     var errors = [];
     errors.push(error.NAME_DUPE);
     errors.push(error.PASSWORD_EMPTY);
@@ -44,16 +44,16 @@ describe("error(field errors)", function () {
   })
 });
 
-describe("error(field error)", function () {
-  it("should success", function () {
+describe('error(field error)', function () {
+  it('should success', function () {
     var err = error(error.NAME_DUPE);
     expect(err.code).equal(error.INVALID_FORM.code);
     expect(err.errors[0]).eql(error.NAME_DUPE);
   })
 });
 
-describe("error(unknown)", function () {
-  it("should success", function () {
+describe('error(unknown)', function () {
+  it('should success', function () {
     var obj = { opt: 'extra' };
     var err = error(obj);
     expect(err).not.have.property('code');

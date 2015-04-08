@@ -1,36 +1,36 @@
 doctype html
 html
   head
-    meta(charset="utf-8")
+    meta(charset='utf-8')
 
     block title
 
-    meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    meta(name="description", content=appDesc)
-    meta(name="author", content="")
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(name='description', content=appDesc)
+    meta(name='author', content='')
 
-    link(rel="icon", type="image/png", href="/modules/favicon/" + appType + ".png")
+    link(rel='icon', type='image/png', href='/modules/favicon/' + appType + '.png')
 
-    link(rel="stylesheet", href="/modules/bower/bootstrap/dist/css/bootstrap.min.css")
-    link(rel="stylesheet", href="/modules/bower/bootstrap/dist/css/bootstrap-theme.min.css")
-    link(rel="stylesheet", href="/modules/css/base.css")
-    link(rel="stylesheet", href="/modules/css/" + appType + ".css")
+    link(rel='stylesheet', href='/modules/bower/bootstrap/dist/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/modules/bower/bootstrap/dist/css/bootstrap-theme.min.css')
+    link(rel='stylesheet', href='/modules/css/base.css')
+    link(rel='stylesheet', href='/modules/css/' + appType + '.css')
 
     //-//if lt IE 9
-    //-  script(src="/modules/bower/html5shiv.js")
-    //-  script(src="/modules/bower/respond.min.js")
+    //-  script(src='/modules/bower/html5shiv.js')
+    //-  script(src='/modules/bower/respond.min.js')
 
-    script(src="/modules/bower/json2/json2.js")
-    script(src="/modules/bower/jquery/dist/jquery.min.js")
-    script(src="/modules/bower/bootstrap/dist/js/bootstrap.min.js")
+    script(src='/modules/bower/json2/json2.js')
+    script(src='/modules/bower/jquery/dist/jquery.min.js')
+    script(src='/modules/bower/bootstrap/dist/js/bootstrap.min.js')
     
     script.
       window.appType = '!{appType}';
       window.user = !{locals.user ? JSON.stringify({ id: user._id, name: user.name }) : 'undefined'};
 
-    script(src="/modules/js/base.js")
-    script(src="/modules/js/user.js")
-    script(src="/modules/js/image.js")
+    script(src='/modules/js/base.js')
+    script(src='/modules/js/user.js')
+    script(src='/modules/js/image.js')
 
   body
 
@@ -38,10 +38,10 @@ html
 
     .section.page-footer
       ul.list-inline
-        li: a(href="/company") Company
-        li: a(href="/services") Services
-        li: a(href="/privacy") Privacy
-        li: a(href="/help") Help
+        li: a(href='/company') Company
+        li: a(href='/services') Services
+        li: a(href='/privacy') Privacy
+        li: a(href='/help') Help
       .home
         a(href='/') #{appName}
 
@@ -49,9 +49,9 @@ html
       .modal-dialog
         .modal-content
           .modal-header
-            button.close(type="button", data-dismiss="modal", aria-hidden="true") ×
+            button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
             h4.modal-title
           .modal-body
           .modal-footer
-            button.btn.btn-default(data-dismiss="modal") Close
+            button.btn.btn-default(data-dismiss='modal') Close
     

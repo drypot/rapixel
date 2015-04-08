@@ -13,7 +13,7 @@ var userp = exports;
 var resets;
 
 init.add(function (done) {
-  resets = exports.resets = mongop.db.collection("resets");
+  resets = exports.resets = mongop.db.collection('resets');
   resets.ensureIndex({ email: 1 }, done);
 });
 

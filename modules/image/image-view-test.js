@@ -22,11 +22,11 @@ before(function (done) {
   userf.login('user1', done);
 });
 
-describe("getting", function () {
+describe('getting', function () {
   var _f1 = 'samples/3840x2160-169.jpg';
   var _id;
   var _files;
-  it("given image", function (done) {
+  it('given image', function (done) {
     this.timeout(30000);
     var post = local.post('/api/images')
       .field('comment', 'image1')
@@ -40,7 +40,7 @@ describe("getting", function () {
       done();
     });
   });
-  it("should success", function (done) {
+  it('should success', function (done) {
     local.get('/api/images/' + _id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
@@ -48,7 +48,7 @@ describe("getting", function () {
       done();
     });
   });
-  it("hit should success", function (done) {
+  it('hit should success', function (done) {
     local.get('/api/images/' + _id + '?hit').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;

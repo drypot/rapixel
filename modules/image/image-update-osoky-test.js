@@ -29,9 +29,9 @@ before(function (done) {
   imageb.emptyImageDir(done);
 });
 
-describe("updating with image", function () {
+describe('updating with image', function () {
   var _id;
-  it("given post", function (done) {
+  it('given post', function (done) {
     this.timeout(30000);
     local.post('/api/images').field('comment', 'image1').attach('files', 'samples/1280x720-169.jpg').end(function (err, res) {
       expect(err).not.exist;
@@ -42,7 +42,7 @@ describe("updating with image", function () {
       done();
     });
   });
-  it("can be checked", function (done) {
+  it('can be checked', function (done) {
     imageb.images.findOne({ _id: _id }, function (err, image) {
       expect(err).not.exist;
       expect(image).exist;
@@ -59,7 +59,7 @@ describe("updating with image", function () {
       done();
     });
   });
-  it("should success", function (done) {
+  it('should success', function (done) {
     this.timeout(30000);
     local.put('/api/images/' + _id).field('comment', 'image2').attach('files', 'samples/1136x640-169.jpg').end(function (err, res) {
       expect(err).not.exist;
@@ -67,7 +67,7 @@ describe("updating with image", function () {
       done();
     });
   });
-  it("can be checked", function (done) {
+  it('can be checked', function (done) {
     imageb.images.findOne({ _id: _id }, function (err, image) {
       expect(err).not.exist;
       expect(image).exist;
@@ -85,16 +85,16 @@ describe("updating with image", function () {
   });
 });
 
-describe("updating with small image", function () {
+describe('updating with small image', function () {
   var _id;
-  it("given post", function (done) {
+  it('given post', function (done) {
     var form = {
       _id: _id = imageb.getNewId(),
       uid: userf.user1._id
     };
     imageb.images.insert(form, done);
   });
-  it("should fail", function (done) {
+  it('should fail', function (done) {
     local.put('/api/images/' + _id).attach('files', 'samples/640x360-169.jpg').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;

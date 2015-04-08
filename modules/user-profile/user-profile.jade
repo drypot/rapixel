@@ -17,7 +17,7 @@ block content
   .section
     if !gtUrl
       #profile-text.sub-section.box
-        | !{jade.escape(tuser.profile).replace(/\n/g, "<br>")}
+        | !{jade.escape(tuser.profile).replace(/\n/g, '<br>')}
 
       if updatable
         .sub-section.box.top-links

@@ -28,14 +28,14 @@ before(function (done) {
 var _f1 = 'samples/3840x2160-169.jpg';
 var _id;
 
-describe("deleting", function () {
+describe('deleting', function () {
   before(function (done) {
     imageb.images.remove(done);
   });
-  it("given user1 login", function (done) {
+  it('given user1 login', function (done) {
     userf.login('user1', done);
   });
-  it("given post", function (done) {
+  it('given post', function (done) {
     this.timeout(30000);
     local.post('/api/images').field('comment', 'image1').attach('files', _f1).end(function (err, res) {
       expect(err).not.exist;
@@ -45,14 +45,14 @@ describe("deleting", function () {
       done();
     });
   });
-  it("should success", function (done) {
+  it('should success', function (done) {
     local.del('/api/images/' + _id, function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
     });
   });
-  it("can be checked", function (done) {
+  it('can be checked', function (done) {
     expect(fs.existsSync(new imageb.ImagePath(_id).getVersion(3840))).false;
     imageb.images.findOne({ _id: _id }, function (err, image) {
       expect(err).not.exist;
@@ -62,14 +62,14 @@ describe("deleting", function () {
   });
 });
 
-describe("deleting by admin", function () {
+describe('deleting by admin', function () {
   before(function (done) {
     imageb.images.remove(done);
   });
-  it("given user1 login", function (done) {
+  it('given user1 login', function (done) {
     userf.login('user1', done);
   });
-  it("given post", function (done) {
+  it('given post', function (done) {
     this.timeout(30000);
     local.post('/api/images').field('comment', 'image1').attach('files', _f1).end(function (err, res) {
       expect(err).not.exist;
@@ -79,17 +79,17 @@ describe("deleting by admin", function () {
       done();
     });
   });
-  it("given admin login", function (done) {
+  it('given admin login', function (done) {
     userf.login('admin', done);
   });
-  it("should success", function (done) {
+  it('should success', function (done) {
     local.del('/api/images/' + _id, function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
     });
   });
-  it("can be checked", function (done) {
+  it('can be checked', function (done) {
     expect(fs.existsSync(new imageb.ImagePath(_id).getVersion(3840))).false;
     imageb.images.findOne({ _id: _id }, function (err, image) {
       expect(err).not.exist;
@@ -99,14 +99,14 @@ describe("deleting by admin", function () {
   });
 });
 
-describe("deleting other's", function () {
+describe('deleting other\'s', function () {
   before(function (done) {
     imageb.images.remove(done);
   });
-  it("given user1 login", function (done) {
+  it('given user1 login', function (done) {
     userf.login('user1', done);
   });
-  it("given post", function (done) {
+  it('given post', function (done) {
     this.timeout(30000);
     local.post('/api/images').field('comment', 'image1').attach('files', _f1).end(function (err, res) {
       expect(err).not.exist;
@@ -116,10 +116,10 @@ describe("deleting other's", function () {
       done();
     });
   });
- it("given user2 login", function (done) {
+ it('given user2 login', function (done) {
     userf.login('user2', done);
   });
-  it("should fail", function (done) {
+  it('should fail', function (done) {
     local.del('/api/images/' + _id, function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
@@ -127,7 +127,7 @@ describe("deleting other's", function () {
       done();
     });
   });
-  it("can be checked", function (done) {
+  it('can be checked', function (done) {
     expect(fs.existsSync(new imageb.ImagePath(_id).getVersion(3840))).true;
     imageb.images.findOne({ _id: _id }, function (err, image) {
       expect(err).not.exist;

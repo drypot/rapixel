@@ -14,7 +14,7 @@ error.define('IMAGE_SIZE', '이미지의 가로, 세로 크기가 너무 작습�
 error.define('IMAGE_TYPE', '인식할 수 없는 파일입니다.', 'files');
 
 init.add(function (done) {
-  imageb.images = mongop.db.collection("imageb.images");
+  imageb.images = mongop.db.collection('images');
   imageb.images.ensureIndex({ uid: 1, _id: -1 }, done);
 });
 

@@ -16,17 +16,17 @@ before(function (done) {
   init.run(done);
 });
 
-describe("emailx test", function () {
-  it("should success", function () {
-    expect(userc.emailx.test("abc.mail.com")).false;
-    expect(userc.emailx.test("abc*xyz@mail.com")).false;
-    expect(userc.emailx.test("-a-b-c_d-e-f@mail.com")).true;
-    expect(userc.emailx.test("develop.bj@mail.com")).true;
+describe('emailx test', function () {
+  it('should success', function () {
+    expect(userc.emailx.test('abc.mail.com')).false;
+    expect(userc.emailx.test('abc*xyz@mail.com')).false;
+    expect(userc.emailx.test('-a-b-c_d-e-f@mail.com')).true;
+    expect(userc.emailx.test('develop.bj@mail.com')).true;
   });
 });
 
-describe("getNewId", function () {
-  it("should work", function () {
+describe('getNewId', function () {
+  it('should work', function () {
     var id1 = userb.getNewId();
     var id1 = userb.getNewId();
     var id2 = userb.getNewId();
@@ -35,9 +35,9 @@ describe("getNewId", function () {
   });
 });
 
-describe("creating user", function () {
+describe('creating user', function () {
   var _id;
-  it("should success", function (done) {
+  it('should success', function (done) {
     var form = { name: 'Name', email: 'name@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
       expect(res.body.err).not.exist;
@@ -45,7 +45,7 @@ describe("creating user", function () {
       done();
     });
   });
-  it("can be checked", function (done) {
+  it('can be checked', function (done) {
     userb.users.findOne({ _id: _id }, function (err, user) {
       expect(err).not.exist;
       expect(user.name).equal('Name');
@@ -60,17 +60,17 @@ describe("creating user", function () {
   });
 });
 
-describe("name check", function () {
+describe('name check', function () {
   var _id;
   before(function (done) {
     userb.users.remove(done);
   });
-  it("given Name1", function (done) {
+  it('given Name1', function (done) {
     // 정규 create api 로는 home 이름을 세팅할 수 없기 때문에 디비에 직접 넣는다.
     var user = { _id: userb.getNewId(), name: 'Name1', namel: 'name1', home: 'Home1', homel: 'home1', email: 'name1@mail.com' };
     userb.users.insert(user, done);
   });
-  it("duped NAME1 should fail", function (done) {
+  it('duped NAME1 should fail', function (done) {
     var form = { name: 'NAME1', email: 'mail1@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
       expect(res.body.err).exist;
@@ -78,7 +78,7 @@ describe("name check", function () {
       done();
     });
   });
-  it("duped HOME1 should fail", function (done) {
+  it('duped HOME1 should fail', function (done) {
     var form = { name: 'HOME1', email: 'mail2@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
       expect(res.body.err).exist;
@@ -86,7 +86,7 @@ describe("name check", function () {
       done();
     });
   });
-  it("length 2 name should success", function (done) {
+  it('length 2 name should success', function (done) {
     var form = { name: '12', email: 'mail3@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
@@ -94,7 +94,7 @@ describe("name check", function () {
       done();
     });
   });
-  it("length 32 name should success", function (done) {
+  it('length 32 name should success', function (done) {
     var form = { name: '12345678901234567890123456789012', email: 'mail4@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
@@ -102,7 +102,7 @@ describe("name check", function () {
       done();
     });
   });
-  it("empty name should fail", function (done) {
+  it('empty name should fail', function (done) {
     var form = { name: '', email: 'mail5@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
@@ -110,7 +110,7 @@ describe("name check", function () {
       done();
     });
   });
-  it("length 1 name should fail", function (done) {
+  it('length 1 name should fail', function (done) {
     var form = { name: 'a', email: 'mail6@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
@@ -119,7 +119,7 @@ describe("name check", function () {
       done();
     });
   });
-  it("long name should fail", function (done) {
+  it('long name should fail', function (done) {
     var form = { name: '123456789012345678901234567890123', email: 'mail7@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
@@ -130,18 +130,18 @@ describe("name check", function () {
   });
 });
 
-describe("email check", function () {
+describe('email check', function () {
   before(function (done) {
     userb.users.remove(done);
   });
-  it("given mail1@mail.com", function (done) {
+  it('given mail1@mail.com', function (done) {
     var form = { name: 'name1', email: 'mail1@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
       expect(res.body.err).not.exist;
       done();
     });
   });
-  it("duped mail1@mail.com should fail", function (done) {
+  it('duped mail1@mail.com should fail', function (done) {
     var form = { name: 'name2', email: 'mail1@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
@@ -150,7 +150,7 @@ describe("email check", function () {
       done();
     });
   });
-  it("different case should success", function (done) {
+  it('different case should success', function (done) {
     var form = { name: 'name3', email: 'Mail1@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
@@ -158,7 +158,7 @@ describe("email check", function () {
       done();
     });
   });
-  it("invalid email should fail", function (done) {
+  it('invalid email should fail', function (done) {
     var form = { name: 'name4', email: 'abc.mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
@@ -167,7 +167,7 @@ describe("email check", function () {
       done();
     });
   });
-  it("invalid email should fail", function (done) {
+  it('invalid email should fail', function (done) {
     var form = { name: 'name5', email: 'abc*xyz@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
@@ -176,7 +176,7 @@ describe("email check", function () {
       done();
     });
   });
-  it("dash should success", function (done) {
+  it('dash should success', function (done) {
     var form = { name: 'name6', email: '-a-b-c_d-e-f@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
@@ -184,7 +184,7 @@ describe("email check", function () {
       done();
     });
   });
-  it("+ should success", function (done) {
+  it('+ should success', function (done) {
     var form = { name: 'name7', email: 'abc+xyz@mail.com', password: '1234' };
     local.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
@@ -194,12 +194,12 @@ describe("email check", function () {
   });
 });
 
-describe("password check", function () {
+describe('password check', function () {
   var _id;
   before(function (done) {
     userb.users.remove(done);
   });
-  it("short password should fail", function (done) {
+  it('short password should fail', function (done) {
     var form = { name: 'name1', email: 'name1@mail.com', password: '123' };
     local.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
@@ -208,7 +208,7 @@ describe("password check", function () {
       done();
     });
   });
-  it("long password should fail", function (done) {
+  it('long password should fail', function (done) {
     var form = { name: 'name2', email: 'name2@mail.com', password: '123456789012345678901234567890123' };
     local.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
@@ -217,7 +217,7 @@ describe("password check", function () {
       done();
     });
   });
-  it("lenth 32 password should success", function (done) {
+  it('lenth 32 password should success', function (done) {
     var form = { name: 'name3', email: 'name3@mail.com', password: '12345678901234567890123456789012' };
     local.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;

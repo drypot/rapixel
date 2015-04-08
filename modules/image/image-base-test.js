@@ -11,20 +11,20 @@ before(function (done) {
   init.run(done);
 });
 
-describe("images", function () {
-  it("should exist", function () {
+describe('images', function () {
+  it('should exist', function () {
     expect(imageb.images).exist;
   });
 });
 
-describe("getNewId", function () {
-  it("should success", function () {
+describe('getNewId', function () {
+  it('should success', function () {
     expect(imageb.getNewId() < imageb.getNewId()).true;
   });
 });
 
-describe("ImagePath", function () {
-  it("should success", function () {
+describe('ImagePath', function () {
+  it('should success', function () {
     var dir = new imageb.ImagePath(1, 'jpeg');
     expect(dir.dir).equals('upload/rapixel-test/public/images/0/0/1');
     expect(dir.original).equals('upload/rapixel-test/public/images/0/0/1/1-org.jpeg');
@@ -32,26 +32,26 @@ describe("ImagePath", function () {
   });
 });
 
-describe("getUrlBase", function () {
-  it("should success", function () {
+describe('getUrlBase', function () {
+  it('should success', function () {
     expect(imageb.getUrlBase(1)).equals('http://file.rapixel.local:8080/images/0/0/1');
   });
 });
 
-describe("identify", function () {
-  it("invalid path should fail", function (done) {
+describe('identify', function () {
+  it('invalid path should fail', function (done) {
     imageb.identify('xxxx', function (err, meta) {
       expect(err).exist;
       done();
     })
   });
-  it("non image should fail", function (done) {
+  it('non image should fail', function (done) {
     imageb.identify('README.md', function (err, meta) {
       expect(err).exist;
       done();
     })
   });
-  it("jpeg should success", function (done) {
+  it('jpeg should success', function (done) {
     imageb.identify('samples/5120x2880-169.jpg', function (err, meta) {
       expect(err).not.exist;
       expect(meta.format).equal('jpeg');
@@ -60,7 +60,7 @@ describe("identify", function () {
       done();
     });
   });
-  it("svg should success", function (done) {
+  it('svg should success', function (done) {
     imageb.identify('samples/svg-sample.svg', function (err, meta) {
       expect(err).not.exist;
       expect(meta.format).equal('svg');

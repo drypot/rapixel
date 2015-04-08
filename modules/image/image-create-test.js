@@ -43,44 +43,44 @@ function genImage(hours, count, done) {
   imageb.images.insert(images, done);
 }
 
-describe("getTicketCount", function () {
-  it("given emtpy images", function (done) {
+describe('getTicketCount', function () {
+  it('given emtpy images', function (done) {
     imageb.images.remove(done);
   });
-  it("should return ticketMax", function (done) {
+  it('should return ticketMax', function (done) {
     imagec.getTicketCount(_now, userf.user1, function (err, count, hours) {
       expect(err).not.exist;
       expect(count).equal(config.ticketMax);
       done();
     });
   });
-  it("given a image out of time", function (done) {
+  it('given a image out of time', function (done) {
     genImage(config.ticketGenInterval + 1, done);
   });
-  it("should return ticketMax", function (done) {
+  it('should return ticketMax', function (done) {
     imagec.getTicketCount(_now, userf.user1, function (err, count, hours) {
       expect(err).not.exist;
       expect(count).equal(config.ticketMax);
       done();
     });
   });
-  it("given a image in time", function (done) {
+  it('given a image in time', function (done) {
     genImage(config.ticketGenInterval - 1, done);
   });
-  it("should return (ticketMax - 1)", function (done) {
+  it('should return (ticketMax - 1)', function (done) {
     imagec.getTicketCount(_now, userf.user1, function (err, count, hours) {
       expect(err).not.exist;
       expect(count).equal(config.ticketMax - 1);
       done();
     });
   });
-  it("given emtpy images", function (done) {
+  it('given emtpy images', function (done) {
     imageb.images.remove(done);
   });
-  it("given ticketMax images in time", function (done) {
+  it('given ticketMax images in time', function (done) {
     genImage(config.ticketGenInterval - 3, config.ticketMax, done);
   });
-  it("should return 0 and hours", function (done) {
+  it('should return 0 and hours', function (done) {
     imagec.getTicketCount(_now, userf.user1, function (err, count, hours) {
       expect(err).not.exist;
       expect(count).equal(0);
@@ -90,11 +90,11 @@ describe("getTicketCount", function () {
   });
 });
 
-describe("posting text", function () {
+describe('posting text', function () {
   before(function (done) {
     imageb.images.remove(done);
   });
-  it("should fail", function (done) {
+  it('should fail', function (done) {
     this.timeout(30000);
     local.post('/api/images').attach('files', 'modules/express/upload-fixture1.txt').end(function (err, res) {
       expect(err).not.exist;
@@ -105,11 +105,11 @@ describe("posting text", function () {
   });
 });
 
-describe("posting no file", function () {
+describe('posting no file', function () {
   before(function (done) {
     imageb.images.remove(done);
   }); 
-  it("should fail", function (done) {
+  it('should fail', function (done) {
     var form = { };
     local.post('/api/images').send(form).end(function (err, res) {
       expect(err).not.exist;

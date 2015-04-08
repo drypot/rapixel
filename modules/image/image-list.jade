@@ -12,19 +12,19 @@ block content
 
   .section.site-title
     h1
-      a(href="/") #{appName}
+      a(href='/') #{appName}
     .desc #{appDesc}
 
   if !gtUrl
     if locals.user
       .section.top-links
-        a(href="/images/new") Upload
-        a(href="/users/" + user._id) Profile
-        a#logout-btn(href="/users/logout") Logout
+        a(href='/images/new') Upload
+        a(href='/users/' + user._id) Profile
+        a#logout-btn(href='/users/logout') Logout
     else
       .section.top-links
-        a(href="/users/login") Login
-        a(href="/users/register") Register
+        a(href='/users/login') Login
+        a(href='/users/register') Register
 
     //- .section.news
         | Update: Can change user address at profile.

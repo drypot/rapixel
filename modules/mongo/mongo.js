@@ -12,6 +12,8 @@ var mongop = exports = module.exports = function (_opt) {
   return mongop;
 };
 
+// db
+
 init.add(function (done) {
   var server = new mongo.Server('localhost', 27017, { auto_reconnect: true } );
   var client = new mongo.MongoClient(server);
@@ -40,6 +42,8 @@ init.add(function (done) {
 });
 
 mongop.ObjectID = mongo.ObjectID;
+
+// utilities
 
 // _id 를 숫자로 쓰는 컬렉션만 페이징할 수 있다.
 
@@ -139,4 +143,11 @@ mongop.forEach = function (col, doit, done) {
       }
     });
   })();
+};
+
+mongop.getLastId = function (col, done) {
+  var opt = { fields: { _id: 1 }, sort: { _id: -1 }, limit: 1 };
+  col.find({}, opt).nextObject(function (err, obj) {
+    done(err, obj ? obj._id : 0);
+  });
 };

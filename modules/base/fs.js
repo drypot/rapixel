@@ -118,7 +118,7 @@ fsp.safeFilename = function (name) {
   for (; i < len; i++) {
     var ch = name.charAt(i);
     var code = name.charCodeAt(i);
-    if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9') || "`~!@#$%^&()-_+=[{]};',. ".indexOf(ch) >= 0)
+    if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9') || '`~!@#$%^&()-_+=[{]};\',. '.indexOf(ch) >= 0)
       safe += ch;
     else if (code < 128)
       safe += '_';

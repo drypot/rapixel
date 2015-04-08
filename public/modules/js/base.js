@@ -310,7 +310,7 @@ $(function () {
   };
 
   fullscreen.onchange = function (handler) {
-    $document.on("fullscreenchange", handler);
+    $document.on('fullscreenchange', handler);
   }
 
 });

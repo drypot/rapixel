@@ -18,9 +18,9 @@ before(function (done) {
   init.run(done);
 });
 
-describe("finding user", function () {
+describe('finding user', function () {
   var _user = { name: 'test', email: 'test@def.com', password: '1234'  };
-  it("given new user", function (done) {
+  it('given new user', function (done) {
     local.post('/api/users').send(_user).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
@@ -28,7 +28,7 @@ describe("finding user", function () {
       done();
     });
   });
-  it("given login", function (done) {
+  it('given login', function (done) {
     var form = { email: _user.email, password: _user.password };
     local.post('/api/users/login').send(form).end(function (err, res) {
       expect(err).not.exist;
@@ -36,7 +36,7 @@ describe("finding user", function () {
       done();
     });
   });
-  it("should success with email field", function (done) {
+  it('should success with email field', function (done) {
     local.get('/api/users/' + _user._id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
@@ -46,10 +46,10 @@ describe("finding user", function () {
       done();
     });
   });
-  it("given other's login", function (done) {
+  it('given other\'s login', function (done) {
     userf.login('user2', done);
   });
-  it("should success without email", function (done) {
+  it('should success without email', function (done) {
     local.get('/api/users/' + _user._id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
@@ -59,10 +59,10 @@ describe("finding user", function () {
       done();
     });
   });
-  it("given admin login", function (done) {
+  it('given admin login', function (done) {
     userf.login('admin', done);
   });
-  it("should success with email", function (done) {
+  it('should success with email', function (done) {
     local.get('/api/users/' + _user._id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
@@ -72,14 +72,14 @@ describe("finding user", function () {
       done();
     });
   });
-  it("given no login", function (done) {
+  it('given no login', function (done) {
     userf.logout(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
     })
   });
-  it("should success without email", function (done) {
+  it('should success without email', function (done) {
     local.get('/api/users/' + _user._id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
@@ -90,7 +90,7 @@ describe("finding user", function () {
       done();
     });
   });
-  it("should fail with invalid id", function (done) {
+  it('should fail with invalid id', function (done) {
     local.get('/api/users/999').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;

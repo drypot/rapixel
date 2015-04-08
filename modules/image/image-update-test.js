@@ -25,23 +25,23 @@ before(function (done) {
   userf.login('user1', done);
 });
 
-describe("updating with no file", function () {
+describe('updating with no file', function () {
   var _id;
-  it("given post", function (done) {
+  it('given post', function (done) {
     var form = {
       _id: _id = imageb.getNewId(),
       uid: userf.user1._id
     };
     imageb.images.insert(form, done);
   });
-  it("should success", function (done) {
+  it('should success', function (done) {
     local.put('/api/images/' + _id).field('comment', 'updated with no file').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
     });
   });
-  it("can be checked", function (done) {
+  it('can be checked', function (done) {
     imageb.images.findOne({ _id: _id }, function (err, image) {
       expect(err).not.exist;
       expect(image).exist;
@@ -51,16 +51,16 @@ describe("updating with no file", function () {
   });
 });
 
-describe("updating with text file", function () {
+describe('updating with text file', function () {
   var _id;
-  it("given post", function (done) {
+  it('given post', function (done) {
     var form = {
       _id: _id = imageb.getNewId(),
       uid: userf.user1._id
     };
     imageb.images.insert(form, done);
   });
-  it("should fail", function (done) {
+  it('should fail', function (done) {
     this.timeout(30000);
     local.put('/api/images/' + _id).attach('files', 'modules/express/upload-fixture1.txt').end(function (err, res) {
       expect(err).not.exist;
@@ -71,19 +71,19 @@ describe("updating with text file", function () {
   });
 });
 
-describe("updating other's", function () {
+describe('updating other\'s', function () {
   var _id;
-  it("given user1 post", function (done) {
+  it('given user1 post', function (done) {
     var form = {
       _id: _id = imageb.getNewId(),
       uid: userf.user1._id
     };
     imageb.images.insert(form, done);
   });
-  it("given user2 login", function (done) {
+  it('given user2 login', function (done) {
     userf.login('user2', done);
   });
-  it("should fail", function (done) {
+  it('should fail', function (done) {
     local.put('/api/images/' + _id).field('comment', 'xxx').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;

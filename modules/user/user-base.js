@@ -43,7 +43,7 @@ error.define('RESET_TIMEOUT', '비밀번호 초기화 토큰 유효시간이 지
 // users collection
 
 init.add(function (done) {
-  userb.users = mongop.db.collection("users");
+  userb.users = mongop.db.collection('users');
   userb.users.ensureIndex({ email: 1 }, function (err) {
     if (err) return done(err);
     userb.users.ensureIndex({ namel: 1 }, function (err) {

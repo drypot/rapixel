@@ -26,32 +26,32 @@ before(function (done) {
   init.run(done);
 });
 
-describe("deactivating self", function () {
-  it("given user1 login", function (done) {
+describe('deactivating self', function () {
+  it('given user1 login', function (done) {
     userf.login('user1', done);
   });
-  it("checkUser should success", function (done) {
+  it('checkUser should success', function (done) {
     local.get('/api/test/user').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
     })
   });
-  it("should success", function (done) {
+  it('should success', function (done) {
     local.del('/api/users/' + userf.user1._id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
     });
   });
-  it("can be checked", function (done) {
+  it('can be checked', function (done) {
     userb.users.findOne({ _id: userf.user1._id }, function (err, user) {
       expect(err).not.exist;
       expect(user.status == 'd').true;
       done();
     });
   });
-  it("checkUser should fail (because logged off)", function (done) {
+  it('checkUser should fail (because logged off)', function (done) {
     local.get('/api/test/user').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
@@ -61,11 +61,11 @@ describe("deactivating self", function () {
   });
 });
 
-describe("deactivating with no login", function () {
-  it("given no login", function (done) {
+describe('deactivating with no login', function () {
+  it('given no login', function (done) {
     userf.logout(done);
   });
-  it("should fail", function (done) {
+  it('should fail', function (done) {
     local.del('/api/users/' + userf.user2._id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
@@ -75,11 +75,11 @@ describe("deactivating with no login", function () {
   });
 });
 
-describe("deactivating other", function () {
-  it("given user2 login", function (done) {
+describe('deactivating other', function () {
+  it('given user2 login', function (done) {
     userf.login('user2', done);
   });
-  it("deactivating other should fail", function (done) {
+  it('deactivating other should fail', function (done) {
     local.del('/api/users/' + userf.user3._id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
@@ -89,11 +89,11 @@ describe("deactivating other", function () {
   });
 });
 
-describe("deactivating other by admin", function () {
-  it("given admin login", function (done) {
+describe('deactivating other by admin', function () {
+  it('given admin login', function (done) {
     userf.login('admin', done);
   });
-  it("should success", function (done) {
+  it('should success', function (done) {
     local.del('/api/users/' + userf.user3._id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
