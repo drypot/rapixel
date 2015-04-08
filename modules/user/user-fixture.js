@@ -47,8 +47,7 @@ init.add(exports.recreate = function (done) {
 });
 
 userf.login = function (name, remember, done) {
-  var remember;
-  if (arguments.length == 2) {
+  if (typeof remember == 'function') {
     done = remember;
     remember = false;
   }
