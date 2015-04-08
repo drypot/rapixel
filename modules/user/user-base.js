@@ -71,7 +71,7 @@ init.add(function (done) {
   });
 });
 
-userb.newId = function () {
+userb.getNewId = function () {
   return ++userId;
 };
 

@@ -34,7 +34,7 @@ function genImage(hours, count, done) {
   var images = [];
   for (var i = 0; i < count; i++) {
     var image = {
-      _id: imageb.newId(),
+      _id: imageb.getNewId(),
       uid: userf.user1._id,
       cdate: new Date(_now.getTime() - (hours * 60 * 60 * 1000))
     };

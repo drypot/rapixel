@@ -38,9 +38,9 @@ describe("users", function () {
   });
 });
 
-describe("newId", function () {
+describe("getNewId", function () {
   it("should success", function () {
-    expect(userb.newId() < userb.newId()).true;
+    expect(userb.getNewId() < userb.getNewId()).true;
   });
 });
 

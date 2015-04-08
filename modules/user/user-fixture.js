@@ -21,7 +21,7 @@ init.add(exports.recreate = function (done) {
       var form = forms[i++];
       var now = new Date();
       var user = {
-        _id: userb.newId(),
+        _id: userb.getNewId(),
         name: form.name,
         namel: form.name,
         home: form.name,

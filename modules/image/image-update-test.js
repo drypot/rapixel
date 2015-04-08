@@ -29,7 +29,7 @@ describe("updating with no file", function () {
   var _id;
   it("given post", function (done) {
     var form = {
-      _id: _id = imageb.newId(),
+      _id: _id = imageb.getNewId(),
       uid: userf.user1._id
     };
     imageb.images.insert(form, done);
@@ -55,7 +55,7 @@ describe("updating with text file", function () {
   var _id;
   it("given post", function (done) {
     var form = {
-      _id: _id = imageb.newId(),
+      _id: _id = imageb.getNewId(),
       uid: userf.user1._id
     };
     imageb.images.insert(form, done);
@@ -75,7 +75,7 @@ describe("updating other's", function () {
   var _id;
   it("given user1 post", function (done) {
     var form = {
-      _id: _id = imageb.newId(),
+      _id: _id = imageb.getNewId(),
       uid: userf.user1._id
     };
     imageb.images.insert(form, done);

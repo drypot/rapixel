@@ -34,7 +34,7 @@ init.add(function (done) {
   });
 });
 
-imageb.newId = function () {
+imageb.getNewId = function () {
   return ++imageId;
 };
 

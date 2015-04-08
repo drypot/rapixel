@@ -100,7 +100,7 @@ describe("permission", function () {
 describe("updating name", function () {
   before(userf.recreate);
   it("given user", function (done) {
-    var user = { _id: userb.newId(), name: 'Name', namel: 'name', home: 'Home', homel: 'home', email: 'name@mail.com' };
+    var user = { _id: userb.getNewId(), name: 'Name', namel: 'name', home: 'Home', homel: 'home', email: 'name@mail.com' };
     userb.users.insert(user, function (err) {
       expect(err).not.exist;
       done();
@@ -172,7 +172,7 @@ describe("updating name", function () {
 describe("updating home", function () {
   before(userf.recreate);
   it("given user", function (done) {
-    var user = { _id: userb.newId(), name: 'Name', namel: 'name', home: 'Home', homel: 'home', email: 'name@mail.com' };
+    var user = { _id: userb.getNewId(), name: 'Name', namel: 'name', home: 'Home', homel: 'home', email: 'name@mail.com' };
     userb.users.insert(user, function (err) {
       expect(err).not.exist;
       done();
@@ -244,7 +244,7 @@ describe("updating home", function () {
 describe("updating email", function () {
   before(userf.recreate);
   it("given user", function (done) {
-    var user = { _id: userb.newId(), name: 'Name', namel: 'name', home: 'Home', homel: 'home', email: 'name@mail.com' };
+    var user = { _id: userb.getNewId(), name: 'Name', namel: 'name', home: 'Home', homel: 'home', email: 'name@mail.com' };
     userb.users.insert(user, function (err) {
       expect(err).not.exist;
       done();
@@ -274,7 +274,7 @@ describe("updating email", function () {
 describe("updating password", function () {
   before(userf.recreate);
   it("given user", function (done) {
-    var user = { _id: userb.newId(), name: 'Name', namel: 'name', home: 'Home', homel: 'home', email: 'name@mail.com' };
+    var user = { _id: userb.getNewId(), name: 'Name', namel: 'name', home: 'Home', homel: 'home', email: 'name@mail.com' };
     userb.users.insert(user, function (err) {
       expect(err).not.exist;
       done();

@@ -101,7 +101,7 @@ function createImages(form, user, done) {
 function createImage(form, file, user, done) {
   site.checkImageMeta(file.path, function (err, meta) {
     if (err) return done(err);
-    var id = imageb.newId();
+    var id = imageb.getNewId();
     var dir = new imageb.ImagePath(id, meta.format);
     fsp.makeDirs(dir.dir, function (err) {
       if (err) return done(err);

@@ -91,7 +91,7 @@ describe("updating with small image", function () {
   var _id;
   it("given post", function (done) {
     var form = {
-      _id: _id = imageb.newId(),
+      _id: _id = imageb.getNewId(),
       uid: userf.user1._id
     };
     imageb.images.insert(form, done);

@@ -17,9 +17,9 @@ describe("images", function () {
   });
 });
 
-describe("newId", function () {
+describe("getNewId", function () {
   it("should success", function () {
-    expect(imageb.newId() < imageb.newId()).true;
+    expect(imageb.getNewId() < imageb.getNewId()).true;
   });
 });
 

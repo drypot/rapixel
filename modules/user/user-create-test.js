@@ -25,12 +25,12 @@ describe("emailx test", function () {
   });
 });
 
-describe("newId", function () {
+describe("getNewId", function () {
   it("should work", function () {
-    var id1 = userb.newId();
-    var id1 = userb.newId();
-    var id2 = userb.newId();
-    var id2 = userb.newId();
+    var id1 = userb.getNewId();
+    var id1 = userb.getNewId();
+    var id2 = userb.getNewId();
+    var id2 = userb.getNewId();
     expect(id1 < id2).true;
   });
 });
@@ -67,7 +67,7 @@ describe("name check", function () {
   });
   it("given Name1", function (done) {
     // 정규 create api 로는 home 이름을 세팅할 수 없기 때문에 디비에 직접 넣는다.
-    var user = { _id: userb.newId(), name: 'Name1', namel: 'name1', home: 'Home1', homel: 'home1', email: 'name1@mail.com' };
+    var user = { _id: userb.getNewId(), name: 'Name1', namel: 'name1', home: 'Home1', homel: 'home1', email: 'name1@mail.com' };
     userb.users.insert(user, done);
   });
   it("duped NAME1 should fail", function (done) {

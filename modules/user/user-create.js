@@ -38,7 +38,7 @@ function createUser(form, done) {
     if (err) return done(err);
     var now = new Date();
     var user = {
-      _id: userb.newId(),
+      _id: userb.getNewId(),
       name: form.name,
       namel: form.namel,
       home: form.home,

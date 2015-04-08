@@ -27,7 +27,7 @@ describe("listing", function (done) {
     var images = [];
     for (var i = 0; i < 10; i++) {
       var image = {
-        _id: imageb.newId(),
+        _id: imageb.getNewId(),
         uid: userf.user1._id,
         cdate: new Date(),
         comment: '' + i
