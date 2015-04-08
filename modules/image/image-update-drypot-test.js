@@ -52,7 +52,7 @@ describe("updating with new image", function () {
       expect(image.vers).not.exist;
       expect(image.cdate).exist;
       expect(image.comment).equal('image1');
-      expect(fs.existsSync(new imageb.ImageDir(_id, 'svg').orgPath)).be.true;
+      expect(fs.existsSync(new imageb.ImagePath(_id, 'svg').original)).be.true;
       done();
     });
   });
@@ -74,7 +74,7 @@ describe("updating with new image", function () {
       expect(image.vers).not.exist;
       expect(image.cdate).exist;
       expect(image.comment).equal('image2');
-      expect(fs.existsSync(new imageb.ImageDir(_id, 'svg').orgPath)).be.true;
+      expect(fs.existsSync(new imageb.ImagePath(_id, 'svg').original)).be.true;
       done();
     });
   });

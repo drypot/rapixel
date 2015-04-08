@@ -13,7 +13,7 @@ init.run(function (err) {
     cursor.nextObject(function (err, image) {
       if (err) return done(err);
       if (!image) return done();
-      var dir = new imageb.ImageDir(image._id, image.format).dir;
+      var dir = new imageb.ImagePath(image._id, image.format).dir;
       var oname = dir + '/' + image._id + '.' + image.format;    
       var nname = dir + '/' + image._id + '-org.' + image.format;
       //console.log(oname + ' -> ' + nname);

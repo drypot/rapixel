@@ -102,10 +102,10 @@ function createImage(form, file, user, done) {
   site.checkImageMeta(file.path, function (err, meta) {
     if (err) return done(err);
     var id = imageb.newId();
-    var dir = new imageb.ImageDir(id, meta.format);
+    var dir = new imageb.ImagePath(id, meta.format);
     fsp.makeDirs(dir.dir, function (err) {
       if (err) return done(err);
-      fs.rename(file.path, dir.orgPath, function (err) {
+      fs.rename(file.path, dir.original, function (err) {
         if (err) return done(err);
         site.makeVersions(dir, meta, function (err, vers) {
           if (err) return done(err);

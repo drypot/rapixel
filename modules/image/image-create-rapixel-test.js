@@ -56,11 +56,11 @@ describe("posting one image", function () {
       expect(image.vers).eql([ 3840, 2880, 2560, 2048, 1920, 1680, 1440, 1366, 1280, 1136, 1024, 960, 640 ]);
       expect(image.cdate).exist;
       expect(image.comment).equal('image1');
-      var dir = new imageb.ImageDir(_id);
-      expect(fs.existsSync(dir.getVersionPath(5120))).be.false;
-      expect(fs.existsSync(dir.getVersionPath(3840))).be.true;
-      expect(fs.existsSync(dir.getVersionPath(1280))).be.true;
-      expect(fs.existsSync(dir.getVersionPath(640))).be.true;
+      var dir = new imageb.ImagePath(_id);
+      expect(fs.existsSync(dir.getVersion(5120))).be.false;
+      expect(fs.existsSync(dir.getVersion(3840))).be.true;
+      expect(fs.existsSync(dir.getVersion(1280))).be.true;
+      expect(fs.existsSync(dir.getVersion(640))).be.true;
       done();
     });
   });

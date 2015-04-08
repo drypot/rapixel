@@ -39,7 +39,7 @@ exports.checkImageMeta = function (path, done) {
 
 exports.makeVersions = function (dir, meta, done) {
   var shorter = meta.shorter;
-  var cmd = 'convert ' + dir.orgPath;
+  var cmd = 'convert ' + dir.original;
   cmd += ' -quality 92';
   cmd += ' -gravity center';
   cmd += ' -auto-orient';
@@ -68,9 +68,9 @@ exports.makeVersions = function (dir, meta, done) {
       circled = true;
     }
     if (i == _vers.length - 1) {
-      cmd += ' ' + dir.getVersionPath(ver);
+      cmd += ' ' + dir.getVersion(ver);
     } else {
-      cmd += ' -write ' + dir.getVersionPath(ver);
+      cmd += ' -write ' + dir.getVersion(ver);
     }
   }
   exec(cmd, function (err) {

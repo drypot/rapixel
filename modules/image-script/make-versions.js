@@ -17,7 +17,7 @@ init.add(function (done) {
       if (err) return done(err);
       if (image) {
         var id = image._id;
-        var dir = new imageb.ImageDir(id, image.format);
+        var dir = new imageb.ImagePath(id, image.format);
         removeVersions(dir.dir, function (err) {
           if (err) return done(err);
           process.stdout.write(id + ' ');

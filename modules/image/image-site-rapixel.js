@@ -40,7 +40,7 @@ exports.checkImageMeta = function (path, done) {
 };
 
 exports.makeVersions = function (dir, meta, done) {
-  var cmd = 'convert ' + dir.orgPath;
+  var cmd = 'convert ' + dir.original;
   cmd += ' -quality 92';
   cmd += ' -gravity center';
 
@@ -58,9 +58,9 @@ exports.makeVersions = function (dir, meta, done) {
     cmd += ' -crop ' + ver.width + 'x' + ver.height + '+0+0'
     cmd += ' +repage'
     if (i == _vers.length - 1) {
-      cmd += ' ' + dir.getVersionPath(ver.width);
+      cmd += ' ' + dir.getVersion(ver.width);
     } else {
-      cmd += ' -write ' + dir.getVersionPath(ver.width);
+      cmd += ' -write ' + dir.getVersion(ver.width);
     }
   }
   exec(cmd, function (err) {

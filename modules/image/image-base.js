@@ -20,8 +20,6 @@ init.add(function (done) {
   images.ensureIndex({ uid: 1, _id: -1 }, done);
 });
 
-var imageId;
-
 init.add(function (done) {
   var opt = {
     fields: { _id: 1 },
@@ -30,15 +28,14 @@ init.add(function (done) {
   };
   images.find({}, opt).nextObject(function (err, obj) {
     if (err) return done(err);
-    imageId = obj ? obj._id : 0;
+    var imageId = obj ? obj._id : 0;
+    imageb.newId = function () {
+      return ++imageId;
+    };
     console.log('image-base: image id = ' + imageId);
     done();
   });
 });
-
-imageb.newId = function () {
-  return ++imageId;
-};
 
 // 원본과 버젼이 같은 디렉토리에 저장된다는 것을 전제로 작명하였다.
 // 원본과 버젼이 같은 디렉토리에 있는 것이 좋을 것 같다.
@@ -49,30 +46,29 @@ imageb.newId = function () {
 // 원본 파일에 -org 를 붙여 놓는다.
 // DB 없이 파일명으로 검색에 편리.
 
-var imageDir;
-var imageDirUrl;
-
 init.add(function (done) {
-  imageDir = imageb.imageDir = config.uploadDir + '/public/images'
-  imageDirUrl = config.uploadSite + '/images';
+  var imageDir = imageb.imageDir = config.uploadDir + '/public/images'
+
   fsp.makeDirs(imageDir, done);
-});
 
-imageb.ImageDir = function (id, format) {
-  this.id = id;
-  this.dir = imageDir + '/' + fsp.makeDeepPath(id, 3);
-  if (format) {
-    this.orgPath = this.dir + '/' + id + '-org.' + format;
+  imageb.ImagePath = function (id, format) {
+    this.id = id;
+    this.dir = imageDir + '/' + fsp.makeDeepPath(id, 3);
+    if (format) {
+      this.original = this.dir + '/' + id + '-org.' + format;
+    }
   }
-}
 
-imageb.ImageDir.prototype.getVersionPath = function (width) {
-  return this.dir + '/' + this.id + '-' + width + '.jpg';
-}
+  imageb.ImagePath.prototype.getVersion = function (width) {
+    return this.dir + '/' + this.id + '-' + width + '.jpg';
+  }
 
-imageb.getUrlBase = function (id) {
-  return imageDirUrl + '/' + fsp.makeDeepPath(id, 3)
-}
+  var imageDirUrl = config.uploadSite + '/images';
+
+  imageb.getUrlBase = function (id) {
+    return imageDirUrl + '/' + fsp.makeDeepPath(id, 3)
+  }
+});
 
 imageb.identify = function (fname, done) {
   exec('identify -format "%m %w %h" ' + fname, function (err, stdout, stderr) {
