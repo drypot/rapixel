@@ -47,19 +47,18 @@ imageb.getNewId = function () {
 // DB 없이 파일명으로 검색에 편리.
 
 init.add(function (done) {
-  var imageDir = config.uploadDir + '/public/images';
-  fsp.makeDirs(imageDir, function (err) {
+  fsp.makeDirs(config.uploadDir + '/public/images', function (err, dir) {
     if (err) return done(err);
 
     if (config.dev) {
       imageb.emptyImageDir = function (done) {
-        fsp.emptyDir(imageDir, done);
+        fsp.emptyDir(dir, done);
       }
     }
 
     imageb.ImagePath = function (id, format) {
       this.id = id;
-      this.dir = imageDir + '/' + fsp.makeDeepPath(id, 3);
+      this.dir = dir + '/' + fsp.makeDeepPath(id, 3);
       if (format) {
         this.original = this.dir + '/' + id + '-org.' + format;
       }
