@@ -26,15 +26,15 @@ describe('getNewId', function () {
 describe('ImagePath', function () {
   it('should success', function () {
     var dir = new imageb.ImagePath(1, 'jpeg');
-    expect(dir.dir).equals('upload/rapixel-test/public/images/0/0/1');
-    expect(dir.original).equals('upload/rapixel-test/public/images/0/0/1/1-org.jpeg');
-    expect(dir.getVersion(640)).equals('upload/rapixel-test/public/images/0/0/1/1-640.jpg');
+    expect(dir.dir).equals(config.uploadDir + '/public/images/0/0/1');
+    expect(dir.original).equals(config.uploadDir + '/public/images/0/0/1/1-org.jpeg');
+    expect(dir.getVersion(640)).equals(config.uploadDir + '/public/images/0/0/1/1-640.jpg');
   });
 });
 
 describe('getUrlBase', function () {
   it('should success', function () {
-    expect(imageb.getUrlBase(1)).equals('http://file.rapixel.local:8080/images/0/0/1');
+    expect(imageb.getUrlBase(1)).equals(config.uploadSite + '/images/0/0/1');
   });
 });
 

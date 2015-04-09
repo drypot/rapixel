@@ -13,6 +13,8 @@ error.define('IMAGE_NO_FILE', '아미지 파일이 첨부되지 않았습니다.
 error.define('IMAGE_SIZE', '이미지의 가로, 세로 크기가 너무 작습니다.', 'files');
 error.define('IMAGE_TYPE', '인식할 수 없는 파일입니다.', 'files');
 
+// images
+
 var imageId;
 
 init.add(function (done) {
@@ -33,6 +35,8 @@ imageb.getNewId = function () {
   return ++imageId;
 };
 
+// files
+
 // 원본과 버젼이 같은 디렉토리에 저장된다는 것을 전제로 작명하였다.
 // 원본과 버젼이 같은 디렉토리에 있는 것이 좋을 것 같다.
 // 같은 형태끼리 모으지 말고 관련된 것 끼리 모아 놓는다.
@@ -44,30 +48,33 @@ imageb.getNewId = function () {
 
 init.add(function (done) {
   var imageDir = config.uploadDir + '/public/images';
-  
-  fsp.makeDirs(imageDir, done);
-  
-  if (config.dev) {
-    imageb.emptyImageDir = function (done) {
-      fsp.emptyDir(imageDir, done);
+  fsp.makeDirs(imageDir, function (err) {
+    if (err) return done(err);
+
+    if (config.dev) {
+      imageb.emptyImageDir = function (done) {
+        fsp.emptyDir(imageDir, done);
+      }
     }
-  }
 
-  imageb.ImagePath = function (id, format) {
-    this.id = id;
-    this.dir = imageDir + '/' + fsp.makeDeepPath(id, 3);
-    if (format) {
-      this.original = this.dir + '/' + id + '-org.' + format;
+    imageb.ImagePath = function (id, format) {
+      this.id = id;
+      this.dir = imageDir + '/' + fsp.makeDeepPath(id, 3);
+      if (format) {
+        this.original = this.dir + '/' + id + '-org.' + format;
+      }
     }
-  }
 
-  imageb.ImagePath.prototype.getVersion = function (width) {
-    return this.dir + '/' + this.id + '-' + width + '.jpg';
-  }
+    imageb.ImagePath.prototype.getVersion = function (width) {
+      return this.dir + '/' + this.id + '-' + width + '.jpg';
+    }
 
-  imageb.getUrlBase = function (id) {
-    return config.uploadSite + '/images/' + fsp.makeDeepPath(id, 3)
-  }
+    imageb.getUrlBase = function (id) {
+      return config.uploadSite + '/images/' + fsp.makeDeepPath(id, 3)
+    }
+
+    done();
+  });
 });
 
 imageb.identify = function (fname, done) {
