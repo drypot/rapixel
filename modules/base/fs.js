@@ -62,7 +62,7 @@ function makeDirsString(p, done) {
   });
 }
 
-fsp.removeDirs = function removeDirs(p, done) {
+fsp.removeDir = function removeDir(p, done) {
   fs.stat(p, function (err, stat) {
     if (err) return done(err);
     if(stat.isFile()) {
@@ -83,7 +83,7 @@ fsp.removeDirs = function removeDirs(p, done) {
             });
           }
           var fname = fnames[i++];
-          removeDirs(p + '/' + fname, function (err) {
+          removeDir(p + '/' + fname, function (err) {
             if (err) return done(err);
             setImmediate(unlink);
           });
@@ -103,7 +103,7 @@ fsp.emptyDir = function (p, done) {
         return done();
       }
       var fname = fnames[i++];
-      fsp.removeDirs(p + '/' + fname, function (err) {
+      fsp.removeDir(p + '/' + fname, function (err) {
         setImmediate(unlink);
       });
     }

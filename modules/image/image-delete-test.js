@@ -22,7 +22,7 @@ before(function (done) {
 });
 
 before(function (done) {
-  imageb.emptyImageDir(done);
+  imageb.emptyDir(done);
 });
 
 var _f1 = 'samples/3840x2160-169.jpg';

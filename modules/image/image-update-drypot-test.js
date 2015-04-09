@@ -26,7 +26,7 @@ before(function (done) {
 });
 
 before(function (done) {
-  imageb.emptyImageDir(done);
+  imageb.emptyDir(done);
 });
 
 describe('updating with new image', function () {

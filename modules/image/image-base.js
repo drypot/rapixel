@@ -51,7 +51,7 @@ init.add(function (done) {
     if (err) return done(err);
 
     if (config.dev) {
-      imageb.emptyImageDir = function (done) {
+      imageb.emptyDir = function (done) {
         fsp.emptyDir(dir, done);
       }
     }

@@ -17,7 +17,7 @@ before(function (done) {
   });
 });
 
-describe('removeDirs', function () {
+describe('removeDir', function () {
   beforeEach(function (done) {
     fs.mkdir(testdir + '/sub1', 0755, function (err) {
       fs.mkdir(testdir + '/sub2', 0755, function (err) {
@@ -37,7 +37,7 @@ describe('removeDirs', function () {
     expect(fs.existsSync(testdir + '/sub1/f1.txt')).true;
     expect(fs.existsSync(testdir + '/sub2/f2.txt')).true;
     expect(fs.existsSync(testdir + '/sub2/sub3/f3.txt')).true;
-    fsp.removeDirs(testdir + '/sub2/f2.txt', function (err) {
+    fsp.removeDir(testdir + '/sub2/f2.txt', function (err) {
       if (err) return done(err);
       expect(fs.existsSync(testdir + '/sub1')).true;
       expect(fs.existsSync(testdir + '/sub2')).true;
@@ -55,7 +55,7 @@ describe('removeDirs', function () {
     expect(fs.existsSync(testdir + '/sub1/f1.txt')).true;
     expect(fs.existsSync(testdir + '/sub2/f2.txt')).true;
     expect(fs.existsSync(testdir + '/sub2/sub3/f3.txt')).true;
-    fsp.removeDirs(testdir + '/sub1', function (err) {
+    fsp.removeDir(testdir + '/sub1', function (err) {
       if (err) return done(err);
       expect(fs.existsSync(testdir + '/sub1')).false;
       expect(fs.existsSync(testdir + '/sub2')).true;
@@ -73,7 +73,7 @@ describe('removeDirs', function () {
     expect(fs.existsSync(testdir + '/sub1/f1.txt')).true;
     expect(fs.existsSync(testdir + '/sub2/f2.txt')).true;
     expect(fs.existsSync(testdir + '/sub2/sub3/f3.txt')).true;
-    fsp.removeDirs(testdir + '/sub2', function (err) {
+    fsp.removeDir(testdir + '/sub2', function (err) {
       if (err) return done(err);
       expect(fs.existsSync(testdir + '/sub1')).true;
       expect(fs.existsSync(testdir + '/sub2')).false;
