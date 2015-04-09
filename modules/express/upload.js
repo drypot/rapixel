@@ -13,7 +13,7 @@ var tmpDir;
 init.add(function (done) {
   console.log('upload: ' + config.uploadDir);
   tmpDir = config.uploadDir + '/tmp';
-  fsp.makeDirs(tmpDir, function (err) {
+  fsp.makeDir(tmpDir, function (err) {
     if (err) return done(err);
     fsp.emptyDir(tmpDir, done);
   });

@@ -47,7 +47,7 @@ imageb.getNewId = function () {
 // DB 없이 파일명으로 검색에 편리.
 
 init.add(function (done) {
-  fsp.makeDirs(config.uploadDir + '/public/images', function (err, dir) {
+  fsp.makeDir(config.uploadDir + '/public/images', function (err, dir) {
     if (err) return done(err);
 
     if (config.dev) {

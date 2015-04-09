@@ -111,52 +111,25 @@ describe('emtpyDir', function () {
   });
 });
 
-describe('makeDirs', function () {
+describe('makeDir', function () {
   before(function (done) {
     fsp.emptyDir(testdir, done);
   });
   it('can make dir', function (done) {
-    expect(fs.existsSync(testdir + '/sub1')).be.false;
-    fsp.makeDirs(testdir, 'sub1', function (err, dir) {
+    expect(fs.existsSync(testdir + '/sub1')).false;
+    fsp.makeDir(testdir + '/sub1', function (err, dir) {
       expect(err).not.exist;
       expect(dir).equal(testdir + '/sub1');
-      expect(fs.existsSync(testdir + '/sub1')).be.true;
+      expect(fs.existsSync(testdir + '/sub1')).true;
       done();
     });
   });
   it('can make dir in existing dir', function (done) {
-    expect(fs.existsSync(testdir + '/sub1/sub2')).be.false;
-    fsp.makeDirs(testdir, 'sub1', 'sub2', function (err, dir) {
+    expect(fs.existsSync(testdir + '/sub1/sub2/sub3')).false;
+    fsp.makeDir(testdir + '/sub1/sub2/sub3', function (err, dir) {
       expect(err).not.exist;
-      expect(dir).equal(testdir + '/sub1/sub2');
-      expect(fs.existsSync(testdir + '/sub1/sub2')).be.true;
-      done();
-    });
-  });
-  it('can make dirs with array ', function (done) {
-    expect(fs.existsSync(testdir + '/ary1/ary2/ary3')).be.false;
-    fsp.makeDirs(testdir, [ 'ary1', 'ary2', 'ary3' ], function (err, dir) {
-      expect(err).not.exist;
-      expect(dir).equal(testdir + '/ary1/ary2/ary3');
-      expect(fs.existsSync(testdir + '/ary1/ary2/ary3')).be.true;
-      done();
-    });
-  });
-  it('can make dirs with string ', function (done) {
-    expect(fs.existsSync(testdir + '/str1/str2/str3')).be.false;
-    fsp.makeDirs(testdir, 'str1/str2/str3', function (err, dir) {
-      expect(err).not.exist;
-      expect(dir).equal(testdir + '/str1/str2/str3');
-      expect(fs.existsSync(testdir + '/str1/str2/str3')).be.true;
-      done();
-    });
-  });
-  it('can make dirs with string and array ', function (done) {
-    expect(fs.existsSync(testdir + '/c1/c2/c3/c4/c5')).be.false;
-    fsp.makeDirs(testdir, 'c1', [ 'c2', 'c3' ], 'c4/c5', function (err, dir) {
-      expect(err).not.exist;
-      expect(dir).equal(testdir + '/c1/c2/c3/c4/c5');
-      expect(fs.existsSync(testdir + '/c1/c2/c3/c4/c5')).be.true;
+      expect(dir).equal(testdir + '/sub1/sub2/sub3');
+      expect(fs.existsSync(testdir + '/sub1/sub2/sub3')).true;
       done();
     });
   });

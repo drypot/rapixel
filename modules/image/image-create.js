@@ -103,7 +103,7 @@ function createImage(form, file, user, done) {
     if (err) return done(err);
     var id = imageb.getNewId();
     var dir = new imageb.ImagePath(id, meta.format);
-    fsp.makeDirs(dir.dir, function (err) {
+    fsp.makeDir(dir.dir, function (err) {
       if (err) return done(err);
       fs.rename(file.path, dir.original, function (err) {
         if (err) return done(err);

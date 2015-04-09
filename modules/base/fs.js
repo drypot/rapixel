@@ -2,66 +2,6 @@ var fs = require('fs');
 var path = require('path');
 var fsp = exports;
 
-fsp.makeDirs = function () {
-  var done = arguments[arguments.length - 1];
-  var subs = arguments;
-  var p = null;
-  var i = 0;
-  function mkdir() {
-    if (i == subs.length - 1) {
-      return done(null, p);
-    }
-    var sub = subs[i++];
-    if (Array.isArray(sub)) {
-      return makeDirsArray(p, sub, function (err, _path) {
-        if (err) return done(err);
-        p = _path;
-        setImmediate(mkdir);
-      });
-    }
-    p = !p ? sub : p + '/' + sub;
-    makeDirsString(p, function (err) {
-      if (err) return done(err);
-      setImmediate(mkdir);
-    });
-  }
-  mkdir();
-};
-
-function makeDirsArray(p, ary, done) {
-  var i = 0;
-  function mkdir() {
-    if (i == ary.length) {
-      return done(null, p);
-    }
-    var sub = ary[i++];
-    p = !p ? sub : p + '/' + sub;
-    fs.mkdir(p, 0755, function (err) {
-      if (err && err.code !== 'EEXIST') return done(err);
-      setImmediate(mkdir);
-    });
-  }
-  mkdir();
-}
-
-function makeDirsString(p, done) {
-  fs.mkdir(p, 0755, function(err) {
-    if (err && err.code === 'ENOENT') {
-      return makeDirsString(path.dirname(p), function (err) {
-        if (err) return done(err);
-        fs.mkdir(p, 0755, function(err) {
-          if (err && err.code !== 'EEXIST') return done(err);
-          done();
-        });
-      });
-    }
-    if (err && err.code !== 'EEXIST') {
-      return done(err);
-    }
-    done();
-  });
-}
-
 fsp.removeDir = function removeDir(p, done) {
   fs.stat(p, function (err, stat) {
     if (err) return done(err);
@@ -108,6 +48,21 @@ fsp.emptyDir = function (p, done) {
       });
     }
     unlink();
+  });
+};
+
+fsp.makeDir = function (p, done) {
+  fs.mkdir(p, 0755, function(err) {
+    if (err && err.code === 'ENOENT') {
+      fsp.makeDir(path.dirname(p), function (err) {
+        if (err) return done(err);
+        fsp.makeDir(p, done);
+      });
+    } else if (err && err.code !== 'EEXIST') {
+      done(err);
+    } else {
+      done(null, p);
+    }
   });
 };
 

@@ -67,7 +67,7 @@ function updateImage(id, form, done) {
     var dir = new imageb.ImagePath(id, meta.format);
     fsp.removeDir(dir.dir, function (err) {
       if (err) return done(err);
-      fsp.makeDirs(dir.dir, function (err) {
+      fsp.makeDir(dir.dir, function (err) {
         if (err) return done(err);
         fs.rename(file.path, dir.original, function (err) {
           if (err) return done(err);
