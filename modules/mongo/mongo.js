@@ -30,7 +30,7 @@ init.add(function (done) {
 init.add(function (done) {
   if (opt.dropDatabase) {
     console.log('mongo: dropping db');
-    mongop.db.dropDatabase(done());
+    mongop.db.dropDatabase(done);
   } else {
     done();
   }
