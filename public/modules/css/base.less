@@ -1,4 +1,4 @@
-@font-size: 18px;
+@font-size: 16px;
 @color: #333;
 @dim-color: lighten(@color, 50%);
 @margin: 50px;
@@ -57,7 +57,7 @@ body {
   ul {
     margin: 0px;
     li {
-      font-size: @font-size * 0.8;
+      font-size: @font-size;
       padding: 0 5px;
     }
   }
@@ -140,20 +140,19 @@ body {
   margin-top: @margin * 0.3;
   .uname {
     margin-bottom: @margin * 0.4;
-    font-size: @font-size * 1.6;
+    font-size: @font-size * 1.8;
   }
   .comment {
-    margin-bottom: @margin * 0.8;
-  }
-  .fname {
-    margin-bottom: @margin * 0.1;
-    font-size: @font-size * 0.8;
-    color: @dim-color;  
+    margin-bottom: @margin * 0.4;
   }
   .cdate {
     margin-bottom: @margin * 0.1;
-    font-size: @font-size * 0.8;
-    color: @dim-color;
+    font-size: @font-size * 0.9;
+  }
+  .fname {
+    margin-bottom: @margin * 0.1;
+    font-size: @font-size * 0.9;
+    color: white;  
   }
   .commands {
   }
@@ -167,7 +166,7 @@ form.main {
     width: 100%;
   }
   textarea {
-    font-family: monospace;
+    //font-family: monospace;
   }
 }
 

@@ -1,6 +1,6 @@
 body {
   font-family: serif;
-  font-size: 18px;
+  font-size: 16px;
   color: #333333;
 }
 .black-link a {
@@ -23,7 +23,7 @@ body {
   color: #333333;
 }
 .page-title h1 {
-  font-size: 41.4px;
+  font-size: 36.8px;
 }
 .page-title a:hover {
   text-decoration: none;
@@ -35,17 +35,17 @@ body {
   color: #333333;
 }
 .site-title h1 {
-  font-size: 41.4px;
+  font-size: 36.8px;
 }
 .site-title a:hover {
   text-decoration: none;
 }
 .site-title h1 {
-  font-size: 57.6px;
+  font-size: 51.2px;
   margin-bottom: 35px;
 }
 .site-title .desc {
-  font-size: 21.6px;
+  font-size: 19.2px;
 }
 .page-footer {
   margin-top: 80px;
@@ -58,14 +58,14 @@ body {
   margin: 0px;
 }
 .page-footer ul li {
-  font-size: 14.4px;
+  font-size: 16px;
   padding: 0 5px;
 }
 .page-footer .home {
   margin-top: 15px;
 }
 .page-footer .home a {
-  font-size: 36px;
+  font-size: 32px;
   font-weight: 500;
   text-decoration: none;
 }
@@ -132,17 +132,16 @@ body {
   font-size: 28.8px;
 }
 .image-info .comment {
-  margin-bottom: 40px;
-}
-.image-info .fname {
-  margin-bottom: 5px;
-  font-size: 14.4px;
-  color: #b3b3b3;
+  margin-bottom: 20px;
 }
 .image-info .cdate {
   margin-bottom: 5px;
   font-size: 14.4px;
-  color: #b3b3b3;
+}
+.image-info .fname {
+  margin-bottom: 5px;
+  font-size: 14.4px;
+  color: white;
 }
 form.main {
   width: 384px;
@@ -150,9 +149,6 @@ form.main {
 }
 form.main input[type=file] {
   width: 100%;
-}
-form.main textarea {
-  font-family: monospace;
 }
 @media (max-width: 480px) {
   form {
