@@ -56,7 +56,7 @@ describe('posting one image', function () {
       expect(image.vers).not.exist;
       expect(image.cdate).exist;
       expect(image.comment).equal('image1');
-      expect(fs.existsSync(new imageb.ImagePath(_id, 'svg').original)).be.true;
+      expect(fs.existsSync(new imageb.FilePath(_id, 'svg').original)).be.true;
       done();
     });
   });

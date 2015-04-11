@@ -27,7 +27,7 @@ exp.core.delete('/api/images/:id([0-9]+)', function (req, res, done) {
 function delImage(id, done) {
   imageb.images.remove({ _id: id }, function (err, cnt) {
     if (err) return done(err);
-    fsp.removeDir(new imageb.ImagePath(id).dir, function (err) {
+    fsp.removeDir(new imageb.FilePath(id).dir, function (err) {
       if (err) return done(err);
       done();
     });

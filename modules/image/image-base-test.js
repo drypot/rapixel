@@ -23,12 +23,12 @@ describe('getNewId', function () {
   });
 });
 
-describe('ImagePath', function () {
+describe('FilePath', function () {
   it('should success', function () {
-    var dir = new imageb.ImagePath(1, 'jpeg');
-    expect(dir.dir).equals(config.uploadDir + '/public/images/0/0/1');
-    expect(dir.original).equals(config.uploadDir + '/public/images/0/0/1/1-org.jpeg');
-    expect(dir.getVersion(640)).equals(config.uploadDir + '/public/images/0/0/1/1-640.jpg');
+    var path = new imageb.FilePath(1, 'jpeg');
+    expect(path.dir).equals(config.uploadDir + '/public/images/0/0/1');
+    expect(path.original).equals(config.uploadDir + '/public/images/0/0/1/1-org.jpeg');
+    expect(path.getVersion(640)).equals(config.uploadDir + '/public/images/0/0/1/1-640.jpg');
   });
 });
 

@@ -55,7 +55,7 @@ describe('posting one image', function () {
       expect(image.vers).eql([ 800, 768, 720, 640 ]);
       expect(image.cdate).exist;
       expect(image.comment).equal('image1');
-      var dir = new imageb.ImagePath(_id);
+      var dir = new imageb.FilePath(_id);
       expect(fs.existsSync(dir.getVersion(900))).be.false;
       expect(fs.existsSync(dir.getVersion(800))).be.true;
       expect(fs.existsSync(dir.getVersion(768))).be.true;
@@ -97,10 +97,10 @@ describe('posting max images', function () {
       expect(image.vers).eql([ 720, 640 ]);
       expect(image.cdate).exist;
       expect(image.comment).equal('max images');
-      var dir = new imageb.ImagePath(_id);
-      expect(fs.existsSync(dir.getVersion(768))).be.false;
-      expect(fs.existsSync(dir.getVersion(720))).be.true;
-      expect(fs.existsSync(dir.getVersion(640))).be.true;
+      var path = new imageb.FilePath(_id);
+      expect(fs.existsSync(path.getVersion(768))).be.false;
+      expect(fs.existsSync(path.getVersion(720))).be.true;
+      expect(fs.existsSync(path.getVersion(640))).be.true;
       done();
     });
   });
@@ -115,10 +115,10 @@ describe('posting max images', function () {
       expect(image.vers).eql([ 720, 640 ]);
       expect(image.cdate).exist;
       expect(image.comment).equal('max images');
-      var dir = new imageb.ImagePath(_id);
-      expect(fs.existsSync(dir.getVersion(768))).be.false;
-      expect(fs.existsSync(dir.getVersion(720))).be.true;
-      expect(fs.existsSync(dir.getVersion(640))).be.true;
+      var path = new imageb.FilePath(_id);
+      expect(fs.existsSync(path.getVersion(768))).be.false;
+      expect(fs.existsSync(path.getVersion(720))).be.true;
+      expect(fs.existsSync(path.getVersion(640))).be.true;
       done();
     });
   });

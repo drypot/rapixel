@@ -53,7 +53,7 @@ describe('deleting', function () {
     });
   });
   it('can be checked', function (done) {
-    expect(fs.existsSync(new imageb.ImagePath(_id).getVersion(3840))).false;
+    expect(fs.existsSync(new imageb.FilePath(_id).getVersion(3840))).false;
     imageb.images.findOne({ _id: _id }, function (err, image) {
       expect(err).not.exist;
       expect(image).not.exist;
@@ -90,7 +90,7 @@ describe('deleting by admin', function () {
     });
   });
   it('can be checked', function (done) {
-    expect(fs.existsSync(new imageb.ImagePath(_id).getVersion(3840))).false;
+    expect(fs.existsSync(new imageb.FilePath(_id).getVersion(3840))).false;
     imageb.images.findOne({ _id: _id }, function (err, image) {
       expect(err).not.exist;
       expect(image).not.exist;
@@ -128,7 +128,7 @@ describe('deleting other\'s', function () {
     });
   });
   it('can be checked', function (done) {
-    expect(fs.existsSync(new imageb.ImagePath(_id).getVersion(3840))).true;
+    expect(fs.existsSync(new imageb.FilePath(_id).getVersion(3840))).true;
     imageb.images.findOne({ _id: _id }, function (err, image) {
       expect(err).not.exist;
       expect(image).exist;

@@ -17,11 +17,11 @@ init.add(function (done) {
       if (err) return done(err);
       if (image) {
         var id = image._id;
-        var dir = new imageb.ImagePath(id, image.format);
-        removeVersions(dir.dir, function (err) {
+        var path = new imageb.FilePath(id, image.format);
+        removeVersions(path.dir, function (err) {
           if (err) return done(err);
           process.stdout.write(id + ' ');
-          imageb.makeVersions(id, dir.dir, org.org, image.width, function (err, vers) {
+          imageb.makeVersions(id, path.dir, org.org, image.width, function (err, vers) {
             if (err) return done(err);
             var fields = {
               $set : { vers: vers }

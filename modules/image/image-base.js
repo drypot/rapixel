@@ -56,7 +56,7 @@ init.add(function (done) {
       }
     }
 
-    imageb.ImagePath = function (id, format) {
+    imageb.FilePath = function (id, format) {
       this.id = id;
       this.dir = dir + '/' + fsp.makeDeepPath(id, 3);
       if (format) {
@@ -64,7 +64,7 @@ init.add(function (done) {
       }
     }
 
-    imageb.ImagePath.prototype.getVersion = function (width) {
+    imageb.FilePath.prototype.getVersion = function (width) {
       return this.dir + '/' + this.id + '-' + width + '.jpg';
     }
 

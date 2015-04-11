@@ -52,10 +52,10 @@ describe('updating with image', function () {
       expect(image.vers).eql([ 720, 640 ]);
       expect(image.cdate).exist;
       expect(image.comment).equal('image1');
-      var dir = new imageb.ImagePath(_id);
-      expect(fs.existsSync(dir.getVersion(768))).be.false;
-      expect(fs.existsSync(dir.getVersion(720))).be.true;
-      expect(fs.existsSync(dir.getVersion(640))).be.true;
+      var path = new imageb.FilePath(_id);
+      expect(fs.existsSync(path.getVersion(768))).be.false;
+      expect(fs.existsSync(path.getVersion(720))).be.true;
+      expect(fs.existsSync(path.getVersion(640))).be.true;
       done();
     });
   });
@@ -77,9 +77,9 @@ describe('updating with image', function () {
       expect(image.vers).eql([ 640 ]);
       expect(image.cdate).exist;
       expect(image.comment).equal('image2');
-      var dir = new imageb.ImagePath(_id);
-      expect(fs.existsSync(dir.getVersion(720))).be.false;
-      expect(fs.existsSync(dir.getVersion(640))).be.true;
+      var path = new imageb.FilePath(_id);
+      expect(fs.existsSync(path.getVersion(720))).be.false;
+      expect(fs.existsSync(path.getVersion(640))).be.true;
       done();
     });
   });
