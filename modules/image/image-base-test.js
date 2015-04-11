@@ -12,10 +12,7 @@ describe('images', function () {
   it('should exist', function () {
     expect(imageb.images).exist;
   });
-});
-
-describe('getNewId', function () {
-  it('should success', function () {
+  it('getNewId should success', function () {
     expect(imageb.getNewId() < imageb.getNewId()).true;
   });
 });

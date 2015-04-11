@@ -21,24 +21,20 @@ init.add(function (done) {
     mongop.db = client.db(config.mongodb);
     console.log('mongo: ' + mongop.db.databaseName);
     if (config.mongoUser) {
-      return mongop.db.authenticate(config.mongoUser, config.mongoPassword, function(err, res) {
-        if (err) return done(err);
-        done();
-      });
+      mongop.db.authenticate(config.mongoUser, config.mongoPassword, done);
+    } else {
+      done();
     }
-    done();
   });
 });
 
 init.add(function (done) {
   if (opt.dropDatabase) {
-    return mongop.db.dropDatabase(function (err) {
-      if (err) return done(err);
-      console.log('mongo: dropped db');
-      done() 
-    });
+    console.log('mongo: dropping db');
+    mongop.db.dropDatabase(done());
+  } else {
+    done();
   }
-  done();
 });
 
 mongop.ObjectID = mongo.ObjectID;
