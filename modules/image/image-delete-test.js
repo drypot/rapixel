@@ -1,7 +1,4 @@
-var chai = require('chai');
-var expect = chai.expect;
-chai.use(require('chai-http'));
-chai.config.includeStack = true;
+var expect = require('../base/chai').expect;
 
 var fs = require('fs');
 
@@ -53,7 +50,7 @@ describe('deleting', function () {
     });
   });
   it('can be checked', function (done) {
-    expect(fs.existsSync(new imageb.FilePath(_id).getVersion(3840))).false;
+    expect(new imageb.FilePath(_id).getVersion(3840)).not.pathExist;
     imageb.images.findOne({ _id: _id }, function (err, image) {
       expect(err).not.exist;
       expect(image).not.exist;
@@ -90,7 +87,7 @@ describe('deleting by admin', function () {
     });
   });
   it('can be checked', function (done) {
-    expect(fs.existsSync(new imageb.FilePath(_id).getVersion(3840))).false;
+    expect(new imageb.FilePath(_id).getVersion(3840)).not.pathExist;
     imageb.images.findOne({ _id: _id }, function (err, image) {
       expect(err).not.exist;
       expect(image).not.exist;
@@ -128,7 +125,7 @@ describe('deleting other\'s', function () {
     });
   });
   it('can be checked', function (done) {
-    expect(fs.existsSync(new imageb.FilePath(_id).getVersion(3840))).true;
+    expect(new imageb.FilePath(_id).getVersion(3840)).pathExist;
     imageb.images.findOne({ _id: _id }, function (err, image) {
       expect(err).not.exist;
       expect(image).exist;

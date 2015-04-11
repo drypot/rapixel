@@ -1,4 +1,5 @@
-var expect = require('chai').expect;
+var expect = require('../base/chai').expect;
+
 var init = require('../base/init');
 
 var error = exports = module.exports = function (ec /* error const */) {

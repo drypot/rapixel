@@ -1,7 +1,4 @@
-var chai = require('chai');
-var expect = chai.expect;
-chai.use(require('chai-http'));
-chai.config.includeStack = true;
+var expect = require('../base/chai').expect;
 
 var fs = require('fs');
 
@@ -66,7 +63,7 @@ describe('parsing one file', function () {
   it('given handler', function () {
     exp.core.post('/api/test/upload-one', upload.handler(function (req, res, done) {
       p1 = req.files.f1[0].path;
-      expect(fs.existsSync(p1)).true;
+      expect(p1).pathExist;
       req.body.files = req.files;
       res.json(req.body);
       done();
@@ -78,7 +75,7 @@ describe('parsing one file', function () {
       expect(res.body.err).not.exist;
       expect(res.body.p1).equal('abc');
       expect(res.body.files.f1[0].safeFilename).equal('upload-fixture1.txt');
-      expect(fs.existsSync(p1)).false;
+      expect(p1).not.pathExist;
       done();
     });
   });
@@ -92,8 +89,8 @@ describe('parsing two files', function () {
     exp.core.post('/api/test/upload-two', upload.handler(function (req, res, done) {
       p1 = req.files.f1[0].path;
       p2 = req.files.f1[1].path;
-      expect(fs.existsSync(p1)).true;
-      expect(fs.existsSync(p2)).true;
+      expect(p1).pathExist;
+      expect(p2).pathExist;
       req.body.files = req.files;
       res.json(req.body);
       done();
@@ -107,8 +104,8 @@ describe('parsing two files', function () {
       expect(res.body.files.f1[0].safeFilename).equal('upload-fixture1.txt');
       expect(res.body.files.f1[1].safeFilename).equal('upload-fixture2.txt');
       setTimeout(function () {
-        expect(fs.existsSync(p1)).false;
-        expect(fs.existsSync(p2)).false;
+        expect(p1).not.pathExist;
+        expect(p2).not.pathExist;
         done();
       }, 100);
     });
@@ -121,7 +118,7 @@ describe('parsing irregular filename', function () {
   it('given handler', function () {
     exp.core.post('/api/test/upload-irregular', upload.handler(function (req, res, done) {
       p1 = req.files.f1[0].path;
-      expect(fs.existsSync(p1)).true;
+      expect(p1).pathExist;
       req.body.files = req.files;
       res.json(req.body);
       done();
@@ -133,7 +130,7 @@ describe('parsing irregular filename', function () {
       expect(res.body.err).not.exist;
       expect(res.body.files.f1[0].safeFilename).equal('file__()[]_-=.txt.%$#@!&.txt');
       expect(res.body.p1).equal('abc');
-      expect(fs.existsSync(p1)).false;
+      expect(p1).not.pathExist;
       done();
     });
   });

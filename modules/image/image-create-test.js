@@ -1,7 +1,4 @@
-var chai = require('chai');
-var expect = chai.expect;
-chai.use(require('chai-http'));
-chai.config.includeStack = true;
+var expect = require('../base/chai').expect;
 
 var fs = require('fs');
 

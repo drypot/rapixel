@@ -1,7 +1,4 @@
-var chai = require('chai');
-var expect = chai.expect;
-chai.use(require('chai-http'));
-chai.config.includeStack = true;
+var expect = require('../base/chai').expect;
 
 var fs = require('fs');
 
@@ -52,7 +49,7 @@ describe('updating with new image', function () {
       expect(image.vers).not.exist;
       expect(image.cdate).exist;
       expect(image.comment).equal('image1');
-      expect(fs.existsSync(new imageb.FilePath(_id, 'svg').original)).be.true;
+      expect(new imageb.FilePath(_id, 'svg').original).pathExist;
       done();
     });
   });
@@ -74,7 +71,7 @@ describe('updating with new image', function () {
       expect(image.vers).not.exist;
       expect(image.cdate).exist;
       expect(image.comment).equal('image2');
-      expect(fs.existsSync(new imageb.FilePath(_id, 'svg').original)).be.true;
+      expect(new imageb.FilePath(_id, 'svg').original).pathExist;
       done();
     });
   });

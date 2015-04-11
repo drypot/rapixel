@@ -1,4 +1,4 @@
-var expect = require('chai').expect;
+var expect = require('../base/chai').expect;
 
 var init = require('../base/init');
 var userb = require('../user/user-base');

@@ -1,4 +1,5 @@
-var expect = require('chai').expect;
+var expect = require('../base/chai').expect;
+
 var express = require('express');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');

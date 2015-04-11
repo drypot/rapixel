@@ -1,6 +1,4 @@
-var chai = require('chai');
-var expect = chai.expect;
-chai.config.includeStack = true;
+var expect = require('../base/chai').expect;
 
 var fs = require('fs');
 
@@ -31,56 +29,56 @@ describe('removeDir', function () {
     });
   });
   it('can remove one file', function (done) {
-    expect(fs.existsSync(testdir + '/sub1')).true;
-    expect(fs.existsSync(testdir + '/sub2')).true;
-    expect(fs.existsSync(testdir + '/sub2/sub3')).true;
-    expect(fs.existsSync(testdir + '/sub1/f1.txt')).true;
-    expect(fs.existsSync(testdir + '/sub2/f2.txt')).true;
-    expect(fs.existsSync(testdir + '/sub2/sub3/f3.txt')).true;
+    expect(testdir + '/sub1').pathExist;
+    expect(testdir + '/sub2').pathExist;
+    expect(testdir + '/sub2/sub3').pathExist;
+    expect(testdir + '/sub1/f1.txt').pathExist;
+    expect(testdir + '/sub2/f2.txt').pathExist;
+    expect(testdir + '/sub2/sub3/f3.txt').pathExist;
     fsp.removeDir(testdir + '/sub2/f2.txt', function (err) {
       if (err) return done(err);
-      expect(fs.existsSync(testdir + '/sub1')).true;
-      expect(fs.existsSync(testdir + '/sub2')).true;
-      expect(fs.existsSync(testdir + '/sub2/sub3')).true;
-      expect(fs.existsSync(testdir + '/sub1/f1.txt')).true;
-      expect(fs.existsSync(testdir + '/sub2/f2.txt')).false;
-      expect(fs.existsSync(testdir + '/sub2/sub3/f3.txt')).true;
+      expect(testdir + '/sub1').pathExist;
+      expect(testdir + '/sub2').pathExist;
+      expect(testdir + '/sub2/sub3').pathExist;
+      expect(testdir + '/sub1/f1.txt').pathExist;
+      expect(testdir + '/sub2/f2.txt').not.pathExist;
+      expect(testdir + '/sub2/sub3/f3.txt').pathExist;
       done();
     })
   });
   it('can remove one dir', function (done) {
-    expect(fs.existsSync(testdir + '/sub1')).true;
-    expect(fs.existsSync(testdir + '/sub2')).true;
-    expect(fs.existsSync(testdir + '/sub2/sub3')).true;
-    expect(fs.existsSync(testdir + '/sub1/f1.txt')).true;
-    expect(fs.existsSync(testdir + '/sub2/f2.txt')).true;
-    expect(fs.existsSync(testdir + '/sub2/sub3/f3.txt')).true;
+    expect(testdir + '/sub1').pathExist;
+    expect(testdir + '/sub2').pathExist;
+    expect(testdir + '/sub2/sub3').pathExist;
+    expect(testdir + '/sub1/f1.txt').pathExist;
+    expect(testdir + '/sub2/f2.txt').pathExist;
+    expect(testdir + '/sub2/sub3/f3.txt').pathExist;
     fsp.removeDir(testdir + '/sub1', function (err) {
       if (err) return done(err);
-      expect(fs.existsSync(testdir + '/sub1')).false;
-      expect(fs.existsSync(testdir + '/sub2')).true;
-      expect(fs.existsSync(testdir + '/sub2/sub3')).true;
-      expect(fs.existsSync(testdir + '/sub1/f1.txt')).false;
-      expect(fs.existsSync(testdir + '/sub2/f2.txt')).true;
-      expect(fs.existsSync(testdir + '/sub2/sub3/f3.txt')).true;
+      expect(testdir + '/sub1').not.pathExist;
+      expect(testdir + '/sub2').pathExist;
+      expect(testdir + '/sub2/sub3').pathExist;
+      expect(testdir + '/sub1/f1.txt').not.pathExist;
+      expect(testdir + '/sub2/f2.txt').pathExist;
+      expect(testdir + '/sub2/sub3/f3.txt').pathExist;
       done();
     })
   });
   it('can remove recursive', function (done) {
-    expect(fs.existsSync(testdir + '/sub1')).true;
-    expect(fs.existsSync(testdir + '/sub2')).true;
-    expect(fs.existsSync(testdir + '/sub2/sub3')).true;
-    expect(fs.existsSync(testdir + '/sub1/f1.txt')).true;
-    expect(fs.existsSync(testdir + '/sub2/f2.txt')).true;
-    expect(fs.existsSync(testdir + '/sub2/sub3/f3.txt')).true;
+    expect(testdir + '/sub1').pathExist;
+    expect(testdir + '/sub2').pathExist;
+    expect(testdir + '/sub2/sub3').pathExist;
+    expect(testdir + '/sub1/f1.txt').pathExist;
+    expect(testdir + '/sub2/f2.txt').pathExist;
+    expect(testdir + '/sub2/sub3/f3.txt').pathExist;
     fsp.removeDir(testdir + '/sub2', function (err) {
       if (err) return done(err);
-      expect(fs.existsSync(testdir + '/sub1')).true;
-      expect(fs.existsSync(testdir + '/sub2')).false;
-      expect(fs.existsSync(testdir + '/sub2/sub3')).false;
-      expect(fs.existsSync(testdir + '/sub1/f1.txt')).true;
-      expect(fs.existsSync(testdir + '/sub2/f2.txt')).false;
-      expect(fs.existsSync(testdir + '/sub2/sub3/f3.txt')).false;
+      expect(testdir + '/sub1').pathExist;
+      expect(testdir + '/sub2').not.pathExist;
+      expect(testdir + '/sub2/sub3').not.pathExist;
+      expect(testdir + '/sub1/f1.txt').pathExist;
+      expect(testdir + '/sub2/f2.txt').not.pathExist;
+      expect(testdir + '/sub2/sub3/f3.txt').not.pathExist;
       done();
     })
   });
@@ -116,20 +114,20 @@ describe('makeDir', function () {
     fsp.emptyDir(testdir, done);
   });
   it('can make dir', function (done) {
-    expect(fs.existsSync(testdir + '/sub1')).false;
+    expect(testdir + '/sub1').not.pathExist;
     fsp.makeDir(testdir + '/sub1', function (err, dir) {
       expect(err).not.exist;
       expect(dir).equal(testdir + '/sub1');
-      expect(fs.existsSync(testdir + '/sub1')).true;
+      expect(testdir + '/sub1').pathExist;
       done();
     });
   });
   it('can make dir in existing dir', function (done) {
-    expect(fs.existsSync(testdir + '/sub1/sub2/sub3')).false;
+    expect(testdir + '/sub1/sub2/sub3').not.pathExist;
     fsp.makeDir(testdir + '/sub1/sub2/sub3', function (err, dir) {
       expect(err).not.exist;
       expect(dir).equal(testdir + '/sub1/sub2/sub3');
-      expect(fs.existsSync(testdir + '/sub1/sub2/sub3')).true;
+      expect(testdir + '/sub1/sub2/sub3').pathExist;
       done();
     });
   });

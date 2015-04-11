@@ -1,7 +1,4 @@
-var chai = require('chai');
-var expect = chai.expect;
-chai.use(require('chai-http'));
-chai.config.includeStack = true;
+var expect = require('../base/chai').expect;
 
 var fs = require('fs');
 
@@ -53,9 +50,9 @@ describe('updating with image', function () {
       expect(image.cdate).exist;
       expect(image.comment).equal('image1');
       var path = new imageb.FilePath(_id);
-      expect(fs.existsSync(path.getVersion(5120))).be.true;
-      expect(fs.existsSync(path.getVersion(3840))).be.true;
-      expect(fs.existsSync(path.getVersion(640))).be.true;
+      expect(path.getVersion(5120)).pathExist;
+      expect(path.getVersion(3840)).pathExist;
+      expect(path.getVersion(640)).pathExist;
       done();
     });
   });
@@ -78,10 +75,10 @@ describe('updating with image', function () {
       expect(image.cdate).exist;
       expect(image.comment).equal('image2');
       var path = new imageb.FilePath(_id);
-      expect(fs.existsSync(path.getVersion(5120))).be.false;
-      expect(fs.existsSync(path.getVersion(3840))).be.true;
-      expect(fs.existsSync(path.getVersion(1280))).be.true;
-      expect(fs.existsSync(path.getVersion(640))).be.true;
+      expect(path.getVersion(5120)).not.pathExist;
+      expect(path.getVersion(3840)).pathExist;
+      expect(path.getVersion(1280)).pathExist;
+      expect(path.getVersion(640)).pathExist;
       done();
     });
   });
