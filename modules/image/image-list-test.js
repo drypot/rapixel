@@ -31,7 +31,7 @@ describe('listing', function (done) {
       };
       images.push(image);
     };
-    imageb.images.insert(images, done);    
+    imageb.images.insertMany(images, done);    
   });
   it('page size 99 should success', function (done) {
     var query = {

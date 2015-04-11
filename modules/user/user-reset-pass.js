@@ -56,15 +56,15 @@ function step1(form, done) {
       if (!user) {
         return done(error(error.EMAIL_NOT_EXIST));
       }
-      resets.remove({ email: form.email }, function (err) {
+      resets.deleteOne({ email: form.email }, function (err) {
         if (err) return done(err);
         var reset = {
           email: form.email,
           token: token
         };
-        resets.insert(reset, function (err, results) {
+        resets.insertOne(reset, function (err, r) {
           if (err) return done(err);
-          var reset = results[0];
+          var reset = r.ops[0];
           var mail = {
             from: 'no-reply@raysoda.com',
             to: reset.email,
@@ -104,9 +104,9 @@ function step2(form, done) {
       admin: { $exists: false } // admin password can not be changed by web api for security.
     };
     var hash = userb.makeHash(form.password);
-    userb.users.update(query, { $set: { hash: hash } }, function (err) {
+    userb.users.updateOne(query, { $set: { hash: hash } }, function (err) {
       if (err) return done(err);
-      resets.remove({ _id: reset._id }, done);
+      resets.deleteOne({ _id: reset._id }, done);
     });
   });
 };

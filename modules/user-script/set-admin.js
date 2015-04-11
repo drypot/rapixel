@@ -8,7 +8,7 @@ init.add(function (done) {
     console.log('\nspecify email.');
     return done();
   }
-  userb.users.update({ email: config.argv[1] }, { $set: { admin: true } }, done);
+  userb.users.updateOne({ email: config.argv[1] }, { $set: { admin: true } }, done);
 });
 
 init.run(function (err) {

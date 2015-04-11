@@ -118,7 +118,7 @@ function createImage(form, file, user, done) {
             cdate: form.now
           };
           site.fillFields(image, form, meta, vers);
-          imageb.images.insert(image, function (err) {
+          imageb.images.insertOne(image, function (err) {
             if (err) return done(err);
             done(null, id);
           });

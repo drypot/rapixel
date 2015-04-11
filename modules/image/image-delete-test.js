@@ -27,7 +27,7 @@ var _id;
 
 describe('deleting', function () {
   before(function (done) {
-    imageb.images.remove(done);
+    imageb.images.deleteMany({}, done);
   });
   it('given user1 login', function (done) {
     userf.login('user1', done);
@@ -61,7 +61,7 @@ describe('deleting', function () {
 
 describe('deleting by admin', function () {
   before(function (done) {
-    imageb.images.remove(done);
+    imageb.images.deleteMany({}, done);
   });
   it('given user1 login', function (done) {
     userf.login('user1', done);
@@ -98,7 +98,7 @@ describe('deleting by admin', function () {
 
 describe('deleting other\'s', function () {
   before(function (done) {
-    imageb.images.remove(done);
+    imageb.images.deleteMany({}, done);
   });
   it('given user1 login', function (done) {
     userf.login('user1', done);

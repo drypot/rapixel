@@ -25,7 +25,7 @@ exp.core.get('/users/deactivate', function (req, res, done) {
 function deactivateUser(id, user, done) {
   userb.checkUpdatable(id, user, function (err) {
     if (err) return done(err);
-    userb.users.update({ _id: id }, { $set: { status: 'd' } }, function (err, cnt) {
+    userb.users.updateOne({ _id: id }, { $set: { status: 'd' } }, function (err, cnt) {
       if (err) return done(err);
       if (!cnt) {
         return done(error(error.USER_NOT_FOUND));

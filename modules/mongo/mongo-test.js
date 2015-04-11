@@ -22,7 +22,7 @@ describe('paging', function () {
     for (var i = 0; i < 10; i++) {
       list.push({ _id: i + 1});
     };
-    col.insert(list, done);    
+    col.insertMany(list, done);    
   });
   it('page size 99 should success', function (done) {
     mongop.findPage(col, {}, 0, 0, 99, null, function (err, results, gt, lt) {
@@ -125,7 +125,7 @@ describe('getLastId', function () {
     for (var i = 0; i < 10; i++) {
       list.push({ _id: i + 1});
     };
-    col.insert(list, done);    
+    col.insertMany(list, done);    
   });
   it('should success', function (done) {
     mongop.getLastId(col, function (err, id) {

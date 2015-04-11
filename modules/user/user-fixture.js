@@ -7,7 +7,7 @@ var userf = exports;
 
 init.add(exports.recreate = function (done) {
   userb.resetCache();
-  userb.users.remove(function (err) {
+  userb.users.deleteMany({}, function (err) {
     if (err) return done(err);
     var forms = [
       { name: 'user1', email: 'user1@mail.com', password: '1234' },
@@ -36,7 +36,7 @@ init.add(exports.recreate = function (done) {
       if (form.admin) {
         user.admin = true;
       }
-      userb.users.insert(user, function (err) {
+      userb.users.insertOne(user, function (err) {
         expect(err).not.exist;
         user.password = form.password;
         exports[user.name] = user;

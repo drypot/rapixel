@@ -51,9 +51,9 @@ function updateUser(id, user, form, done) {
     if (form.password.length) {
       fields.hash = userb.makeHash(form.password);
     }
-    userb.users.update({ _id: id }, { $set: fields }, function (err, cnt) {
+    userb.users.updateOne({ _id: id }, { $set: fields }, function (err, r) {
       if (err) return done(err);
-      if (!cnt) {
+      if (!r.modifiedCount) {
         return done(error(error.USER_NOT_FOUND));
       }
       userb.deleteCache(id);

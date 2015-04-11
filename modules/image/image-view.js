@@ -46,7 +46,7 @@ exp.core.get('/drawings/:id([0-9]+)', function (req, res, done) {
 
 function incHit(id, hit, done) {
   if (!hit) return done();
-  imageb.images.update({ _id: id }, { $inc: { hit: 1 }}, done);
+  imageb.images.updateOne({ _id: id }, { $inc: { hit: 1 }}, done);
 }
 
 function findImage(id, done) {

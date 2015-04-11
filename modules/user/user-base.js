@@ -220,7 +220,7 @@ function createSession(req, res, user, done) {
   req.session.regenerate(function (err) {
     if (err) return done(err);
     var now = new Date();
-    userb.users.update({_id: user._id}, {$set: {adate: now}}, function (err) {
+    userb.users.updateOne({_id: user._id}, {$set: {adate: now}}, function (err) {
       if (err) return done(err);
       user.adate = now;
       req.session.uid = user._id;

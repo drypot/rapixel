@@ -59,7 +59,7 @@ function updateImage(id, form, done) {
   if (!file) {
     var fields = {};
     site.fillFields(fields, form);
-    imageb.images.update({ _id: id }, { $set: fields }, done);
+    imageb.images.updateOne({ _id: id }, { $set: fields }, done);
     return;
   } 
   site.checkImageMeta(file.path, function (err, meta) {
@@ -78,7 +78,7 @@ function updateImage(id, form, done) {
               format: meta.format,
             }
             site.fillFields(fields, form, meta, vers);
-            imageb.images.update({ _id: id }, { $set: fields }, done);
+            imageb.images.updateOne({ _id: id }, { $set: fields }, done);
           });
         });
       });

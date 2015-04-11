@@ -15,16 +15,15 @@ var mongop = exports = module.exports = function (_opt) {
 // db
 
 init.add(function (done) {
-  var server = new mongo.Server('localhost', 27017, { auto_reconnect: true } );
-  var client = new mongo.MongoClient(server);
-  client.open(function (err) {
-    mongop.db = client.db(config.mongodb);
+  mongo.MongoClient.connect('mongodb://localhost:27017/' + config.mongodb, function(err, db) {
+    if (err) return done(err);
+    mongop.db = db;
     console.log('mongo: ' + mongop.db.databaseName);
     if (config.mongoUser) {
       mongop.db.authenticate(config.mongoUser, config.mongoPassword, done);
     } else {
       done();
-    }
+    }    
   });
 });
 

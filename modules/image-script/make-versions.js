@@ -26,7 +26,7 @@ init.add(function (done) {
             var fields = {
               $set : { vers: vers }
             }
-            imageb.images.update({ _id: id }, fields, function (err) {
+            imageb.images.updateOne({ _id: id }, fields, function (err) {
               if (err) return done(err);
               setImmediate(read);
             });

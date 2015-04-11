@@ -84,7 +84,7 @@ describe('updating with jpeg', function () {
       _id: _id = imageb.getNewId(),
       uid: userf.user1._id
     };
-    imageb.images.insert(form, done);
+    imageb.images.insertOne(form, done);
   });
   it('should fail', function (done) {
     this.timeout(30000);

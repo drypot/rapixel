@@ -29,7 +29,7 @@ describe('updating with no file', function () {
       _id: _id = imageb.getNewId(),
       uid: userf.user1._id
     };
-    imageb.images.insert(form, done);
+    imageb.images.insertOne(form, done);
   });
   it('should success', function (done) {
     local.put('/api/images/' + _id).field('comment', 'updated with no file').end(function (err, res) {
@@ -55,7 +55,7 @@ describe('updating with text file', function () {
       _id: _id = imageb.getNewId(),
       uid: userf.user1._id
     };
-    imageb.images.insert(form, done);
+    imageb.images.insertOne(form, done);
   });
   it('should fail', function (done) {
     this.timeout(30000);
@@ -75,7 +75,7 @@ describe('updating other\'s', function () {
       _id: _id = imageb.getNewId(),
       uid: userf.user1._id
     };
-    imageb.images.insert(form, done);
+    imageb.images.insertOne(form, done);
   });
   it('given user2 login', function (done) {
     userf.login('user2', done);

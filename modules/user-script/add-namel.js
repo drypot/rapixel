@@ -14,7 +14,7 @@ init.run(function (err) {
       }
       fields.namel = user.name.toLowerCase();
       fields.homel = user.home.toLowerCase();
-      return userb.users.update({ _id: user._id }, { $set: fields }, done);
+      return userb.users.updateOne({ _id: user._id }, { $set: fields }, done);
     }
     process.stdout.write(user._id + 's ');
     done();

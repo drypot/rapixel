@@ -10,7 +10,7 @@ init.run(function (err) {
       process.stdout.write(obj._id + 'u ');
       var fields = {};
       fields.comment = '';
-      return col.update({ _id: obj._id }, { $set: fields }, done);
+      return col.updateOne({ _id: obj._id }, { $set: fields }, done);
     }
     process.stdout.write(obj._id + 's ');
     done();

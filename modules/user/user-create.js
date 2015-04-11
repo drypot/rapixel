@@ -54,7 +54,7 @@ function createUser(form, done) {
     if (form.admin) {
       user.admin = true;
     }
-    userb.users.insert(user, function (err) {
+    userb.users.insertOne(user, function (err) {
       if (err) return done(err);
       done(null, user);
     });

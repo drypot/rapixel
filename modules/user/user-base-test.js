@@ -241,9 +241,9 @@ describe('auto login with invalid email', function () {
     var fields = {
       email: 'new@def.com'
     };
-    userb.users.update({ _id: userf.user1._id }, fields, function (err, cnt) {
+    userb.users.updateOne({ _id: userf.user1._id }, fields, function (err, r) {
       expect(err).not.exist;
-      expect((cnt == 1)).true;
+      expect(r.modifiedCount).equal(1);
       done();
     });
   });
