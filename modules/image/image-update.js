@@ -19,10 +19,42 @@ exp.core.put('/api/images/:id([0-9]+)', upload.handler(function (req, res, done)
     var form = imagec.getForm(req);
     imageu.checkUpdatable(id, user, function (err) {
       if (err) return done(err);
-      updateImage(id, form, function (err) {
+      var file = form.files[0];
+      if (!file) {
+        var fields = {};
+        site.fillFields(fields, form);
+        imageb.images.updateOne({ _id: id }, { $set: fields }, function (err) {
+          if (err) return done(err);
+          res.json({});
+          done();
+        });
+        return;
+      } 
+      site.checkImageMeta(file.path, function (err, meta) {
         if (err) return done(err);
-        res.json({});
-        done();
+        var path = new imageb.FilePath(id, meta.format);
+        fsp.removeDir(path.dir, function (err) {
+          if (err) return done(err);
+          fsp.makeDir(path.dir, function (err) {
+            if (err) return done(err);
+            fs.rename(file.path, path.original, function (err) {
+              if (err) return done(err);
+              site.makeVersions(path, meta, function (err, vers) {
+                if (err) return done(err);
+                var fields = {
+                  fname: file.safeFilename,
+                  format: meta.format,
+                }
+                site.fillFields(fields, form, meta, vers);
+                imageb.images.updateOne({ _id: id }, { $set: fields }, function (err) {
+                  if (err) return done(err);
+                  res.json({});
+                  done();
+                });
+              });
+            });
+          });
+        });
       });
     });
   });
@@ -53,35 +85,3 @@ imageu.checkUpdatable = function (id, user, done) {
     done(null, image);
   });
 }
-
-function updateImage(id, form, done) {
-  var file = form.files[0];
-  if (!file) {
-    var fields = {};
-    site.fillFields(fields, form);
-    imageb.images.updateOne({ _id: id }, { $set: fields }, done);
-    return;
-  } 
-  site.checkImageMeta(file.path, function (err, meta) {
-    if (err) return done(err);
-    var path = new imageb.FilePath(id, meta.format);
-    fsp.removeDir(path.dir, function (err) {
-      if (err) return done(err);
-      fsp.makeDir(path.dir, function (err) {
-        if (err) return done(err);
-        fs.rename(file.path, path.original, function (err) {
-          if (err) return done(err);
-          site.makeVersions(path, meta, function (err, vers) {
-            if (err) return done(err);
-            var fields = {
-              fname: file.safeFilename,
-              format: meta.format,
-            }
-            site.fillFields(fields, form, meta, vers);
-            imageb.images.updateOne({ _id: id }, { $set: fields }, done);
-          });
-        });
-      });
-    });
-  });
-};

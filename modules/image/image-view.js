@@ -36,14 +36,6 @@ exp.core.get('/images/:id([0-9]+)', function (req, res, done) {
   });
 });
 
-exp.core.get('/photos/:id([0-9]+)', function (req, res, done) {
-  res.redirect('/images/' + req.params.id);
-});
-
-exp.core.get('/drawings/:id([0-9]+)', function (req, res, done) {
-  res.redirect('/images/' + req.params.id);
-});
-
 function incHit(id, hit, done) {
   if (!hit) return done();
   imageb.images.updateOne({ _id: id }, { $inc: { hit: 1 }}, done);
@@ -68,3 +60,10 @@ function findImage(id, done) {
   });
 };
 
+exp.core.get('/photos/:id([0-9]+)', function (req, res, done) {
+  res.redirect('/images/' + req.params.id);
+});
+
+exp.core.get('/drawings/:id([0-9]+)', function (req, res, done) {
+  res.redirect('/images/' + req.params.id);
+});

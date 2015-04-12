@@ -14,16 +14,54 @@ var imagec = exports;
 exp.core.post('/api/images', upload.handler(function (req, res, done) {
   userb.checkUser(res, function (err, user) {
     if (err) return done(err);
-    var form = imagec.getForm(req);
-    createImages(form, user, function (err, ids) {
-      if (err) return done(err);
-      res.json({
-        ids: ids
+    var form = getForm(req);
+    if (!form.files.length) {
+      return done(error(error.IMAGE_NO_FILE));
+    }
+    var i = 0;
+    var ids = [];
+    (function create() {
+      if (i == form.files.length) {
+        res.json({ ids: ids });
+        return done();
+      }
+      var file = form.files[i++];
+      getTicketCount(form.now, user, function (err, count, hours) {
+        if (err) return done(err);
+        if (!count) {
+          res.json({ ids: ids });
+          return done();
+        }
+        site.checkImageMeta(file.path, function (err, meta) {
+          if (err) return done(err);
+          var id = imageb.getNewId();
+          var path = new imageb.FilePath(id, meta.format);
+          fsp.makeDir(path.dir, function (err) {
+            if (err) return done(err);
+            fs.rename(file.path, path.original, function (err) {
+              if (err) return done(err);
+              site.makeVersions(path, meta, function (err, vers) {
+                if (err) return done(err);
+                var image = {
+                  _id: id,
+                  uid: user._id,
+                  hit: 0,
+                  fname: file.safeFilename,
+                  format: meta.format,
+                  cdate: form.now
+                };
+                site.fillFields(image, form, meta, vers);
+                imageb.images.insertOne(image, function (err) {
+                  if (err) return done(err);
+                  ids.push(id);
+                  setImmediate(create);
+                });
+              });
+            });
+          });
+        });
       });
-      // 오류 없이 처리되었다면 임시파일들은 정상보관되었을 것이기 때문에
-      // done() 을 호출해서 임시파일 삭제를 안 해도 되긴 하다.
-      done();
-    });
+    })();
   });
 }));
 
@@ -31,7 +69,7 @@ exp.core.get('/images/new', function (req, res, done) {
   userb.checkUser(res, function (err, user) {
     if (err) return done(err);
     var now = new Date();
-    imagec.getTicketCount(now, user, function (err, count, hours) {
+    getTicketCount(now, user, function (err, count, hours) {
       res.render('image/image-create', {
         ticketMax: config.ticketMax,
         ticketCount: count,
@@ -41,7 +79,7 @@ exp.core.get('/images/new', function (req, res, done) {
   });
 });
 
-imagec.getForm = function (req) {
+var getForm = imagec.getForm = function (req) {
   var body = req.body;
   var form = {};
   form.now = new Date();
@@ -50,7 +88,7 @@ imagec.getForm = function (req) {
   return form;
 }
 
-imagec.getTicketCount = function(now, user, done) {
+var getTicketCount = imagec.getTicketCount = function(now, user, done) {
   var count = config.ticketMax;
   var hours;
   var opt = {
@@ -71,60 +109,3 @@ imagec.getTicketCount = function(now, user, done) {
     done(null, count, hours);
   });
 };
-
-function createImages(form, user, done) {
-  if (!form.files.length) {
-    return done(error(error.IMAGE_NO_FILE));
-  }
-  var i = 0;
-  var ids = [];
-  function create() {
-    if (i == form.files.length) {
-      return done(null, ids);
-    }
-    var file = form.files[i++];
-    imagec.getTicketCount(form.now, user, function (err, count, hours) {
-      if (err) return done(err);
-      if (!count) {
-        return done(null, ids);
-      }
-      createImage(form, file, user, function (err, id) {
-        if (err) return done(err);
-        ids.push(id);
-        setImmediate(create);
-      });
-    });
-  }
-  create();
-};
-
-function createImage(form, file, user, done) {
-  site.checkImageMeta(file.path, function (err, meta) {
-    if (err) return done(err);
-    var id = imageb.getNewId();
-    var path = new imageb.FilePath(id, meta.format);
-    fsp.makeDir(path.dir, function (err) {
-      if (err) return done(err);
-      fs.rename(file.path, path.original, function (err) {
-        if (err) return done(err);
-        site.makeVersions(path, meta, function (err, vers) {
-          if (err) return done(err);
-          var image = {
-            _id: id,
-            uid: user._id,
-            hit: 0,
-            fname: file.safeFilename,
-            format: meta.format,
-            cdate: form.now
-          };
-          site.fillFields(image, form, meta, vers);
-          imageb.images.insertOne(image, function (err) {
-            if (err) return done(err);
-            done(null, id);
-          });
-        });
-      });
-    });
-  });
-}
-

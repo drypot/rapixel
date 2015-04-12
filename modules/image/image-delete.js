@@ -16,21 +16,13 @@ exp.core.delete('/api/images/:id([0-9]+)', function (req, res, done) {
     var id = parseInt(req.params.id) || 0;
     imageu.checkUpdatable(id, user, function (err) {
       if (err) return done(err);
-      delImage(id, function (err) {
+      imageb.images.deleteOne({ _id: id }, function (err, cnt) {
         if (err) return done(err);
-        res.json({});
+        fsp.removeDir(new imageb.FilePath(id).dir, function (err) {
+          if (err) return done(err);
+          res.json({});
+        });
       });
     });
   });
 });
-
-function delImage(id, done) {
-  imageb.images.deleteOne({ _id: id }, function (err, cnt) {
-    if (err) return done(err);
-    fsp.removeDir(new imageb.FilePath(id).dir, function (err) {
-      if (err) return done(err);
-      done();
-    });
-  });
-};
-
