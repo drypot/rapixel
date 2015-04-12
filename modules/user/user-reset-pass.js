@@ -20,29 +20,6 @@ init.add(function (done) {
 exp.core.post('/api/reset-pass', function (req, res, done) {
   var form = {};
   form.email = String(req.body.email || '').trim();
-  step1(form, function (err) {
-    if (err) return done(err);
-    res.json({});
-  });
-});
-
-exp.core.put('/api/reset-pass', function (req, res, done) {
-  var body = req.body;
-  var form = {};
-  form.id = String(body.id || '').trim();
-  form.token = String(body.token || '').trim();
-  form.password = String(body.password || '').trim();
-  step2(form, function (err) {
-    if (err) return done(err);
-    res.json({});
-  });
-});
-
-exp.core.get('/users/reset-pass', function (req, res, done) {
-  res.render('user/user-reset-pass');
-});
-
-function step1(form, done) {
   var errors = [];
   userc.checkFormEmail(form, errors);
   if (errors.length) {
@@ -75,14 +52,22 @@ function step1(form, done) {
               config.mainSite + '/users/reset-pass?step=3&id=' + reset._id + '&t=' + reset.token + '\n\n' +
               config.appName
           };
-          mailer.send(mail, done);
+          mailer.send(mail, function (err) {
+            if (err) return done(err);
+            res.json({});
+          });
         });
       });
     });
   });
-};
+});
 
-function step2(form, done) {
+exp.core.put('/api/reset-pass', function (req, res, done) {
+  var body = req.body;
+  var form = {};
+  form.id = String(body.id || '').trim();
+  form.token = String(body.token || '').trim();
+  form.password = String(body.password || '').trim();
   var errors = [];
   userc.checkFormPassword(form, errors);
   if (errors.length) {
@@ -106,7 +91,14 @@ function step2(form, done) {
     var hash = userb.makeHash(form.password);
     userb.users.updateOne(query, { $set: { hash: hash } }, function (err) {
       if (err) return done(err);
-      resets.deleteOne({ _id: reset._id }, done);
+      resets.deleteOne({ _id: reset._id }, function (err) {
+        if (err) return done(err);
+        res.json({});
+      });
     });
   });
-};
+});
+
+exp.core.get('/users/reset-pass', function (req, res, done) {
+  res.render('user/user-reset-pass');
+});

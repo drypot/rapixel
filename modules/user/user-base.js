@@ -124,54 +124,64 @@ userb.resetCache = function () {
   usersByHome = {};
 }
 
-// login
+// authentication
+
+userb.checkUser = function (res, done) {
+  var user = res.locals.user;
+  if (!user) {
+    return done(error(error.NOT_AUTHENTICATED));
+  }
+  done(null, user);
+};
+
+userb.checkAdmin = function (res, done) {
+  var user = res.locals.user;
+  if (!user) {
+    return done(error(error.NOT_AUTHENTICATED));
+  }
+  if (!user.admin) {
+    return done(error(error.NOT_AUTHORIZED));
+  }
+  done(null, user);
+};
+
+userb.checkUpdatable = function (id, user, done) {
+  if (user._id != id && !user.admin) {
+    return done(error(error.NOT_AUTHORIZED))
+  }
+  done();
+};
 
 exp.core.post('/api/users/login', function (req, res, done) {
-  login(req, res, function (err, user) {
+  var form = {};
+  form.email = String(req.body.email || '').trim();
+  form.password = String(req.body.password || '').trim();
+  form.remember = !!req.body.remember;
+  findUser(form.email, form.password, function (err, user) {
     if (err) return done(err);
-    res.json({
-      user: {
-        id: user._id,
-        name: user.name
-      }
+    if (form.remember) {
+      res.cookie('email', form.email, {
+        maxAge: 99 * 365 * 24 * 60 * 60 * 1000,
+        httpOnly: true
+      });
+      res.cookie('password', form.password, {
+        maxAge: 99 * 365 * 24 * 60 * 60 * 1000,
+        httpOnly: true
+      });
+    }
+    createSession(req, res, user, function (err, user) {
+      if (err) return done(err);
+      res.json({
+        user: {
+          id: user._id,
+          name: user.name
+        }
+      });
     });
   });
-});
-
-exp.core.get('/api/users/login', function (req, res, done) {
-  userb.checkUser(res, function (err, user) {
-    if (err) return done(err);
-    res.json({
-      user: {
-        id: user._id,
-        name: user.name        
-      }
-    });
-  });
-});
-
-exp.core.post('/api/users/logout', function (req, res, done) {
-  userb.logout(req, res);
-  res.json({});
-});
-
-exp.core.get('/users/login', function (req, res, done) {
-  res.render('user/user-base-login');
 });
 
 exp.autoLogin = function (req, res, done) {
-  autoLogin(req, res, done);
-};
-
-exp.redirectToLogin = function (err, req, res, done) {
-  if (!res.locals.api && err.code == error.NOT_AUTHENTICATED.code) {
-    res.redirect('/users/login');
-  } else {
-    done(err);
-  }
-};
-
-function autoLogin(req, res, done) {
   if (req.session.uid) {
     userb.getCached(req.session.uid, function (err, user) {
       if (err) return req.session.regenerate(done);
@@ -190,27 +200,6 @@ function autoLogin(req, res, done) {
       res.clearCookie('email');
       res.clearCookie('password');
       return done();
-    }
-    createSession(req, res, user, done);
-  });
-}
-
-function login(req, res, done) {
-  var form = {};
-  form.email = String(req.body.email || '').trim();
-  form.password = String(req.body.password || '').trim();
-  form.remember = !!req.body.remember;
-  findUser(form.email, form.password, function (err, user) {
-    if (err) return done(err);
-    if (form.remember) {
-      res.cookie('email', form.email, {
-        maxAge: 99 * 365 * 24 * 60 * 60 * 1000,
-        httpOnly: true
-      });
-      res.cookie('password', form.password, {
-        maxAge: 99 * 365 * 24 * 60 * 60 * 1000,
-        httpOnly: true
-      });
     }
     createSession(req, res, user, done);
   });
@@ -247,34 +236,37 @@ function findUser(email, password, done) {
   });
 };
 
+exp.core.get('/api/users/login', function (req, res, done) {
+  userb.checkUser(res, function (err, user) {
+    if (err) return done(err);
+    res.json({
+      user: {
+        id: user._id,
+        name: user.name        
+      }
+    });
+  });
+});
+
+exp.core.post('/api/users/logout', function (req, res, done) {
+  userb.logout(req, res);
+  res.json({});
+});
+
 userb.logout = function (req, res, done) {
   res.clearCookie('email');
   res.clearCookie('password');
   req.session.destroy();
 };
 
-userb.checkUser = function (res, done) {
-  var user = res.locals.user;
-  if (!user) {
-    return done(error(error.NOT_AUTHENTICATED));
-  }
-  done(null, user);
-};
+exp.core.get('/users/login', function (req, res, done) {
+  res.render('user/user-base-login');
+});
 
-userb.checkAdmin = function (res, done) {
-  var user = res.locals.user;
-  if (!user) {
-    return done(error(error.NOT_AUTHENTICATED));
+exp.redirectToLogin = function (err, req, res, done) {
+  if (!res.locals.api && err.code == error.NOT_AUTHENTICATED.code) {
+    res.redirect('/users/login');
+  } else {
+    done(err);
   }
-  if (!user.admin) {
-    return done(error(error.NOT_AUTHORIZED));
-  }
-  done(null, user);
-};
-
-userb.checkUpdatable = function (id, user, done) {
-  if (user._id != id && !user.admin) {
-    return done(error(error.NOT_AUTHORIZED))
-  }
-  done();
 };

@@ -5,36 +5,10 @@ var userb = require('../user/user-base');
 var userc = exports;
 
 exp.core.post('/api/users', function (req, res, done) {
-  var form = userc.getForm(req);
-  createUser(form, function (err, user) {
-    if (err) return done(err);
-    res.json({
-      id: user._id
-    });
-  });
-});
-
-exp.core.get('/users/register', function (req, res, done) {
-  res.render('user/user-create');
-});
-
-userc.emailx = /^[a-z0-9-_+.]+@[a-z0-9-]+(\.[a-z0-9-]+)+$/i
-
-userc.getForm = function (req) {
-  var body = req.body;
-  var form = {};
-  form.name = String(body.name || '').trim();
-  form.home = String(body.home || '').trim();
-  form.email = String(body.email || '').trim();
-  form.password = String(body.password || '').trim();
-  form.profile = String(body.profile || '').trim();
-  return form;
-}
-
-function createUser(form, done) {
+  var form = getForm(req);
   form.home = form.name;
   form.homel = form.namel = form.name.toLowerCase();
-  userc.checkForm(form, 0, function (err) {
+  checkForm(form, 0, function (err) {
     if (err) return done(err);
     var now = new Date();
     var user = {
@@ -49,19 +23,35 @@ function createUser(form, done) {
       cdate: now,
       adate: now,
       profile: form.profile
+      // admin 플래그는 콘솔에서 수작업으로 삽입한다. api 로 넣을 수 없다.
     };
-    // can't be set through form.
-    if (form.admin) {
-      user.admin = true;
-    }
     userb.users.insertOne(user, function (err) {
       if (err) return done(err);
-      done(null, user);
+      res.json({
+        id: user._id
+      });
     });
   });
-};
+});
 
-userc.checkForm = function (form, id, done) {
+exp.core.get('/users/register', function (req, res, done) {
+  res.render('user/user-create');
+});
+
+userc.emailx = /^[a-z0-9-_+.]+@[a-z0-9-]+(\.[a-z0-9-]+)+$/i
+
+var getForm = userc.getForm = function (req) {
+  var body = req.body;
+  var form = {};
+  form.name = String(body.name || '').trim();
+  form.home = String(body.home || '').trim();
+  form.email = String(body.email || '').trim();
+  form.password = String(body.password || '').trim();
+  form.profile = String(body.profile || '').trim();
+  return form;
+}
+
+var checkForm = userc.checkForm = function (form, id, done) {
   var errors = [];
   var creating = id == 0;
 
@@ -77,10 +67,10 @@ userc.checkForm = function (form, id, done) {
     errors.push(error.HOME_RANGE);
   }
 
-  userc.checkFormEmail(form, errors);
+  checkFormEmail(form, errors);
 
   if (creating || form.password.length) {
-    userc.checkFormPassword(form, errors);
+    checkFormPassword(form, errors);
   }
 
   countUsersByName(form.namel, id, function (err, cnt) {
@@ -99,12 +89,31 @@ userc.checkForm = function (form, id, done) {
           errors.push(error.EMAIL_DUPE);
         }
         if (errors.length) {
-          return done(error(errors));
+          done(error(errors));
+        } else {
+          done();
         }
-        done();
       });
     });
   });
+}
+
+var checkFormEmail = userc.checkFormEmail = function (form, errors) {
+  if (!form.email.length) {
+    errors.push(error.EMAIL_EMPTY);
+  } else if (form.email.length > 64 || form.email.length < 8) {
+    errors.push(error.EMAIL_RANGE);
+  } else if (!userc.emailx.test(form.email)) {
+    errors.push(error.EMAIL_PATTERN);
+  }
+}
+
+var checkFormPassword = userc.checkFormPassword = function (form, errors) {
+  if (!form.password.length) {
+    errors.push(error.PASSWORD_EMPTY);
+  } else if (form.password.length > 32 || form.password.length < 4) {
+    errors.push(error.PASSWORD_RANGE);
+  }
 }
 
 function countUsersByName(namel, id, done) {
@@ -130,21 +139,3 @@ function countUsersByEmail(email, id, done) {
   };
   userb.users.count(q, done);
 };
-
-userc.checkFormEmail = function (form, errors) {
-  if (!form.email.length) {
-    errors.push(error.EMAIL_EMPTY);
-  } else if (form.email.length > 64 || form.email.length < 8) {
-    errors.push(error.EMAIL_RANGE);
-  } else if (!userc.emailx.test(form.email)) {
-    errors.push(error.EMAIL_PATTERN);
-  }
-}
-
-userc.checkFormPassword = function (form, errors) {
-  if (!form.password.length) {
-    errors.push(error.PASSWORD_EMPTY);
-  } else if (form.password.length > 32 || form.password.length < 4) {
-    errors.push(error.PASSWORD_RANGE);
-  }
-}
