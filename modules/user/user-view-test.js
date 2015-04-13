@@ -1,5 +1,3 @@
-var expect = require('../base/chai').expect;
-
 var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config')({ path: 'config/test.json' });
@@ -10,6 +8,7 @@ var userv = require('../user/user-view');
 var userf = require('../user/user-fixture');
 var userc = require('../user/user-create');
 var local = require('../express/local');
+var expect = require('../base/assert').expect
 
 before(function (done) {
   init.run(done);
@@ -91,7 +90,7 @@ describe('finding user', function () {
     local.get('/api/users/999').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
-      expect(error.find(res.body.err, error.USER_NOT_FOUND)).true;
+      expect(res.body.err).error('USER_NOT_FOUND');
       done();
     });
   });

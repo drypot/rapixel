@@ -16,7 +16,7 @@ exp.core.post('/api/images', upload.handler(function (req, res, done) {
     if (err) return done(err);
     var form = getForm(req);
     if (!form.files.length) {
-      return done(error(error.IMAGE_NO_FILE));
+      return done(error('IMAGE_NO_FILE'));
     }
     var i = 0;
     var ids = [];

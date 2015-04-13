@@ -1,8 +1,7 @@
-var expect = require('../base/chai').expect;
-
 var fs = require('fs');
 
 var fsp = require('../base/fs');
+var expect = require('../base/assert').expect
 
 var testdir = 'tmp/fs-test';
 
@@ -12,6 +11,13 @@ before(function (done) {
     fs.mkdir('tmp/fs-test', 0755, function (err) {
       done();
     });
+  });
+});
+
+describe('pathExist', function () {
+  it('should success', function () {
+    expect('modules/base/fs-test.js').pathExist;
+    expect('modules/base/fs-test-xx.js').not.pathExist;
   });
 });
 

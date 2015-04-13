@@ -89,7 +89,7 @@ userb.getCached = function (id, done) {
   }
   userb.users.findOne({ _id: id }, function (err, user) {
     if (err) return done(err);
-    if (!user) return done(error(error.USER_NOT_FOUND));
+    if (!user) return done(error('USER_NOT_FOUND'));
     cache(user);
     done(null, user);
   });
@@ -129,7 +129,7 @@ userb.resetCache = function () {
 userb.checkUser = function (res, done) {
   var user = res.locals.user;
   if (!user) {
-    return done(error(error.NOT_AUTHENTICATED));
+    return done(error('NOT_AUTHENTICATED'));
   }
   done(null, user);
 };
@@ -137,17 +137,17 @@ userb.checkUser = function (res, done) {
 userb.checkAdmin = function (res, done) {
   var user = res.locals.user;
   if (!user) {
-    return done(error(error.NOT_AUTHENTICATED));
+    return done(error('NOT_AUTHENTICATED'));
   }
   if (!user.admin) {
-    return done(error(error.NOT_AUTHORIZED));
+    return done(error('NOT_AUTHORIZED'));
   }
   done(null, user);
 };
 
 userb.checkUpdatable = function (id, user, done) {
   if (user._id != id && !user.admin) {
-    return done(error(error.NOT_AUTHORIZED))
+    return done(error('NOT_AUTHORIZED'))
   }
   done();
 };
@@ -223,13 +223,13 @@ function findUser(email, password, done) {
   userb.users.findOne({ email: email }, function (err, user) {
     if (err) return done(err);
     if (!user) {
-      return done(error(error.EMAIL_NOT_FOUND));
+      return done(error('EMAIL_NOT_FOUND'));
     }
     if (user.status == 'd') {
-      return done(error(error.ACCOUNT_DEACTIVATED));
+      return done(error('ACCOUNT_DEACTIVATED'));
     }    
     if (!checkPassword(password, user.hash)) {      
-      return done(error(error.PASSWORD_WRONG));
+      return done(error('PASSWORD_WRONG'));
     }
     cache(user);    
     done(null, user);

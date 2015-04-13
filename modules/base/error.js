@@ -1,13 +1,20 @@
-var expect = require('../base/chai').expect;
+var assertp = require('../base/assert');
+var expect = assertp.expect;
 
-var init = require('../base/init');
-
-var error = exports = module.exports = function (ec /* error const */) {
+var error = exports = module.exports = function (obj) {
   var err;
-  if (Array.isArray(ec)) {
+  if (Array.isArray(obj)) {
     err = new Error(error.INVALID_FORM.message);
     err.code = error.INVALID_FORM.code;
-    err.errors = ec;
+    err.errors = obj;
+    return err;
+  }
+  var ec = error[obj];
+  if (!ec) {
+    err = new Error('unknown error');
+    for (var p in obj) {
+      err[p] = obj[p];
+    }
     return err;
   }
   if (ec.field) {
@@ -16,15 +23,8 @@ var error = exports = module.exports = function (ec /* error const */) {
     err.errors = [ec];
     return err;
   }
-  if (ec.code) {
-    err = new Error(ec.message);
-    err.code = ec.code;
-    return err;
-  }
-  err = new Error('unknown error');
-  for (var p in ec) {
-    err[p] = ec[p];
-  }
+  err = new Error(ec.message);
+  err.code = ec.code;
   return err;
 };
 
@@ -39,21 +39,38 @@ error.define = function (code, msg, field) {
   }
 };
 
-error.find = function (err, ec) {
-  if (err.code == error.INVALID_FORM.code) {
-    for (var i = 0; i < err.errors.length; i++) {
-      var e = err.errors[i];
-      if (e.code == ec.code && e.field == ec.field && e.message == ec.message) {
+error.define('INVALID_DATA', '비정상적인 값이 입력되었습니다.');
+error.define('INVALID_FORM', '*');
+
+error.find = function (act, exp) {
+  if (act.code === error.INVALID_FORM.code) {
+    for (var i = 0; i < act.errors.length; i++) {
+      var e = act.errors[i];
+      if (e.code === exp.code && e.field === exp.field && e.message === exp.message) {
         return true;
       }
     }
   } else {
-    if (err.code == ec.code && err.message == ec.message) {
+    if (act.code === exp.code && act.message === exp.message) {
       return true;
     }
   }
   return false;
-}
+};
 
-error.define('INVALID_DATA', '비정상적인 값이 입력되었습니다.');
-error.define('INVALID_FORM', '*');
+assertp.chai.use(function (chai, utils) {
+  var Assertion = chai.Assertion;
+  Assertion.addMethod('error', function (code) {
+    var act = this._obj;
+    var exp = error[code];
+    new Assertion(exp).property('code');
+    new Assertion(exp).property('message');
+    this.assert(
+      error.find(act, exp),
+      "expected #{this.code} to be #{exp} but got #{act}",
+      "expected #{this.code} not to be #{exp}",
+      exp.code,
+      act.code
+    );    
+  });
+});

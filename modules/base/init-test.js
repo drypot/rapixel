@@ -1,6 +1,5 @@
-var expect = require('../base/chai').expect;
-
 var init = require('../base/init');
+var expect = require('../base/assert').expect;
 
 describe('sync init function', function () {
   it('should success', function (done) {

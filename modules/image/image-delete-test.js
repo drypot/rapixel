@@ -1,5 +1,3 @@
-var expect = require('../base/chai').expect;
-
 var fs = require('fs');
 
 var init = require('../base/init');
@@ -13,6 +11,7 @@ var userf = require('../user/user-fixture');
 var imageb = require('../image/image-base');
 var imaged = require('../image/image-delete');
 var local = require('../express/local');
+var expect = require('../base/assert').expect
 
 before(function (done) {
   init.run(done);
@@ -120,7 +119,7 @@ describe('deleting other\'s', function () {
     local.del('/api/images/' + _id, function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
-      expect(error.find(res.body.err, error.NOT_AUTHORIZED)).true;
+      expect(res.body.err).error('NOT_AUTHORIZED');
       done();
     });
   });

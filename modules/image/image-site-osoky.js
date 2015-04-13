@@ -28,10 +28,10 @@ exports.thumbnailSuffix = '-640.jpg';
 exports.checkImageMeta = function (path, done) {
   imageb.identify(path, function (err, meta) {
     if (err) {
-      return done(error(error.IMAGE_TYPE));
+      return done(error('IMAGE_TYPE'));
     }
     if (meta.shorter < 640) {
-      return done(error(error.IMAGE_SIZE));
+      return done(error('IMAGE_SIZE'));
     }
     done(null, meta);
   });

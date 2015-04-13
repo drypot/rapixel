@@ -1,5 +1,3 @@
-var expect = require('../base/chai').expect;
-
 var fs = require('fs');
 
 var init = require('../base/init');
@@ -13,6 +11,7 @@ var userf = require('../user/user-fixture');
 var imageb = require('../image/image-base');
 var imageu = require('../image/image-update');
 var local = require('../express/local');
+var expect = require('../base/assert').expect
 
 before(function (done) {
   init.run(done);
@@ -62,7 +61,7 @@ describe('updating with text file', function () {
     local.put('/api/images/' + _id).attach('files', 'modules/express/upload-fixture1.txt').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
-      expect(error.find(res.body.err, error.IMAGE_TYPE)).true;
+      expect(res.body.err).error('IMAGE_TYPE');
       done();
     });
   });
@@ -84,7 +83,7 @@ describe('updating other\'s', function () {
     local.put('/api/images/' + _id).field('comment', 'xxx').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
-      expect(error.find(res.body.err, error.NOT_AUTHORIZED)).true;
+      expect(res.body.err).error('NOT_AUTHORIZED');
       done();
     });
   });

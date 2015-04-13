@@ -1,5 +1,3 @@
-var expect = require('../base/chai').expect;
-
 var fs = require('fs');
 
 var init = require('../base/init');
@@ -13,6 +11,7 @@ var userf = require('../user/user-fixture');
 var imageb = require('../image/image-base');
 var imagec = require('../image/image-create');
 var local = require('../express/local');
+var expect = require('../base/assert').expect
 
 before(function (done) {
   init.run(done);
@@ -105,7 +104,7 @@ describe('posting small image', function () {
     local.post('/api/images').attach('files', 'samples/2880x1620-169.jpg').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
-      expect(error.find(res.body.err, error.IMAGE_SIZE)).true;
+      expect(res.body.err).error('IMAGE_SIZE');
       done();
     });
   });

@@ -1,8 +1,7 @@
-var expect = require('../base/chai').expect;
-
 var init = require('../base/init');
 var config = require('../base/config')({ path: 'config/test.json' });
 var imageb = require('../image/image-base');
+var expect = require('../base/assert').expect
 
 before(function (done) {
   init.run(done);

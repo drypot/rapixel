@@ -1,5 +1,3 @@
-var expect = require('../base/chai').expect;
-
 var express = require('express');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
@@ -9,6 +7,7 @@ var redisStore = require('connect-redis')(session);
 var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config');
+var expect = require('../base/assert').expect
 var exp = exports;
 
 exp.core = express.Router();

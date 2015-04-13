@@ -44,7 +44,7 @@ function incHit(id, hit, done) {
 function findImage(id, done) {
   imageb.images.findOne({ _id: id }, function (err, image) {
     if (err) return done(err);
-    if (!image) return done(error(error.IMAGE_NOT_EXIST));
+    if (!image) return done(error('IMAGE_NOT_EXIST'));
     userb.getCached(image.uid, function (err, user) {
       if (err) return done(err);
       image.user = {

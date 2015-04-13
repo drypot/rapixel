@@ -31,7 +31,7 @@ exp.core.post('/api/reset-pass', function (req, res, done) {
     userb.users.findOne({ email: form.email }, function (err, user) {
       if (err) return done(err);
       if (!user) {
-        return done(error(error.EMAIL_NOT_EXIST));
+        return done(error('EMAIL_NOT_EXIST'));
       }
       resets.deleteOne({ email: form.email }, function (err) {
         if (err) return done(err);
@@ -76,13 +76,13 @@ exp.core.put('/api/reset-pass', function (req, res, done) {
   resets.findOne({ _id: new mongop.ObjectID(form.id) }, function (err, reset) {
     if (err) return done(err);
     if (!reset) {
-      return done(error(error.INVALID_DATA));
+      return done(error('INVALID_DATA'));
     }
     if (form.token != reset.token) {
-      return done(error(error.INVALID_DATA));
+      return done(error('INVALID_DATA'));
     }
     if (Date.now() - reset._id.getTimestamp().getTime() > 15 * 60 * 1000) {
-      return done(error(error.RESET_TIMEOUT));
+      return done(error('RESET_TIMEOUT'));
     }
     var query = { 
       email: reset.email,

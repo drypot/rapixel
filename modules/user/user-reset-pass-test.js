@@ -1,5 +1,3 @@
-var expect = require('../base/chai').expect;
-
 var bcrypt = require('bcrypt');
 
 var init = require('../base/init');
@@ -11,6 +9,7 @@ var userb = require('../user/user-base');
 var userf = require('../user/user-fixture');
 var userp = require('../user/user-reset-pass');
 var local = require('../express/local');
+var expect = require('../base/assert').expect
 
 before(function (done) {
   init.run(done);
@@ -50,7 +49,7 @@ describe('resetting user', function () {
     local.post('/api/reset-pass').send({ email: 'abc.def.xyz' }).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
-      expect(error.find(res.body.err, error.EMAIL_PATTERN)).true;
+      expect(res.body.err).error('EMAIL_PATTERN');
       done();
     });
   });
@@ -58,7 +57,7 @@ describe('resetting user', function () {
     local.post('/api/reset-pass').send({ email: 'non-exist@xyz.com' }).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
-      expect(error.find(res.body.err, error.EMAIL_NOT_EXIST)).true;
+      expect(res.body.err).error('EMAIL_NOT_EXIST');
       done();
     });
   });
@@ -67,7 +66,7 @@ describe('resetting user', function () {
     local.put('/api/reset-pass').send(form).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
-      expect(error.find(res.body.err, error.INVALID_DATA)).true;
+      expect(res.body.err).error('INVALID_DATA');
       done();
     });
   });
@@ -76,7 +75,7 @@ describe('resetting user', function () {
     local.put('/api/reset-pass').send(form).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
-      expect(error.find(res.body.err, error.INVALID_DATA)).true;
+      expect(res.body.err).error('INVALID_DATA');
       done();
     });
   });
@@ -85,7 +84,7 @@ describe('resetting user', function () {
     local.put('/api/reset-pass').send(form).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
-      expect(error.find(res.body.err, error.PASSWORD_EMPTY)).true;
+      expect(res.body.err).error('PASSWORD_EMPTY');
       done();
     });
   });
@@ -94,7 +93,7 @@ describe('resetting user', function () {
     local.put('/api/reset-pass').send(form).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
-      expect(error.find(res.body.err, error.PASSWORD_RANGE)).true;
+      expect(res.body.err).error('PASSWORD_RANGE');
       done();
     });
   });

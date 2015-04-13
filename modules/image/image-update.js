@@ -77,10 +77,10 @@ imageu.checkUpdatable = function (id, user, done) {
   imageb.images.findOne({ _id: id }, function (err, image) {
     if (err) return done(err);
     if (!image) {
-      return done(error(error.IMAGE_NOT_EXIST));
+      return done(error('IMAGE_NOT_EXIST'));
     }
     if (!user.admin && image.uid != user._id) {
-      return done(error(error.NOT_AUTHORIZED));
+      return done(error('NOT_AUTHORIZED'));
     }
     done(null, image);
   });

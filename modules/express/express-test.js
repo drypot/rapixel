@@ -1,10 +1,9 @@
-var expect = require('../base/chai').expect;
-
 var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config')({ path: 'config/test.json' });
 var exp = require('../express/express');
 var local = require('../express/local');
+var expect = require('../base/assert').expect
 
 before(function (done) {
   init.run(done);
@@ -128,7 +127,7 @@ describe('no-action', function () {
 describe('json error', function () {
   it('given handler', function () {
     exp.core.get('/api/test/invalid-data', function (req, res, done) {
-       done(error(error.INVALID_DATA));
+       done(error('INVALID_DATA'));
     });
   });
   it('should return json', function (done) {
@@ -136,7 +135,7 @@ describe('json error', function () {
       expect(err).not.exist;
       expect(res).json;
       expect(res.body.err).exist;
-      expect(error.find(res.body.err, error.INVALID_DATA)).true;
+      expect(res.body.err).error('INVALID_DATA');
       done();
     });
   });
@@ -161,7 +160,7 @@ describe('html', function () {
 describe('html error', function () {
   it('given handler', function () {
     exp.core.get('/test/invalid-data', function (req, res, done) {
-       done(error(error.INVALID_DATA));
+       done(error('INVALID_DATA'));
     });
   });
   it('should return html', function (done) {

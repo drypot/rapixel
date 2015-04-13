@@ -1,5 +1,3 @@
-var expect = require('../base/chai').expect;
-
 var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config')({ path: 'config/test.json' });
@@ -9,6 +7,7 @@ var userb = require('../user/user-base');
 var userf = require('../user/user-fixture');
 var userd = require('../user/user-deactivate');
 var local = require('../express/local');
+var expect = require('../base/assert').expect
 
 init.add(function () {
   exp.core.get('/api/test/user', function (req, res, done) {
@@ -52,7 +51,7 @@ describe('deactivating self', function () {
     local.get('/api/test/user').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
-      expect(error.find(res.body.err, error.NOT_AUTHENTICATED)).true;
+      expect(res.body.err).error('NOT_AUTHENTICATED');
       done();
     });
   });
@@ -66,7 +65,7 @@ describe('deactivating with no login', function () {
     local.del('/api/users/' + userf.user2._id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
-      expect(error.find(res.body.err, error.NOT_AUTHENTICATED)).true;
+      expect(res.body.err).error('NOT_AUTHENTICATED');
       done();
     });
   });
@@ -80,7 +79,7 @@ describe('deactivating other', function () {
     local.del('/api/users/' + userf.user3._id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
-      expect(error.find(res.body.err, error.NOT_AUTHORIZED)).true;
+      expect(res.body.err).error('NOT_AUTHORIZED');
       done();
     });
   });

@@ -12,7 +12,7 @@ exp.core.delete('/api/users/:id([0-9]+)', function (req, res, done) {
       userb.users.updateOne({ _id: id }, { $set: { status: 'd' } }, function (err, cnt) {
         if (err) return done(err);
         if (!cnt) {
-          return done(error(error.USER_NOT_FOUND));
+          return done(error('USER_NOT_FOUND'));
         }
         userb.deleteCache(id);
         userb.logout(req, res);

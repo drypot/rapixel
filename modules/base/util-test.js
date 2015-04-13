@@ -1,6 +1,5 @@
-var expect = require('../base/chai').expect;
-
 var utilp = require('../base/util');
+var expect = require('../base/assert').expect
 
 describe('find', function () {
   it('should success', function () {

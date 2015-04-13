@@ -1,6 +1,20 @@
 var fs = require('fs');
 var path = require('path');
+
+var assertp = require('../base/assert');
 var fsp = exports;
+
+assertp.chai.use(function (chai, utils) {
+  var Assertion = chai.Assertion;
+  Assertion.addProperty('pathExist', function () {
+    new Assertion(this._obj).a('string');
+    this.assert(
+      fs.existsSync(this._obj),
+      "expected #{this} to exist",
+      "expected #{this} not to exist"
+    );
+  });
+});
 
 fsp.removeDir = function removeDir(p, done) {
   fs.stat(p, function (err, stat) {

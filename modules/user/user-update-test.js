@@ -1,5 +1,3 @@
-var expect = require('../base/chai').expect;
-
 var bcrypt = require('bcrypt');
 
 var init = require('../base/init');
@@ -11,6 +9,7 @@ var userb = require('../user/user-base');
 var useru = require('../user/user-update');
 var userf = require('../user/user-fixture');
 var local = require('../express/local');
+var expect = require('../base/assert').expect
 
 before(function (done) {
   init.run(done);
@@ -69,7 +68,7 @@ describe('permission', function () {
     local.put('/api/users/' + userf.user2._id).send(form).end(function (err,res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
-      expect(error.find(res.body.err, error.NOT_AUTHORIZED)).true;
+      expect(res.body.err).error('NOT_AUTHORIZED');
       done();
     });
   });
@@ -88,7 +87,7 @@ describe('permission', function () {
     var form = { name: 'NewName3', home: 'NewHome3', email: 'new.name3@mail.com', password: '5678' };
     local.put('/api/users/' + 999).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(error.find(res.body.err, error.USER_NOT_FOUND)).true;
+      expect(res.body.err).error('USER_NOT_FOUND');
       done();
     });
   });
@@ -111,7 +110,7 @@ describe('updating name', function () {
     local.put('/api/users/' + userf.user1._id).send(form).end(function (err,res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
-      expect(error.find(res.body.err, error.NAME_DUPE)).true;
+      expect(res.body.err).error('NAME_DUPE');
       done();
     });
   });
@@ -120,7 +119,7 @@ describe('updating name', function () {
     local.put('/api/users/' + userf.user1._id).send(form).end(function (err,res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
-      expect(error.find(res.body.err, error.NAME_DUPE)).true;
+      expect(res.body.err).error('NAME_DUPE');
       done();
     });
   });
@@ -128,7 +127,7 @@ describe('updating name', function () {
     var form = { name: '', home: 'NameTest', email: 'nametest@mail.com', password: '1234' };
     local.put('/api/users/' + userf.user1._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(error.find(res.body.err, error.NAME_EMPTY)).true;
+      expect(res.body.err).error('NAME_EMPTY');
       done();
     });
   });
@@ -136,7 +135,7 @@ describe('updating name', function () {
     var form = { name: 'u', home: 'NameTest', email: 'nametest@mail.com', password: '1234' };
     local.put('/api/users/' + userf.user1._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(error.find(res.body.err, error.NAME_RANGE)).true;
+      expect(res.body.err).error('NAME_RANGE');
       done();
     });
   });
@@ -152,7 +151,7 @@ describe('updating name', function () {
     var form = { name: '123456789012345678901234567890123', home: 'NameTest', email: 'nametest@mail.com', password: '1234' };
     local.put('/api/users/' + userf.user1._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(error.find(res.body.err, error.NAME_RANGE)).true;
+      expect(res.body.err).error('NAME_RANGE');
       done();
     });
   });
@@ -183,7 +182,7 @@ describe('updating home', function () {
     local.put('/api/users/' + userf.user1._id).send(form).end(function (err,res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
-      expect(error.find(res.body.err, error.HOME_DUPE)).true;
+      expect(res.body.err).error('HOME_DUPE');
       done();
     });
   });
@@ -192,7 +191,7 @@ describe('updating home', function () {
     local.put('/api/users/' + userf.user1._id).send(form).end(function (err,res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
-      expect(error.find(res.body.err, error.HOME_DUPE)).true;
+      expect(res.body.err).error('HOME_DUPE');
       done();
     });
   });
@@ -200,7 +199,7 @@ describe('updating home', function () {
     var form = { name: 'Name3', home: '', email: 'name3@mail.com', password: '1234' };
     local.put('/api/users/' + userf.user1._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(error.find(res.body.err, error.HOME_EMPTY)).true;
+      expect(res.body.err).error('HOME_EMPTY');
       done();
     });
   });
@@ -208,7 +207,7 @@ describe('updating home', function () {
     var form = { name: 'Name4', home: 'h', email: 'name4@mail.com', password: '1234' };
     local.put('/api/users/' + userf.user1._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(error.find(res.body.err, error.HOME_RANGE)).true;
+      expect(res.body.err).error('HOME_RANGE');
       done();
     });
   });
@@ -224,7 +223,7 @@ describe('updating home', function () {
     var form = { name: 'HomeTest', home: '123456789012345678901234567890123', email: 'hometest@mail.com', password: '1234' };
     local.put('/api/users/' + userf.user1._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(error.find(res.body.err, error.HOME_RANGE)).true;
+      expect(res.body.err).error('HOME_RANGE');
       done();
     });
   });
@@ -254,7 +253,7 @@ describe('updating email', function () {
     var form = { name: 'Name1', home: 'Home1', email: 'name@mail.com', password: '1234' };
     local.put('/api/users/' + userf.user1._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(error.find(res.body.err, error.EMAIL_DUPE)).true;
+      expect(res.body.err).error('EMAIL_DUPE');
       done();
     });
   });
@@ -262,7 +261,7 @@ describe('updating email', function () {
     var form = { name: 'Name2', home: 'Home2', email: 'abc.mail.com', password: '1234' };
     local.put('/api/users/' + userf.user1._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(error.find(res.body.err, error.EMAIL_PATTERN)).true;
+      expect(res.body.err).error('EMAIL_PATTERN');
       done();
     });
   });
@@ -300,7 +299,7 @@ describe('updating password', function () {
     var form = { name: 'Name2', home: 'Home2', email: 'name2@mail.com', password: '123' };
     local.put('/api/users/' + userf.user1._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(error.find(res.body.err, error.PASSWORD_RANGE)).true;
+      expect(res.body.err).error('PASSWORD_RANGE');
       done();
     });
   });
@@ -308,7 +307,7 @@ describe('updating password', function () {
     var form = { name: 'Name3', home: 'Home3', email: 'name3@mail.com', password: '123456789012345678901234567890123' };
     local.put('/api/users/' + userf.user1._id).send(form).end(function (err,res) {
       expect(err).not.exist;
-      expect(error.find(res.body.err, error.PASSWORD_RANGE)).true;
+      expect(res.body.err).error('PASSWORD_RANGE');
       done();
     });
   });

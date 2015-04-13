@@ -1,5 +1,3 @@
-var expect = require('../base/chai').expect;
-
 var fs = require('fs');
 
 var init = require('../base/init');
@@ -12,6 +10,7 @@ var userf = require('../user/user-fixture');
 var imageb = require('../image/image-base');
 var imagec = require('../image/image-create');
 var local = require('../express/local');
+var expect = require('../base/assert').expect
 
 before(function (done) {
   init.run(done);
@@ -96,7 +95,7 @@ describe('posting text', function () {
     local.post('/api/images').attach('files', 'modules/express/upload-fixture1.txt').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
-      expect(error.find(res.body.err, error.IMAGE_TYPE)).true;
+      expect(res.body.err).error('IMAGE_TYPE');
       done();
     });
   });
@@ -111,7 +110,7 @@ describe('posting no file', function () {
     local.post('/api/images').send(form).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
-      expect(error.find(res.body.err, error.IMAGE_NO_FILE)).true;
+      expect(res.body.err).error('IMAGE_NO_FILE');
       done();
     });
   });

@@ -11,10 +11,10 @@ exports.svg = true;
 exports.checkImageMeta = function (path, done) {
   imageb.identify(path, function (err, meta) {
     if (err) {
-      return done(error(error.IMAGE_TYPE));
+      return done(error('IMAGE_TYPE'));
     }
     if (meta.format !== 'svg') {
-      return done(error(error.IMAGE_TYPE));
+      return done(error('IMAGE_TYPE'));
     }
     done(null, meta);
   });

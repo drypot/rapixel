@@ -29,7 +29,7 @@ exp.core.put('/api/users/:id([0-9]+)', function (req, res, done) {
         userb.users.updateOne({ _id: id }, { $set: fields }, function (err, r) {
           if (err) return done(err);
           if (!r.modifiedCount) {
-            return done(error(error.USER_NOT_FOUND));
+            return done(error('USER_NOT_FOUND'));
           }
           userb.deleteCache(id);
           res.json({});
