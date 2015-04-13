@@ -48,7 +48,7 @@ describe('parsing form', function () {
     local.post('/api/test/upload-form').field('p1', 'abc').field('p2', '123').field('p2', '456').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
-      expect(res.body.files).eql({});
+      expect(res.body.files).not.exist;
       expect(res.body.p1).equal('abc');
       expect(res.body.p2).eql(['123', '456']);
       done();

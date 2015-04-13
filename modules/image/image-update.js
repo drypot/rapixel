@@ -20,10 +20,10 @@ exp.core.put('/api/images/:id([0-9]+)', upload.handler(function (req, res, done)
     var form = imagec.getForm(req);
     imageu.checkUpdatable(id, user, function (err) {
       if (err) return done(err);
-      var file = form.files[0];
-      utilp.fif(!file, function (next) {
+      utilp.fif(!form.files, function (next) {
         next({}, null, null);
       }, function (next) {
+        var file = form.files[0];
         site.checkImageMeta(file.path, function (err, meta) {
           if (err) return done(err);
           var path = new imageb.FilePath(id, meta.format);

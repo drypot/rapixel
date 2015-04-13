@@ -15,7 +15,7 @@ exp.core.post('/api/images', upload.handler(function (req, res, done) {
   userb.checkUser(res, function (err, user) {
     if (err) return done(err);
     var form = getForm(req);
-    if (!form.files.length) {
+    if (!form.files) {
       return done(error('IMAGE_NO_FILE'));
     }
     var i = 0;
@@ -84,7 +84,7 @@ var getForm = imagec.getForm = function (req) {
   var form = {};
   form.now = new Date();
   form.comment = body.comment || '';
-  form.files = req.files && req.files.files || [];
+  form.files = req.files && req.files.files;
   return form;
 }
 
