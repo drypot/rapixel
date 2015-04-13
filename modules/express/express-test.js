@@ -50,7 +50,6 @@ describe('echo', function () {
   });
 });
 
-
 describe('undefined', function () {
   it('should return 404', function (done) {
     local.get('/api/test/undefined-url').end(function (err, res) {

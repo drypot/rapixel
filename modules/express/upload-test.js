@@ -44,13 +44,27 @@ describe('parsing form', function () {
       done();
     }));
   });
-  it('should success', function (done) {
+  it('field should success', function (done) {
     local.post('/api/test/upload-form').field('p1', 'abc').field('p2', '123').field('p2', '456').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       expect(res.body.files).not.exist;
       expect(res.body.p1).equal('abc');
       expect(res.body.p2).eql(['123', '456']);
+      done();
+    });
+  });
+  it('fields should success', function (done) {
+    var form = {
+      p1: 'abc',
+      p2: '123'
+    }
+    local.post('/api/test/upload-form').fields(form).end(function (err, res) {
+      expect(err).not.exist;
+      expect(res.body.err).not.exist;
+      expect(res.body.files).not.exist;
+      expect(res.body.p1).equal('abc');
+      expect(res.body.p2).equal('123');
       done();
     });
   });
