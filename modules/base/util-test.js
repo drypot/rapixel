@@ -60,6 +60,35 @@ describe('mergeArray', function () {
   });
 });
 
+describe('fif', function () {
+  it('should success', function () {
+    var r;
+    utilp.fif(true, function (next) {
+      r = '123';
+      next('456');
+    }, function (next) {
+      r = 'abc';
+      next('def');
+    }, function (p) {
+      expect(r).equal('123');
+      expect(p).equal('456');
+    })
+  });
+  it('should success', function () {
+    var r;
+    utilp.fif(false, function (next) {
+      r = '123';
+      next('456');
+    }, function (next) {
+      r = 'abc';
+      next('def');
+    }, function (p) {
+      expect(r).equal('abc');
+      expect(p).equal('def');
+    })
+  });
+});
+
 describe('pass', function () {
   it('should success', function (done) {
     utilp.pass(function (err) {

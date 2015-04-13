@@ -4,6 +4,7 @@ var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config');
 var fsp = require('../base/fs');
+var utilp = require('../base/util');
 var exp = require('../express/express');
 var upload = require('../express/upload');
 var userb = require('../user/user-base');
@@ -20,40 +21,36 @@ exp.core.put('/api/images/:id([0-9]+)', upload.handler(function (req, res, done)
     imageu.checkUpdatable(id, user, function (err) {
       if (err) return done(err);
       var file = form.files[0];
-      if (!file) {
-        var fields = {};
-        site.fillFields(fields, form);
-        imageb.images.updateOne({ _id: id }, { $set: fields }, function (err) {
+      utilp.fif(!file, function (next) {
+        next({}, null, null);
+      }, function (next) {
+        site.checkImageMeta(file.path, function (err, meta) {
           if (err) return done(err);
-          res.json({});
-          done();
-        });
-        return;
-      } 
-      site.checkImageMeta(file.path, function (err, meta) {
-        if (err) return done(err);
-        var path = new imageb.FilePath(id, meta.format);
-        fsp.removeDir(path.dir, function (err) {
-          if (err) return done(err);
-          fsp.makeDir(path.dir, function (err) {
+          var path = new imageb.FilePath(id, meta.format);
+          fsp.removeDir(path.dir, function (err) {
             if (err) return done(err);
-            fs.rename(file.path, path.original, function (err) {
+            fsp.makeDir(path.dir, function (err) {
               if (err) return done(err);
-              site.makeVersions(path, meta, function (err, vers) {
+              fs.rename(file.path, path.original, function (err) {
                 if (err) return done(err);
-                var fields = {
-                  fname: file.safeFilename,
-                  format: meta.format,
-                }
-                site.fillFields(fields, form, meta, vers);
-                imageb.images.updateOne({ _id: id }, { $set: fields }, function (err) {
+                site.makeVersions(path, meta, function (err, vers) {
                   if (err) return done(err);
-                  res.json({});
-                  done();
+                  var fields = {
+                    fname: file.safeFilename,
+                    format: meta.format,
+                  }
+                  next(fields, meta, vers);
                 });
               });
             });
           });
+        });
+      }, function (fields, meta, vers) {
+        site.fillFields(fields, form, meta, vers);
+        imageb.images.updateOne({ _id: id }, { $set: fields }, function (err) {
+          if (err) return done(err);
+          res.json({});
+          done();
         });
       });
     });

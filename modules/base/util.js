@@ -42,12 +42,24 @@ utilp.mergeArray = function () {
   }
 }
 
+// functional if
+
+utilp.fif = function (condi, case1, case2, next) {
+  if (condi) {
+    case1(next);
+  } else {
+    case2(next);
+  }
+};
+
 // 마지막 인자 콜백을 바로 호출. 
 // 테스트 디버깅 용으로 만들었던 듯.
 
 utilp.pass = function () {
   arguments[arguments.length - 1]();
 }
+
+// datetime
 
 function pad(number) {
   var r = String(number);
