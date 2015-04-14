@@ -16,31 +16,34 @@ init.add(exports.recreate = function (done) {
     ];
     var i = 0;
     (function create() {
-      if (i == forms.length) return done();
-      var form = forms[i++];
-      var now = new Date();
-      var user = {
-        _id: userb.getNewId(),
-        name: form.name,
-        namel: form.name,
-        home: form.name,
-        homel: form.name,
-        email: form.email,
-        hash: userb.makeHash(form.password),
-        status: 'v',
-        cdate: now,
-        adate: now,
-        profile: '',
-      };
-      if (form.admin) {
-        user.admin = true;
+      if (i < forms.length) {
+        var form = forms[i++];
+        var now = new Date();
+        var user = {
+          _id: userb.getNewId(),
+          name: form.name,
+          namel: form.name,
+          home: form.name,
+          homel: form.name,
+          email: form.email,
+          hash: userb.makeHash(form.password),
+          status: 'v',
+          cdate: now,
+          adate: now,
+          profile: '',
+        };
+        if (form.admin) {
+          user.admin = true;
+        }
+        userb.users.insertOne(user, function (err) {
+          expect(err).not.exist;
+          user.password = form.password;
+          exports[user.name] = user;
+          setImmediate(create);
+        });
+        return;        
       }
-      userb.users.insertOne(user, function (err) {
-        expect(err).not.exist;
-        user.password = form.password;
-        exports[user.name] = user;
-        setImmediate(create);
-      });
+      done();
     })();
   });
 });

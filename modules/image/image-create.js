@@ -21,46 +21,47 @@ exp.core.post('/api/images', upload.handler(function (req, res, done) {
     var i = 0;
     var ids = [];
     (function create() {
-      if (i == form.files.length) {
-        res.json({ ids: ids });
-        return done();
-      }
-      var file = form.files[i++];
-      getTicketCount(form.now, user, function (err, count, hours) {
-        if (err) return done(err);
-        if (!count) {
-          res.json({ ids: ids });
-          return done();
-        }
-        site.checkImageMeta(file.path, function (err, meta) {
+      if (i < form.files.length) {
+        var file = form.files[i++];
+        getTicketCount(form.now, user, function (err, count, hours) {
           if (err) return done(err);
-          var id = imageb.getNewId();
-          var path = new imageb.FilePath(id, meta.format);
-          fsp.makeDir(path.dir, function (err) {
+          if (!count) {
+            res.json({ ids: ids });
+            return done();
+          }
+          site.checkImageMeta(file.path, function (err, meta) {
             if (err) return done(err);
-            fs.rename(file.path, path.original, function (err) {
+            var id = imageb.getNewId();
+            var path = new imageb.FilePath(id, meta.format);
+            fsp.makeDir(path.dir, function (err) {
               if (err) return done(err);
-              site.makeVersions(path, meta, function (err, vers) {
+              fs.rename(file.path, path.original, function (err) {
                 if (err) return done(err);
-                var image = {
-                  _id: id,
-                  uid: user._id,
-                  hit: 0,
-                  fname: file.safeFilename,
-                  format: meta.format,
-                  cdate: form.now
-                };
-                site.fillFields(image, form, meta, vers);
-                imageb.images.insertOne(image, function (err) {
+                site.makeVersions(path, meta, function (err, vers) {
                   if (err) return done(err);
-                  ids.push(id);
-                  setImmediate(create);
+                  var image = {
+                    _id: id,
+                    uid: user._id,
+                    hit: 0,
+                    fname: file.safeFilename,
+                    format: meta.format,
+                    cdate: form.now
+                  };
+                  site.fillFields(image, form, meta, vers);
+                  imageb.images.insertOne(image, function (err) {
+                    if (err) return done(err);
+                    ids.push(id);
+                    setImmediate(create);
+                  });
                 });
               });
             });
           });
         });
-      });
+        return;
+      }
+      res.json({ ids: ids });
+      done();
     })();
   });
 }));

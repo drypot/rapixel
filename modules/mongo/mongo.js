@@ -76,25 +76,26 @@ mongop.findPage = function (col, query, gt, lt, ps, filter, done) {
     (function read() {
       cursor.nextObject(function (err, result) {
         if (err) return done(err);
-        if (!result) {
-          return returnPage(false);
-        }
-        count++;
-        if (count > ps) {
-          return returnPage(true);
-        }
-        if (!first) first = result._id;
-        last = result._id;
-        if (filter) {
-          filter(result, function (err, result) {
-            if (err) return done(err);
-            if (result) fillResults(result);
+        if (result) {
+          count++;
+          if (count > ps) {
+            return returnPage(true);
+          }
+          if (!first) first = result._id;
+          last = result._id;
+          if (filter) {
+            filter(result, function (err, result) {
+              if (err) return done(err);
+              if (result) fillResults(result);
+              setImmediate(read);
+            });
+          } else {
+            fillResults(result);
             setImmediate(read);
-          });
-        } else {
-          fillResults(result);
-          setImmediate(read);
+          }
+          return;
         }
+        returnPage(false);
       });
     })();
 
@@ -133,9 +134,9 @@ mongop.forEach = function (col, doit, done) {
           if (err) return done(err);
           setImmediate(read);         
         });
-      } else {
-        done();
+        return;
       }
+      done();
     });
   })();
 };
