@@ -63,15 +63,15 @@ describe('error(unknown)', function () {
 describe('error find', function () {
   it('should success', function () {
     var err = error('INVALID_DATA');
-    expect(error.find(err, error.INVALID_DATA)).true;
-    expect(error.find(err, error.INVALID_FORM)).false;
-    expect(error.find(err, error.NAME_DUPE)).false;
+    expect(error.find(err, 'INVALID_DATA')).true;
+    expect(error.find(err, 'INVALID_FORM')).false;
+    expect(error.find(err, 'NAME_DUPE')).false;
   });
   it('form error should success', function () {
     var err = error('NAME_DUPE');
-    expect(error.find(err, error.INVALID_DATA)).false;
-    expect(error.find(err, error.INVALID_FORM)).false;
-    expect(error.find(err, error.NAME_DUPE)).true;
+    expect(error.find(err, 'INVALID_DATA')).false;
+    expect(error.find(err, 'INVALID_FORM')).false;
+    expect(error.find(err, 'NAME_DUPE')).true;
   });
 });
 

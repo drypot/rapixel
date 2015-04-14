@@ -42,16 +42,16 @@ error.define = function (code, msg, field) {
 error.define('INVALID_DATA', '비정상적인 값이 입력되었습니다.');
 error.define('INVALID_FORM', '*');
 
-error.find = function (act, exp) {
+error.find = function (act, code) {
   if (act.code === error.INVALID_FORM.code) {
     for (var i = 0; i < act.errors.length; i++) {
       var e = act.errors[i];
-      if (e.code === exp.code && e.field === exp.field && e.message === exp.message) {
+      if (e.code === code) {
         return true;
       }
     }
   } else {
-    if (act.code === exp.code && act.message === exp.message) {
+    if (act.code === code) {
       return true;
     }
   }
@@ -61,16 +61,13 @@ error.find = function (act, exp) {
 assertp.chai.use(function (chai, utils) {
   var Assertion = chai.Assertion;
   Assertion.addMethod('error', function (code) {
-    var act = this._obj;
-    var exp = error[code];
-    new Assertion(exp).property('code');
-    new Assertion(exp).property('message');
+    new Assertion(error[code]).exist;
     this.assert(
-      error.find(act, exp),
+      error.find(this._obj, code),
       "expected #{this.code} to be #{exp} but got #{act}",
       "expected #{this.code} not to be #{exp}",
-      exp.code,
-      act.code
+      code,
+      this._obj.code
     );    
   });
 });
