@@ -74,6 +74,8 @@ utilp.toDateTimeString = function (d) {
     pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
 };
 
+// url
+
 utilp.makeUrl = function(url, params) {
   var qm;
 
@@ -91,6 +93,31 @@ utilp.makeUrl = function(url, params) {
 
   return url;
 };
+
+utilp.UrlMaker = function(url) {
+  this.url = '' + url;
+  this.qm = false;
+}
+
+utilp.UrlMaker.prototype.add = function (name, value, def) {
+  if (def !== undefined && def === value) {
+    return this;
+  }
+  if (!this.qm) {
+    this.url += '?';
+    this.qm = true;
+  } else {
+    this.url += '&';
+  }
+  this.url += name;
+  this.url += '=';
+  this.url += value;
+  return this;
+}
+
+utilp.UrlMaker.prototype.done = function () {
+  return this.url;
+}
 
 // tokenzier
 

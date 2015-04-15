@@ -120,3 +120,18 @@ describe('makeUrl', function () {
     expect(utilp.makeUrl('http://localhost/test', params2)).equal('http://localhost/test?a=10&b=big');
   });
 });
+
+describe("UrlMaker", function () {
+  it("url should success", function () {
+    expect(new utilp.UrlMaker('/thread').done()).equal('/thread');
+  });
+  it("query param should success", function () {
+    expect(new utilp.UrlMaker('/thread').add('p', 10).done()).equal('/thread?p=10');
+  });
+  it("query params should success", function () {
+    expect(new utilp.UrlMaker('/thread').add('p', 10).add('ps', 16).done()).equal('/thread?p=10&ps=16');
+  });
+  it("default value should success", function () {
+    expect(new utilp.UrlMaker('/thread').add('p', 0, 0).add('ps', 16, 32).done()).equal('/thread?ps=16');
+  });
+});
