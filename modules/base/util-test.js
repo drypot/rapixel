@@ -61,7 +61,7 @@ describe('mergeArray', function () {
 });
 
 describe('fif', function () {
-  it('should success', function () {
+  it('3 func true case should success', function () {
     var r;
     utilp.fif(true, function (next) {
       r = '123';
@@ -74,7 +74,7 @@ describe('fif', function () {
       expect(p).equal('456');
     })
   });
-  it('should success', function () {
+  it('3 func false case should success', function () {
     var r;
     utilp.fif(false, function (next) {
       r = '123';
@@ -85,6 +85,26 @@ describe('fif', function () {
     }, function (p) {
       expect(r).equal('abc');
       expect(p).equal('def');
+    })
+  });
+  it('2 func true case should success', function () {
+    var r;
+    utilp.fif(true, function (next) {
+      r = '123';
+      next('456');
+    }, function (p) {
+      expect(r).equal('123');
+      expect(p).equal('456');
+    })
+  });
+  it('2 func false case should success', function () {
+    var r;
+    utilp.fif(false, function (next) {
+      r = '123';
+      next('456');
+    }, function (p) {
+      expect(r).undefined;
+      expect(p).undefined;
     })
   });
 });

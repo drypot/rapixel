@@ -44,11 +44,19 @@ utilp.mergeArray = function () {
 
 // functional if
 
-utilp.fif = function (condi, case1, case2, next) {
-  if (condi) {
-    case1(next);
+utilp.fif = function (condi, f1, f2, f3) {
+  if (f3) {
+    if (condi) {
+      f1(f3);
+    } else {
+      f2(f3);
+    }
   } else {
-    case2(next);
+    if (condi) {
+      f1(f2);
+    } else {
+      f2();
+    }    
   }
 };
 
