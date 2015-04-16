@@ -57,7 +57,8 @@ describe('parsing form', function () {
   it('fields should success', function (done) {
     var form = {
       p1: 'abc',
-      p2: '123'
+      p2: '123',
+      p3: ['123', '456']
     }
     local.post('/api/test/upload-form').fields(form).end(function (err, res) {
       expect(err).not.exist;
@@ -65,6 +66,7 @@ describe('parsing form', function () {
       expect(res.body.files).not.exist;
       expect(res.body.p1).equal('abc');
       expect(res.body.p2).equal('123');
+      expect(res.body.p3).eql(['123', '456']);
       done();
     });
   });

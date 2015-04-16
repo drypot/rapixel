@@ -14,7 +14,14 @@ expect(superagent.Request.prototype.fields).not.exist;
 
 superagent.Request.prototype.fields = function(obj){
   for (var key in obj) {
-    this.field(key, obj[key]);
+    var val = obj[key];
+    if (Array.isArray(val)) {
+      for (var i = 0; i < val.length; i++) {
+        this.field(key, val[i]);
+      }
+      continue;
+    }
+    this.field(key, val);
   }
   return this;
 };
