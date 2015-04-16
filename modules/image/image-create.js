@@ -11,6 +11,20 @@ var imageb = require('../image/image-base');
 var site = require('../image/image-site');
 var imagec = exports;
 
+exp.core.get('/images/new', function (req, res, done) {
+  userb.checkUser(res, function (err, user) {
+    if (err) return done(err);
+    var now = new Date();
+    getTicketCount(now, user, function (err, count, hours) {
+      res.render('image/image-create', {
+        ticketMax: config.ticketMax,
+        ticketCount: count,
+        hours: hours
+      });
+    });
+  });
+});
+
 exp.core.post('/api/images', upload.handler(function (req, res, done) {
   userb.checkUser(res, function (err, user) {
     if (err) return done(err);
@@ -65,20 +79,6 @@ exp.core.post('/api/images', upload.handler(function (req, res, done) {
     })();
   });
 }));
-
-exp.core.get('/images/new', function (req, res, done) {
-  userb.checkUser(res, function (err, user) {
-    if (err) return done(err);
-    var now = new Date();
-    getTicketCount(now, user, function (err, count, hours) {
-      res.render('image/image-create', {
-        ticketMax: config.ticketMax,
-        ticketCount: count,
-        hours: hours
-      });
-    });
-  });
-});
 
 var getForm = imagec.getForm = function (req) {
   var body = req.body;

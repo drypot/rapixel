@@ -13,6 +13,21 @@ var imagec = require('../image/image-create');
 var site = require('../image/image-site');
 var imageu = exports;
 
+// get /api/images/:id([0-9]+)/update 업데이트 뷰 api 가 없지만 앱 만들기 전에는 필요가 없을 것 같다.
+
+exp.core.get('/images/:id([0-9]+)/update', function (req, res, done) {
+  userb.checkUser(res, function (err, user) {
+    if (err) return done(err);
+    var id = parseInt(req.params.id) || 0;
+    imageu.checkUpdatable(id, user, function (err, image) {
+      if (err) return done(err);
+      res.render('image/image-update', {
+        image: image
+      });
+    });
+  });
+});
+
 exp.core.put('/api/images/:id([0-9]+)', upload.handler(function (req, res, done) {
   userb.checkUser(res, function (err, user) {
     if (err) return done(err);
@@ -56,19 +71,6 @@ exp.core.put('/api/images/:id([0-9]+)', upload.handler(function (req, res, done)
     });
   });
 }));
-
-exp.core.get('/images/:id([0-9]+)/update', function (req, res, done) {
-  userb.checkUser(res, function (err, user) {
-    if (err) return done(err);
-    var id = parseInt(req.params.id) || 0;
-    imageu.checkUpdatable(id, user, function (err, image) {
-      if (err) return done(err);
-      res.render('image/image-update', {
-        image: image
-      });
-    });
-  });
-});
 
 imageu.checkUpdatable = function (id, user, done) {
   imageb.images.findOne({ _id: id }, function (err, image) {
