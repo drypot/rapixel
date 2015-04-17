@@ -1,11 +1,11 @@
 for arg in ${@-modules}; do
   if [ -f $arg ]; then
-    echo mocha $arg
-    mocha $arg
+    echo mocha --timeout 15000 $arg
+    mocha --timeout 15000 $arg
   else
     for path in $(find ${arg} -name "*-test.js"); do
-      echo mocha $path
-      mocha $path
+      echo mocha --timeout 15000 $path
+      mocha --timeout 15000 $path
       if [ $? -ne 0 ]; then break; fi
     done
   fi
