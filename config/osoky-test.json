@@ -10,7 +10,6 @@
 
   "uploadSite": "http://file.osoky.local:8080",
   "uploadDir": "upload/osoky-test",
-  "uploadMax": 10,
 
   "mongodb": "osoky-test",
 

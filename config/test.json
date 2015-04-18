@@ -10,7 +10,6 @@
 
   "uploadSite": "http://file.rapixel.local:8080",
   "uploadDir": "upload/rapixel-test",
-  "uploadMax": 10,
 
   "mongodb": "rapixel-test",
 

@@ -10,7 +10,6 @@
 
   "uploadSite": "http://file.drypot.local:8080",
   "uploadDir": "upload/drypot",
-  "uploadMax": 10,
 
   "mongodb": "drypot",
 
