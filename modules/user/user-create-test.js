@@ -59,7 +59,7 @@ describe('creating user', function () {
 describe('name check', function () {
   var _id;
   before(function (done) {
-    userb.users.deleteMany({}, done);
+    userb.users.deleteMany(done);
   });
   it('given Name1', function (done) {
     // 정규 create api 로는 home 이름을 세팅할 수 없기 때문에 디비에 직접 넣는다.
@@ -128,7 +128,7 @@ describe('name check', function () {
 
 describe('email check', function () {
   before(function (done) {
-    userb.users.deleteMany({}, done);
+    userb.users.deleteMany(done);
   });
   it('given mail1@mail.com', function (done) {
     var form = { name: 'name1', email: 'mail1@mail.com', password: '1234' };
@@ -193,7 +193,7 @@ describe('email check', function () {
 describe('password check', function () {
   var _id;
   before(function (done) {
-    userb.users.deleteMany({}, done);
+    userb.users.deleteMany(done);
   });
   it('short password should fail', function (done) {
     var form = { name: 'name1', email: 'name1@mail.com', password: '123' };

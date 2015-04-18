@@ -6,7 +6,7 @@ var userf = exports;
 
 init.add(exports.recreate = function (done) {
   userb.resetCache();
-  userb.users.deleteMany({}, function (err) {
+  userb.users.deleteMany(function (err) {
     if (err) return done(err);
     var forms = [
       { name: 'user1', email: 'user1@mail.com', password: '1234' },

@@ -28,7 +28,7 @@ before(function (done) {
 describe('posting one image', function () {
   var _id;
   before(function (done) {
-    imageb.images.deleteMany({}, done);
+    imageb.images.deleteMany(done);
   });
   it('should success', function (done) {
     this.timeout(30000);
@@ -60,7 +60,7 @@ describe('posting one image', function () {
 
 describe('posting max images', function () {
   before(function (done) {
-    imageb.images.deleteMany({}, done);
+    imageb.images.deleteMany(done);
   }); 
   it('should success', function (done) {
     this.timeout(30000);
@@ -90,7 +90,7 @@ describe('posting max images', function () {
 
 describe('posting jpeg', function () {
   before(function (done) {
-    imageb.images.deleteMany({}, done);
+    imageb.images.deleteMany(done);
   });
   it('should fail', function (done) {
     this.timeout(30000);

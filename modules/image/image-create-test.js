@@ -41,7 +41,7 @@ function genImage(hours, count, done) {
 
 describe('getTicketCount', function () {
   it('given emtpy images', function (done) {
-    imageb.images.deleteMany({}, done);
+    imageb.images.deleteMany(done);
   });
   it('should return ticketMax', function (done) {
     imagec.getTicketCount(_now, userf.user1, function (err, count, hours) {
@@ -71,7 +71,7 @@ describe('getTicketCount', function () {
     });
   });
   it('given emtpy images', function (done) {
-    imageb.images.deleteMany({}, done);
+    imageb.images.deleteMany(done);
   });
   it('given ticketMax images in time', function (done) {
     genImage(config.ticketGenInterval - 3, config.ticketMax, done);
@@ -88,7 +88,7 @@ describe('getTicketCount', function () {
 
 describe('posting text', function () {
   before(function (done) {
-    imageb.images.deleteMany({}, done);
+    imageb.images.deleteMany(done);
   });
   it('should fail', function (done) {
     this.timeout(30000);
@@ -103,7 +103,7 @@ describe('posting text', function () {
 
 describe('posting no file', function () {
   before(function (done) {
-    imageb.images.deleteMany({}, done);
+    imageb.images.deleteMany(done);
   }); 
   it('should fail', function (done) {
     var form = { };
