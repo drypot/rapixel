@@ -15,7 +15,7 @@ block content
       a(href='/') #{appName}
     .desc #{appDesc}
 
-  if !gtUrl
+  if !gt
     if locals.user
       .section.top-links
         a(href='/images/new') Upload
@@ -29,9 +29,9 @@ block content
     //- .section.news
         | Update: Can change user address at profile.
 
-  if locals.gtUrl
+  if gt
     .section.pager-prev
-      a(href=gtUrl) Previous
+      a(href=gt) Previous
 
   .section.images
     for image in images
@@ -41,6 +41,6 @@ block content
         if showName
           a.uname(href='/' + encodeURIComponent(image.user.home)) #{image.user.name}
 
-  if locals.ltUrl
+  if lt
     .section.pager-next
-      a(href=ltUrl) Next
+      a(href=lt) Next

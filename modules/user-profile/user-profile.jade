@@ -15,7 +15,7 @@ block content
       a(href='/' + encodeURIComponent(tuser.home)) #{tuser.name}
 
   .section
-    if !gtUrl
+    if !gt
       #profile-text.sub-section.box
         | !{jade.escape(tuser.profile).replace(/\n/g, '<br>')}
 
@@ -24,9 +24,9 @@ block content
           a(href='/users/' + tuser._id + '/update') Update Profile
 
   if images.length
-    if locals.gtUrl
+    if gt
       .section.pager-prev
-        a(href=gtUrl) Previous
+        a(href=gt) Previous
 
     .section.images
       for image in images
@@ -34,6 +34,6 @@ block content
           a.image(href='/images/' + image._id)
             img(src=image.dir + '/' + image._id + suffix)
 
-    if locals.ltUrl
+    if lt
       .section.pager-next
-        a(href=ltUrl) Next
+        a(href=lt) Next

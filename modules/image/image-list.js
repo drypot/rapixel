@@ -9,44 +9,37 @@ var imageb = require('../image/image-base');
 var site = require('../image/image-site');
 var imagel = exports;
 
-exp.core.get('/api/images', function (req, res, done) {
-  var params = imagel.getParams(req);
-  imagel.findImages(params, function (err, images, gt, lt) {
-    if (err) return done(err);
-    res.json({
-      images: images,
-      gt: gt,
-      lt: lt
-    });
-  });
-});
-
 exp.core.get('/', function (req, res, done) {
-  var params = imagel.getParams(req);
-  imagel.findImages(params, function (err, images, gt, lt) {
-    if (err) return done(err);
-    res.render('image/image-list', {
-      images: images,
-      showName: site.showListName,
-      suffix: site.thumbnailSuffix,
-      gtUrl: gt ? utilp.makeUrl(('/'), { gt: gt }) : undefined,
-      ltUrl: lt ? utilp.makeUrl(('/'), { lt: lt }) : undefined
-    });
-  });
+  list(req, res, false, done);
 });
 
-imagel.getParams = function (req) {
-  var params = {};
-  params.lt = parseInt(req.query.lt) || 0;
-  params.gt = params.lt ? 0 : parseInt(req.query.gt) || 0;
-  params.ps = parseInt(req.query.ps) || 16;
-  return params;
-};
+exp.core.get('/api/images', function (req, res, done) {
+  list(req, res, true, done);
+});
 
-imagel.findImages = function (params, done) {
-  var query = params.uid ? { uid: params.uid } : {};
-  mongop.findPage(imageb.images, query, params.gt, params.lt, params.ps, filter, done);
-};
+function list(req, res, api, done) {
+  var lt = parseInt(req.query.lt) || 0;
+  var gt = lt ? 0 : parseInt(req.query.gt) || 0;
+  var ps = parseInt(req.query.ps) || 16;
+  mongop.findPage(imageb.images, {}, gt, lt, ps, filter, function (err, images, gt, lt) {
+    if (err) return done(err);
+    if (api) {
+      res.json({
+        images: images,
+        gt: gt,
+        lt: lt
+      });
+    } else {
+     res.render('image/image-list', {
+       images: images,
+       showName: site.showListName,
+       suffix: site.thumbnailSuffix,
+       gt: gt ? new utilp.UrlMaker('/').add('gt', gt).add('ps', ps, 16).done() : undefined,
+       lt: lt ? new utilp.UrlMaker('/').add('lt', lt).add('ps', ps, 16).done() : undefined
+     });
+    }
+  });
+}
 
 function filter(image, done) {
   userb.getCached(image.uid, function (err, user) {
