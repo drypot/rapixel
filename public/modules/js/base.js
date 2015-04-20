@@ -40,35 +40,6 @@ $(function () {
   })();
 });
 
-$(function () {
-  var patterns = [
-    { // url
-      pattern: /(https?:\/\/[^ "'><)\n\r]+)/g,
-      replace: '<a href="$1" target="_blank">$1</a>'
-    }
-  ];
-
-  window.tagUpText = function (s, pi) {
-    if (pi == undefined) {
-      pi = 0;
-    }
-    if (pi == patterns.length) {
-      return s;
-    }
-    var p = patterns[pi];
-    var r = '';
-    var a = 0;
-    var match;
-    while(match = p.pattern.exec(s)) {
-      r += tagUpText(s.slice(a, match.index), pi + 1);
-      r += p.replace.replace(/\$1/g, match[1]);
-      a = match.index + match[0].length;
-    }
-    r += tagUpText(s.slice(a), pi + 1);
-    return r;
-  };
-});
-
 $(function() {
   var $modal = $('#error-modal');
   var $title = $modal.find('.modal-title');
@@ -293,6 +264,54 @@ $(function() {
 });
 
 $(function () {
+  var ping;
+  $('textarea').on('focus', function () {
+    if (!ping) {
+      ping = true;
+      console.log('ping: ready');
+      window.setInterval(function() {
+        request.get('/api/hello').end(function (err, res) {
+          if (err || res.error) {
+            console.log('ping: error');
+          } else {
+            console.log('ping');
+          }
+        });
+      }, 1000 * 60 * 5); // 5 min
+    }
+  })
+});
+
+$(function () {
+  var patterns = [
+    { // url
+      pattern: /(https?:\/\/[^ "'><)\n\r]+)/g,
+      replace: '<a href="$1" target="_blank">$1</a>'
+    }
+  ];
+
+  window.tagUpText = function (s, pi) {
+    if (pi == undefined) {
+      pi = 0;
+    }
+    if (pi == patterns.length) {
+      return s;
+    }
+    var p = patterns[pi];
+    var r = '';
+    var a = 0;
+    var match;
+    while(match = p.pattern.exec(s)) {
+      r += tagUpText(s.slice(a, match.index), pi + 1);
+      r += p.replace.replace(/\$1/g, match[1]);
+      a = match.index + match[0].length;
+    }
+    r += tagUpText(s.slice(a), pi + 1);
+    return r;
+  };
+});
+
+$(function () {
   window.fullscreen = {};
 
   fullscreen.enabled = 
@@ -312,5 +331,4 @@ $(function () {
   fullscreen.onchange = function (handler) {
     $document.on('fullscreenchange', handler);
   }
-
 });

@@ -4,13 +4,15 @@
 @margin: 50px;
 @width: 640px;
 
+// basic layout
+
 body {
   font-family: serif;
   font-size: @font-size;
   color: @color; 
 }
 
-.black-link {
+.ac-link { // achromatic color link
   a {
     color: @color;
   }
@@ -18,7 +20,9 @@ body {
 
 .section {
   max-width: @width; // for mobile. width 를 쓰면 작은 화면에서 화면 밖으로 나간다.
-  margin: 0 auto; // auto 는 IE9 이상부터
+  margin-top: 0px;
+  margin-left: auto; // auto 는 IE9 이상부터
+  margin-right: auto;
   margin-bottom: @margin;
   padding: 0px 8px;
   text-align: center;
@@ -29,11 +33,8 @@ body {
 }
 
 .page-title {
-  .black-link;
+  .ac-link;
   margin-top: @margin * 1.1;
-  h1 {
-    font-size: @font-size * 2.3;
-  }
   a:hover {
     text-decoration: none;
   }
@@ -45,13 +46,10 @@ body {
     font-size: @font-size * 3.2;
     margin-bottom: @margin * 0.7;
   }
-  .desc {
-    font-size: @font-size * 1.2;
-  }
 }
 
 .page-footer {
-  .black-link;
+  .ac-link;
   margin-top: @margin * 1.6;
   margin-bottom: @margin * 1.6;
   ul {
@@ -71,6 +69,53 @@ body {
   }
 }
 
+// error
+
+pre.error-report {
+  margin: 0px;
+
+  padding: 0px;
+  padding-top: 5px;
+
+  border: 0;
+  border-top: 1px solid #eeeeee;
+
+  text-align: left;
+  font-family: monospace;
+  font-size: 14px;
+  background-color: white;
+  white-space: nowrap;
+}
+
+.modal-body {
+  p {
+    white-space: nowrap;
+    overflow: scroll;
+  }
+}
+
+// form
+
+form.main {
+  width: @width * 0.6;
+  margin: 0 auto;
+
+  input[type=file] {
+    width: 100%;
+  }
+  textarea {
+    //font-family: monospace;
+  }
+}
+
+@media (max-width: 480px) {
+  form {
+    width: 100%;
+  }
+}
+
+// home
+
 .top-links {
   a {
     padding-left:10px;
@@ -82,6 +127,8 @@ body {
   margin-top: @margin 0.4;
 }
 
+// image list
+
 .pager-prev {
   line-height: 1;
 }
@@ -91,7 +138,7 @@ body {
 }
 
 .images {
-  .black-link;
+  .ac-link;
   padding-left: 0px;
   .box {
     margin-bottom: @margin * 0.9;
@@ -110,6 +157,8 @@ body {
     }
   }
 }
+
+// image view
 
 .image-view {
   text-align: center;
@@ -136,7 +185,7 @@ body {
 }
 
 .image-info {
-  .black-link;
+  .ac-link;
   margin-top: @margin * 0.3;
   .uname {
     margin-bottom: @margin * 0.4;
@@ -155,46 +204,5 @@ body {
     color: white;  
   }
   .commands {
-  }
-}
-
-form.main {
-  width: @width * 0.6;
-  margin: 0 auto;
-
-  input[type=file] {
-    width: 100%;
-  }
-  textarea {
-    //font-family: monospace;
-  }
-}
-
-@media (max-width: 480px) {
-  form {
-    width: 100%;
-  }
-}
-
-pre.error-report {
-  margin: 0px;
-
-  padding: 0px;
-  padding-top: 5px;
-
-  border: 0;
-  border-top: 1px solid #eeeeee;
-
-  text-align: left;
-  font-family: monospace;
-  font-size: 14px;
-  background-color: white;
-  white-space: nowrap;
-}
-
-.modal-body {
-  p {
-    white-space: nowrap;
-    overflow: scroll;
   }
 }

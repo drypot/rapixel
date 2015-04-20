@@ -3,12 +3,14 @@ body {
   font-size: 16px;
   color: #333333;
 }
-.black-link a {
+.ac-link a {
   color: #333333;
 }
 .section {
   max-width: 640px;
-  margin: 0 auto;
+  margin-top: 0px;
+  margin-left: auto;
+  margin-right: auto;
   margin-bottom: 50px;
   padding: 0px 8px;
   text-align: center;
@@ -22,9 +24,6 @@ body {
 .page-title a {
   color: #333333;
 }
-.page-title h1 {
-  font-size: 36.8px;
-}
 .page-title a:hover {
   text-decoration: none;
 }
@@ -34,18 +33,12 @@ body {
 .site-title a {
   color: #333333;
 }
-.site-title h1 {
-  font-size: 36.8px;
-}
 .site-title a:hover {
   text-decoration: none;
 }
 .site-title h1 {
   font-size: 51.2px;
   margin-bottom: 35px;
-}
-.site-title .desc {
-  font-size: 19.2px;
 }
 .page-footer {
   margin-top: 80px;
@@ -68,6 +61,34 @@ body {
   font-size: 32px;
   font-weight: 500;
   text-decoration: none;
+}
+pre.error-report {
+  margin: 0px;
+  padding: 0px;
+  padding-top: 5px;
+  border: 0;
+  border-top: 1px solid #eeeeee;
+  text-align: left;
+  font-family: monospace;
+  font-size: 14px;
+  background-color: white;
+  white-space: nowrap;
+}
+.modal-body p {
+  white-space: nowrap;
+  overflow: scroll;
+}
+form.main {
+  width: 384px;
+  margin: 0 auto;
+}
+form.main input[type=file] {
+  width: 100%;
+}
+@media (max-width: 480px) {
+  form {
+    width: 100%;
+  }
 }
 .top-links a {
   padding-left: 10px;
@@ -142,32 +163,4 @@ body {
   margin-bottom: 5px;
   font-size: 14.4px;
   color: white;
-}
-form.main {
-  width: 384px;
-  margin: 0 auto;
-}
-form.main input[type=file] {
-  width: 100%;
-}
-@media (max-width: 480px) {
-  form {
-    width: 100%;
-  }
-}
-pre.error-report {
-  margin: 0px;
-  padding: 0px;
-  padding-top: 5px;
-  border: 0;
-  border-top: 1px solid #eeeeee;
-  text-align: left;
-  font-family: monospace;
-  font-size: 14px;
-  background-color: white;
-  white-space: nowrap;
-}
-.modal-body p {
-  white-space: nowrap;
-  overflow: scroll;
 }

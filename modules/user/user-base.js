@@ -152,6 +152,20 @@ userb.checkUpdatable = function (id, user, done) {
   done();
 };
 
+// login
+
+exp.redirectToLogin = function (err, req, res, done) {
+  if (!res.locals.api && err.code == error.NOT_AUTHENTICATED.code) {
+    res.redirect('/users/login');
+  } else {
+    done(err);
+  }
+};
+
+exp.core.get('/users/login', function (req, res, done) {
+  res.render('user/user-base-login');
+});
+
 exp.core.post('/api/users/login', function (req, res, done) {
   var form = {};
   form.email = String(req.body.email || '').trim();
@@ -248,6 +262,8 @@ exp.core.get('/api/users/login', function (req, res, done) {
   });
 });
 
+// logout
+
 exp.core.post('/api/users/logout', function (req, res, done) {
   userb.logout(req, res);
   res.json({});
@@ -257,16 +273,4 @@ userb.logout = function (req, res, done) {
   res.clearCookie('email');
   res.clearCookie('password');
   req.session.destroy();
-};
-
-exp.core.get('/users/login', function (req, res, done) {
-  res.render('user/user-base-login');
-});
-
-exp.redirectToLogin = function (err, req, res, done) {
-  if (!res.locals.api && err.code == error.NOT_AUTHENTICATED.code) {
-    res.redirect('/users/login');
-  } else {
-    done(err);
-  }
 };
