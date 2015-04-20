@@ -3,13 +3,13 @@ var fs = require('fs');
 var init = require('../base/init');
 var error = require('../base/error');
 var fsp = require('../base/fs');
-var config = require('../base/config')({ path: 'config/drypot-test.json' });
+var config = require('../base/config')({ path: 'config/test.json' });
 var mongop = require('../mongo/mongo')({ dropDatabase: true });
 var exp = require('../express/express');
 var upload = require('../express/upload');
 var userf = require('../user/user-fixture');
 var imageb = require('../image/image-base');
-var imagec = require('../image/image-create');
+var imagen = require('../image/image-new');
 var local = require('../express/local');
 var expect = require('../base/assert').expect
 
@@ -32,7 +32,7 @@ describe('posting one image', function () {
   });
   it('should success', function (done) {
     this.timeout(30000);
-    local.post('/api/images').field('comment', 'image1').attach('files', 'samples/svg-sample.svg').end(function (err, res) {
+    local.post('/api/images').field('comment', 'image1').attach('files', 'samples/3840x2160-169.jpg').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       expect(res.body.ids).exist;
@@ -46,39 +46,45 @@ describe('posting one image', function () {
       expect(err).not.exist;
       expect(image._id).equal(_id);
       expect(image.uid).equal(userf.user1._id);
-      expect(image.fname).equal('svg-sample.svg');
-      expect(image.format).equal('svg');
-      expect(image.width).not.exist;
-      expect(image.vers).not.exist;
+      expect(image.fname).equal('3840x2160-169.jpg');
+      expect(image.format).equal('jpeg');
+      expect(image.width).equal(3840);
+      expect(image.vers).eql([ 3840, 2880, 2560, 2048, 1920, 1680, 1440, 1366, 1280, 1136, 1024, 960, 640 ]);
       expect(image.cdate).exist;
       expect(image.comment).equal('image1');
-      expect(new imageb.FilePath(_id, 'svg').original).pathExist;
+      var path = new imageb.FilePath(_id);
+      expect(path.getVersion(5120)).not.pathExist;
+      expect(path.getVersion(3840)).pathExist;
+      expect(path.getVersion(1280)).pathExist;
+      expect(path.getVersion(640)).pathExist;
       done();
     });
   });
 });
 
 describe('posting max images', function () {
+  var _ids;
   before(function (done) {
     imageb.images.deleteMany(done);
   }); 
   it('should success', function (done) {
     this.timeout(30000);
-    var post = local.post('/api/images');
+    var post = local.post('/api/images').field('comment', 'max images');
     for (var i = 0; i < config.ticketMax; i++) {
-      post.attach('files', 'samples/svg-sample.svg');
+      post.attach('files', 'samples/3840x2160-169.jpg');
     }
     post.end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       expect(res.body.ids).exist;
       expect(res.body.ids).length(config.ticketMax);
+      _ids = res.body.ids;
       done();
     });
   });
-  it('one more should fail', function (done) {
+  it('posting one more should fail', function (done) {
     this.timeout(30000);
-    local.post('/api/images').attach('files', 'samples/svg-sample.svg').end(function (err, res) {
+    local.post('/api/images').attach('files', 'samples/3840x2160-169.jpg').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       expect(res.body.ids).exist;
@@ -88,16 +94,17 @@ describe('posting max images', function () {
   });
 });
 
-describe('posting jpeg', function () {
+describe('posting small image', function () {
+  var _files;
   before(function (done) {
     imageb.images.deleteMany(done);
-  });
+  }); 
   it('should fail', function (done) {
     this.timeout(30000);
-    local.post('/api/images').attach('files', 'samples/1136x640-169.jpg').end(function (err, res) {
+    local.post('/api/images').attach('files', 'samples/2880x1620-169.jpg').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
-      expect(res.body.err).error('IMAGE_TYPE');
+      expect(res.body.err).error('IMAGE_SIZE');
       done();
     });
   });

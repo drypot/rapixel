@@ -7,7 +7,7 @@ var mongop = require('../mongo/mongo');
 var exp = require('../express/express');
 var mailer = require('../mail/mailer');
 var userb = require('../user/user-base');
-var userc = require('../user/user-create');
+var usern = require('../user/user-new');
 var userp = exports;
 
 var resets;
@@ -21,7 +21,7 @@ exp.core.post('/api/reset-pass', function (req, res, done) {
   var form = {};
   form.email = String(req.body.email || '').trim();
   var errors = [];
-  userc.checkFormEmail(form, errors);
+  usern.checkFormEmail(form, errors);
   if (errors.length) {
     return done(error(errors));
   }
@@ -69,7 +69,7 @@ exp.core.put('/api/reset-pass', function (req, res, done) {
   form.token = String(body.token || '').trim();
   form.password = String(body.password || '').trim();
   var errors = [];
-  userc.checkFormPassword(form, errors);
+  usern.checkFormPassword(form, errors);
   if (errors.length) {
     return done(error(errors));
   }

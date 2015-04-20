@@ -4,7 +4,7 @@ var config = require('../base/config')({ path: 'config/test.json' });
 var mongop = require('../mongo/mongo')({ dropDatabase: true });
 var exp = require('../express/express');
 var userb = require('../user/user-base');
-var userc = require('../user/user-create');
+var usern = require('../user/user-new');
 var local = require('../express/local');
 var expect = require('../base/assert').expect
 
@@ -14,10 +14,10 @@ before(function (done) {
 
 describe('emailx test', function () {
   it('should success', function () {
-    expect(userc.emailx.test('abc.mail.com')).false;
-    expect(userc.emailx.test('abc*xyz@mail.com')).false;
-    expect(userc.emailx.test('-a-b-c_d-e-f@mail.com')).true;
-    expect(userc.emailx.test('develop.bj@mail.com')).true;
+    expect(usern.emailx.test('abc.mail.com')).false;
+    expect(usern.emailx.test('abc*xyz@mail.com')).false;
+    expect(usern.emailx.test('-a-b-c_d-e-f@mail.com')).true;
+    expect(usern.emailx.test('develop.bj@mail.com')).true;
   });
 });
 

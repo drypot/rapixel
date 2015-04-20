@@ -9,7 +9,7 @@ var exp = require('../express/express');
 var upload = require('../express/upload');
 var userb = require('../user/user-base');
 var imageb = require('../image/image-base');
-var imagec = require('../image/image-create');
+var imagen = require('../image/image-new');
 var site = require('../image/image-site');
 var imageu = exports;
 
@@ -32,7 +32,7 @@ exp.core.put('/api/images/:id([0-9]+)', upload.handler(function (req, res, done)
   userb.checkUser(res, function (err, user) {
     if (err) return done(err);
     var id = parseInt(req.params.id) || 0;
-    var form = imagec.getForm(req);
+    var form = imagen.getForm(req);
     imageu.checkUpdatable(id, user, function (err) {
       if (err) return done(err);
       utilp.fif(!form.files, function (next) {

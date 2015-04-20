@@ -9,7 +9,7 @@ var exp = require('../express/express');
 var upload = require('../express/upload');
 var userf = require('../user/user-fixture');
 var imageb = require('../image/image-base');
-var imagec = require('../image/image-create');
+var imagen = require('../image/image-new');
 var local = require('../express/local');
 var expect = require('../base/assert').expect
 

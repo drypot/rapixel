@@ -2,7 +2,11 @@ var init = require('../base/init');
 var error = require('../base/error');
 var exp = require('../express/express');
 var userb = require('../user/user-base');
-var userc = exports;
+var usern = exports;
+
+exp.core.get('/users/register', function (req, res, done) {
+  res.render('user/user-new');
+});
 
 exp.core.post('/api/users', function (req, res, done) {
   var form = getForm(req);
@@ -34,13 +38,9 @@ exp.core.post('/api/users', function (req, res, done) {
   });
 });
 
-exp.core.get('/users/register', function (req, res, done) {
-  res.render('user/user-create');
-});
+usern.emailx = /^[a-z0-9-_+.]+@[a-z0-9-]+(\.[a-z0-9-]+)+$/i
 
-userc.emailx = /^[a-z0-9-_+.]+@[a-z0-9-]+(\.[a-z0-9-]+)+$/i
-
-var getForm = userc.getForm = function (req) {
+var getForm = usern.getForm = function (req) {
   var body = req.body;
   var form = {};
   form.name = String(body.name || '').trim();
@@ -51,7 +51,7 @@ var getForm = userc.getForm = function (req) {
   return form;
 }
 
-var checkForm = userc.checkForm = function (form, id, done) {
+var checkForm = usern.checkForm = function (form, id, done) {
   var errors = [];
   var creating = id == 0;
 
@@ -98,17 +98,17 @@ var checkForm = userc.checkForm = function (form, id, done) {
   });
 }
 
-var checkFormEmail = userc.checkFormEmail = function (form, errors) {
+var checkFormEmail = usern.checkFormEmail = function (form, errors) {
   if (!form.email.length) {
     errors.push(error.EMAIL_EMPTY);
   } else if (form.email.length > 64 || form.email.length < 8) {
     errors.push(error.EMAIL_RANGE);
-  } else if (!userc.emailx.test(form.email)) {
+  } else if (!usern.emailx.test(form.email)) {
     errors.push(error.EMAIL_PATTERN);
   }
 }
 
-var checkFormPassword = userc.checkFormPassword = function (form, errors) {
+var checkFormPassword = usern.checkFormPassword = function (form, errors) {
   if (!form.password.length) {
     errors.push(error.PASSWORD_EMPTY);
   } else if (form.password.length > 32 || form.password.length < 4) {

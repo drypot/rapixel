@@ -8,7 +8,7 @@ var exp = require('../express/express');
 var upload = require('../express/upload');
 var userf = require('../user/user-fixture');
 var imageb = require('../image/image-base');
-var imagec = require('../image/image-create');
+var imagen = require('../image/image-new');
 var local = require('../express/local');
 var expect = require('../base/assert').expect
 
@@ -44,7 +44,7 @@ describe('getTicketCount', function () {
     imageb.images.deleteMany(done);
   });
   it('should return ticketMax', function (done) {
-    imagec.getTicketCount(_now, userf.user1, function (err, count, hours) {
+    imagen.getTicketCount(_now, userf.user1, function (err, count, hours) {
       expect(err).not.exist;
       expect(count).equal(config.ticketMax);
       done();
@@ -54,7 +54,7 @@ describe('getTicketCount', function () {
     genImage(config.ticketGenInterval + 1, done);
   });
   it('should return ticketMax', function (done) {
-    imagec.getTicketCount(_now, userf.user1, function (err, count, hours) {
+    imagen.getTicketCount(_now, userf.user1, function (err, count, hours) {
       expect(err).not.exist;
       expect(count).equal(config.ticketMax);
       done();
@@ -64,7 +64,7 @@ describe('getTicketCount', function () {
     genImage(config.ticketGenInterval - 1, done);
   });
   it('should return (ticketMax - 1)', function (done) {
-    imagec.getTicketCount(_now, userf.user1, function (err, count, hours) {
+    imagen.getTicketCount(_now, userf.user1, function (err, count, hours) {
       expect(err).not.exist;
       expect(count).equal(config.ticketMax - 1);
       done();
@@ -77,7 +77,7 @@ describe('getTicketCount', function () {
     genImage(config.ticketGenInterval - 3, config.ticketMax, done);
   });
   it('should return 0 and hours', function (done) {
-    imagec.getTicketCount(_now, userf.user1, function (err, count, hours) {
+    imagen.getTicketCount(_now, userf.user1, function (err, count, hours) {
       expect(err).not.exist;
       expect(count).equal(0);
       expect(hours).equal(3);

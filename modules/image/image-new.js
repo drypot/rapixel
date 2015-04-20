@@ -9,14 +9,14 @@ var upload = require('../express/upload');
 var userb = require('../user/user-base');
 var imageb = require('../image/image-base');
 var site = require('../image/image-site');
-var imagec = exports;
+var imagen = exports;
 
 exp.core.get('/images/new', function (req, res, done) {
   userb.checkUser(res, function (err, user) {
     if (err) return done(err);
     var now = new Date();
     getTicketCount(now, user, function (err, count, hours) {
-      res.render('image/image-create', {
+      res.render('image/image-new', {
         ticketMax: config.ticketMax,
         ticketCount: count,
         hours: hours
@@ -80,7 +80,7 @@ exp.core.post('/api/images', upload.handler(function (req, res, done) {
   });
 }));
 
-var getForm = imagec.getForm = function (req) {
+var getForm = imagen.getForm = function (req) {
   var body = req.body;
   var form = {};
   form.now = new Date();
@@ -89,7 +89,7 @@ var getForm = imagec.getForm = function (req) {
   return form;
 }
 
-var getTicketCount = imagec.getTicketCount = function(now, user, done) {
+var getTicketCount = imagen.getTicketCount = function(now, user, done) {
   var count = config.ticketMax;
   var hours;
   var opt = {

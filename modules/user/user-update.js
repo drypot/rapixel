@@ -2,18 +2,18 @@ var init = require('../base/init');
 var error = require('../base/error');
 var exp = require('../express/express');
 var userb = require('../user/user-base');
-var userc = require('../user/user-create');
+var usern = require('../user/user-new');
 
 exp.core.put('/api/users/:id([0-9]+)', function (req, res, done) {
   userb.checkUser(res, function (err, user) {
     if (err) return done(err);
     var id = parseInt(req.params.id) || 0;
-    var form = userc.getForm(req);
+    var form = usern.getForm(req);
     userb.checkUpdatable(id, user, function (err) {
       if (err) return done(err);
       form.namel = form.name.toLowerCase();
       form.homel = form.home.toLowerCase();
-      userc.checkForm(form, id, function (err) {
+      usern.checkForm(form, id, function (err) {
         if (err) return done(err);
         var fields = {
           name: form.name,
