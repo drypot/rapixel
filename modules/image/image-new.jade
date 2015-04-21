@@ -24,17 +24,15 @@ block content
       form.main
         .sub-section
           .form-group
-            label Image
-            .panel.panel-default
-              .panel-body
-                input(type='file', name='files', multiple='multiple')
+            label.control-label Image
+            input.form-control(type='file', name='files', multiple='multiple')
             p.help-block
               | You can upload #{ticketCount} more images today.
               br
               if appType == 'drypot'
                 | Only SVG files.
           .form-group
-            label Comment
+            label.control-label Comment
             textarea.form-control(name='comment', rows=7)
         .sub-section
           button.btn.btn-primary(name='send', data-loading-text='Sending') Upload
