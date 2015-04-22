@@ -7,3 +7,12 @@
   width: 100%;
   max-width: 100%;
 }
+:-webkit-full-screen {
+  background: white;
+}
+:-ms-fullscreen {
+  background: white;
+}
+:fullscreen {
+  background: white;
+}
