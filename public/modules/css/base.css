@@ -105,6 +105,7 @@ form.main input[type=file] {
 }
 .images {
   padding-left: 0px;
+  padding-right: 0px;
 }
 .images a {
   color: #333333;
