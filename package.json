@@ -1,10 +1,10 @@
 {
-  "name": "Rapixel",
-  "version": "0.1.1",
+  "name": "rapixel",
+  "version": "1.0.0",
   "description": "Image gallery powering Rapixel, Osoky, Drypot.",
-  "main": "app.js",
-  "directories": {
-    "test": "server/test"
+  "main": "modules/main/main.js",
+  "scripts": {
+    "test": "bin/test"
   },
   "dependencies": {
     "bcrypt": "^0.8.1",

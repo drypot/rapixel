@@ -38,7 +38,7 @@ Arch 서비스 Fail 나면
 
 ## 설정 업데이트
 
-    ftp config files.
+    config/...
 
 ## 테스트 런
 
