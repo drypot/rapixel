@@ -1,11 +1,13 @@
 extends ../layout/layout
 
 block title
-  title Image !{image._id} - #{appName}
   if svg
-    link(rel='image_src', href=image.dir + '/' + image._id + '-org.svg')
+    meta(property='og:image', content=image.dir + '/' + image._id + '-org.svg')
   else
-    link(rel='image_src', href=image.dir + '/' + image._id + '-640.jpg')
+    meta(property='og:image', content=image.dir + '/' + image._id + '-1440.jpg')
+  meta(property='og:title' content='Image ' + image._id)
+  meta(property='og:description' content=image.comment)
+  title Image !{image._id} - #{appName}
 
 block content
 
