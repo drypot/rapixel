@@ -2,6 +2,10 @@ extends ../layout/layout
 
 block title
   title Image !{image._id} - #{appName}
+  if svg
+    link(rel='image_src', href=image.dir + '/' + image._id + '-org.svg')
+  else
+    link(rel='image_src', href=image.dir + '/' + image._id + '-640.jpg')
 
 block content
 
