@@ -328,7 +328,18 @@ $(function () {
     ).call(obj);
   };
 
+  fullscreen.exit = function () {
+    ( document.exitFullscreen ||
+      document.mozCancelFullScreen ||
+      document.webkitExitFullscreen
+    ).call(document);
+  };
+
   fullscreen.onchange = function (handler) {
     $document.on('fullscreenchange', handler);
   }
+
+  fullscreen.inFullscreen = function () {
+    return fullscreen.enabled && !!(document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement);
+  };
 });

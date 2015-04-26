@@ -5,6 +5,26 @@ $(function () {
   imagel.initList = function () {
   };
 
+  imagel.initNew = function () {
+    var $form = formty.getForm('form.main');
+    $form.$send.click(function (err, res) {
+      formty.post('/api/images', $form, function () {
+        location = '/';
+      });
+      return false;
+    });
+  };
+
+  imagel.initUpdate = function (image) {
+    var $form = formty.getForm('form.main');
+    $form.$send.click(function (err, res) {
+      formty.put('/api/images/' + image._id, $form, function () {
+        location = '/images/' + image._id;
+      });
+      return false;
+    });
+  };
+
   imagel.initView = function (image) {
     var $view = $('.image-view');
     var $img = $('.image-view img');
@@ -15,7 +35,11 @@ $(function () {
     var raster = appType === 'rapixel' || appType === 'osoky';
 
     $img.click(function () {
-      history.back();
+      if (fullscreen.inFullscreen()) {
+        fullscreen.exit();
+      } else {
+        history.back();
+      }
       return false;
     });
 
@@ -89,25 +113,4 @@ $(function () {
       $img.attr('src', image.dir + '/' + image._id + '-' + ver + '.jpg');
     }
   };
-
-  imagel.initNew = function () {
-    var $form = formty.getForm('form.main');
-    $form.$send.click(function (err, res) {
-      formty.post('/api/images', $form, function () {
-        location = '/';
-      });
-      return false;
-    });
-  };
-
-  imagel.initUpdate = function (image) {
-    var $form = formty.getForm('form.main');
-    $form.$send.click(function (err, res) {
-      formty.put('/api/images/' + image._id, $form, function () {
-        location = '/images/' + image._id;
-      });
-      return false;
-    });
-  };
-
 });
