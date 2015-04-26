@@ -118,6 +118,9 @@ form.main input[type=file] {
   max-height: 100%;
   margin-bottom: 5px;
 }
+.images .box a {
+  display: block;
+}
 @media (max-width: 768px) {
   .images .box {
     margin-bottom: 20px;
