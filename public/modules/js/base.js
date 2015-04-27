@@ -331,7 +331,8 @@ $(function () {
   fullscreen.exit = function () {
     ( document.exitFullscreen ||
       document.mozCancelFullScreen ||
-      document.webkitExitFullscreen
+      document.webkitExitFullscreen ||
+      document.msExitFullscreen
     ).call(document);
   };
 
@@ -340,6 +341,11 @@ $(function () {
   }
 
   fullscreen.inFullscreen = function () {
-    return fullscreen.enabled && !!(document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement);
+    return fullscreen.enabled && !!(
+      document.fullscreenElement || 
+      document.mozFullScreenElement || 
+      document.webkitFullscreenElement ||
+      document.msFullscreenElement
+    );
   };
 });
