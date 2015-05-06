@@ -74,13 +74,13 @@ upload.handler = function (inner) {
         req.body[key] = val.length == 1 ? val[0] : val;
       }
       for (key in files) {
-        if (!req.files) {
-          req.files = {};
-        }
-        req.files[key] = [];
         files[key].forEach(function (file) {
           paths.push(file.path);
           if (file.originalFilename.trim()) {
+            // XHR 이 빈 파일 필드를 보낸다.
+            // 불필요한 req.files[key] 생성을 막기 위해 조건 처리는 가장 안쪽에서.
+            if (!req.files) req.files = {};
+            if (!req.files[key]) req.files[key] = [];
             file.safeFilename = fsp.safeFilename(path.basename(file.originalFilename));
             req.files[key].push(file);
           }
