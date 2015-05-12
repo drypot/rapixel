@@ -1,7 +1,7 @@
 var init = require('../base/init');
 var userb = require('../user/user-base');
 var local = require('../express/local');
-var expect = require('../base/assert').expect
+var expect = require('../base/assert').expect;
 var userf = exports;
 
 init.add(exports.recreate = function (done) {

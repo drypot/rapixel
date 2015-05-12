@@ -9,7 +9,7 @@ var userb = require('../user/user-base');
 var userf = require('../user/user-fixture');
 var userp = require('../user/user-reset-pass');
 var local = require('../express/local');
-var expect = require('../base/assert').expect
+var expect = require('../base/assert').expect;
 
 before(function (done) {
   init.run(done);

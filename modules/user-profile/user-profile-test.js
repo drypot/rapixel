@@ -1,4 +1,4 @@
-var expect = require('../base/assert').expect;
+var expect = require('../base/assert').expect;;
 
 var init = require('../base/init');
 var error = require('../base/error');

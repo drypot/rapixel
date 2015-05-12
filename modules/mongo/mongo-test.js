@@ -1,7 +1,7 @@
 var init = require('../base/init');
 var config = require('../base/config')({ path: 'config/test.json' });
 var mongop = require('../mongo/mongo')({ dropDatabase: true });
-var expect = require('../base/assert').expect
+var expect = require('../base/assert').expect;
 
 before(function (done) {
   init.run(done);

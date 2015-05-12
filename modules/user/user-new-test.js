@@ -6,7 +6,7 @@ var exp = require('../express/express');
 var userb = require('../user/user-base');
 var usern = require('../user/user-new');
 var local = require('../express/local');
-var expect = require('../base/assert').expect
+var expect = require('../base/assert').expect;
 
 before(function (done) {
   init.run(done);

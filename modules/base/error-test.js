@@ -1,6 +1,6 @@
 var init = require('../base/init');
 var error = require('../base/error');
-var expect = require('../base/assert').expect
+var expect = require('../base/assert').expect;
 
 before(function (done) {
   init.run(done);

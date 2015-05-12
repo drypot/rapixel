@@ -8,7 +8,7 @@ var userf = require('../user/user-fixture');
 var imageb = require('../image/image-base');
 var imagel = require('../image/image-list');
 var local = require('../express/local');
-var expect = require('../base/assert').expect
+var expect = require('../base/assert').expect;
 
 before(function (done) {
   init.run(done);

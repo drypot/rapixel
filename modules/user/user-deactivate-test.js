@@ -7,7 +7,7 @@ var userb = require('../user/user-base');
 var userf = require('../user/user-fixture');
 var userd = require('../user/user-deactivate');
 var local = require('../express/local');
-var expect = require('../base/assert').expect
+var expect = require('../base/assert').expect;
 
 init.add(function () {
   exp.core.get('/api/test/user', function (req, res, done) {

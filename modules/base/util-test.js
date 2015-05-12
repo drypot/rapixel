@@ -1,5 +1,5 @@
 var utilp = require('../base/util');
-var expect = require('../base/assert').expect
+var expect = require('../base/assert').expect;
 
 describe('find', function () {
   it('should success', function () {

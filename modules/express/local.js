@@ -1,7 +1,7 @@
 var superagent = require('superagent');
 
 var config = require('../base/config');
-var expect = require('../base/assert').expect
+var expect = require('../base/assert').expect;
 var local = exports;
 
 // user-fixture 와 같이 여러 테스트 모듈이 세션을 공유할 필요가 있다.

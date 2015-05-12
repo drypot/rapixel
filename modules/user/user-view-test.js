@@ -8,7 +8,7 @@ var userv = require('../user/user-view');
 var userf = require('../user/user-fixture');
 var usern = require('../user/user-new');
 var local = require('../express/local');
-var expect = require('../base/assert').expect
+var expect = require('../base/assert').expect;
 
 before(function (done) {
   init.run(done);

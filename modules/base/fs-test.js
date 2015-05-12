@@ -1,7 +1,7 @@
 var fs = require('fs');
 
 var fsp = require('../base/fs');
-var expect = require('../base/assert').expect
+var expect = require('../base/assert').expect;
 
 var testdir = 'tmp/fs-test';
 
