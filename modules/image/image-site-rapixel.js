@@ -47,7 +47,7 @@ exports.makeVersions = function (dir, meta, done) {
   var i = 0;
   var vers = [];
   for (; i < _vers.length; i++) {
-    if (_vers[i].width < meta.width + 15) {
+    if (_vers[i].width < meta.width + (5120 - 3840) / 2) {
       break;
     }
   }

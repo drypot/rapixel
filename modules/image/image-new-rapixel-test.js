@@ -62,6 +62,43 @@ describe('posting one image', function () {
   });
 });
 
+describe.only('posting 4800 width image', function () {
+  var _id;
+  before(function (done) {
+    imageb.images.deleteMany(done);
+  });
+  it('should success', function (done) {
+    this.timeout(30000);
+    local.post('/api/images').field('comment', 'image1').attach('files', 'samples/4800x2700-169.jpg').end(function (err, res) {
+      expect(err).not.exist;
+      expect(res.body.err).not.exist;
+      expect(res.body.ids).exist;
+      expect(res.body.ids.length).equal(1);
+      _id = res.body.ids[0];
+      done();
+    });
+  });
+  it('image should exist', function (done) {
+    imageb.images.findOne({ _id: _id }, function (err, image) {
+      expect(err).not.exist;
+      expect(image._id).equal(_id);
+      expect(image.uid).equal(userf.user1._id);
+      expect(image.fname).equal('4800x2700-169.jpg');
+      expect(image.format).equal('jpeg');
+      expect(image.width).equal(4800);
+      expect(image.vers).eql([ 5120, 3840, 2880, 2560, 2048, 1920, 1680, 1440, 1366, 1280, 1136, 1024, 960, 640 ]);
+      expect(image.cdate).exist;
+      expect(image.comment).equal('image1');
+      var path = new imageb.FilePath(_id);
+      expect(path.getVersion(5120)).pathExist;
+      expect(path.getVersion(3840)).pathExist;
+      expect(path.getVersion(1280)).pathExist;
+      expect(path.getVersion(640)).pathExist;
+      done();
+    });
+  });
+});
+
 describe('posting max images', function () {
   var _ids;
   before(function (done) {
