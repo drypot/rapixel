@@ -160,45 +160,6 @@ describe('accessing admin resource', function () {
   });
 });
 
-
-describe.only('login as', function () {
-  it('given admin session', function (done) {
-    userf.login('admin', done);
-  });
-  it('should success', function (done) {
-    local.post('/api/users/login-as/' + userf.user1._id).end(function (err, res) {
-      expect(err).not.exist;
-      expect(res.body.err).not.exist;
-      done();
-    });
-  });
-  it('session should be changed', function (done) {
-    local.get('/api/users/login').end(function (err, res) {
-      expect(err).not.exist;
-      expect(res.body.err).not.exist;
-      expect(res.body.user.id).equal(userf.user1._id);
-      done();
-    });
-  });
-  it('non admin should fail', function (done) {
-    local.post('/api/users/login-as/' + userf.user2._id).end(function (err, res) {
-      expect(err).not.exist;
-      expect(res.body.err).error('NOT_AUTHORIZED');
-      done();
-    });
-  });
-  it('given admin session', function (done) {
-    userf.login('admin', done);
-  });
-  it('invalid id should fail', function (done) {
-    local.post('/api/users/login-as/999').end(function (err, res) {
-      expect(err).not.exist;
-      expect(res.body.err).error('USER_NOT_FOUND');
-      done();
-    });
-  });
-});
-
 describe('auto login', function () {
   it('given new (cookie clean) Agent',function () {
     local.newAgent();

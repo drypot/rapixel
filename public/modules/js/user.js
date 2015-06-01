@@ -13,14 +13,6 @@ $(function () {
     });
   };
 
-  userl.loginAs = function (id) {
-    request.post('/api/users/login-as/' + id).end(function (err, res) {
-      err = err || res.body.err;
-      if (err) return showError(err);
-      location = '/';
-    });
-  };
-
   userl.logout = function () {
     request.post('/api/users/logout').end(function (err, res) {
       err = err || res.body.err;

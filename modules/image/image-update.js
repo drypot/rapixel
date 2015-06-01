@@ -78,7 +78,7 @@ imageu.checkUpdatable = function (id, user, done) {
     if (!image) {
       return done(error('IMAGE_NOT_EXIST'));
     }
-    if (!user.admin && image.uid != user._id) {
+    if (image.uid != user._id && !user.admin) {
       return done(error('NOT_AUTHORIZED'));
     }
     done(null, image);
