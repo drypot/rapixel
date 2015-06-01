@@ -20,8 +20,10 @@ block content
         | !{jade.escape(tuser.profile).replace(/\n/g, '<br>')}
 
       if updatable
-        .sub-section.box.top-links
+        .section.top-links
           a(href='/users/' + tuser._id + '/update') Update Profile
+          if user && user.admin
+            a(href='#' onclick='javascript:userl.loginAs(' + tuser._id + '); return false;') Login As
 
   if images.length
     if gt

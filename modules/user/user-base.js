@@ -195,6 +195,25 @@ exp.core.post('/api/users/login', function (req, res, done) {
   });
 });
 
+exp.core.post('/api/users/login-as/:id([0-9]+)', function (req, res, done) {
+  userb.checkAdmin(res, function (err, _user) {
+    if (err) return done(err);
+    var id = parseInt(req.params.id) || 0;
+    userb.getCached(id, function (err, user) {
+      if (err) return done(error('USER_NOT_FOUND'));
+      createSession(req, res, user, function (err, user) {
+        if (err) return done(err);
+        res.json({
+          user: {
+            id: user._id,
+            name: user.name
+          }
+        });
+      });
+    });
+  });
+});
+
 exp.autoLogin = function (req, res, done) {
   if (req.session.uid) {
     userb.getCached(req.session.uid, function (err, user) {

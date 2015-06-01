@@ -20,7 +20,7 @@ block content
       .section.top-links
         a(href='/images/new') Upload
         a(href='/users/' + user._id) Profile
-        a#logout-btn(href='/users/logout') Logout
+        a(href='#' onclick='javascript:userl.logout(); return false;') Logout
     else
       .section.top-links
         a(href='/users/login') Login

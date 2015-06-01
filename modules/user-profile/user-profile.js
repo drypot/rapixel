@@ -35,7 +35,7 @@ function profile(req, res, tuser) {
     if (err) return done(err);
     res.render('user-profile/user-profile', {
       tuser: tuser,
-      updatable: user && (user.admin || user._id === id),
+      updatable: user && (user._id === tuser._id || user.admin),
       images: images,
       suffix: site.thumbnailSuffix,
       gt: gt ? new utilp.UrlMaker(req.path).add('gt', gt).add('ps', ps, 16).done() : undefined,

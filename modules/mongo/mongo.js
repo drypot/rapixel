@@ -1,4 +1,5 @@
 var mongo = require('mongodb');
+var expect = require('../base/assert').expect;
 
 var init = require('../base/init');
 var config = require('../base/config');
@@ -15,6 +16,7 @@ var mongop = exports = module.exports = function (_opt) {
 // db
 
 init.add(function (done) {
+  expect(config.mongodb).exist;
   mongo.MongoClient.connect('mongodb://localhost:27017/' + config.mongodb, function(err, db) {
     if (err) return done(err);
     mongop.db = db;

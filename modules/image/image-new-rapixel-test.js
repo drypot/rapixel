@@ -62,7 +62,7 @@ describe('posting one image', function () {
   });
 });
 
-describe.only('posting 4800 width image', function () {
+describe('posting 4800 width image', function () {
   var _id;
   before(function (done) {
     imageb.images.deleteMany(done);
