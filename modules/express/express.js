@@ -20,8 +20,8 @@ init.add(function () {
   exp.app.disable('x-powered-by');
   exp.app.locals.pretty = true;
   exp.app.locals.appName = config.appName;
+  exp.app.locals.appNamel = config.appNamel;
   exp.app.locals.appDesc = config.appDesc;
-  exp.app.locals.appType = config.appType;
 
   exp.app.engine('jade', require('jade').renderFile);
   exp.app.set('view engine', 'jade');

@@ -31,8 +31,8 @@ $(function () {
     var $comment = $('.image-info .comment');
     var $fs = $('#fs');
 
-    var fit = appType === 'osoky' || appType == 'drypot';
-    var raster = appType === 'rapixel' || appType === 'osoky';
+    var fit = appNamel === 'osoky' || appNamel == 'drypot';
+    var raster = appNamel === 'rapixel' || appNamel === 'osoky';
 
     $img.click(function () {
       if (fullscreen.inFullscreen()) {

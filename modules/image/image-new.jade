@@ -29,7 +29,7 @@ block content
             p.help-block
               | You can upload #{ticketCount} more images today.
               br
-              if appType == 'drypot'
+              if appNamel == 'drypot'
                 | Only SVG files.
           .form-group
             label.control-label Comment
@@ -42,7 +42,7 @@ block content
       br
       | You must be copyright owner.
       br
-      if appType == 'rapixel'
+      if appNamel == 'rapixel'
         | Image must be larger than 3840x2160 pixels.
         br
         | Image will be cropped to 16:9 automatically.

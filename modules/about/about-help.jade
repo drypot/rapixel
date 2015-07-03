@@ -13,6 +13,6 @@ block content
       span Want to deactivate your account?&nbsp;
       a(href='/users/deactivate') click
     .sub-section
-      | email:&nbsp;
-      -var email = 'support+' + appType + '@raysoda.com'
+      | support email:&nbsp;
+      -var email = 'support+' + appNamel + '@raysoda.com'
       a(href='mailto:' + email)= email 

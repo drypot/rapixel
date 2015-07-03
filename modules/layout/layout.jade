@@ -7,18 +7,18 @@ html
     meta(property='og:site_name', content=appName)
     block title
 
-    link(rel='icon', type='image/png', href='/modules/favicon/' + appType + '.png')
+    link(rel='icon', type='image/png', href='/modules/favicon/' + appNamel + '.png')
 
     link(rel='stylesheet', href='/modules/bower/bootstrap/dist/css/bootstrap.min.css')
     link(rel='stylesheet', href='/modules/css/base.css')
-    link(rel='stylesheet', href='/modules/css/' + appType + '.css')
+    link(rel='stylesheet', href='/modules/css/' + appNamel + '.css')
 
     script(src='/modules/bower/json2/json2.js')
     script(src='/modules/bower/jquery/dist/jquery.min.js')
     script(src='/modules/bower/bootstrap/dist/js/bootstrap.min.js')
     
     script.
-      window.appType = '!{appType}';
+      window.appNamel = '!{appNamel}';
       window.user = !{locals.user ? JSON.stringify({ id: user._id, name: user.name }) : 'undefined'};
 
     script(src='/modules/js/base.js')
@@ -31,10 +31,9 @@ html
 
     .section.page-footer
       ul.list-inline
-        li: a(href='/company') Company
-        li: a(href='/services') Services
-        li: a(href='/privacy') Privacy
-        li: a(href='/help') Help
+        li: a(href='/about/company') Company
+        li: a(href='/about/privacy') Privacy
+        li: a(href='/about/help') Help
       .home
         a(href='/') #{appName}
 
