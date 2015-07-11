@@ -1,7 +1,9 @@
 extends ../layout/layout
 
-block title
+block head-title
   title #{appName}
+
+block site-title
 
 block content
 
@@ -10,10 +12,8 @@ block content
       imagel.initList();
     });
 
-  .section.site-title
-    h1
-      a(href='/') #{appName}
-    h3 #{appDesc}
+  .section.page-title
+      h1 #{appName}
 
   if !gt
     if locals.user

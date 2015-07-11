@@ -18,17 +18,10 @@ body {
 .sub-section {
   margin-bottom: 30px;
 }
-.page-title {
-  margin-top: 55px;
-}
-.page-title a {
-  color: #333333;
-}
-.page-title a:hover {
-  text-decoration: none;
-}
 .site-title {
-  margin-top: 55px;
+  margin-top: 10px;
+  margin-bottom: -10px;
+  font-size: 24px;
 }
 .site-title a {
   color: #333333;
@@ -36,9 +29,17 @@ body {
 .site-title a:hover {
   text-decoration: none;
 }
-.site-title h1 {
+.page-title {
+  margin-top: 50px;
+}
+.page-title a {
+  color: #333333;
+}
+.page-title a:hover {
+  text-decoration: none;
+}
+.page-title h1 {
   font-size: 51.2px;
-  margin-bottom: 35px;
 }
 .page-footer {
   margin-top: 80px;

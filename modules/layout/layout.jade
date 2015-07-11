@@ -5,7 +5,7 @@ html
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     meta(name='description', content=appDesc)
     meta(property='og:site_name', content=appName)
-    block title
+    block head-title
 
     link(rel='icon', type='image/png', href='/modules/favicon/' + appNamel + '.png')
 
@@ -27,6 +27,10 @@ html
 
   body
 
+    block site-title
+      .section.site-title
+        a(href='/') #{appName}
+
     block content
 
     .section.page-footer
@@ -34,8 +38,6 @@ html
         li: a(href='/about/company') Company
         li: a(href='/about/privacy') Privacy
         li: a(href='/about/help') Help
-      .home
-        a(href='/') #{appName}
 
     #error-modal.modal
       .modal-dialog

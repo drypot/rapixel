@@ -32,19 +32,24 @@ body {
   margin-bottom: @margin * 0.6;
 }
 
-.page-title {
+.site-title {
   .ac-link;
-  margin-top: @margin * 1.1;
   a:hover {
     text-decoration: none;
   }
+  margin-top: @margin * 0.2;
+  margin-bottom: @margin * 0.2 * -1;
+  font-size: @font-size * 1.5;
 }
 
-.site-title {
-  .page-title;
+.page-title {
+  .ac-link;
+  a:hover {
+    text-decoration: none;
+  }
+  margin-top: @margin;
   h1 {
     font-size: @font-size * 3.2;
-    margin-bottom: @margin * 0.7;
   }
 }
 
