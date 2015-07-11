@@ -12,20 +12,20 @@ exp.core.get('/users/:id([0-9]+)', function (req, res, done) {
   var id = parseInt(req.params.id) || 0;
   userb.getCached(id, function (err, tuser) {
     if (err) return done(err);
-    profile(req, res, tuser);
+    list(req, res, tuser);
   });
 });
 
 exp.core.get('/:name([^/]+)', function (req, res, done) {
   var homel = decodeURIComponent(req.params.name).toLowerCase();
-  userb.getCachedByHome(homel, function (err, user) {
+  userb.getCachedByHome(homel, function (err, tuser) {
     if (err) return done(err);
-    if (!user) return done();
-    profile(req, res, user);
+    if (!tuser) return done();
+    list(req, res, tuser);
   });
 });
 
-function profile(req, res, tuser) {
+function list(req, res, tuser) {
   var user = res.locals.user;
   var lt = parseInt(req.query.lt) || 0;
   var gt = lt ? 0 : parseInt(req.query.gt) || 0;
@@ -33,7 +33,7 @@ function profile(req, res, tuser) {
   var query = { uid: tuser.id };
   mongop.findPage(imageb.images, { uid: tuser._id }, gt, lt, ps, filter, function (err, images, gt, lt) {
     if (err) return done(err);
-    res.render('user-profile/user-profile', {
+    res.render('image/image-listu', {
       tuser: tuser,
       updatable: user && (user._id === tuser._id || user.admin),
       images: images,

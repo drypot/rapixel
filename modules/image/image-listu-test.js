@@ -7,7 +7,7 @@ var mongop = require('../mongo/mongo')({ dropDatabase: true });
 var exp = require('../express/express');
 var userb = require('../user/user-base');
 var userf = require('../user/user-fixture');
-var userp = require('../user-profile/user-profile');
+var userp = require('../image/image-listu');
 var local = require('../express/local');
 
 before(function (done) {
