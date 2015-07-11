@@ -1,0 +1,20 @@
+extends ../layout/layout
+
+block head-title
+  title About - #{appName}
+
+block content
+
+    .section.page-title
+      h1 About
+
+    .section
+      case appNamel
+        when 'rapixel'
+          | Rapixel is a gallery for 4K images.
+        when 'osoky'
+          | Share your randos.
+        when 'drypot'
+          | Simply vectors.
+        default
+          | Just a Gallery.

@@ -2,6 +2,10 @@ var init = require('../base/init');
 var exp = require('../express/express');
 
 init.add(function () {
+  exp.core.get('/about/site', function (req, res, done) {
+    res.render('about/about-site');
+  });
+
   exp.core.get('/about/company', function (req, res, done) {
     res.render('about/about-company');
   });
