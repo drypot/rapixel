@@ -86,7 +86,7 @@ pre.error-report {
   overflow: scroll;
 }
 form.main {
-  width: 384px;
+  max-width: 384px;
   margin: 0 auto;
 }
 form.main input[type=file] {
