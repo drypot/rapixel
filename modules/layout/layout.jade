@@ -30,15 +30,20 @@ html
     block site-title
       .section.site-title
         a(href='/') #{appName}
+        hr
 
     block content
 
     .section.page-footer
-      ul.list-inline
-        li: a(href='/about/site') About
-        li: a(href='/about/company') Company
-        li: a(href='/about/privacy') Privacy
-        li: a(href='/about/help') Help
+      hr
+      .about-list
+        ul.list-inline
+          li: a(href='/about/site') About
+          li: a(href='/about/company') Company
+          li: a(href='/about/privacy') Privacy
+          li: a(href='/about/help') Help
+      .site-title-bottom
+        a(href='/') #{appName}
 
     #error-modal.modal
       .modal-dialog

@@ -3,6 +3,9 @@ body {
   font-size: 16px;
   color: #333333;
 }
+hr {
+  margin: 10px 0px;
+}
 .ac-link a {
   color: #333333;
 }
@@ -19,14 +22,39 @@ body {
   margin-bottom: 30px;
 }
 .site-title {
+  padding: 0px;
   margin-top: 10px;
-  margin-bottom: -10px;
+  margin-bottom: 10px;
   font-size: 24px;
 }
 .site-title a {
   color: #333333;
 }
 .site-title a:hover {
+  text-decoration: none;
+}
+.page-footer {
+  margin-top: 80px;
+  margin-bottom: 80px;
+  padding: 0px;
+}
+.page-footer a {
+  color: #333333;
+}
+.page-footer .about-list {
+  margin-bottom: 15px;
+}
+.page-footer .about-list ul {
+  margin: 0px;
+}
+.page-footer .about-list ul li {
+  font-size: 16px;
+  padding: 0 5px;
+}
+.page-footer .site-title-bottom {
+  font-size: 24px;
+}
+.page-footer .site-title-bottom a:hover {
   text-decoration: none;
 }
 .page-title {
@@ -39,29 +67,7 @@ body {
   text-decoration: none;
 }
 .page-title h1 {
-  font-size: 51.2px;
-}
-.page-footer {
-  margin-top: 80px;
-  margin-bottom: 80px;
-}
-.page-footer a {
-  color: #333333;
-}
-.page-footer ul {
-  margin: 0px;
-}
-.page-footer ul li {
-  font-size: 16px;
-  padding: 0 5px;
-}
-.page-footer .home {
-  margin-top: 15px;
-}
-.page-footer .home a {
-  font-size: 32px;
-  font-weight: 500;
-  text-decoration: none;
+  font-size: 48px;
 }
 pre.error-report {
   margin: 0px;
