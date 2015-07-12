@@ -7,23 +7,23 @@ html
     meta(property='og:site_name', content=appName)
     block head-title
 
-    link(rel='icon', type='image/png', href='/modules/favicon/' + appNamel + '.png')
+    link(rel='icon', type='image/png', href='/static/favicon/' + appNamel + '.png')
 
-    link(rel='stylesheet', href='/modules/bower/bootstrap/dist/css/bootstrap.min.css')
-    link(rel='stylesheet', href='/modules/css/base.css')
-    link(rel='stylesheet', href='/modules/css/' + appNamel + '.css')
+    link(rel='stylesheet', href='/static/bower/bootstrap/dist/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/static/css/base.css')
+    link(rel='stylesheet', href='/static/css/' + appNamel + '.css')
 
-    script(src='/modules/bower/json2/json2.js')
-    script(src='/modules/bower/jquery/dist/jquery.min.js')
-    script(src='/modules/bower/bootstrap/dist/js/bootstrap.min.js')
+    script(src='/static/bower/json2/json2.js')
+    script(src='/static/bower/jquery/dist/jquery.min.js')
+    script(src='/static/bower/bootstrap/dist/js/bootstrap.min.js')
     
     script.
       window.appNamel = '!{appNamel}';
       window.user = !{locals.user ? JSON.stringify({ id: user._id, name: user.name }) : 'undefined'};
 
-    script(src='/modules/js/base.js')
-    script(src='/modules/js/user.js')
-    script(src='/modules/js/image.js')
+    script(src='/static/js/base.js')
+    script(src='/static/js/user.js')
+    script(src='/static/js/image.js')
 
   body
 

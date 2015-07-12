@@ -16,8 +16,8 @@ before(function (done) {
 
 describe('pathExist', function () {
   it('should success', function () {
-    expect('modules/base/fs-test.js').pathExist;
-    expect('modules/base/fs-test-xx.js').not.pathExist;
+    expect('server/base/fs-test.js').pathExist;
+    expect('server/base/fs-test-xx.js').not.pathExist;
   });
 });
 

@@ -1,5 +1,5 @@
 var init = require('../base/init');
-var config = require('../base/config')({ path: 'modules/base/config-fixture.json' });
+var config = require('../base/config')({ path: 'server/base/config-fixture.json' });
 var expect = require('../base/assert').expect;
 
 describe('config with valid path', function () {

@@ -18,10 +18,10 @@ Mac 개발환경용 Nginx 설정 예
         proxy_set_header Host $http_host;
       }
 
-      location /modules/ {
+      location /static/ {
       }
 
-      location /modules/bower/ {
+      location /static/bower/ {
         alias /Users/drypot/projects/rapixel/website/bower_components/;
       }
     }
@@ -82,7 +82,7 @@ libpng 는 svg 지원 설치하면서 설치되는 것 같다.
     Restart=always
     RestartSec=15
     WorkingDirectory=/data/web/rapixel
-    ExecStart=/usr/bin/node modules/main/main.js --config config/rapixel-live.json
+    ExecStart=/usr/bin/node server/main/main.js --config config/rapixel-live.json
     Environment=NODE_ENV=production
 
     [Install]

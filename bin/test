@@ -1,4 +1,4 @@
-for arg in ${@-modules}; do
+for arg in ${@-server}; do
   if [ -f $arg ]; then
     echo mocha --timeout 15000 $arg
     mocha --timeout 15000 $arg

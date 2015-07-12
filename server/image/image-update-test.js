@@ -58,7 +58,7 @@ describe('updating with text file', function () {
   });
   it('should fail', function (done) {
     this.timeout(30000);
-    local.put('/api/images/' + _id).attach('files', 'modules/express/upload-fixture1.txt').end(function (err, res) {
+    local.put('/api/images/' + _id).attach('files', 'server/express/upload-fixture1.txt').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(res.body.err).error('IMAGE_TYPE');

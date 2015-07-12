@@ -4,10 +4,10 @@
     nginx:  
         location ~ /(?:css|image|js|lib)/ ->
 
-            location /modules/ {
+            location /static/ {
             }
 
-            location /modules/bower/ {
+            location /static/bower/ {
               alias /Users/drypot/projects/rapixel/website/bower_components/;
             }
     

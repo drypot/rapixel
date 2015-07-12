@@ -25,7 +25,7 @@ init.add(function () {
 
   exp.app.engine('jade', require('jade').renderFile);
   exp.app.set('view engine', 'jade');
-  exp.app.set('views', 'modules');
+  exp.app.set('views', 'server');
 
   exp.app.use(cookieParser());
   exp.app.use(session({ 

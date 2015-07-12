@@ -30,7 +30,7 @@
     },
     {
       "follow_symlinks": true,
-      "path": "modules"
+      "path": "server"
     }
   ],
   "settings":

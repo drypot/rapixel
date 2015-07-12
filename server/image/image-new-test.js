@@ -92,7 +92,7 @@ describe('posting text', function () {
   });
   it('should fail', function (done) {
     this.timeout(30000);
-    local.post('/api/images').attach('files', 'modules/express/upload-fixture1.txt').end(function (err, res) {
+    local.post('/api/images').attach('files', 'server/express/upload-fixture1.txt').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(res.body.err).error('IMAGE_TYPE');
