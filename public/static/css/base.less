@@ -1,6 +1,7 @@
 @font-size: 16px;
 @color: #333;
 @dim-color: lighten(@color, 50%);
+@line-color: lighten(@color, 70%);
 @margin: 50px;
 @width: 640px;
 
@@ -38,20 +39,25 @@ hr {
 
 .site-title {
   .ac-link;
-  padding: 0px;
   a:hover {
     text-decoration: none;
   }
-  margin-top: @margin * 0.2;
-  margin-bottom: @margin * 0.2;
+  margin-top: 0px;
+  padding: @margin * 0.2 0px;
+  border-bottom-color: @line-color;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
   font-size: @font-size * 1.5;
 }
 
 .page-footer {
   .ac-link;
-  margin-top: @margin * 1.6;
-  margin-bottom: @margin * 1.6;
-  padding: 0px;
+  margin-top: @margin * 1.5;
+  margin-bottom: @margin * 1.5;
+  padding: @margin * 0.2 0px;
+  border-top-color: @line-color;
+  border-top-style: solid;
+  border-top-width: 1px;
   .about-list {
     margin-bottom: @margin * 0.3;
     ul {
