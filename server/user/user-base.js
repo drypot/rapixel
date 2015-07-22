@@ -40,11 +40,11 @@ var userId;
 
 init.add(function (done) {
   userb.users = mongop.db.collection('users');
-  userb.users.ensureIndex({ email: 1 }, function (err) {
+  userb.users.createIndex({ email: 1 }, function (err) {
     if (err) return done(err);
-    userb.users.ensureIndex({ namel: 1 }, function (err) {
+    userb.users.createIndex({ namel: 1 }, function (err) {
       if (err) return done(err);
-      userb.users.ensureIndex({ homel: 1 }, done);
+      userb.users.createIndex({ homel: 1 }, done);
     });
   });
 });

@@ -14,7 +14,7 @@ var resets;
 
 init.add(function (done) {
   resets = exports.resets = mongop.db.collection('resets');
-  resets.ensureIndex({ email: 1 }, done);
+  resets.createIndex({ email: 1 }, done);
 });
 
 exp.core.post('/api/reset-pass', function (req, res, done) {

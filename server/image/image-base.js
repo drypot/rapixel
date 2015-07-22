@@ -19,7 +19,7 @@ var imageId;
 
 init.add(function (done) {
   imageb.images = mongop.db.collection('images');
-  imageb.images.ensureIndex({ uid: 1, _id: -1 }, done);
+  imageb.images.createIndex({ uid: 1, _id: -1 }, done);
 });
 
 init.add(function (done) {
