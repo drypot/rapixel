@@ -24,7 +24,7 @@ function makeVersions(next) {
     var w = v.width;
     var h = v.height;
     var cmd = '';
-    cmd += 'gm convert -size ' + w + 'x' + h + ' xc:#c0c0c0';
+    cmd += 'convert -size ' + w + 'x' + h + ' xc:#c0c0c0';
     cmd += ' -fill "#c0c0c0" -stroke "#303030" '
     cmd += ' -draw "circle ' + w / 2 + ', ' + h / 2 + ', ' + w / 2 + ', 0"';
     cmd += ' -draw "circle ' + w / 2 + ', ' + h / 2 + ', ' + w / 2 + ', ' + h / 4 + '"';
