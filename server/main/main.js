@@ -16,6 +16,6 @@ require('../image/image-update');
 require('../image/image-delete');
 require('../image/image-listu');
 
-require('../about/about');
+require('../about/about-base');
 
 init.run();
