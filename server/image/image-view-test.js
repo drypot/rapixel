@@ -1,14 +1,14 @@
 var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config')({ path: 'config/test.json' });
-var mongop = require('../mongo/mongo')({ dropDatabase: true });
-var exp = require('../express/express');
-var upload = require('../express/upload');
+var mongob = require('../mongo/mongo-base')({ dropDatabase: true });
+var expb = require('../express/express-base');
+var expu = require('../express/express-upload');
 var userf = require('../user/user-fixture');
 var imagen = require('../image/image-new');
 var imagev = require('../image/image-view');
-var local = require('../express/local');
-var expect = require('../base/assert').expect;
+var expl = require('../express/express-local');
+var expect = require('../base/assert2').expect;
 
 before(function (done) {
   init.run(done);
@@ -24,7 +24,7 @@ describe('getting', function () {
   var _files;
   it('given image', function (done) {
     this.timeout(30000);
-    var post = local.post('/api/images')
+    var post = expl.post('/api/images')
       .field('comment', 'image1')
       .attach('files', _f1);
     post.end(function (err, res) {
@@ -37,7 +37,7 @@ describe('getting', function () {
     });
   });
   it('should success', function (done) {
-    local.get('/api/images/' + _id).end(function (err, res) {
+    expl.get('/api/images/' + _id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       expect(res.body.hit).equal(0);
@@ -45,7 +45,7 @@ describe('getting', function () {
     });
   });
   it('hit should success', function (done) {
-    local.get('/api/images/' + _id + '?hit').end(function (err, res) {
+    expl.get('/api/images/' + _id + '?hit').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       expect(res.body.hit).equal(1);

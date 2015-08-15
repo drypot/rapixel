@@ -7,37 +7,37 @@ var redisStore = require('connect-redis')(session);
 var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config');
-var expect = require('../base/assert').expect;
-var exp = exports;
+var expect = require('../base/assert2').expect;
+var expb = exports;
 
-exp.core = express.Router();
+expb.core = express.Router();
 
 init.add(function () {
-  exp.app = express();
+  expb.app = express();
 
   // Set Middlewares
 
-  exp.app.disable('x-powered-by');
-  exp.app.locals.pretty = true;
-  exp.app.locals.appName = config.appName;
-  exp.app.locals.appNamel = config.appNamel;
-  exp.app.locals.appDesc = config.appDesc;
+  expb.app.disable('x-powered-by');
+  expb.app.locals.pretty = true;
+  expb.app.locals.appName = config.appName;
+  expb.app.locals.appNamel = config.appNamel;
+  expb.app.locals.appDesc = config.appDesc;
 
-  exp.app.engine('jade', require('jade').renderFile);
-  exp.app.set('view engine', 'jade');
-  exp.app.set('views', 'server');
+  expb.app.engine('jade', require('jade').renderFile);
+  expb.app.set('view engine', 'jade');
+  expb.app.set('views', 'server');
 
-  exp.app.use(cookieParser());
-  exp.app.use(session({ 
+  expb.app.use(cookieParser());
+  expb.app.use(session({ 
     store: new redisStore({ ttl: 1800 /* 단위: 초. 30 분 */ }), 
     resave: false,
     saveUninitialized: false,
     secret: config.cookieSecret
   }));
-  exp.app.use(bodyParser.urlencoded({ extended: false }));
-  exp.app.use(bodyParser.json());
+  expb.app.use(bodyParser.urlencoded({ extended: false }));
+  expb.app.use(bodyParser.json());
 
-  exp.app.use(function (req, res, done) {
+  expb.app.use(function (req, res, done) {
     res.locals.query = req.query;
     
     // Response 의 Content-Type 을 지정할 방법을 마련해 두어야한다.
@@ -66,24 +66,24 @@ init.add(function () {
     done();
   });
 
-  // exp.before: 인증 미들웨어용
-  // exp.after: redirect to login page 용
+  // expb.before: 인증 미들웨어용
+  // expb.after: redirect to login page 용
   // 테스트케이스에서 인스턴스가 기동한 후 핸들러를 추가하는 경우가 있어 core 를 도입.
 
-  if (exp.autoLogin) {
-    exp.app.use(exp.autoLogin);
+  if (expb.autoLogin) {
+    expb.app.use(expb.autoLogin);
   }
 
-  exp.app.use(exp.core);
+  expb.app.use(expb.core);
 
-  exp.app.get('/api/hello', function (req, res, done) {
+  expb.app.get('/api/hello', function (req, res, done) {
     res.json({
       name: config.appName,
       time: Date.now()
     });
   });
 
-  exp.app.all('/api/echo', function (req, res, done) {
+  expb.app.all('/api/echo', function (req, res, done) {
     res.json({
       method: req.method,
       rtype: req.header('content-type'),
@@ -92,50 +92,51 @@ init.add(function () {
     });
   });
 
-  exp.app.get('/test/error', function (req, res, done) {
+  expb.app.get('/test/error', function (req, res, done) {
     var err = new Error('Error Sample Page');
     err.code = 999;
-    res.render('express/error', {
+    res.render('express/express-error', {
       err: err
     });
   });
 
-  exp.core.post('/api/test/destroy-session', function (req, res, done) {
+  expb.core.post('/api/test/destroy-session', function (req, res, done) {
     req.session.destroy();
     res.json({});
   });
 
-  exp.core.get('/api/test/cookies', function (req, res, done) {
+  expb.core.get('/api/test/cookies', function (req, res, done) {
     res.json(req.cookies);
   });
 
   // error handler
 
-  if (exp.redirectToLogin) {
-    exp.app.use(exp.redirectToLogin);
+  if (expb.redirectToLogin) {
+    expb.app.use(expb.redirectToLogin);
   }
 
-  exp.app.use(function (_err, req, res, done) {
+  expb.app.use(function (_err, req, res, done) {
     var err = {
       message: _err.message,
       code: _err.code,
       errors: _err.errors,
     };
-    err.stack = ((_err.stack || '').match(/^(?:.*\n){1,8}/m) || [''])[0];
-    if (exp.logError) {
+    //err.stack = ((_err.stack || '').match(/^(?:.*\n){1,8}/m) || [''])[0];
+    err.stack = _err.stack;
+    if (expb.logError) {
       console.error('Code: ' + err.code);
       console.error(err.stack);
     }
     if (res.locals.api) {
       res.json({ err: err });
     } else {
-      res.render('express/error', { err: err });
+      res.render('express/express-error', { err: err });
     }
   });
 
 });
 
 init.tail(function () {
-  exp.app.listen(config.appPort);
+  expb.app.listen(config.appPort);
   console.log('express: listening ' + config.appPort);
 });

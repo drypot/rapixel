@@ -1,12 +1,12 @@
 var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config')({ path: 'config/test.json' });
-var mongop = require('../mongo/mongo')({ dropDatabase: true });
-var exp = require('../express/express');
+var mongob = require('../mongo/mongo-base')({ dropDatabase: true });
+var expb = require('../express/express-base');
 var userb = require('../user/user-base');
 var usern = require('../user/user-new');
-var local = require('../express/local');
-var expect = require('../base/assert').expect;
+var expl = require('../express/express-local');
+var expect = require('../base/assert2').expect;
 
 before(function (done) {
   init.run(done);
@@ -35,7 +35,7 @@ describe('creating user', function () {
   var _id;
   it('should success', function (done) {
     var form = { name: 'Name', email: 'name@mail.com', password: '1234' };
-    local.post('/api/users').send(form).end(function (err,res) {
+    expl.post('/api/users').send(form).end(function (err,res) {
       expect(res.body.err).not.exist;
       _id = res.body.id;
       done();
@@ -68,7 +68,7 @@ describe('name check', function () {
   });
   it('duped NAME1 should fail', function (done) {
     var form = { name: 'NAME1', email: 'mail1@mail.com', password: '1234' };
-    local.post('/api/users').send(form).end(function (err,res) {
+    expl.post('/api/users').send(form).end(function (err,res) {
       expect(res.body.err).exist;
       expect(res.body.err).error('NAME_DUPE');
       done();
@@ -76,7 +76,7 @@ describe('name check', function () {
   });
   it('duped HOME1 should fail', function (done) {
     var form = { name: 'HOME1', email: 'mail2@mail.com', password: '1234' };
-    local.post('/api/users').send(form).end(function (err,res) {
+    expl.post('/api/users').send(form).end(function (err,res) {
       expect(res.body.err).exist;
       expect(res.body.err).error('NAME_DUPE');
       done();
@@ -84,7 +84,7 @@ describe('name check', function () {
   });
   it('length 2 name should success', function (done) {
     var form = { name: '12', email: 'mail3@mail.com', password: '1234' };
-    local.post('/api/users').send(form).end(function (err,res) {
+    expl.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
@@ -92,7 +92,7 @@ describe('name check', function () {
   });
   it('length 32 name should success', function (done) {
     var form = { name: '12345678901234567890123456789012', email: 'mail4@mail.com', password: '1234' };
-    local.post('/api/users').send(form).end(function (err,res) {
+    expl.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
@@ -100,7 +100,7 @@ describe('name check', function () {
   });
   it('empty name should fail', function (done) {
     var form = { name: '', email: 'mail5@mail.com', password: '1234' };
-    local.post('/api/users').send(form).end(function (err,res) {
+    expl.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
       expect(res.body.err).error('NAME_EMPTY');
       done();
@@ -108,7 +108,7 @@ describe('name check', function () {
   });
   it('length 1 name should fail', function (done) {
     var form = { name: 'a', email: 'mail6@mail.com', password: '1234' };
-    local.post('/api/users').send(form).end(function (err,res) {
+    expl.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(res.body.err).error('NAME_RANGE');
@@ -117,7 +117,7 @@ describe('name check', function () {
   });
   it('long name should fail', function (done) {
     var form = { name: '123456789012345678901234567890123', email: 'mail7@mail.com', password: '1234' };
-    local.post('/api/users').send(form).end(function (err,res) {
+    expl.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(res.body.err).error('NAME_RANGE');
@@ -132,14 +132,14 @@ describe('email check', function () {
   });
   it('given mail1@mail.com', function (done) {
     var form = { name: 'name1', email: 'mail1@mail.com', password: '1234' };
-    local.post('/api/users').send(form).end(function (err,res) {
+    expl.post('/api/users').send(form).end(function (err,res) {
       expect(res.body.err).not.exist;
       done();
     });
   });
   it('duped mail1@mail.com should fail', function (done) {
     var form = { name: 'name2', email: 'mail1@mail.com', password: '1234' };
-    local.post('/api/users').send(form).end(function (err,res) {
+    expl.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(res.body.err).error('EMAIL_DUPE');
@@ -148,7 +148,7 @@ describe('email check', function () {
   });
   it('different case should success', function (done) {
     var form = { name: 'name3', email: 'Mail1@mail.com', password: '1234' };
-    local.post('/api/users').send(form).end(function (err,res) {
+    expl.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
@@ -156,7 +156,7 @@ describe('email check', function () {
   });
   it('invalid email should fail', function (done) {
     var form = { name: 'name4', email: 'abc.mail.com', password: '1234' };
-    local.post('/api/users').send(form).end(function (err,res) {
+    expl.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(res.body.err).error('EMAIL_PATTERN');
@@ -165,7 +165,7 @@ describe('email check', function () {
   });
   it('invalid email should fail', function (done) {
     var form = { name: 'name5', email: 'abc*xyz@mail.com', password: '1234' };
-    local.post('/api/users').send(form).end(function (err,res) {
+    expl.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(res.body.err).error('EMAIL_PATTERN');
@@ -174,7 +174,7 @@ describe('email check', function () {
   });
   it('dash should success', function (done) {
     var form = { name: 'name6', email: '-a-b-c_d-e-f@mail.com', password: '1234' };
-    local.post('/api/users').send(form).end(function (err,res) {
+    expl.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
@@ -182,7 +182,7 @@ describe('email check', function () {
   });
   it('+ should success', function (done) {
     var form = { name: 'name7', email: 'abc+xyz@mail.com', password: '1234' };
-    local.post('/api/users').send(form).end(function (err,res) {
+    expl.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
@@ -197,7 +197,7 @@ describe('password check', function () {
   });
   it('short password should fail', function (done) {
     var form = { name: 'name1', email: 'name1@mail.com', password: '123' };
-    local.post('/api/users').send(form).end(function (err,res) {
+    expl.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(res.body.err).error('PASSWORD_RANGE');
@@ -206,7 +206,7 @@ describe('password check', function () {
   });
   it('long password should fail', function (done) {
     var form = { name: 'name2', email: 'name2@mail.com', password: '123456789012345678901234567890123' };
-    local.post('/api/users').send(form).end(function (err,res) {
+    expl.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(res.body.err).error('PASSWORD_RANGE');
@@ -215,7 +215,7 @@ describe('password check', function () {
   });
   it('lenth 32 password should success', function (done) {
     var form = { name: 'name3', email: 'name3@mail.com', password: '12345678901234567890123456789012' };
-    local.post('/api/users').send(form).end(function (err,res) {
+    expl.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();

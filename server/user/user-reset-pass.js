@@ -3,9 +3,9 @@ var crypto = require('crypto');
 var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config');
-var mongop = require('../mongo/mongo');
-var exp = require('../express/express');
-var mailer = require('../mail/mailer');
+var mongob = require('../mongo/mongo-base');
+var expb = require('../express/express-base');
+var mailb = require('../mail/mail-base');
 var userb = require('../user/user-base');
 var usern = require('../user/user-new');
 var userp = exports;
@@ -13,11 +13,11 @@ var userp = exports;
 var resets;
 
 init.add(function (done) {
-  resets = exports.resets = mongop.db.collection('resets');
+  resets = exports.resets = mongob.db.collection('resets');
   resets.createIndex({ email: 1 }, done);
 });
 
-exp.core.post('/api/reset-pass', function (req, res, done) {
+expb.core.post('/api/reset-pass', function (req, res, done) {
   var form = {};
   form.email = String(req.body.email || '').trim();
   var errors = [];
@@ -52,7 +52,7 @@ exp.core.post('/api/reset-pass', function (req, res, done) {
               config.mainSite + '/users/reset-pass?step=3&id=' + reset._id + '&t=' + reset.token + '\n\n' +
               config.appName
           };
-          mailer.send(mail, function (err) {
+          mailb.send(mail, function (err) {
             if (err) return done(err);
             res.json({});
           });
@@ -62,7 +62,7 @@ exp.core.post('/api/reset-pass', function (req, res, done) {
   });
 });
 
-exp.core.put('/api/reset-pass', function (req, res, done) {
+expb.core.put('/api/reset-pass', function (req, res, done) {
   var body = req.body;
   var form = {};
   form.id = String(body.id || '').trim();
@@ -73,7 +73,7 @@ exp.core.put('/api/reset-pass', function (req, res, done) {
   if (errors.length) {
     return done(error(errors));
   }
-  resets.findOne({ _id: new mongop.ObjectID(form.id) }, function (err, reset) {
+  resets.findOne({ _id: new mongob.ObjectID(form.id) }, function (err, reset) {
     if (err) return done(err);
     if (!reset) {
       return done(error('INVALID_DATA'));
@@ -99,6 +99,6 @@ exp.core.put('/api/reset-pass', function (req, res, done) {
   });
 });
 
-exp.core.get('/users/reset-pass', function (req, res, done) {
+expb.core.get('/users/reset-pass', function (req, res, done) {
   res.render('user/user-reset-pass');
 });

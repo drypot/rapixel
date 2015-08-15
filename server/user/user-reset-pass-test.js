@@ -3,13 +3,13 @@ var bcrypt = require('bcrypt');
 var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config')({ path: 'config/test.json' });
-var mongop = require('../mongo/mongo')({ dropDatabase: true });
-var exp = require('../express/express');
+var mongob = require('../mongo/mongo-base')({ dropDatabase: true });
+var expb = require('../express/express-base');
 var userb = require('../user/user-base');
 var userf = require('../user/user-fixture');
 var userp = require('../user/user-reset-pass');
-var local = require('../express/local');
-var expect = require('../base/assert').expect;
+var expl = require('../express/express-local');
+var expect = require('../base/assert2').expect;
 
 before(function (done) {
   init.run(done);
@@ -29,7 +29,7 @@ describe('resetting user', function () {
     });
   });
   it('reset request should success', function (done) {
-    local.post('/api/reset-pass').send({ email: _user.email }).end(function (err, res) {
+    expl.post('/api/reset-pass').send({ email: _user.email }).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
@@ -46,7 +46,7 @@ describe('resetting user', function () {
     });
   });
   it('invalid email should fail', function (done) {
-    local.post('/api/reset-pass').send({ email: 'abc.def.xyz' }).end(function (err, res) {
+    expl.post('/api/reset-pass').send({ email: 'abc.def.xyz' }).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(res.body.err).error('EMAIL_PATTERN');
@@ -54,7 +54,7 @@ describe('resetting user', function () {
     });
   });
   it('unregistered email should fail', function (done) {
-    local.post('/api/reset-pass').send({ email: 'non-exist@xyz.com' }).end(function (err, res) {
+    expl.post('/api/reset-pass').send({ email: 'non-exist@xyz.com' }).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(res.body.err).error('EMAIL_NOT_EXIST');
@@ -63,7 +63,7 @@ describe('resetting user', function () {
   });
   it('invalid id should fail', function (done) {
     var form = { id: '012345678901234567890123', token: _reset.token, password: '4567' };
-    local.put('/api/reset-pass').send(form).end(function (err, res) {
+    expl.put('/api/reset-pass').send(form).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(res.body.err).error('INVALID_DATA');
@@ -72,7 +72,7 @@ describe('resetting user', function () {
   });
   it('invalid token should fail', function (done) {
     var form = { id: _reset._id, token: 'xxxxx', password: '4567' };
-    local.put('/api/reset-pass').send(form).end(function (err, res) {
+    expl.put('/api/reset-pass').send(form).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(res.body.err).error('INVALID_DATA');
@@ -81,7 +81,7 @@ describe('resetting user', function () {
   });
   it('invalid password should fail', function (done) {
     var form = { id: _reset._id, token: _reset.token, password: '' };
-    local.put('/api/reset-pass').send(form).end(function (err, res) {
+    expl.put('/api/reset-pass').send(form).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(res.body.err).error('PASSWORD_EMPTY');
@@ -90,7 +90,7 @@ describe('resetting user', function () {
   });
   it('invalid password should fail', function (done) {
     var form = { id: _reset._id, token: _reset.token, password: 'xx' };
-    local.put('/api/reset-pass').send(form).end(function (err, res) {
+    expl.put('/api/reset-pass').send(form).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(res.body.err).error('PASSWORD_RANGE');
@@ -99,7 +99,7 @@ describe('resetting user', function () {
   });
   it('should success', function (done) {
     var form = { id: _reset._id, token: _reset.token, password: 'new-pass' };
-    local.put('/api/reset-pass').send(form).end(function (err, res) {
+    expl.put('/api/reset-pass').send(form).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
@@ -136,7 +136,7 @@ describe('resetting admin', function () {
   });
   it('given reset request', function (done) {
     var form = { email: _user.email };
-    local.post('/api/reset-pass').send(form).end(function (err, res) {
+    expl.post('/api/reset-pass').send(form).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
@@ -154,7 +154,7 @@ describe('resetting admin', function () {
   });
   it('should success', function (done) {
     var form = { id: _reset._id, token: _reset.token, password: 'new-pass' };
-    local.put('/api/reset-pass').send(form).end(function (err, res) {
+    expl.put('/api/reset-pass').send(form).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();

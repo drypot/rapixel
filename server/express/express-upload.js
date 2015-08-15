@@ -3,27 +3,27 @@ var path = require('path');
 
 var init = require('../base/init');
 var config = require('../base/config');
-var fsp = require('../base/fs');
+var fs2 = require('../base/fs2');
 var multiparty = require('multiparty');
-var exp = require('../express/express');
-var upload = exports;
+var expb = require('../express/express-base');
+var expu = exports;
 
 var tmpDir;
 
 init.add(function (done) {
   console.log('upload: ' + config.uploadDir);
   tmpDir = config.uploadDir + '/tmp';
-  fsp.makeDir(tmpDir, function (err) {
+  fs2.makeDir(tmpDir, function (err) {
     if (err) return done(err);
-    fsp.emptyDir(tmpDir, done);
+    fs2.emptyDir(tmpDir, done);
   });
 
   if (config.dev) {
-    exp.core.get('/test/upload', function (req, res) {
-      res.render('express/upload');
+    expb.core.get('/test/upload', function (req, res) {
+      res.render('express/express-upload');
     });
 
-    exp.core.all('/api/test/echo-upload', upload.handler(function (req, res, done) {
+    expb.core.all('/api/test/echo-upload', expu.handler(function (req, res, done) {
       var paths = [];
       if (req.files) {
         Object.keys(req.files).forEach(function (field) {
@@ -49,12 +49,12 @@ init.add(function (done) {
 // { 
 //   f1: [ {   <-- input field name
 //     fieldName: 'f1',
-//     originalFilename: 'upload-fixture1.txt',
+//     originalFilename: 'express-upload-f1.txt',
 //     path: 'upload/rapixel-test/tmp/L-QT_2veCOSuKmOjdsFu3ivR.txt',
-//      'content-disposition': 'form-data; name="f1"; filename="upload-fixture1.txt"',
+//      'content-disposition': 'form-data; name="f1"; filename="upload-f1.txt"',
 //      'content-type': 'text/plain' 
 //     size: 6,
-//     safeFilename: 'upload-fixture1.txt' 
+//     safeFilename: 'express-upload-f1.txt' 
 //   }, {
 //     ...
 //   },
@@ -62,7 +62,7 @@ init.add(function (done) {
 //   ] 
 // }
 
-upload.handler = function (inner) {
+expu.handler = function (inner) {
   return function (req, res, done) {
     if (req._body) return inner(req, res, done);
     var form = new multiparty.Form({ uploadDir: tmpDir });
@@ -81,7 +81,7 @@ upload.handler = function (inner) {
             // 불필요한 req.files[key] 생성을 막기 위해 조건 처리는 가장 안쪽에서.
             if (!req.files) req.files = {};
             if (!req.files[key]) req.files[key] = [];
-            file.safeFilename = fsp.safeFilename(path.basename(file.originalFilename));
+            file.safeFilename = fs2.safeFilename(path.basename(file.originalFilename));
             req.files[key].push(file);
           }
         });

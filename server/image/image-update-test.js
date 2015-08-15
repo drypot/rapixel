@@ -2,16 +2,16 @@ var fs = require('fs');
 
 var init = require('../base/init');
 var error = require('../base/error');
-var fsp = require('../base/fs');
+var fs2 = require('../base/fs2');
 var config = require('../base/config')({ path: 'config/test.json' });
-var mongop = require('../mongo/mongo')({ dropDatabase: true });
-var exp = require('../express/express');
-var upload = require('../express/upload');
+var mongob = require('../mongo/mongo-base')({ dropDatabase: true });
+var expb = require('../express/express-base');
+var expu = require('../express/express-upload');
 var userf = require('../user/user-fixture');
 var imageb = require('../image/image-base');
 var imageu = require('../image/image-update');
-var local = require('../express/local');
-var expect = require('../base/assert').expect;
+var expl = require('../express/express-local');
+var expect = require('../base/assert2').expect;
 
 before(function (done) {
   init.run(done);
@@ -31,7 +31,7 @@ describe('updating with no file', function () {
     imageb.images.insertOne(form, done);
   });
   it('should success', function (done) {
-    local.put('/api/images/' + _id).field('comment', 'updated with no file').end(function (err, res) {
+    expl.put('/api/images/' + _id).field('comment', 'updated with no file').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
@@ -58,7 +58,7 @@ describe('updating with text file', function () {
   });
   it('should fail', function (done) {
     this.timeout(30000);
-    local.put('/api/images/' + _id).attach('files', 'server/express/upload-fixture1.txt').end(function (err, res) {
+    expl.put('/api/images/' + _id).attach('files', 'server/express/express-upload-f1.txt').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(res.body.err).error('IMAGE_TYPE');
@@ -80,7 +80,7 @@ describe('updating other\'s', function () {
     userf.login('user2', done);
   });
   it('should fail', function (done) {
-    local.put('/api/images/' + _id).field('comment', 'xxx').end(function (err, res) {
+    expl.put('/api/images/' + _id).field('comment', 'xxx').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(res.body.err).error('NOT_AUTHORIZED');

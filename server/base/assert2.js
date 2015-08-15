@@ -1,8 +1,8 @@
 var chai = require('chai');
-var assertp = exports;
+var assert2 = exports;
 
 chai.use(require('chai-http'));
 chai.config.includeStack = true;
 
-assertp.expect = chai.expect;
-assertp.chai = chai;
+assert2.expect = chai.expect;
+assert2.chai = chai;

@@ -1,5 +1,5 @@
-var assertp = require('../base/assert');
-var expect = assertp.expect;
+var assert2 = require('../base/assert2');
+var expect = assert2.expect;
 
 var error = exports = module.exports = function (obj) {
   var err;
@@ -58,7 +58,7 @@ error.find = function (act, code) {
   return false;
 };
 
-assertp.chai.use(function (chai, utils) {
+assert2.chai.use(function (chai, utils) {
   var Assertion = chai.Assertion;
   Assertion.addMethod('error', function (code) {
     new Assertion(error[code]).exist;

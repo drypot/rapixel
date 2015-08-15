@@ -1,16 +1,16 @@
 var mongo = require('mongodb');
-var expect = require('../base/assert').expect;
+var expect = require('../base/assert2').expect;
 
 var init = require('../base/init');
 var config = require('../base/config');
 
 var opt = {};
 
-var mongop = exports = module.exports = function (_opt) {
+var mongob = exports = module.exports = function (_opt) {
   for(var p in _opt) {
     opt[p] = _opt[p];
   }
-  return mongop;
+  return mongob;
 };
 
 // db
@@ -19,10 +19,10 @@ init.add(function (done) {
   expect(config.mongodb).exist;
   mongo.MongoClient.connect('mongodb://localhost:27017/' + config.mongodb, function(err, db) {
     if (err) return done(err);
-    mongop.db = db;
-    console.log('mongo: ' + mongop.db.databaseName);
+    mongob.db = db;
+    console.log('mongo: ' + mongob.db.databaseName);
     if (config.mongoUser) {
-      mongop.db.authenticate(config.mongoUser, config.mongoPassword, done);
+      mongob.db.authenticate(config.mongoUser, config.mongoPassword, done);
     } else {
       done();
     }    
@@ -32,19 +32,19 @@ init.add(function (done) {
 init.add(function (done) {
   if (opt.dropDatabase) {
     console.log('mongo: dropping db');
-    mongop.db.dropDatabase(done);
+    mongob.db.dropDatabase(done);
   } else {
     done();
   }
 });
 
-mongop.ObjectID = mongo.ObjectID;
+mongob.ObjectID = mongo.ObjectID;
 
 // utilities
 
 // _id 를 숫자로 쓰는 컬렉션만 페이징할 수 있다.
 
-mongop.findPage = function (col, query, gt, lt, ps, filter, done) {
+mongob.findPage = function (col, query, gt, lt, ps, filter, done) {
   
   readPage(getCursor());
 
@@ -126,7 +126,7 @@ mongop.findPage = function (col, query, gt, lt, ps, filter, done) {
 
 };
 
-mongop.forEach = function (col, doit, done) {
+mongob.forEach = function (col, doit, done) {
   var cursor = col.find();
   (function read() {
     cursor.nextObject(function (err, obj) {
@@ -143,7 +143,7 @@ mongop.forEach = function (col, doit, done) {
   })();
 };
 
-mongop.getLastId = function (col, done) {
+mongob.getLastId = function (col, done) {
   var opt = { fields: { _id: 1 }, sort: { _id: -1 }, limit: 1 };
   col.find({}, opt).nextObject(function (err, obj) {
     done(err, obj ? obj._id : 0);

@@ -2,16 +2,16 @@ var fs = require('fs');
 
 var init = require('../base/init');
 var error = require('../base/error');
-var fsp = require('../base/fs');
+var fs2 = require('../base/fs2');
 var config = require('../base/config')({ path: 'config/test.json' });
-var mongop = require('../mongo/mongo')({ dropDatabase: true });
-var exp = require('../express/express');
-var upload = require('../express/upload');
+var mongob = require('../mongo/mongo-base')({ dropDatabase: true });
+var expb = require('../express/express-base');
+var expu = require('../express/express-upload');
 var userf = require('../user/user-fixture');
 var imageb = require('../image/image-base');
 var imaged = require('../image/image-delete');
-var local = require('../express/local');
-var expect = require('../base/assert').expect;
+var expl = require('../express/express-local');
+var expect = require('../base/assert2').expect;
 
 before(function (done) {
   init.run(done);
@@ -33,7 +33,7 @@ describe('deleting', function () {
   });
   it('given post', function (done) {
     this.timeout(30000);
-    local.post('/api/images').field('comment', 'image1').attach('files', _f1).end(function (err, res) {
+    expl.post('/api/images').field('comment', 'image1').attach('files', _f1).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       expect(res.body.ids).exist;
@@ -42,7 +42,7 @@ describe('deleting', function () {
     });
   });
   it('should success', function (done) {
-    local.del('/api/images/' + _id, function (err, res) {
+    expl.del('/api/images/' + _id, function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
@@ -67,7 +67,7 @@ describe('deleting by admin', function () {
   });
   it('given post', function (done) {
     this.timeout(30000);
-    local.post('/api/images').field('comment', 'image1').attach('files', _f1).end(function (err, res) {
+    expl.post('/api/images').field('comment', 'image1').attach('files', _f1).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       expect(res.body.ids).exist;
@@ -79,7 +79,7 @@ describe('deleting by admin', function () {
     userf.login('admin', done);
   });
   it('should success', function (done) {
-    local.del('/api/images/' + _id, function (err, res) {
+    expl.del('/api/images/' + _id, function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
@@ -104,7 +104,7 @@ describe('deleting other\'s', function () {
   });
   it('given post', function (done) {
     this.timeout(30000);
-    local.post('/api/images').field('comment', 'image1').attach('files', _f1).end(function (err, res) {
+    expl.post('/api/images').field('comment', 'image1').attach('files', _f1).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       expect(res.body.ids).exist;
@@ -116,7 +116,7 @@ describe('deleting other\'s', function () {
     userf.login('user2', done);
   });
   it('should fail', function (done) {
-    local.del('/api/images/' + _id, function (err, res) {
+    expl.del('/api/images/' + _id, function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(res.body.err).error('NOT_AUTHORIZED');

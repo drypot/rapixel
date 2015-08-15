@@ -1,14 +1,14 @@
 var init = require('../base/init');
 var error = require('../base/error');
-var exp = require('../express/express');
+var expb = require('../express/express-base');
 var userb = require('../user/user-base');
 var usern = exports;
 
-exp.core.get('/users/register', function (req, res, done) {
+expb.core.get('/users/register', function (req, res, done) {
   res.render('user/user-new');
 });
 
-exp.core.post('/api/users', function (req, res, done) {
+expb.core.post('/api/users', function (req, res, done) {
   var form = getForm(req);
   form.home = form.name;
   form.homel = form.namel = form.name.toLowerCase();

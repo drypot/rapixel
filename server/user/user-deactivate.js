@@ -1,9 +1,9 @@
 var init = require('../base/init');
 var error = require('../base/error');
-var exp = require('../express/express');
+var expb = require('../express/express-base');
 var userb = require('../user/user-base');
 
-exp.core.delete('/api/users/:id([0-9]+)', function (req, res, done) {
+expb.core.delete('/api/users/:id([0-9]+)', function (req, res, done) {
   userb.checkUser(res, function (err, user) {
     if (err) return done(err);
     var id = parseInt(req.params.id) || 0;
@@ -22,7 +22,7 @@ exp.core.delete('/api/users/:id([0-9]+)', function (req, res, done) {
   });
 });
 
-exp.core.get('/users/deactivate', function (req, res, done) {
+expb.core.get('/users/deactivate', function (req, res, done) {
   userb.checkUser(res, function (err, user) {
     if (err) return done(err);
     res.render('user/user-deactivate');

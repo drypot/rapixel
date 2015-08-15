@@ -1,24 +1,24 @@
 var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config');
-var utilp = require('../base/util');
-var exp = require('../express/express');
-var upload = require('../express/upload');
+var util2 = require('../base/util2');
+var expb = require('../express/express-base');
+var expu = require('../express/express-upload');
 var userb = require('../user/user-base');
 var imageb = require('../image/image-base');
 var site = require('../image/image-site');
 
-exp.core.get('/api/images/:id([0-9]+)', function (req, res, done) {
+expb.core.get('/api/images/:id([0-9]+)', function (req, res, done) {
   view(req, res, true, done);
 });
 
-exp.core.get('/images/:id([0-9]+)', function (req, res, done) {
+expb.core.get('/images/:id([0-9]+)', function (req, res, done) {
   view(req, res, false, done);
 });
 
 function view(req, res, api, done) {
   var id = parseInt(req.params.id) || 0;
-  utilp.fif(!api || req.query.hasOwnProperty('hit'), function (next) {
+  util2.fif(!api || req.query.hasOwnProperty('hit'), function (next) {
     imageb.images.updateOne({ _id: id }, { $inc: { hit: 1 }}, next);
   }, function (err) {
     if (err) return done(err);
@@ -33,7 +33,7 @@ function view(req, res, api, done) {
           home: user.home
         };
         image.dir = imageb.getUrlBase(image._id);
-        image.cdateStr = utilp.toDateTimeString(image.cdate);
+        image.cdateStr = util2.toDateTimeString(image.cdate);
         image.cdate = image.cdate.getTime();
         if (api) {
           res.json(image);
@@ -51,10 +51,10 @@ function view(req, res, api, done) {
   });
 }
 
-exp.core.get('/photos/:id([0-9]+)', function (req, res, done) {
+expb.core.get('/photos/:id([0-9]+)', function (req, res, done) {
   res.redirect('/images/' + req.params.id);
 });
 
-exp.core.get('/drawings/:id([0-9]+)', function (req, res, done) {
+expb.core.get('/drawings/:id([0-9]+)', function (req, res, done) {
   res.redirect('/images/' + req.params.id);
 });

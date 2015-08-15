@@ -1,9 +1,9 @@
 var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config')({ path: 'config/test.json' });
-var exp = require('../express/express');
-var local = require('../express/local');
-var expect = require('../base/assert').expect;
+var expb = require('../express/express-base');
+var expl = require('../express/express-local');
+var expect = require('../base/assert2').expect;
 
 before(function (done) {
   init.run(done);
@@ -11,7 +11,7 @@ before(function (done) {
 
 describe('hello', function () {
   it('should return appName', function (done) {
-    local.get('/api/hello').end(function (err, res) {
+    expl.get('/api/hello').end(function (err, res) {
       expect(err).not.exist;
       expect(res).json;
       expect(res.body.name).equal(config.appName);
@@ -26,7 +26,7 @@ describe('hello', function () {
 
 describe('echo', function () {
   it('get should success', function (done) {
-    local.get('/api/echo?p1&p2=123').end(function (err, res) {
+    expl.get('/api/echo?p1&p2=123').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.method).equal('GET');
       expect(res.body.query).eql({ p1: '', p2: '123' });
@@ -34,7 +34,7 @@ describe('echo', function () {
     });
   });
   it('post should success', function (done) {
-    local.post('/api/echo').send({ p1: '', p2: '123' }).end(function (err, res) {
+    expl.post('/api/echo').send({ p1: '', p2: '123' }).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.method).equal('POST');
       expect(res.body.body).eql({ p1: '', p2: '123' });
@@ -42,7 +42,7 @@ describe('echo', function () {
     });
   });
   it('delete should success', function (done) {
-    local.del('/api/echo').end(function (err, res) {
+    expl.del('/api/echo').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.method).equal('DELETE');
       done();
@@ -52,7 +52,7 @@ describe('echo', function () {
 
 describe('undefined', function () {
   it('should return 404', function (done) {
-    local.get('/api/test/undefined-url').end(function (err, res) {
+    expl.get('/api/test/undefined-url').end(function (err, res) {
       expect(err).exist;
       expect(res).status(404); // Not Found
       done();
@@ -62,12 +62,12 @@ describe('undefined', function () {
 
 describe('json object', function () {
   it('given handler', function () {
-    exp.core.get('/api/test/object', function (req, res, done) {
+    expb.core.get('/api/test/object', function (req, res, done) {
       res.json({ msg: 'valid json' });
     });
   });
   it('should return json', function (done) {
-    local.get('/api/test/object').end(function (err, res) {
+    expl.get('/api/test/object').end(function (err, res) {
       expect(err).not.exist;
       expect(res).json;
       expect(res.body.msg).equal('valid json');
@@ -78,12 +78,12 @@ describe('json object', function () {
 
 describe('json string', function () {
   it('given handler', function () {
-    exp.core.get('/api/test/string', function (req, res, done) {
+    expb.core.get('/api/test/string', function (req, res, done) {
       res.json('hi');
     });
   });
   it('should return json', function (done) {
-    local.get('/api/test/string').end(function (err, res) {
+    expl.get('/api/test/string').end(function (err, res) {
       expect(err).not.exist;
       expect(res).json;
       expect(res.body).equal('hi');
@@ -94,12 +94,12 @@ describe('json string', function () {
 
 describe('json null', function () {
   it('given handler', function () {
-    exp.core.get('/api/test/null', function (req, res, done) {
+    expb.core.get('/api/test/null', function (req, res, done) {
       res.json(null);
     });
   });
   it('should return {}', function (done) {
-    local.get('/api/test/null').end(function (err, res) {
+    expl.get('/api/test/null').end(function (err, res) {
       expect(err).not.exist;
       expect(res).json;
       expect(res.body).equal(null);
@@ -110,12 +110,12 @@ describe('json null', function () {
 
 describe('no-action', function () {
   it('given handler', function () {
-    exp.core.get('/api/test/no-action', function (req, res, done) {
+    expb.core.get('/api/test/no-action', function (req, res, done) {
       done();
     });
   });
   it('should return 404', function (done) {
-    local.get('/api/test/no-action').end(function (err, res) {
+    expl.get('/api/test/no-action').end(function (err, res) {
       expect(err).exist;
       expect(res).status(404); // Not Found
       done();
@@ -125,12 +125,12 @@ describe('no-action', function () {
 
 describe('json error', function () {
   it('given handler', function () {
-    exp.core.get('/api/test/invalid-data', function (req, res, done) {
+    expb.core.get('/api/test/invalid-data', function (req, res, done) {
        done(error('INVALID_DATA'));
     });
   });
   it('should return json', function (done) {
-    local.get('/api/test/invalid-data').end(function (err, res) {
+    expl.get('/api/test/invalid-data').end(function (err, res) {
       expect(err).not.exist;
       expect(res).json;
       expect(res.body.err).exist;
@@ -142,12 +142,12 @@ describe('json error', function () {
 
 describe('html', function () {
   it('given handler', function () {
-    exp.core.get('/test/html', function (req, res, done) {
+    expb.core.get('/test/html', function (req, res, done) {
       res.send('<p>some text</p>');
     });
   });
   it('should return html', function (done) {
-    local.get('/test/html').end(function (err, res) {
+    expl.get('/test/html').end(function (err, res) {
       expect(err).not.exist;
       expect(res).html;
       expect(res.text).equal('<p>some text</p>');
@@ -158,12 +158,12 @@ describe('html', function () {
 
 describe('html error', function () {
   it('given handler', function () {
-    exp.core.get('/test/invalid-data', function (req, res, done) {
+    expb.core.get('/test/invalid-data', function (req, res, done) {
        done(error('INVALID_DATA'));
     });
   });
   it('should return html', function (done) {
-    local.get('/test/invalid-data').end(function (err, res) {
+    expl.get('/test/invalid-data').end(function (err, res) {
       expect(err).not.exist;
       expect(res).html;
       expect(res.text).match(/.*INVALID_DATA.*/);
@@ -174,19 +174,19 @@ describe('html error', function () {
 
 describe('cache control', function () {
   it('given handler', function () {
-    exp.core.get('/test/cache-test', function (req, res, done) {
+    expb.core.get('/test/cache-test', function (req, res, done) {
        res.send('<p>muse be cached</p>');
      });
   });
   it('none api request should return Cache-Control: private', function (done) {
-    local.get('/test/cache-test').end(function (err, res) {
+    expl.get('/test/cache-test').end(function (err, res) {
       expect(err).not.exist;
       expect(res.get('Cache-Control')).equal('private');
       done();
     });
   });
   it('api should return Cache-Control: no-cache', function (done) {
-    local.get('/api/hello').end(function (err, res) {
+    expl.get('/api/hello').end(function (err, res) {
       expect(err).not.exist;
       expect(res.get('Cache-Control')).equal('no-cache');
       done();
@@ -196,14 +196,14 @@ describe('cache control', function () {
 
 describe('session', function () {
   it('given handler', function () {
-    exp.core.put('/api/test/session', function (req, res) {
+    expb.core.put('/api/test/session', function (req, res) {
       for (var key in req.body) {
         req.session[key] = req.body[key];
       }
       res.json({});
     });
 
-    exp.core.get('/api/test/session', function (req, res) {
+    expb.core.get('/api/test/session', function (req, res) {
       var obj = {};
       for (var i = 0; i < req.body.length; i++) {
         var key = req.body[i];
@@ -213,14 +213,14 @@ describe('session', function () {
     });
   });
   it('post should success', function (done) {
-    local.put('/api/test/session').send({ book: 'book1', price: 11 }).end(function (err, res) {
+    expl.put('/api/test/session').send({ book: 'book1', price: 11 }).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
     });
   });
   it('get should success', function (done) {
-    local.get('/api/test/session').send([ 'book', 'price' ]).end(function (err, res) {
+    expl.get('/api/test/session').send([ 'book', 'price' ]).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body).property('book', 'book1');
       expect(res.body).property('price', 11);
@@ -228,14 +228,14 @@ describe('session', function () {
     });
   });
   it('given session destroied', function (done) {
-    local.post('/api/test/destroy-session').end(function (err, res) {
+    expl.post('/api/test/destroy-session').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
     });
   });
   it('get should fail', function (done) {
-    local.get('/api/test/session').send([ 'book', 'price' ]).end(function (err, res) {
+    expl.get('/api/test/session').send([ 'book', 'price' ]).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body).not.property('book');
       expect(res.body).not.property('price');
@@ -261,19 +261,19 @@ describe('middleware', function () {
       done(new Error('some error'));
     }
     
-    exp.core.get('/api/test/mw-1-2', mid1, mid2, function (req, res, done) {
+    expb.core.get('/api/test/mw-1-2', mid1, mid2, function (req, res, done) {
       result.mid3 = 'ok';
       res.json({});
     });
 
-    exp.core.get('/api/test/mw-1-err-2', mid1, miderr, mid2, function (req, res, done) {
+    expb.core.get('/api/test/mw-1-err-2', mid1, miderr, mid2, function (req, res, done) {
       result.mid3 = 'ok';
       res.json({});
     });
   });
   it('mw-1-2 should return 1, 2', function (done) {
     result = {};
-    local.get('/api/test/mw-1-2').end(function (err, res) {
+    expl.get('/api/test/mw-1-2').end(function (err, res) {
       expect(err).not.exist;
       expect(result.mid1).exist;
       expect(result.mid2).exist;
@@ -283,7 +283,7 @@ describe('middleware', function () {
   });
   it('mw-1-err-2 should return 1, 2', function (done) {
     result = {};
-    local.get('/api/test/mw-1-err-2').end(function (err, res) {
+    expl.get('/api/test/mw-1-err-2').end(function (err, res) {
       expect(err).not.exist;
       expect(result.mid1).exist;
       expect(result.mid2).not.exist;

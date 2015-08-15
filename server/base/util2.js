@@ -1,12 +1,12 @@
-var utilp = exports;
+var util2 = exports;
 
-utilp.defineMethod = function (con, methodName, fn) {
+util2.defineMethod = function (con, methodName, fn) {
   Object.defineProperty(
     con, methodName, { value : fn, writable: true, enumerable: false, configurable: true}
   );
 }
 
-utilp.find = function (a, fn) {
+util2.find = function (a, fn) {
   for (var i = 0; i < a.length; i++) {
     var item = a[i];
     if (fn(item)) return item;
@@ -14,7 +14,7 @@ utilp.find = function (a, fn) {
   return null;
 };
 
-utilp.mergeObject = function () {
+util2.mergeObject = function () {
   var tar = arguments[0];
   for (var i = 1; i < arguments.length; i++) {
     var src = arguments[i];
@@ -24,7 +24,7 @@ utilp.mergeObject = function () {
   }
 }
 
-utilp.mergeArray = function () {
+util2.mergeArray = function () {
   var tar = arguments[0];
   var fn = arguments[arguments.length -1];
   for (var a = 1; a < arguments.length - 1; a++) {
@@ -44,7 +44,7 @@ utilp.mergeArray = function () {
 
 // functional if
 
-utilp.fif = function (condi, f1, f2, f3) {
+util2.fif = function (condi, f1, f2, f3) {
   if (f3) {
     if (condi) {
       f1(f3);
@@ -63,7 +63,7 @@ utilp.fif = function (condi, f1, f2, f3) {
 // 마지막 인자 콜백을 바로 호출. 
 // 테스트 디버깅 용으로 만들었던 듯.
 
-utilp.pass = function () {
+util2.pass = function () {
   arguments[arguments.length - 1]();
 }
 
@@ -77,14 +77,22 @@ function pad(number) {
   return r;
 }
 
-utilp.toDateTimeString = function (d) {
+util2.toDateTimeString = function (d) {
   return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + ' ' +
     pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
 };
 
+util2.toDateString = function (d) {
+  return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+};
+
+util2.toDateStringNoDash = function (d) {
+  return d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate());
+};
+
 // url
 
-utilp.makeUrl = function(url, params) {
+util2.makeUrl = function(url, params) {
   var qm;
 
   for(var p in params) {
@@ -102,12 +110,12 @@ utilp.makeUrl = function(url, params) {
   return url;
 };
 
-utilp.UrlMaker = function(url) {
+util2.UrlMaker = function(url) {
   this.url = '' + url;
   this.qm = false;
 }
 
-utilp.UrlMaker.prototype.add = function (name, value, def) {
+util2.UrlMaker.prototype.add = function (name, value, def) {
   if (def !== undefined && def === value) {
     return this;
   }
@@ -123,7 +131,7 @@ utilp.UrlMaker.prototype.add = function (name, value, def) {
   return this;
 }
 
-utilp.UrlMaker.prototype.done = function () {
+util2.UrlMaker.prototype.done = function () {
   return this.url;
 }
 
@@ -140,7 +148,7 @@ var stops = [
 var engx = /\w+/g
 var unix = /[\u0100-\uffff]+/g
 
-utilp.tokenize = function () {
+util2.tokenize = function () {
   var tokens = [];
   var len = arguments.length;
   for (var i = 0; i < len; i++) {

@@ -4,8 +4,8 @@ var crypto = require('crypto');
 var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config');
-var mongop = require('../mongo/mongo');
-var exp = require('../express/express');
+var mongob = require('../mongo/mongo-base');
+var expb = require('../express/express-base');
 var userb = exports;
 
 error.define('NOT_AUTHENTICATED', '먼저 로그인해 주십시오.');
@@ -39,7 +39,7 @@ error.define('RESET_TIMEOUT', '비밀번호 초기화 토큰 유효시간이 지
 var userId;
 
 init.add(function (done) {
-  userb.users = mongop.db.collection('users');
+  userb.users = mongob.db.collection('users');
   userb.users.createIndex({ email: 1 }, function (err) {
     if (err) return done(err);
     userb.users.createIndex({ namel: 1 }, function (err) {
@@ -50,7 +50,7 @@ init.add(function (done) {
 });
 
 init.add(function (done) {
-  mongop.getLastId(userb.users, function (err, id) {
+  mongob.getLastId(userb.users, function (err, id) {
     if (err) return done(err);
     userId = id;
     console.log('user-base: user id = ' + userId);
@@ -154,7 +154,7 @@ userb.checkUpdatable = function (id, user, done) {
 
 // login
 
-exp.redirectToLogin = function (err, req, res, done) {
+expb.redirectToLogin = function (err, req, res, done) {
   if (!res.locals.api && err.code == error.NOT_AUTHENTICATED.code) {
     res.redirect('/users/login');
   } else {
@@ -162,11 +162,11 @@ exp.redirectToLogin = function (err, req, res, done) {
   }
 };
 
-exp.core.get('/users/login', function (req, res, done) {
+expb.core.get('/users/login', function (req, res, done) {
   res.render('user/user-base-login');
 });
 
-exp.core.post('/api/users/login', function (req, res, done) {
+expb.core.post('/api/users/login', function (req, res, done) {
   var form = {};
   form.email = String(req.body.email || '').trim();
   form.password = String(req.body.password || '').trim();
@@ -195,7 +195,7 @@ exp.core.post('/api/users/login', function (req, res, done) {
   });
 });
 
-exp.autoLogin = function (req, res, done) {
+expb.autoLogin = function (req, res, done) {
   if (req.session.uid) {
     userb.getCached(req.session.uid, function (err, user) {
       if (err) return req.session.regenerate(done);
@@ -250,7 +250,7 @@ function findUser(email, password, done) {
   });
 };
 
-exp.core.get('/api/users/login', function (req, res, done) {
+expb.core.get('/api/users/login', function (req, res, done) {
   userb.checkUser(res, function (err, user) {
     if (err) return done(err);
     res.json({
@@ -264,7 +264,7 @@ exp.core.get('/api/users/login', function (req, res, done) {
 
 // logout
 
-exp.core.post('/api/users/logout', function (req, res, done) {
+expb.core.post('/api/users/logout', function (req, res, done) {
   userb.logout(req, res);
   res.json({});
 });

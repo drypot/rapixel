@@ -1,14 +1,14 @@
 var init = require('../base/init');
-var utilp = require('../base/util');
+var util2 = require('../base/util2');
 var error = require('../base/error');
-var mongop = require('../mongo/mongo');
-var exp = require('../express/express');
+var mongob = require('../mongo/mongo-base');
+var expb = require('../express/express-base');
 var userb = require('../user/user-base');
 var imageb = require('../image/image-base');
 var imagel = require('../image/image-list');
 var site = require('../image/image-site');
 
-exp.core.get('/users/:id([0-9]+)', function (req, res, done) {
+expb.core.get('/users/:id([0-9]+)', function (req, res, done) {
   var id = parseInt(req.params.id) || 0;
   userb.getCached(id, function (err, tuser) {
     if (err) return done(err);
@@ -16,7 +16,7 @@ exp.core.get('/users/:id([0-9]+)', function (req, res, done) {
   });
 });
 
-exp.core.get('/:name([^/]+)', function (req, res, done) {
+expb.core.get('/:name([^/]+)', function (req, res, done) {
   var homel = decodeURIComponent(req.params.name).toLowerCase();
   userb.getCachedByHome(homel, function (err, tuser) {
     if (err) return done(err);
@@ -31,15 +31,15 @@ function list(req, res, tuser) {
   var gt = lt ? 0 : parseInt(req.query.gt) || 0;
   var ps = parseInt(req.query.ps) || 16;
   var query = { uid: tuser.id };
-  mongop.findPage(imageb.images, { uid: tuser._id }, gt, lt, ps, filter, function (err, images, gt, lt) {
+  mongob.findPage(imageb.images, { uid: tuser._id }, gt, lt, ps, filter, function (err, images, gt, lt) {
     if (err) return done(err);
     res.render('image/image-listu', {
       tuser: tuser,
       updatable: user && (user._id === tuser._id || user.admin),
       images: images,
       suffix: site.thumbnailSuffix,
-      gt: gt ? new utilp.UrlMaker(req.path).add('gt', gt).add('ps', ps, 16).done() : undefined,
-      lt: lt ? new utilp.UrlMaker(req.path).add('lt', lt).add('ps', ps, 16).done() : undefined
+      gt: gt ? new util2.UrlMaker(req.path).add('gt', gt).add('ps', ps, 16).done() : undefined,
+      lt: lt ? new util2.UrlMaker(req.path).add('lt', lt).add('ps', ps, 16).done() : undefined
     });
   });
 }
@@ -53,7 +53,7 @@ function filter(image, done) {
       home: user.home
     };
     image.dir = imageb.getUrlBase(image._id);
-    image.cdateStr = utilp.toDateTimeString(image.cdate);
+    image.cdateStr = util2.toDateTimeString(image.cdate);
     done(null, image);
   });
 }

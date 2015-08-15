@@ -1,14 +1,14 @@
 var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config')({ path: 'config/test.json' });
-var mongop = require('../mongo/mongo')({ dropDatabase: true });
-var exp = require('../express/express');
+var mongob = require('../mongo/mongo-base')({ dropDatabase: true });
+var expb = require('../express/express-base');
 var userb = require('../user/user-base');
 var userv = require('../user/user-view');
 var userf = require('../user/user-fixture');
 var usern = require('../user/user-new');
-var local = require('../express/local');
-var expect = require('../base/assert').expect;
+var expl = require('../express/express-local');
+var expect = require('../base/assert2').expect;
 
 before(function (done) {
   init.run(done);
@@ -17,7 +17,7 @@ before(function (done) {
 describe('finding user', function () {
   var _user = { name: 'test', email: 'test@def.com', password: '1234'  };
   it('given new user', function (done) {
-    local.post('/api/users').send(_user).end(function (err, res) {
+    expl.post('/api/users').send(_user).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       _user._id = res.body.id;
@@ -26,14 +26,14 @@ describe('finding user', function () {
   });
   it('given login', function (done) {
     var form = { email: _user.email, password: _user.password };
-    local.post('/api/users/login').send(form).end(function (err, res) {
+    expl.post('/api/users/login').send(form).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
     });
   });
   it('should success with email field', function (done) {
-    local.get('/api/users/' + _user._id).end(function (err, res) {
+    expl.get('/api/users/' + _user._id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       expect(res.body.user._id).equal(_user._id);
@@ -46,7 +46,7 @@ describe('finding user', function () {
     userf.login('user2', done);
   });
   it('should success without email', function (done) {
-    local.get('/api/users/' + _user._id).end(function (err, res) {
+    expl.get('/api/users/' + _user._id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       expect(res.body.user._id).equal(_user._id);
@@ -59,7 +59,7 @@ describe('finding user', function () {
     userf.login('admin', done);
   });
   it('should success with email', function (done) {
-    local.get('/api/users/' + _user._id).end(function (err, res) {
+    expl.get('/api/users/' + _user._id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       expect(res.body.user._id).equal(_user._id);
@@ -76,7 +76,7 @@ describe('finding user', function () {
     })
   });
   it('should success without email', function (done) {
-    local.get('/api/users/' + _user._id).end(function (err, res) {
+    expl.get('/api/users/' + _user._id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       expect(res.body.user._id).equal(_user._id);
@@ -87,7 +87,7 @@ describe('finding user', function () {
     });
   });
   it('should fail with invalid id', function (done) {
-    local.get('/api/users/999').end(function (err, res) {
+    expl.get('/api/users/999').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(res.body.err).error('USER_NOT_FOUND');

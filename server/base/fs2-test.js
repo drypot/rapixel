@@ -1,7 +1,7 @@
 var fs = require('fs');
 
-var fsp = require('../base/fs');
-var expect = require('../base/assert').expect;
+var fs2 = require('../base/fs2');
+var expect = require('../base/assert2').expect;
 
 var testdir = 'tmp/fs-test';
 
@@ -16,8 +16,8 @@ before(function (done) {
 
 describe('pathExist', function () {
   it('should success', function () {
-    expect('server/base/fs-test.js').pathExist;
-    expect('server/base/fs-test-xx.js').not.pathExist;
+    expect('server/base/fs2-test.js').pathExist;
+    expect('server/base/fs2-test-xx.js').not.pathExist;
   });
 });
 
@@ -41,7 +41,7 @@ describe('removeDir', function () {
     expect(testdir + '/sub1/f1.txt').pathExist;
     expect(testdir + '/sub2/f2.txt').pathExist;
     expect(testdir + '/sub2/sub3/f3.txt').pathExist;
-    fsp.removeDir(testdir + '/sub2/f2.txt', function (err) {
+    fs2.removeDir(testdir + '/sub2/f2.txt', function (err) {
       if (err) return done(err);
       expect(testdir + '/sub1').pathExist;
       expect(testdir + '/sub2').pathExist;
@@ -59,7 +59,7 @@ describe('removeDir', function () {
     expect(testdir + '/sub1/f1.txt').pathExist;
     expect(testdir + '/sub2/f2.txt').pathExist;
     expect(testdir + '/sub2/sub3/f3.txt').pathExist;
-    fsp.removeDir(testdir + '/sub1', function (err) {
+    fs2.removeDir(testdir + '/sub1', function (err) {
       if (err) return done(err);
       expect(testdir + '/sub1').not.pathExist;
       expect(testdir + '/sub2').pathExist;
@@ -77,7 +77,7 @@ describe('removeDir', function () {
     expect(testdir + '/sub1/f1.txt').pathExist;
     expect(testdir + '/sub2/f2.txt').pathExist;
     expect(testdir + '/sub2/sub3/f3.txt').pathExist;
-    fsp.removeDir(testdir + '/sub2', function (err) {
+    fs2.removeDir(testdir + '/sub2', function (err) {
       if (err) return done(err);
       expect(testdir + '/sub1').pathExist;
       expect(testdir + '/sub2').not.pathExist;
@@ -104,7 +104,7 @@ describe('emtpyDir', function () {
     });
   });
   it('should success', function (done) {
-    fsp.emptyDir(testdir, function (err) {
+    fs2.emptyDir(testdir, function (err) {
       if (err) return done(err);
       fs.readdir(testdir, function (err, files) {
         if (err) return done(err);
@@ -117,11 +117,11 @@ describe('emtpyDir', function () {
 
 describe('makeDir', function () {
   before(function (done) {
-    fsp.emptyDir(testdir, done);
+    fs2.emptyDir(testdir, done);
   });
   it('can make dir', function (done) {
     expect(testdir + '/sub1').not.pathExist;
-    fsp.makeDir(testdir + '/sub1', function (err, dir) {
+    fs2.makeDir(testdir + '/sub1', function (err, dir) {
       expect(err).not.exist;
       expect(dir).equal(testdir + '/sub1');
       expect(testdir + '/sub1').pathExist;
@@ -130,7 +130,7 @@ describe('makeDir', function () {
   });
   it('can make dir in existing dir', function (done) {
     expect(testdir + '/sub1/sub2/sub3').not.pathExist;
-    fsp.makeDir(testdir + '/sub1/sub2/sub3', function (err, dir) {
+    fs2.makeDir(testdir + '/sub1/sub2/sub3', function (err, dir) {
       expect(err).not.exist;
       expect(dir).equal(testdir + '/sub1/sub2/sub3');
       expect(testdir + '/sub1/sub2/sub3').pathExist;
@@ -154,7 +154,7 @@ describe('safeFilename', function () {
       [ "이상한 '한글' 이름을 가진 파일", "이상한 '한글' 이름을 가진 파일" ]
     ];
     table.forEach(function (pair) {
-      var a = fsp.safeFilename(pair[0]);
+      var a = fs2.safeFilename(pair[0]);
       var b = pair[1];
       if (a !== b) console.log(pair);
       expect((a == b)).true;
@@ -164,13 +164,13 @@ describe('safeFilename', function () {
 
 describe('makeDeepPath', function () {
   it('should success', function () {
-    expect(fsp.makeDeepPath(1, 3)).equal('0/0/1');
-    expect(fsp.makeDeepPath(999, 3)).equal('0/0/999');
-    expect(fsp.makeDeepPath(1000, 3)).equal('0/1/0');
-    expect(fsp.makeDeepPath(1999, 3)).equal('0/1/999');
-    expect(fsp.makeDeepPath(999999, 3)).equal('0/999/999');
-    expect(fsp.makeDeepPath(1999999, 3)).equal('1/999/999');
-    expect(fsp.makeDeepPath(999999999, 3)).equal('999/999/999');
-    expect(fsp.makeDeepPath(9999999999, 3)).equal('9999/999/999');
+    expect(fs2.makeDeepPath(1, 3)).equal('0/0/1');
+    expect(fs2.makeDeepPath(999, 3)).equal('0/0/999');
+    expect(fs2.makeDeepPath(1000, 3)).equal('0/1/0');
+    expect(fs2.makeDeepPath(1999, 3)).equal('0/1/999');
+    expect(fs2.makeDeepPath(999999, 3)).equal('0/999/999');
+    expect(fs2.makeDeepPath(1999999, 3)).equal('1/999/999');
+    expect(fs2.makeDeepPath(999999999, 3)).equal('999/999/999');
+    expect(fs2.makeDeepPath(9999999999, 3)).equal('9999/999/999');
   });
 });

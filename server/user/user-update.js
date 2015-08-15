@@ -1,10 +1,10 @@
 var init = require('../base/init');
 var error = require('../base/error');
-var exp = require('../express/express');
+var expb = require('../express/express-base');
 var userb = require('../user/user-base');
 var usern = require('../user/user-new');
 
-exp.core.put('/api/users/:id([0-9]+)', function (req, res, done) {
+expb.core.put('/api/users/:id([0-9]+)', function (req, res, done) {
   userb.checkUser(res, function (err, user) {
     if (err) return done(err);
     var id = parseInt(req.params.id) || 0;
@@ -15,7 +15,7 @@ exp.core.put('/api/users/:id([0-9]+)', function (req, res, done) {
       form.homel = form.home.toLowerCase();
       usern.checkForm(form, id, function (err) {
         if (err) return done(err);
-        var fields = {
+        var updated = {
           name: form.name,
           namel: form.namel,
           home: form.home,
@@ -24,11 +24,11 @@ exp.core.put('/api/users/:id([0-9]+)', function (req, res, done) {
           profile: form.profile
         };
         if (form.password.length) {
-          fields.hash = userb.makeHash(form.password);
+          updated.hash = userb.makeHash(form.password);
         }
-        userb.users.updateOne({ _id: id }, { $set: fields }, function (err, r) {
+        userb.users.updateOne({ _id: id }, { $set: updated }, function (err, r) {
           if (err) return done(err);
-          if (!r.modifiedCount) {
+          if (!r.matchedCount) {
             return done(error('USER_NOT_FOUND'));
           }
           userb.deleteCache(id);
@@ -39,7 +39,7 @@ exp.core.put('/api/users/:id([0-9]+)', function (req, res, done) {
   });
 });
 
-exp.core.get('/users/:id([0-9]+)/update', function (req, res, done) {
+expb.core.get('/users/:id([0-9]+)/update', function (req, res, done) {
   userb.checkUser(res, function (err, user) {
     if (err) return done(err);
     var id = parseInt(req.params.id) || 0;

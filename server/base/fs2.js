@@ -1,10 +1,10 @@
 var fs = require('fs');
 var path = require('path');
 
-var assertp = require('../base/assert');
-var fsp = exports;
+var assert2 = require('../base/assert2');
+var fs2 = exports;
 
-assertp.chai.use(function (chai, utils) {
+assert2.chai.use(function (chai, utils) {
   var Assertion = chai.Assertion;
   Assertion.addProperty('pathExist', function () {
     new Assertion(this._obj).a('string');
@@ -16,7 +16,7 @@ assertp.chai.use(function (chai, utils) {
   });
 });
 
-fsp.removeDir = function removeDir(p, done) {
+fs2.removeDir = function removeDir(p, done) {
   fs.stat(p, function (err, stat) {
     if (err) return done(err);
     if(stat.isFile()) {
@@ -48,7 +48,7 @@ fsp.removeDir = function removeDir(p, done) {
   });
 };
 
-fsp.emptyDir = function (p, done) {
+fs2.emptyDir = function (p, done) {
   fs.readdir(p, function (err, fnames) {
     if (err) return done(err);
     var i = 0;
@@ -57,7 +57,7 @@ fsp.emptyDir = function (p, done) {
         return done();
       }
       var fname = fnames[i++];
-      fsp.removeDir(p + '/' + fname, function (err) {
+      fs2.removeDir(p + '/' + fname, function (err) {
         setImmediate(unlink);
       });
     }
@@ -65,12 +65,12 @@ fsp.emptyDir = function (p, done) {
   });
 };
 
-fsp.makeDir = function (p, done) {
+fs2.makeDir = function (p, done) {
   fs.mkdir(p, 0755, function(err) {
     if (err && err.code === 'ENOENT') {
-      fsp.makeDir(path.dirname(p), function (err) {
+      fs2.makeDir(path.dirname(p), function (err) {
         if (err) return done(err);
-        fsp.makeDir(p, done);
+        fs2.makeDir(p, done);
       });
     } else if (err && err.code !== 'EEXIST') {
       done(err);
@@ -80,7 +80,7 @@ fsp.makeDir = function (p, done) {
   });
 };
 
-fsp.safeFilename = function (name) {
+fs2.safeFilename = function (name) {
   var i = 0;
   var len = name.length;
   var safe = '';
@@ -97,7 +97,7 @@ fsp.safeFilename = function (name) {
   return safe;
 };
 
-fsp.makeDeepPath = function (id, iter) {
+fs2.makeDeepPath = function (id, iter) {
   var path = '';
   for (iter--; iter > 0; iter--) {
     path = '/' + id % 1000 + path;

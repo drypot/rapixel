@@ -1,7 +1,7 @@
 var init = require('../base/init');
 var userb = require('../user/user-base');
-var local = require('../express/local');
-var expect = require('../base/assert').expect;
+var expl = require('../express/express-local');
+var expect = require('../base/assert2').expect;
 var userf = exports;
 
 init.add(exports.recreate = function (done) {
@@ -55,9 +55,9 @@ userf.login = function (name, remember, done) {
   }
   var user = exports[name];
   var form = { email: user.email, password: user.password, remember: remember };
-  local.post('/api/users/login').send(form).end(done);
+  expl.post('/api/users/login').send(form).end(done);
 };
 
 userf.logout = function (done) {
-  local.post('/api/users/logout', done);
+  expl.post('/api/users/logout', done);
 }

@@ -1,16 +1,16 @@
 var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config')({ path: 'config/test.json' });
-var mongop = require('../mongo/mongo')({ dropDatabase: true });
-var exp = require('../express/express');
+var mongob = require('../mongo/mongo-base')({ dropDatabase: true });
+var expb = require('../express/express-base');
 var userb = require('../user/user-base');
 var userf = require('../user/user-fixture');
 var userd = require('../user/user-deactivate');
-var local = require('../express/local');
-var expect = require('../base/assert').expect;
+var expl = require('../express/express-local');
+var expect = require('../base/assert2').expect;
 
 init.add(function () {
-  exp.core.get('/api/test/user', function (req, res, done) {
+  expb.core.get('/api/test/user', function (req, res, done) {
     userb.checkUser(res, function (err, user) {
       if (err) return done(err);
       res.json({});
@@ -27,14 +27,14 @@ describe('deactivating self', function () {
     userf.login('user1', done);
   });
   it('checkUser should success', function (done) {
-    local.get('/api/test/user').end(function (err, res) {
+    expl.get('/api/test/user').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
     })
   });
   it('should success', function (done) {
-    local.del('/api/users/' + userf.user1._id).end(function (err, res) {
+    expl.del('/api/users/' + userf.user1._id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
@@ -48,7 +48,7 @@ describe('deactivating self', function () {
     });
   });
   it('checkUser should fail (because logged off)', function (done) {
-    local.get('/api/test/user').end(function (err, res) {
+    expl.get('/api/test/user').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(res.body.err).error('NOT_AUTHENTICATED');
@@ -62,7 +62,7 @@ describe('deactivating with no login', function () {
     userf.logout(done);
   });
   it('should fail', function (done) {
-    local.del('/api/users/' + userf.user2._id).end(function (err, res) {
+    expl.del('/api/users/' + userf.user2._id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(res.body.err).error('NOT_AUTHENTICATED');
@@ -76,7 +76,7 @@ describe('deactivating other', function () {
     userf.login('user2', done);
   });
   it('deactivating other should fail', function (done) {
-    local.del('/api/users/' + userf.user3._id).end(function (err, res) {
+    expl.del('/api/users/' + userf.user3._id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(res.body.err).error('NOT_AUTHORIZED');
@@ -90,7 +90,7 @@ describe('deactivating other by admin', function () {
     userf.login('admin', done);
   });
   it('should success', function (done) {
-    local.del('/api/users/' + userf.user3._id).end(function (err, res) {
+    expl.del('/api/users/' + userf.user3._id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();

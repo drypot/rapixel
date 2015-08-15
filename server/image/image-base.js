@@ -2,9 +2,9 @@ var exec = require('child_process').exec;
 
 var init = require('../base/init');
 var error = require('../base/error');
-var fsp = require('../base/fs');
+var fs2 = require('../base/fs2');
 var config = require('../base/config');
-var mongop = require('../mongo/mongo');
+var mongob = require('../mongo/mongo-base');
 var imageb = exports;
 
 error.define('IMAGE_NOT_EXIST', '파일이 없습니다.');
@@ -18,12 +18,12 @@ error.define('IMAGE_TYPE', '인식할 수 없는 파일입니다.', 'files');
 var imageId;
 
 init.add(function (done) {
-  imageb.images = mongop.db.collection('images');
+  imageb.images = mongob.db.collection('images');
   imageb.images.createIndex({ uid: 1, _id: -1 }, done);
 });
 
 init.add(function (done) {
-  mongop.getLastId(imageb.images, function (err, id) {
+  mongob.getLastId(imageb.images, function (err, id) {
     if (err) return done(err);
     imageId = id;
     console.log('image-base: image id = ' + imageId);
@@ -51,7 +51,7 @@ imageb.getNewId = function () {
 var uploadDir;
 
 init.add(function (done) {
-  fsp.makeDir(config.uploadDir + '/public/images', function (err, dir) {
+  fs2.makeDir(config.uploadDir + '/public/images', function (err, dir) {
     if (err) return done(err);
     uploadDir = dir;
     done();
@@ -61,7 +61,7 @@ init.add(function (done) {
 init.add(function (done) {
   if (config.dev) {
     imageb.emptyDir = function (done) {
-      fsp.emptyDir(uploadDir, done);
+      fs2.emptyDir(uploadDir, done);
     }
   }
   done();
@@ -69,7 +69,7 @@ init.add(function (done) {
 
 imageb.FilePath = function (id, format) {
   this.id = id;
-  this.dir = uploadDir + '/' + fsp.makeDeepPath(id, 3);
+  this.dir = uploadDir + '/' + fs2.makeDeepPath(id, 3);
   if (format) {
     this.original = this.dir + '/' + id + '-org.' + format;
   }
@@ -80,7 +80,7 @@ imageb.FilePath.prototype.getVersion = function (width) {
 }
 
 imageb.getUrlBase = function (id) {
-  return config.uploadSite + '/images/' + fsp.makeDeepPath(id, 3)
+  return config.uploadSite + '/images/' + fs2.makeDeepPath(id, 3)
 }
 
 imageb.identify = function (fname, done) {

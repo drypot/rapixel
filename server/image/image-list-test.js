@@ -1,14 +1,14 @@
 var init = require('../base/init');
 var error = require('../base/error');
 var config = require('../base/config')({ path: 'config/test.json' });
-var mongop = require('../mongo/mongo')({ dropDatabase: true });
-var exp = require('../express/express');
-var upload = require('../express/upload');
+var mongob = require('../mongo/mongo-base')({ dropDatabase: true });
+var expb = require('../express/express-base');
+var expu = require('../express/express-upload');
 var userf = require('../user/user-fixture');
 var imageb = require('../image/image-base');
 var imagel = require('../image/image-list');
-var local = require('../express/local');
-var expect = require('../base/assert').expect;
+var expl = require('../express/express-local');
+var expect = require('../base/assert2').expect;
 
 before(function (done) {
   init.run(done);
@@ -36,7 +36,7 @@ describe('listing', function (done) {
     var query = {
       ps: 99
     }
-    local.get('/api/images').query(query).end(function (err, res) {
+    expl.get('/api/images').query(query).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       expect(res.body.gt).equal(0);
@@ -53,7 +53,7 @@ describe('listing', function (done) {
     var query = {
       ps: 4
     };
-    local.get('/api/images').query(query).end(function (err, res) {
+    expl.get('/api/images').query(query).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       expect(res.body.gt).equal(0);
@@ -68,7 +68,7 @@ describe('listing', function (done) {
     var query = {
       lt:7, ps: 4
     }
-    local.get('/api/images').query(query).end(function (err, res) {
+    expl.get('/api/images').query(query).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       expect(res.body.gt).equal(6);
@@ -83,7 +83,7 @@ describe('listing', function (done) {
     var query = {
       lt: 3, ps: 4
     }
-    local.get('/api/images').query(query).end(function (err, res) {
+    expl.get('/api/images').query(query).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       expect(res.body.gt).equal(2);
@@ -98,7 +98,7 @@ describe('listing', function (done) {
     var query = {
       gt:2, ps: 4
     }
-    local.get('/api/images').query(query).end(function (err, res) {
+    expl.get('/api/images').query(query).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       expect(res.body.gt).equal(6);
@@ -113,7 +113,7 @@ describe('listing', function (done) {
     var query = {
       gt: 6, ps: 4
     };
-    local.get('/api/images').query(query).end(function (err, res) {
+    expl.get('/api/images').query(query).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       expect(res.body.gt).equal(0);
