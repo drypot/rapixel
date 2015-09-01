@@ -14,7 +14,7 @@ expb.core.delete('/api/images/:id([0-9]+)', function (req, res, done) {
   userb.checkUser(res, function (err, user) {
     if (err) return done(err);
     var id = parseInt(req.params.id) || 0;
-    imageu.checkUpdatable(id, user, function (err) {
+    imageu.checkUpdatable(user, id, function (err) {
       if (err) return done(err);
       imageb.images.deleteOne({ _id: id }, function (err, cnt) {
         if (err) return done(err);

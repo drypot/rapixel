@@ -7,7 +7,7 @@ expb.core.delete('/api/users/:id([0-9]+)', function (req, res, done) {
   userb.checkUser(res, function (err, user) {
     if (err) return done(err);
     var id = parseInt(req.params.id) || 0;
-    userb.checkUpdatable(id, user, function (err) {
+    userb.checkUpdatable(user, id, function (err) {
       if (err) return done(err);
       userb.users.updateOne({ _id: id }, { $set: { status: 'd' } }, function (err, cnt) {
         if (err) return done(err);

@@ -9,7 +9,7 @@ expb.core.put('/api/users/:id([0-9]+)', function (req, res, done) {
     if (err) return done(err);
     var id = parseInt(req.params.id) || 0;
     var form = usern.getForm(req);
-    userb.checkUpdatable(id, user, function (err) {
+    userb.checkUpdatable(user, id, function (err) {
       if (err) return done(err);
       form.namel = form.name.toLowerCase();
       form.homel = form.home.toLowerCase();
@@ -43,7 +43,7 @@ expb.core.get('/users/:id([0-9]+)/update', function (req, res, done) {
   userb.checkUser(res, function (err, user) {
     if (err) return done(err);
     var id = parseInt(req.params.id) || 0;
-    userb.checkUpdatable(id, user, function (err) {
+    userb.checkUpdatable(user, id, function (err) {
       if (err) return done(err);
       userb.getCached(id, function (err, tuser) {
         if (err) return done(err);

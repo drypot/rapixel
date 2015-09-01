@@ -19,7 +19,7 @@ expb.core.get('/images/:id([0-9]+)/update', function (req, res, done) {
   userb.checkUser(res, function (err, user) {
     if (err) return done(err);
     var id = parseInt(req.params.id) || 0;
-    imageu.checkUpdatable(id, user, function (err, image) {
+    imageu.checkUpdatable(user, id, function (err, image) {
       if (err) return done(err);
       res.render('image/image-update', {
         image: image
@@ -33,7 +33,7 @@ expb.core.put('/api/images/:id([0-9]+)', expu.handler(function (req, res, done) 
     if (err) return done(err);
     var id = parseInt(req.params.id) || 0;
     var form = imagen.getForm(req);
-    imageu.checkUpdatable(id, user, function (err) {
+    imageu.checkUpdatable(user, id, function (err) {
       if (err) return done(err);
       util2.fif(!form.files, function (next) {
         next({}, null, null);
@@ -72,7 +72,7 @@ expb.core.put('/api/images/:id([0-9]+)', expu.handler(function (req, res, done) 
   });
 }));
 
-imageu.checkUpdatable = function (id, user, done) {
+imageu.checkUpdatable = function (user, id, done) {
   imageb.images.findOne({ _id: id }, function (err, image) {
     if (err) return done(err);
     if (!image) {

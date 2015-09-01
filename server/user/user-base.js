@@ -145,7 +145,7 @@ userb.checkAdmin = function (res, done) {
   done(null, user);
 };
 
-userb.checkUpdatable = function (id, user, done) {
+userb.checkUpdatable = function (user, id, done) {
   if (user._id != id && !user.admin) {
     return done(error('NOT_AUTHORIZED'))
   }
