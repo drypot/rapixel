@@ -4,10 +4,10 @@ var config = require('../base/config')({ path: 'config/test.json' });
 var mongob = require('../mongo/mongo-base')({ dropDatabase: true });
 var expb = require('../express/express-base');
 var expu = require('../express/express-upload');
+var expl = require('../express/express-local');
 var userf = require('../user/user-fixture');
 var imagen = require('../image/image-new');
 var imagev = require('../image/image-view');
-var expl = require('../express/express-local');
 var expect = require('../base/assert2').expect;
 
 before(function (done) {

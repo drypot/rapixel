@@ -3,9 +3,9 @@ var error = require('../base/error');
 var config = require('../base/config')({ path: 'config/test.json' });
 var mongob = require('../mongo/mongo-base')({ dropDatabase: true });
 var expb = require('../express/express-base');
+var expl = require('../express/express-local');
 var userb = require('../user/user-base');
 var userf = require('../user/user-fixture');
-var expl = require('../express/express-local');
 var expect = require('../base/assert2').expect;
 
 init.add(function () {

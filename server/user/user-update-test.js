@@ -5,10 +5,10 @@ var error = require('../base/error');
 var config = require('../base/config')({ path: 'config/test.json' });
 var mongob = require('../mongo/mongo-base')({ dropDatabase: true });
 var expb = require('../express/express-base');
+var expl = require('../express/express-local');
 var userb = require('../user/user-base');
 var useru = require('../user/user-update');
 var userf = require('../user/user-fixture');
-var expl = require('../express/express-local');
 var expect = require('../base/assert2').expect;
 
 before(function (done) {
