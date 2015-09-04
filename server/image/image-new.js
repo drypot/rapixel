@@ -7,12 +7,13 @@ var fs2 = require('../base/fs2');
 var expb = require('../express/express-base');
 var expu = require('../express/express-upload');
 var userb = require('../user/user-base');
+var usera = require('../user/user-auth');
 var imageb = require('../image/image-base');
 var site = require('../image/image-site');
 var imagen = exports;
 
 expb.core.get('/images/new', function (req, res, done) {
-  userb.checkUser(res, function (err, user) {
+  usera.checkUser(res, function (err, user) {
     if (err) return done(err);
     var now = new Date();
     getTicketCount(now, user, function (err, count, hours) {
@@ -26,7 +27,7 @@ expb.core.get('/images/new', function (req, res, done) {
 });
 
 expb.core.post('/api/images', expu.handler(function (req, res, done) {
-  userb.checkUser(res, function (err, user) {
+  usera.checkUser(res, function (err, user) {
     if (err) return done(err);
     var form = getForm(req);
     if (!form.files) {

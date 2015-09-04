@@ -5,13 +5,14 @@ var mongob = require('../mongo/mongo-base')({ dropDatabase: true });
 var expb = require('../express/express-base');
 var expl = require('../express/express-local');
 var userb = require('../user/user-base');
+var usera = require('../user/user-auth');
 var userf = require('../user/user-fixture');
 var userd = require('../user/user-deactivate');
 var expect = require('../base/assert2').expect;
 
 init.add(function () {
   expb.core.get('/api/test/user', function (req, res, done) {
-    userb.checkUser(res, function (err, user) {
+    usera.checkUser(res, function (err, user) {
       if (err) return done(err);
       res.json({});
     });

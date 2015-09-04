@@ -1,5 +1,6 @@
 var init = require('../base/init');
 var userb = require('../user/user-base');
+var usera = require('../user/user-auth');
 var expl = require('../express/express-local');
 var expect = require('../base/assert2').expect;
 var userf = exports;
