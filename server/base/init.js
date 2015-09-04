@@ -30,13 +30,12 @@ init.tail = function (func) {
 };
 
 init.run = function (done) {
-  var i = 0;
-
   done = done || function (err) {
     if (err) throw err;
   };
-  
-  function run() {
+  funcs = funcs.concat(tails);
+  var i = 0;
+  (function run() {
     if (i == funcs.length) {
       funcs = [];
       tails = [];
@@ -52,8 +51,5 @@ init.run = function (done) {
         setImmediate(run);
       });
     }
-  };
-
-  funcs = funcs.concat(tails);
-  run();
+  })();
 };
