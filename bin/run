@@ -1,12 +1,12 @@
-if [ $# -lt 2 ]; then
-  echo 'run [rapixel|osoky|drypot|...] [dev|live]'
+if [ $# -lt 1 ]; then
+  echo 'run [rapixel-dev|rapixel-live|...]'
   exit 1
 fi
 
-if [ '$2' = 'live' ]; then
+if [[ "$1" =~ "live" ]]; then
   NODE_ENV=production
 else
   NODE_ENV=development
 fi
 
-node server/main/main.js -c config/$1-$2.json
+node server/main/main.js -c config/$1.json
