@@ -13,7 +13,8 @@ block content
     });
 
   .section.page-title
-      h1 #{appName}
+      h1
+        a(href='/') #{appName}
 
   if !gt
     if locals.user
