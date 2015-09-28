@@ -63,7 +63,7 @@ libpng 는 svg 지원 설치하면서 설치되는 것 같다.
 
 실행.
 
-    bin/run rapixel live
+    bin/run rapixel-live
 
 ## 서비스로 등록
 

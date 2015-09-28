@@ -42,7 +42,7 @@ Arch 서비스 Fail 나면
 
 ## 테스트 런
 
-    node bin/run rapixel live
+    node bin/run rapixel-live
 
 ## 재부팅
 

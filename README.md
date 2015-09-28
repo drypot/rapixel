@@ -17,13 +17,13 @@ Image gallery running following sites.
 
 2015.03.01 2 년만에 업데이트, 전반적인 코드 질 개선.
 
-2013.08.28 Drypot, Osoky 코드를 Rapixel 코드로 통합
+2013.08.28 Drypot, Osoky 코드를 Rapixel 코드로 통합.
 
 2013.07.06 Drypot 개발 시작, 사이트 오픈.
 
 2013.06.24 Osoky 개발 시작, 사이트 오픈.
 
-2013.06.04 공식 오픈 공지
+2013.06.04 공식 오픈 공지.
 
 2013.05.15 Rapixel 첫 디자인을 입혔다.
 
