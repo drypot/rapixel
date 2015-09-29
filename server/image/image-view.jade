@@ -30,10 +30,10 @@ block content
         span.glyphicon.glyphicon-fullscreen
 
     .sub-section
-      .uname
-        a(href='/' + encodeURIComponent(image.user.home)) #{image.user.name}
       .comment !{jade.escape(image.comment).replace(/\n/g, '<br>')}
       .cdate !{image.cdateStr.slice(0,16)}
+      .uname
+        a(href='/' + encodeURIComponent(image.user.home)) #{image.user.name}
       .fname #{image.fname}
 
     if updatable

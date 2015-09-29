@@ -171,18 +171,16 @@ form.main input[type=file] {
   color: #333333;
 }
 .image-info .uname {
-  margin-bottom: 20px;
-  font-size: 22.4px;
+  margin-bottom: 40px;
+  font-size: 25.6px;
 }
 .image-info .comment {
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 .image-info .cdate {
-  margin-bottom: 5px;
-  font-size: 14.4px;
+  margin-bottom: 30px;
 }
 .image-info .fname {
-  margin-bottom: 5px;
-  font-size: 14.4px;
+  margin-bottom: 50px;
   color: white;
 }
