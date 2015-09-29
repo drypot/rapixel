@@ -36,10 +36,12 @@ block content
 
   .section.image-list
     for image in images
-      .image
-        a.image(href='/images/' + image._id)
-          img(src=image.dir + '/' + image._id + suffix)
-        a.uname(href='/' + encodeURIComponent(image.user.home)) #{image.user.name}
+      .box
+        .image
+          a(href='/images/' + image._id)
+            img(src=image.dir + '/' + image._id + suffix)
+        .uname
+          a(href='/' + encodeURIComponent(image.user.home)) #{image.user.name}
 
   if lt
     .section.pager-next
