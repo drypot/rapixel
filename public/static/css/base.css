@@ -170,15 +170,16 @@ form.main input[type=file] {
 .image-info a {
   color: #333333;
 }
-.image-info .uname {
-  margin-bottom: 40px;
-  font-size: 22.4px;
-}
 .image-info .comment {
   margin-bottom: 40px;
 }
 .image-info .cdate {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+  font-size: 12.8px;
+}
+.image-info .uname {
+  margin-bottom: 50px;
+  font-size: 22.4px;
 }
 .image-info .fname {
   margin-bottom: 50px;
