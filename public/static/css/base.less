@@ -4,6 +4,7 @@
 @line-color: lighten(@color, 70%);
 @margin: 50px;
 @width: 640px;
+@form-width: @width * 0.6;
 
 // basic layout
 
@@ -115,7 +116,7 @@ pre.error-report {
 // form
 
 form.main {
-  max-width: @width * 0.6;
+  max-width: @form-width;
   margin: 0 auto;
 
   input[type=file] {
