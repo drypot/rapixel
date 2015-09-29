@@ -34,13 +34,12 @@ block content
     .section.pager-prev
       a(href=gt) Previous
 
-  .section.images
+  .section.image-list
     for image in images
-      .box
+      .image
         a.image(href='/images/' + image._id)
           img(src=image.dir + '/' + image._id + suffix)
-        if showName
-          a.uname(href='/' + encodeURIComponent(image.user.home)) #{image.user.name}
+        a.uname(href='/' + encodeURIComponent(image.user.home)) #{image.user.name}
 
   if lt
     .section.pager-next

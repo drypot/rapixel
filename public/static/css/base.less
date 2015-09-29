@@ -3,8 +3,10 @@
 @dim-color: lighten(@color, 50%);
 @line-color: lighten(@color, 70%);
 @margin: 50px;
+@sub-margin: @margin * 0.6;
 @width: 640px;
 @form-width: @width * 0.6;
+@image-width: 100%;
 
 // basic layout
 
@@ -35,7 +37,7 @@ hr {
 }
 
 .sub-section {
-  margin-bottom: @margin * 0.6;
+  margin-bottom: @sub-margin;
 }
 
 .site-title {
@@ -183,13 +185,6 @@ form.main {
 
 // image view
 
-.image-view {
-  text-align: center;
-  img {
-    cursor:pointer;
-  }
-}
-
 :-webkit-full-screen {
   background: black;
   width: 100%;
@@ -214,25 +209,35 @@ form.main {
   height: 100%;
 }
 
-.image-info {
-  .ac-link;
-  margin-top: @margin * 0.3;
-  .comment {
-    margin-bottom: @margin * 0.8;
+.image-view {
+  .image {
+    max-width: @image-width;
+    padding: 0px;
+    margin-bottom: @sub-margin;
+    text-align: center;
+    img {
+      cursor:pointer;
+    }
   }
-  .cdate {
-    margin-bottom: @margin * 0.4;
-    font-size: @font-size * 0.8;
-  }
-  .uname {
-    margin-bottom: @margin * 1;
-    font-size: @font-size * 1.4;
-  }
-  .fname {
-    margin-bottom: @margin * 1;
-    //font-size: @font-size * 0.9;
-    color: white;  
-  }
-  .commands {
-  }
+  .info {
+    .ac-link;
+    .comment {
+      margin-bottom: @margin * 0.8;
+    }
+    .cdate {
+      margin-bottom: @margin * 0.4;
+      font-size: @font-size * 0.8;
+    }
+    .uname {
+      margin-bottom: @margin * 1;
+      font-size: @font-size * 1.4;
+    }
+    .fname {
+      margin-bottom: @margin * 1;
+      //font-size: @font-size * 0.9;
+      color: white;  
+    }
+    .commands {
+    }
+  }   
 }

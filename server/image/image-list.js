@@ -32,7 +32,6 @@ function list(req, res, api, done) {
     } else {
      res.render('image/image-list', {
        images: images,
-       showName: site.showListName,
        suffix: site.thumbnailSuffix,
        gt: gt ? new util2.UrlMaker('/').add('gt', gt).add('ps', ps, 16).done() : undefined,
        lt: lt ? new util2.UrlMaker('/').add('lt', lt).add('ps', ps, 16).done() : undefined

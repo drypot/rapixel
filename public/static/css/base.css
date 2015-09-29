@@ -138,12 +138,6 @@ form.main input[type=file] {
     margin-bottom: 20px;
   }
 }
-.image-view {
-  text-align: center;
-}
-.image-view img {
-  cursor: pointer;
-}
 :-webkit-full-screen {
   background: black;
   width: 100%;
@@ -164,24 +158,30 @@ form.main input[type=file] {
   width: 100%;
   height: 100%;
 }
-.image-info {
-  margin-top: 15px;
+.image-view .image {
+  max-width: 100%;
+  padding: 0px;
+  margin-bottom: 30px;
+  text-align: center;
 }
-.image-info a {
+.image-view .image img {
+  cursor: pointer;
+}
+.image-view .info a {
   color: #333333;
 }
-.image-info .comment {
+.image-view .info .comment {
   margin-bottom: 40px;
 }
-.image-info .cdate {
+.image-view .info .cdate {
   margin-bottom: 20px;
   font-size: 12.8px;
 }
-.image-info .uname {
+.image-view .info .uname {
   margin-bottom: 50px;
   font-size: 22.4px;
 }
-.image-info .fname {
+.image-view .info .fname {
   margin-bottom: 50px;
   color: white;
 }

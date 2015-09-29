@@ -26,9 +26,9 @@ $(function () {
   };
 
   imagel.initView = function (image) {
-    var $view = $('.image-view');
-    var $img = $('.image-view img');
-    var $comment = $('.image-info .comment');
+    var $imgdiv = $('.image-view .image');
+    var $img = $('.image-view .image img');
+    var $comment = $('.image-view .info .comment');
     var $fs = $('#fs');
 
     var fit = appNamel === 'osoky' || appNamel == 'drypot';
@@ -48,7 +48,7 @@ $(function () {
     if (fullscreen.enabled) {
       $fs.parent().css('display', 'block');
       $fs.click(function () {
-        fullscreen.request($view[0]);
+        fullscreen.request($imgdiv[0]);
         if (raster) {
           setRaster(true);
         }

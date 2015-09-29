@@ -22,7 +22,6 @@ var _vers = [
   640
 ];
 
-exports.showListName = true;
 exports.thumbnailSuffix = '-640.jpg';
 
 exports.checkImageMeta = function (path, done) {

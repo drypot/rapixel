@@ -19,26 +19,27 @@ block content
     });
 
   .image-view
-    if svg
-      img(src=image.dir + '/' + image._id + '-org.svg')
-    else
-      img(style='background: url(' + image.dir + '/' + image._id + '-640.jpg); background-size: cover;')
+    .section.image
+      if svg
+        img(src=image.dir + '/' + image._id + '-org.svg')
+      else
+        img(style='background: url(' + image.dir + '/' + image._id + '-640.jpg); background-size: cover;')
 
-  .section.image-info
-    .sub-section(style='display: none')
-      a#fs(href='')
-        span.glyphicon.glyphicon-fullscreen
+    .section.info
+      .sub-section(style='display: none')
+        a#fs(href='')
+          span.glyphicon.glyphicon-fullscreen
 
-    .sub-section
-      .comment !{jade.escape(image.comment).replace(/\n/g, '<br>')}
-      .cdate !{image.cdateStr.slice(0,16)}
-      .uname
-        a(href='/' + encodeURIComponent(image.user.home)) #{image.user.name}
-      //-.fname #{image.fname}
-
-    if updatable
       .sub-section
-        .commands
-          button#update-btn.btn.btn-success.btn-xs Update
-          button#del-btn.btn.btn-danger.btn-xs Delete
-          button#del-confirm-btn.btn.btn-danger.btn-xs.hide Yes, Delete
+        .comment !{jade.escape(image.comment).replace(/\n/g, '<br>')}
+        .cdate !{image.cdateStr.slice(0,16)}
+        .uname
+          a(href='/' + encodeURIComponent(image.user.home)) #{image.user.name}
+        //-.fname #{image.fname}
+
+      if updatable
+        .sub-section
+          .commands
+            button#update-btn.btn.btn-success.btn-xs Update
+            button#del-btn.btn.btn-danger.btn-xs Delete
+            button#del-confirm-btn.btn.btn-danger.btn-xs.hide Yes, Delete

@@ -4,7 +4,6 @@ var error = require('../base/error');
 var config = require('../base/config');
 var imageb = require('../image/image-base');
 
-exports.showListName = true;
 exports.thumbnailSuffix = '-org.svg';
 exports.svg = true;
 
