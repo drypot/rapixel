@@ -123,18 +123,21 @@ form.main input[type=file] {
   color: #333333;
 }
 .image-list .box {
-  margin-bottom: 45px;
+  margin-bottom: 50px;
 }
 .image-list .box .image {
-  margin-bottom: 5px;
+  margin-bottom: 15px;
 }
 .image-list .box .image img {
   max-width: 100%;
   max-height: 100%;
 }
 @media (max-width: 768px) {
-  .images .box {
+  .image-list .box {
     margin-bottom: 20px;
+  }
+  .image-list .box .image {
+    margin-bottom: 5px;
   }
 }
 :-webkit-full-screen {

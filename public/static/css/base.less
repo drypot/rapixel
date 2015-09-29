@@ -163,21 +163,24 @@ form.main {
   padding-left: 0px;
   padding-right: 0px;
   .box {
-    margin-bottom: @margin * 0.9;
+    margin-bottom: @margin * 1;
     .image {
       img {
         max-width: 100%; // for mobile
         max-height: 100%; // for mobile
       }
-      margin-bottom: @margin * 0.1;
+      margin-bottom: @margin * 0.3;
     }
   }
 }
 
 @media (max-width: 768px) {
-  .images {
+  .image-list {
     .box {
       margin-bottom: @margin * 0.4;
+      .image {
+        margin-bottom: @margin * 0.1;
+      }
     }
   }
 }

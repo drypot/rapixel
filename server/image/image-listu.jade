@@ -28,11 +28,12 @@ block content
       .section.pager-prev
         a(href=gt) Previous
 
-    .section.images
+    .section.image-list
       for image in images
         .box
-          a.image(href='/images/' + image._id)
-            img(src=image.dir + '/' + image._id + suffix)
+          .image
+            a(href='/images/' + image._id)
+              img(src=image.dir + '/' + image._id + suffix)
 
     if lt
       .section.pager-next
