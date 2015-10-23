@@ -5,7 +5,7 @@ block head-title
     meta(property='og:image', content=image.dir + '/' + image._id + '-org.svg')
   else
     meta(property='og:image', content=image.dir + '/' + image._id + '-1440.jpg')
-  meta(property='og:title' content='Image ' + image._id)
+  meta(property='og:title' content=appName + ' ' + image._id)
   meta(property='og:description' content=image.comment)
   title Image !{image._id} - #{appName}
 
