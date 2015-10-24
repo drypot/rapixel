@@ -13,11 +13,8 @@
 
 ## Arch Linux 업데이트
 
+    sudo pacman -S archlinux-keyring
     sudo pacman -Syu
-
-invalid or corrupted package 오류나면 키 업데이트
-
-    sudo pacman-key --refresh-keys
 
 Arch 서비스 Fail 나면
 
