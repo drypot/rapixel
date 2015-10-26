@@ -18,13 +18,10 @@ block content
       .sub-section
         .form-group
           label.control-label Image
-          .panel.panel-default
-            .panel-body
-              input(type='file', name='files', multiple='multiple')
+          input.form-control(type='file', name='files', accept='image/*', multiple='multiple')
           if appNamel == 'drypot'
             p.help-block
               | Only SVG files.
-      .sub-section
         .form-group
           label.control-label Comment
           textarea.form-control(name='comment', rows=7) #{image.comment}
