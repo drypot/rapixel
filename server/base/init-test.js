@@ -2,7 +2,7 @@ var init = require('../base/init');
 var expect = require('../base/assert2').expect;
 
 describe('sync init function', function () {
-  it('should success', function (done) {
+  it('should succeed', function (done) {
     var a = [];
     init.reset();
     init.add(function () {
@@ -21,7 +21,7 @@ describe('sync init function', function () {
 });
 
 describe('async init function', function () {
-  it('should success', function (done) {
+  it('should succeed', function (done) {
     var a = [];
     init.reset();
     init.add(function (done) {
@@ -42,7 +42,7 @@ describe('async init function', function () {
 });
 
 describe('sync throw', function () {
-  it('should success', function (done) {
+  it('should succeed', function (done) {
     var a = [];
     init.reset();
     init.add(function () {
@@ -66,7 +66,7 @@ describe('sync throw', function () {
 });
 
 describe('async throw', function () {
-  it('should success', function (done) {
+  it('should succeed', function (done) {
     var a = [];
     init.reset();
     init.add(function (done) {
@@ -86,7 +86,7 @@ describe('async throw', function () {
 });
 
 describe('tail function', function () {
-  it('should success', function (done) {
+  it('should succeed', function (done) {
     var a = [];
     init.reset();
     init.add(function () {

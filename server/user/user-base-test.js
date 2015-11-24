@@ -18,7 +18,7 @@ describe('users', function () {
 });
 
 describe('getNewId', function () {
-  it('should success', function () {
+  it('should succeed', function () {
     expect(userb.getNewId() < userb.getNewId()).true;
   });
 });

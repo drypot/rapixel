@@ -22,7 +22,7 @@ describe('parsing json', function () {
       done();
     }));
   });
-  it('should success', function (done) {
+  it('should succeed', function (done) {
     expl.post('/api/test/upload-json').send({'p1': 'abc'}).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
@@ -44,7 +44,7 @@ describe('parsing form', function () {
       done();
     }));
   });
-  it('field should success', function (done) {
+  it('field should succeed', function (done) {
     expl.post('/api/test/upload-form').field('p1', 'abc').field('p2', '123').field('p2', '456').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
@@ -54,7 +54,7 @@ describe('parsing form', function () {
       done();
     });
   });
-  it('fields should success', function (done) {
+  it('fields should succeed', function (done) {
     var form = {
       p1: 'abc',
       p2: '123',
@@ -84,7 +84,7 @@ describe('parsing one file', function () {
       done();
     }));
   });
-  it('should success', function (done) {
+  it('should succeed', function (done) {
     expl.post('/api/test/upload-one').field('p1', 'abc').attach('f1', f1).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
@@ -111,7 +111,7 @@ describe('parsing two files', function () {
       done();
     }));
   });
-  it('should success', function (done) {
+  it('should succeed', function (done) {
     expl.post('/api/test/upload-two').field('p1', 'abc').attach('f1', f1).attach('f1', f2).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
@@ -139,7 +139,7 @@ describe('parsing irregular filename', function () {
       done();
     }));
   });
-  it('should success', function (done) {
+  it('should succeed', function (done) {
     expl.post('/api/test/upload-irregular').field('p1', 'abc').attach('f1', f1, 'file<>()[]_-=.txt.%$#@!&.txt').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;

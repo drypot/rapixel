@@ -41,7 +41,7 @@ describe('deleting', function () {
       done();
     });
   });
-  it('should success', function (done) {
+  it('should succeed', function (done) {
     expl.del('/api/images/' + _id, function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
@@ -78,7 +78,7 @@ describe('deleting by admin', function () {
   it('given admin login', function (done) {
     userf.login('admin', done);
   });
-  it('should success', function (done) {
+  it('should succeed', function (done) {
     expl.del('/api/images/' + _id, function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;

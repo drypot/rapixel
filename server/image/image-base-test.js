@@ -11,13 +11,13 @@ describe('images', function () {
   it('should exist', function () {
     expect(imageb.images).exist;
   });
-  it('getNewId should success', function () {
+  it('getNewId should succeed', function () {
     expect(imageb.getNewId() < imageb.getNewId()).true;
   });
 });
 
 describe('FilePath', function () {
-  it('should success', function () {
+  it('should succeed', function () {
     var path = new imageb.FilePath(1, 'jpeg');
     expect(path.dir).equals(config.uploadDir + '/public/images/0/0/1');
     expect(path.original).equals(config.uploadDir + '/public/images/0/0/1/1-org.jpeg');
@@ -26,7 +26,7 @@ describe('FilePath', function () {
 });
 
 describe('getUrlBase', function () {
-  it('should success', function () {
+  it('should succeed', function () {
     expect(imageb.getUrlBase(1)).equals(config.uploadSite + '/images/0/0/1');
   });
 });
@@ -44,7 +44,7 @@ describe('identify', function () {
       done();
     })
   });
-  it('jpeg should success', function (done) {
+  it('jpeg should succeed', function (done) {
     imageb.identify('samples/5120x2880-169.jpg', function (err, meta) {
       expect(err).not.exist;
       expect(meta.format).equal('jpeg');
@@ -53,7 +53,7 @@ describe('identify', function () {
       done();
     });
   });
-  it('svg should success', function (done) {
+  it('svg should succeed', function (done) {
     imageb.identify('samples/svg-sample.svg', function (err, meta) {
       expect(err).not.exist;
       expect(meta.format).equal('svg');

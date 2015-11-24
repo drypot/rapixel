@@ -32,7 +32,7 @@ describe('listing', function (done) {
     };
     imageb.images.insertMany(images, done);    
   });
-  it('page size 99 should success', function (done) {
+  it('page size 99 should succeed', function (done) {
     var query = {
       ps: 99
     }
@@ -49,7 +49,7 @@ describe('listing', function (done) {
       done();
     });
   });
-  it('page 1 should success', function (done) {
+  it('page 1 should succeed', function (done) {
     var query = {
       ps: 4
     };
@@ -64,7 +64,7 @@ describe('listing', function (done) {
       done();
     });
   });
-  it('page 2 with lt should success', function (done) {
+  it('page 2 with lt should succeed', function (done) {
     var query = {
       lt:7, ps: 4
     }
@@ -79,7 +79,7 @@ describe('listing', function (done) {
       done();
     });
   });
-  it('last page should success', function (done) {
+  it('last page should succeed', function (done) {
     var query = {
       lt: 3, ps: 4
     }
@@ -94,7 +94,7 @@ describe('listing', function (done) {
       done();
     });
   });
-  it('page 2 with gt should success', function (done) {
+  it('page 2 with gt should succeed', function (done) {
     var query = {
       gt:2, ps: 4
     }
@@ -109,7 +109,7 @@ describe('listing', function (done) {
       done();
     });
   });
-  it('first page should success', function (done) {
+  it('first page should succeed', function (done) {
     var query = {
       gt: 6, ps: 4
     };

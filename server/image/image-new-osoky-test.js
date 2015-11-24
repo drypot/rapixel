@@ -30,7 +30,7 @@ describe('posting one image', function () {
   before(function (done) {
     imageb.images.deleteMany(done);
   });
-  it('should success', function (done) {
+  it('should succeed', function (done) {
     this.timeout(30000);
     expl.post('/api/images').field('comment', 'image1').attach('files', 'samples/1440x810-169.jpg').end(function (err, res) {
       expect(err).not.exist;
@@ -67,7 +67,7 @@ describe('posting max images', function () {
   before(function (done) {
     imageb.images.deleteMany(done);
   }); 
-  it('should success', function (done) {
+  it('should succeed', function (done) {
     this.timeout(30000);
     var post = expl.post('/api/images').field('comment', 'max images');
     for (var i = 0; i < config.ticketMax; i++) {

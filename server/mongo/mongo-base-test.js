@@ -23,7 +23,7 @@ describe('paging', function () {
     };
     col.insertMany(list, done);    
   });
-  it('page size 99 should success', function (done) {
+  it('page size 99 should succeed', function (done) {
     mongob.findPage(col, {}, 0, 0, 99, null, function (err, results, gt, lt) {
       expect(err).not.exist;
       expect(results.length).equal(10);
@@ -36,7 +36,7 @@ describe('paging', function () {
       done();
     });
   });
-  it('page 1 should success', function (done) {
+  it('page 1 should succeed', function (done) {
     mongob.findPage(col, {}, 0, 0, 4, null, function (err, results, gt, lt) {
       expect(err).not.exist;
       expect(results).length(4);
@@ -47,7 +47,7 @@ describe('paging', function () {
       done();
     });
   });
-  it('page 2 with lt should success', function (done) {
+  it('page 2 with lt should succeed', function (done) {
     mongob.findPage(col, {}, 0, 7, 4, null, function (err, results, gt, lt) {
       expect(err).not.exist;
       expect(results).length(4);
@@ -58,7 +58,7 @@ describe('paging', function () {
       done();
     });
   });
-  it('last page should success', function (done) {
+  it('last page should succeed', function (done) {
     mongob.findPage(col, {}, 0, 3, 4, null, function (err, results, gt, lt) {
       expect(err).not.exist;
       expect(results).length(2);
@@ -69,7 +69,7 @@ describe('paging', function () {
       done();
     });
   });
-  it('page 2 with gt should success', function (done) {
+  it('page 2 with gt should succeed', function (done) {
     mongob.findPage(col, {}, 2, 0, 4, null, function (err, results, gt, lt) {
       expect(err).not.exist;
       expect(results).length(4);
@@ -80,7 +80,7 @@ describe('paging', function () {
       done();
     });
   });
-  it('first page should success', function (done) {
+  it('first page should succeed', function (done) {
     mongob.findPage(col, {}, 6, 0, 4, null, function (err, results, gt, lt) {
       expect(err).not.exist;
       expect(results).length(4);
@@ -91,7 +91,7 @@ describe('paging', function () {
       done();
     });
   });
-  it('filter should success', function (done) {
+  it('filter should succeed', function (done) {
     mongob.findPage(col, {}, 0, 0, 5, filter, function (err, results, gt, lt) {
       expect(err).not.exist;
       expect(results).length(2);
@@ -112,7 +112,7 @@ describe('getLastId', function () {
   it('given empty collection', function () {
     col = mongob.db.collection('testlastid');
   });
-  it('should success', function (done) {
+  it('should succeed', function (done) {
     mongob.getLastId(col, function (err, id) {
       expect(err).not.exist;
       expect(id).equal(0);
@@ -126,7 +126,7 @@ describe('getLastId', function () {
     };
     col.insertMany(list, done);    
   });
-  it('should success', function (done) {
+  it('should succeed', function (done) {
     mongob.getLastId(col, function (err, id) {
       expect(err).not.exist;
       expect(id).equal(10);

@@ -27,14 +27,14 @@ describe('deactivating self', function () {
   it('given user1 login', function (done) {
     userf.login('user1', done);
   });
-  it('checkUser should success', function (done) {
+  it('checkUser should succeed', function (done) {
     expl.get('/api/test/user').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
     })
   });
-  it('should success', function (done) {
+  it('should succeed', function (done) {
     expl.del('/api/users/' + userf.user1._id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
@@ -90,7 +90,7 @@ describe('deactivating other by admin', function () {
   it('given admin login', function (done) {
     userf.login('admin', done);
   });
-  it('should success', function (done) {
+  it('should succeed', function (done) {
     expl.del('/api/users/' + userf.user3._id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;

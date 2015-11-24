@@ -13,7 +13,7 @@ before(function (done) {
 });
 
 describe('emailx test', function () {
-  it('should success', function () {
+  it('should succeed', function () {
     expect(usern.emailx.test('abc.mail.com')).false;
     expect(usern.emailx.test('abc*xyz@mail.com')).false;
     expect(usern.emailx.test('-a-b-c_d-e-f@mail.com')).true;
@@ -33,7 +33,7 @@ describe('getNewId', function () {
 
 describe('creating user', function () {
   var _id;
-  it('should success', function (done) {
+  it('should succeed', function (done) {
     var form = { name: 'Name', email: 'name@mail.com', password: '1234' };
     expl.post('/api/users').send(form).end(function (err,res) {
       expect(res.body.err).not.exist;
@@ -82,7 +82,7 @@ describe('name check', function () {
       done();
     });
   });
-  it('length 2 name should success', function (done) {
+  it('length 2 name should succeed', function (done) {
     var form = { name: '12', email: 'mail3@mail.com', password: '1234' };
     expl.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
@@ -90,7 +90,7 @@ describe('name check', function () {
       done();
     });
   });
-  it('length 32 name should success', function (done) {
+  it('length 32 name should succeed', function (done) {
     var form = { name: '12345678901234567890123456789012', email: 'mail4@mail.com', password: '1234' };
     expl.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
@@ -146,7 +146,7 @@ describe('email check', function () {
       done();
     });
   });
-  it('different case should success', function (done) {
+  it('different case should succeed', function (done) {
     var form = { name: 'name3', email: 'Mail1@mail.com', password: '1234' };
     expl.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
@@ -172,7 +172,7 @@ describe('email check', function () {
       done();
     });
   });
-  it('dash should success', function (done) {
+  it('dash should succeed', function (done) {
     var form = { name: 'name6', email: '-a-b-c_d-e-f@mail.com', password: '1234' };
     expl.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
@@ -180,7 +180,7 @@ describe('email check', function () {
       done();
     });
   });
-  it('+ should success', function (done) {
+  it('+ should succeed', function (done) {
     var form = { name: 'name7', email: 'abc+xyz@mail.com', password: '1234' };
     expl.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;
@@ -213,7 +213,7 @@ describe('password check', function () {
       done();
     });
   });
-  it('lenth 32 password should success', function (done) {
+  it('lenth 32 password should succeed', function (done) {
     var form = { name: 'name3', email: 'name3@mail.com', password: '12345678901234567890123456789012' };
     expl.post('/api/users').send(form).end(function (err,res) {
       expect(err).not.exist;

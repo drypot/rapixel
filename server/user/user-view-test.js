@@ -32,7 +32,7 @@ describe('finding user', function () {
       done();
     });
   });
-  it('should success with email field', function (done) {
+  it('should succeed with email field', function (done) {
     expl.get('/api/users/' + _user._id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
@@ -45,7 +45,7 @@ describe('finding user', function () {
   it('given other\'s login', function (done) {
     userf.login('user2', done);
   });
-  it('should success without email', function (done) {
+  it('should succeed without email', function (done) {
     expl.get('/api/users/' + _user._id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
@@ -58,7 +58,7 @@ describe('finding user', function () {
   it('given admin login', function (done) {
     userf.login('admin', done);
   });
-  it('should success with email', function (done) {
+  it('should succeed with email', function (done) {
     expl.get('/api/users/' + _user._id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
@@ -75,7 +75,7 @@ describe('finding user', function () {
       done();
     })
   });
-  it('should success without email', function (done) {
+  it('should succeed without email', function (done) {
     expl.get('/api/users/' + _user._id).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;

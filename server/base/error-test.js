@@ -21,7 +21,7 @@ describe('defining duplicated', function () {
 });
 
 describe('error(string)', function () {
-  it('should success', function () {
+  it('should succeed', function () {
     var err = error('INVALID_DATA');
     expect(err.code).equal(error.INVALID_DATA.code);
     expect(err.message).equal(error.INVALID_DATA.message);
@@ -30,7 +30,7 @@ describe('error(string)', function () {
 });
 
 describe('error(field error)', function () {
-  it('should success', function () {
+  it('should succeed', function () {
     var err = error('NAME_DUPE');
     expect(err.code).equal(error.INVALID_FORM.code);
     expect(err.errors[0]).eql(error.NAME_DUPE);
@@ -38,7 +38,7 @@ describe('error(field error)', function () {
 });
 
 describe('error(field errors)', function () {
-  it('should success', function () {
+  it('should succeed', function () {
     var errors = [];
     errors.push(error.NAME_DUPE);
     errors.push(error.PASSWORD_EMPTY);
@@ -50,7 +50,7 @@ describe('error(field errors)', function () {
 });
 
 describe('error(unknown)', function () {
-  it('should success', function () {
+  it('should succeed', function () {
     var obj = { opt: 'extra' };
     var err = error(obj);
     expect(err).not.property('code');
@@ -61,13 +61,13 @@ describe('error(unknown)', function () {
 });
 
 describe('error find', function () {
-  it('should success', function () {
+  it('should succeed', function () {
     var err = error('INVALID_DATA');
     expect(error.find(err, 'INVALID_DATA')).true;
     expect(error.find(err, 'INVALID_FORM')).false;
     expect(error.find(err, 'NAME_DUPE')).false;
   });
-  it('form error should success', function () {
+  it('form error should succeed', function () {
     var err = error('NAME_DUPE');
     expect(error.find(err, 'INVALID_DATA')).false;
     expect(error.find(err, 'INVALID_FORM')).false;
@@ -76,7 +76,7 @@ describe('error find', function () {
 });
 
 describe('chai error find', function () {
-  it('should success', function () {
+  it('should succeed', function () {
     var err = error('INVALID_DATA');
     expect(err).error('INVALID_DATA');
     expect(err).not.error('INVALID_FORM');

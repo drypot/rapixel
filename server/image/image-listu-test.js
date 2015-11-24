@@ -15,14 +15,14 @@ before(function (done) {
 });
 
 describe('user profile page', function () {
-  it('should success', function (done) {
+  it('should succeed', function (done) {
     expl.get('/user1').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
     });
   });
-  it('uppercase should success', function (done) {
+  it('uppercase should succeed', function (done) {
     expl.get('/USER1').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;

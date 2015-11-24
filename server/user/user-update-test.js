@@ -34,7 +34,7 @@ describe('updating user', function () {
       done();
     });
   });
-  it('should success', function (done) {
+  it('should succeed', function (done) {
     var form = { name: 'NewName', home: 'NewHome', email: 'new.name@mail.com', password: '5678', profile: 'new profile' };
     expl.put('/api/users/' + _id).send(form).end(function (err, res) {
       expect(err).not.exist;
@@ -75,7 +75,7 @@ describe('permission', function () {
   it('given admin login', function (done) {
     userf.login('admin', done);
   });
-  it('updating anybody should success', function (done) {
+  it('updating anybody should succeed', function (done) {
     var form = { name: 'NewName2', home: 'NewHome2', email: 'new.name2@mail.com', password: '5678' };
     expl.put('/api/users/' + userf.user2._id).send(form).end(function (err,res) {
       expect(err).not.exist;
@@ -139,7 +139,7 @@ describe('updating name', function () {
       done();
     });
   });
-  it('length 2 naem should success', function (done) {
+  it('length 2 naem should succeed', function (done) {
     var form = { name: 'uu', home: 'NameTest', email: 'nametest@mail.com', password: '1234' };
     expl.put('/api/users/' + userf.user1._id).send(form).end(function (err,res) {
       expect(err).not.exist;
@@ -155,7 +155,7 @@ describe('updating name', function () {
       done();
     });
   });
-  it('length 32 name should success', function (done) {
+  it('length 32 name should succeed', function (done) {
     var form = { name: '12345678901234567890123456789012', home: 'NameTest', email: 'nametest@mail.com', password: '1234' };
     expl.put('/api/users/' + userf.user1._id).send(form).end(function (err,res) {
       expect(err).not.exist;
@@ -211,7 +211,7 @@ describe('updating home', function () {
       done();
     });
   });
-  it('length 2 home should success', function (done) {
+  it('length 2 home should succeed', function (done) {
     var form = { name: 'Name5', home: 'hh', email: 'name5@mail.com', password: '1234' };
     expl.put('/api/users/' + userf.user1._id).send(form).end(function (err,res) {
       expect(err).not.exist;
@@ -227,7 +227,7 @@ describe('updating home', function () {
       done();
     });
   });
-  it('length 32 home should success', function (done) {
+  it('length 32 home should succeed', function (done) {
     var form = { name: 'HomeTest', home: '1234567890123456789012345678901H', email: 'hometest@mail.com', password: '1234' };
     expl.put('/api/users/' + userf.user1._id).send(form).end(function (err,res) {
       expect(err).not.exist;
@@ -279,7 +279,7 @@ describe('updating password', function () {
   it('given user1 login', function (done) {
     userf.login('user1', done);
   });
-  it('empty password should success', function (done) {
+  it('empty password should succeed', function (done) {
     var form = { name: 'Name1', home: 'Home1', email: 'pwtest@mail.com' };
     expl.put('/api/users/' + userf.user1._id).send(form).end(function (err,res) {
       expect(err).not.exist;
@@ -311,7 +311,7 @@ describe('updating password', function () {
       done();
     });
   });
-  it('length 32 password should success', function (done) {
+  it('length 32 password should succeed', function (done) {
     var form = { name: 'Name4', home: 'Home4', email: 'name4@mail.com', password: '12345678901234567890123456789012' };
     expl.put('/api/users/' + userf.user1._id).send(form).end(function (err,res) {
       expect(err).not.exist;
@@ -336,7 +336,7 @@ describe('updating cache', function () {
       done();
     });
   });
-  it('should success', function (done) {
+  it('should succeed', function (done) {
     var form = { name: 'Name1', home: 'Home1', email: 'name1@mail.com' };
     expl.put('/api/users/' + userf.user1._id).send(form).end(function (err,res) {
       expect(err).not.exist;

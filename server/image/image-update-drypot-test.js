@@ -52,7 +52,7 @@ describe('updating with new image', function () {
       done();
     });
   });
-  it('should success', function (done) {
+  it('should succeed', function (done) {
     this.timeout(30000);
     expl.put('/api/images/' + _id).field('comment', 'image2').attach('files', 'samples/svg-sample-2.svg').end(function (err, res) {
       expect(err).not.exist;

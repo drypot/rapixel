@@ -28,7 +28,7 @@ describe('resetting user', function () {
       done();
     });
   });
-  it('reset request should success', function (done) {
+  it('reset request should succeed', function (done) {
     expl.post('/api/reset-pass').send({ email: _user.email }).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
@@ -97,7 +97,7 @@ describe('resetting user', function () {
       done();
     });
   });
-  it('should success', function (done) {
+  it('should succeed', function (done) {
     var form = { id: _reset._id, token: _reset.token, password: 'new-pass' };
     expl.put('/api/reset-pass').send(form).end(function (err, res) {
       expect(err).not.exist;
@@ -112,7 +112,7 @@ describe('resetting user', function () {
       done();
     });
   });
-  it('new password should success', function (done) {
+  it('new password should succeed', function (done) {
     userb.users.findOne({ email: _user.email }, function (err, user) {
       expect(err).not.exist;
       expect(userb.checkPassword('new-pass', user.hash)).true;
@@ -127,7 +127,7 @@ describe('resetting admin', function () {
   before(function () {
     _user = userf.admin;
   });
-  it('old password should success', function (done) {
+  it('old password should succeed', function (done) {
     userb.users.findOne({ email: _user.email }, function (err, user) {
       expect(err).not.exist;
       expect(userb.checkPassword(_user.password, user.hash)).true;
@@ -152,7 +152,7 @@ describe('resetting admin', function () {
       done();
     });
   });
-  it('should success', function (done) {
+  it('should succeed', function (done) {
     var form = { id: _reset._id, token: _reset.token, password: 'new-pass' };
     expl.put('/api/reset-pass').send(form).end(function (err, res) {
       expect(err).not.exist;
@@ -160,7 +160,7 @@ describe('resetting admin', function () {
       done();
     });
   });
-  it('old password should success', function (done) {
+  it('old password should succeed', function (done) {
     userb.users.findOne({ email: _user.email }, function (err, user) {
       expect(err).not.exist;
       expect(userb.checkPassword(_user.password, user.hash)).true;

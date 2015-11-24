@@ -25,7 +25,7 @@ describe('hello', function () {
 });
 
 describe('echo', function () {
-  it('get should success', function (done) {
+  it('get should succeed', function (done) {
     expl.get('/api/echo?p1&p2=123').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.method).equal('GET');
@@ -33,7 +33,7 @@ describe('echo', function () {
       done();
     });
   });
-  it('post should success', function (done) {
+  it('post should succeed', function (done) {
     expl.post('/api/echo').send({ p1: '', p2: '123' }).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.method).equal('POST');
@@ -41,7 +41,7 @@ describe('echo', function () {
       done();
     });
   });
-  it('delete should success', function (done) {
+  it('delete should succeed', function (done) {
     expl.del('/api/echo').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.method).equal('DELETE');
@@ -212,14 +212,14 @@ describe('session', function () {
       res.json(obj);
     });
   });
-  it('post should success', function (done) {
+  it('post should succeed', function (done) {
     expl.put('/api/test/session').send({ book: 'book1', price: 11 }).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
     });
   });
-  it('get should success', function (done) {
+  it('get should succeed', function (done) {
     expl.get('/api/test/session').send([ 'book', 'price' ]).end(function (err, res) {
       expect(err).not.exist;
       expect(res.body).property('book', 'book1');

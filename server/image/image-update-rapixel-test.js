@@ -55,7 +55,7 @@ describe('updating with image', function () {
       done();
     });
   });
-  it('should success', function (done) {
+  it('should succeed', function (done) {
     this.timeout(30000);
     expl.put('/api/images/' + _id).field('comment', 'image2').attach('files', 'samples/3840x2160-169.jpg').end(function (err, res) {
       expect(err).not.exist;

@@ -15,7 +15,7 @@ before(function (done) {
 });
 
 describe('pathExist', function () {
-  it('should success', function () {
+  it('should succeed', function () {
     expect('server/base/fs2-test.js').pathExist;
     expect('server/base/fs2-test-xx.js').not.pathExist;
   });
@@ -103,7 +103,7 @@ describe('emtpyDir', function () {
       });
     });
   });
-  it('should success', function (done) {
+  it('should succeed', function (done) {
     fs2.emptyDir(testdir, function (err) {
       if (err) return done(err);
       fs.readdir(testdir, function (err, files) {
@@ -140,7 +140,7 @@ describe('makeDir', function () {
 });
 
 describe('safeFilename', function () {
-  it('should success', function () {
+  it('should succeed', function () {
     var table = [
       [ '`', '`' ], [ '~', '~' ],
       [ '!', '!' ], [ '@', '@' ], [ '#', '#' ], [ '$', '$' ], [ '%', '%' ],
@@ -163,7 +163,7 @@ describe('safeFilename', function () {
 });
 
 describe('makeDeepPath', function () {
-  it('should success', function () {
+  it('should succeed', function () {
     expect(fs2.makeDeepPath(1, 3)).equal('0/0/1');
     expect(fs2.makeDeepPath(999, 3)).equal('0/0/999');
     expect(fs2.makeDeepPath(1000, 3)).equal('0/1/0');

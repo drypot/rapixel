@@ -30,7 +30,7 @@ describe('updating with no file', function () {
     };
     imageb.images.insertOne(form, done);
   });
-  it('should success', function (done) {
+  it('should succeed', function (done) {
     expl.put('/api/images/' + _id).field('comment', 'updated with no file').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
