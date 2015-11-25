@@ -124,34 +124,34 @@ describe('pass', function () {
   });
 });
 
-describe('toDateTimeString', function () {
+describe('dateTimeString', function () {
   it('should succeed', function () {
     var d = new Date(1974, 4, 16, 12, 0);
-    expect(util2.toDateTimeString(d)).equal('1974-05-16 12:00:00');
+    expect(util2.dateTimeString(d)).equal('1974-05-16 12:00:00');
   });
 });
 
-describe('toDateString', function () {
+describe('dateString', function () {
   it('should succeed', function () {
     var d = new Date(1974, 4, 16, 12, 0);
-    expect(util2.toDateString(d)).equal('1974-05-16');
+    expect(util2.dateString(d)).equal('1974-05-16');
   });
 });
 
-describe('toDateStringNoDash', function () {
+describe('dateStringNoDash', function () {
   it('should succeed', function () {
     var d = new Date(1974, 4, 16, 12, 0);
-    expect(util2.toDateStringNoDash(d)).equal('19740516');
+    expect(util2.dateStringNoDash(d)).equal('19740516');
   });
 });
 
-describe('makeUrl', function () {
+describe('url', function () {
   it('should succeed', function () {
     var params = { a: 10 };
     var params2 = { a: 10, b: 'big'};
-    expect(util2.makeUrl('http://localhost/test')).equal('http://localhost/test');
-    expect(util2.makeUrl('http://localhost/test', params)).equal('http://localhost/test?a=10');
-    expect(util2.makeUrl('http://localhost/test', params2)).equal('http://localhost/test?a=10&b=big');
+    expect(util2.url('http://localhost/test')).equal('http://localhost/test');
+    expect(util2.url('http://localhost/test', params)).equal('http://localhost/test?a=10');
+    expect(util2.url('http://localhost/test', params2)).equal('http://localhost/test?a=10&b=big');
   });
 });
 

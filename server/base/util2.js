@@ -77,22 +77,22 @@ function pad(number) {
   return r;
 }
 
-util2.toDateTimeString = function (d) {
+util2.dateTimeString = function (d) {
   return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + ' ' +
     pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
 };
 
-util2.toDateString = function (d) {
+util2.dateString = function (d) {
   return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
 };
 
-util2.toDateStringNoDash = function (d) {
+util2.dateStringNoDash = function (d) {
   return d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate());
 };
 
 // url
 
-util2.makeUrl = function(url, params) {
+util2.url = function(url, params) {
   var qm;
 
   for(var p in params) {

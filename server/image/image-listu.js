@@ -53,7 +53,7 @@ function filter(image, done) {
       home: user.home
     };
     image.dir = imageb.getUrlBase(image._id);
-    image.cdateStr = util2.toDateTimeString(image.cdate);
+    image.cdateStr = util2.dateTimeString(image.cdate);
     done(null, image);
   });
 }

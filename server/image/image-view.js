@@ -33,7 +33,7 @@ function view(req, res, api, done) {
           home: user.home
         };
         image.dir = imageb.getUrlBase(image._id);
-        image.cdateStr = util2.toDateTimeString(image.cdate);
+        image.cdateStr = util2.dateTimeString(image.cdate);
         image.cdate = image.cdate.getTime();
         if (api) {
           res.json(image);
