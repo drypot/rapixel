@@ -19,7 +19,7 @@ before(function (done) {
 });
 
 describe('getting', function () {
-  var _f1 = 'samples/3840x2160-169.jpg';
+  var _f1 = 'samples/3840x2160.jpg';
   var _id;
   var _files;
   it('given image', function (done) {

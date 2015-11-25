@@ -87,7 +87,7 @@ describe('updating with jpeg', function () {
   });
   it('should fail', function (done) {
     this.timeout(30000);
-    expl.put('/api/images/' + _id).attach('files', 'samples/1136x640-169.jpg').end(function (err, res) {
+    expl.put('/api/images/' + _id).attach('files', 'samples/1136x640.jpg').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(res.body.err).error('IMAGE_TYPE');

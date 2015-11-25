@@ -32,7 +32,7 @@ describe('posting one image', function () {
   });
   it('should succeed', function (done) {
     this.timeout(30000);
-    expl.post('/api/images').field('comment', 'image1').attach('files', 'samples/1440x810-169.jpg').end(function (err, res) {
+    expl.post('/api/images').field('comment', 'image1').attach('files', 'samples/1440x810.jpg').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       expect(res.body.ids).exist;
@@ -46,7 +46,7 @@ describe('posting one image', function () {
       expect(err).not.exist;
       expect(image._id).equal(_id);
       expect(image.uid).equal(userf.user1._id);
-      expect(image.fname).equal('1440x810-169.jpg');
+      expect(image.fname).equal('1440x810.jpg');
       expect(image.format).equal('jpeg');
       expect(image.vers).eql([ 800, 768, 720, 640 ]);
       expect(image.cdate).exist;
@@ -71,7 +71,7 @@ describe('posting max images', function () {
     this.timeout(30000);
     var post = expl.post('/api/images').field('comment', 'max images');
     for (var i = 0; i < config.ticketMax; i++) {
-      post.attach('files', 'samples/1280x720-169.jpg');
+      post.attach('files', 'samples/1280x720.jpg');
     }
     post.end(function (err, res) {
       expect(err).not.exist;
@@ -88,7 +88,7 @@ describe('posting max images', function () {
       expect(err).not.exist;
       expect(image._id).equal(_id);
       expect(image.uid).equal(userf.user1._id);
-      expect(image.fname).equal('1280x720-169.jpg');
+      expect(image.fname).equal('1280x720.jpg');
       expect(image.format).equal('jpeg');
       expect(image.vers).eql([ 720, 640 ]);
       expect(image.cdate).exist;
@@ -106,7 +106,7 @@ describe('posting max images', function () {
       expect(err).not.exist;
       expect(image._id).equal(_id);
       expect(image.uid).equal(userf.user1._id);
-      expect(image.fname).equal('1280x720-169.jpg');
+      expect(image.fname).equal('1280x720.jpg');
       expect(image.format).equal('jpeg');
       expect(image.vers).eql([ 720, 640 ]);
       expect(image.cdate).exist;
@@ -120,7 +120,7 @@ describe('posting max images', function () {
   });
   it('posting one more should fail', function (done) {
     this.timeout(30000);
-    expl.post('/api/images').attach('files', 'samples/1136x640-169.jpg').end(function (err, res) {
+    expl.post('/api/images').attach('files', 'samples/1136x640.jpg').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       expect(res.body.ids).exist;
@@ -137,7 +137,7 @@ describe('posting small image', function () {
   }); 
   it('should fail', function (done) {
     this.timeout(30000);
-    expl.post('/api/images').attach('files', 'samples/640x360-169.jpg').end(function (err, res) {
+    expl.post('/api/images').attach('files', 'samples/640x360.jpg').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(res.body.err).error('IMAGE_SIZE');

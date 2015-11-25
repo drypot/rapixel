@@ -32,7 +32,7 @@ describe('posting one image', function () {
   });
   it('should succeed', function (done) {
     this.timeout(30000);
-    expl.post('/api/images').field('comment', 'image1').attach('files', 'samples/3840x2160-169.jpg').end(function (err, res) {
+    expl.post('/api/images').field('comment', 'image1').attach('files', 'samples/3840x2160.jpg').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       expect(res.body.ids).exist;
@@ -46,7 +46,7 @@ describe('posting one image', function () {
       expect(err).not.exist;
       expect(image._id).equal(_id);
       expect(image.uid).equal(userf.user1._id);
-      expect(image.fname).equal('3840x2160-169.jpg');
+      expect(image.fname).equal('3840x2160.jpg');
       expect(image.format).equal('jpeg');
       expect(image.width).equal(3840);
       expect(image.vers).eql([ 3840, 2880, 2560, 2048, 1920, 1680, 1440, 1366, 1280, 1136, 1024, 960, 640 ]);
@@ -69,7 +69,7 @@ describe('posting 4800 width image', function () {
   });
   it('should succeed', function (done) {
     this.timeout(30000);
-    expl.post('/api/images').field('comment', 'image1').attach('files', 'samples/4800x2700-169.jpg').end(function (err, res) {
+    expl.post('/api/images').field('comment', 'image1').attach('files', 'samples/4800x2700.jpg').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       expect(res.body.ids).exist;
@@ -83,7 +83,7 @@ describe('posting 4800 width image', function () {
       expect(err).not.exist;
       expect(image._id).equal(_id);
       expect(image.uid).equal(userf.user1._id);
-      expect(image.fname).equal('4800x2700-169.jpg');
+      expect(image.fname).equal('4800x2700.jpg');
       expect(image.format).equal('jpeg');
       expect(image.width).equal(4800);
       expect(image.vers).eql([ 5120, 3840, 2880, 2560, 2048, 1920, 1680, 1440, 1366, 1280, 1136, 1024, 960, 640 ]);
@@ -108,7 +108,7 @@ describe('posting max images', function () {
     this.timeout(30000);
     var post = expl.post('/api/images').field('comment', 'max images');
     for (var i = 0; i < config.ticketMax; i++) {
-      post.attach('files', 'samples/3840x2160-169.jpg');
+      post.attach('files', 'samples/3840x2160.jpg');
     }
     post.end(function (err, res) {
       expect(err).not.exist;
@@ -121,7 +121,7 @@ describe('posting max images', function () {
   });
   it('posting one more should fail', function (done) {
     this.timeout(30000);
-    expl.post('/api/images').attach('files', 'samples/3840x2160-169.jpg').end(function (err, res) {
+    expl.post('/api/images').attach('files', 'samples/3840x2160.jpg').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       expect(res.body.ids).exist;
@@ -138,7 +138,7 @@ describe('posting small image', function () {
   }); 
   it('should fail', function (done) {
     this.timeout(30000);
-    expl.post('/api/images').attach('files', 'samples/2880x1620-169.jpg').end(function (err, res) {
+    expl.post('/api/images').attach('files', 'samples/2880x1620.jpg').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(res.body.err).error('IMAGE_SIZE');

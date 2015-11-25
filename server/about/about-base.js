@@ -17,8 +17,4 @@ init.add(function () {
   expb.core.get('/about/help', function (req, res, done) {
     res.render('about/about-help');
   });
-
-  expb.core.get('/about/support', function (req, res, done) {
-    res.render('about/about-help');
-  });
 });

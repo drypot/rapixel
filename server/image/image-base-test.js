@@ -45,7 +45,7 @@ describe('identify', function () {
     })
   });
   it('jpeg should succeed', function (done) {
-    imageb.identify('samples/5120x2880-169.jpg', function (err, meta) {
+    imageb.identify('samples/5120x2880.jpg', function (err, meta) {
       expect(err).not.exist;
       expect(meta.format).equal('jpeg');
       expect(meta.width).equal(5120);

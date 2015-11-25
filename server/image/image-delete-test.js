@@ -21,7 +21,7 @@ before(function (done) {
   imageb.emptyDir(done);
 });
 
-var _f1 = 'samples/3840x2160-169.jpg';
+var _f1 = 'samples/3840x2160.jpg';
 var _id;
 
 describe('deleting', function () {

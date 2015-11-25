@@ -29,7 +29,7 @@ describe('updating with image', function () {
   var _id;
   it('given post', function (done) {
     this.timeout(30000);
-    expl.post('/api/images').field('comment', 'image1').attach('files', 'samples/1280x720-169.jpg').end(function (err, res) {
+    expl.post('/api/images').field('comment', 'image1').attach('files', 'samples/1280x720.jpg').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       expect(res.body.ids).exist;
@@ -42,7 +42,7 @@ describe('updating with image', function () {
     imageb.images.findOne({ _id: _id }, function (err, image) {
       expect(err).not.exist;
       expect(image).exist;
-      expect(image.fname).equal('1280x720-169.jpg');
+      expect(image.fname).equal('1280x720.jpg');
       expect(image.format).equal('jpeg');
       expect(image.width).equal(1280);
       expect(image.vers).eql([ 720, 640 ]);
@@ -57,7 +57,7 @@ describe('updating with image', function () {
   });
   it('should succeed', function (done) {
     this.timeout(30000);
-    expl.put('/api/images/' + _id).field('comment', 'image2').attach('files', 'samples/1136x640-169.jpg').end(function (err, res) {
+    expl.put('/api/images/' + _id).field('comment', 'image2').attach('files', 'samples/1136x640.jpg').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).not.exist;
       done();
@@ -67,7 +67,7 @@ describe('updating with image', function () {
     imageb.images.findOne({ _id: _id }, function (err, image) {
       expect(err).not.exist;
       expect(image).exist;
-      expect(image.fname).equal('1136x640-169.jpg');
+      expect(image.fname).equal('1136x640.jpg');
       expect(image.format).equal('jpeg');
       expect(image.width).equal(1136);
       expect(image.vers).eql([ 640 ]);
@@ -91,7 +91,7 @@ describe('updating with small image', function () {
     imageb.images.insertOne(form, done);
   });
   it('should fail', function (done) {
-    expl.put('/api/images/' + _id).attach('files', 'samples/640x360-169.jpg').end(function (err, res) {
+    expl.put('/api/images/' + _id).attach('files', 'samples/640x360.jpg').end(function (err, res) {
       expect(err).not.exist;
       expect(res.body.err).exist;
       expect(res.body.err).error('IMAGE_SIZE');
