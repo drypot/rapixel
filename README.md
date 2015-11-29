@@ -1,10 +1,6 @@
 # Rapixel
 
-Image gallery running following sites.
-
-* [https://rapixel.com](https://rapixel.com)
-* [https://osoky.com](https://osoky.com)
-* [https://drypot.com](https://drypot.com)
+Merged to [RaySoda](https://github.com/drypot/raysoda)
 
 
 ## Install and Upgrade
@@ -14,6 +10,8 @@ Image gallery running following sites.
 
 
 ## History
+
+2015.11.00 RaySoda 프로젝트로 코드 머지
 
 2015.03.01 2 년만에 업데이트, 전반적인 코드 질 개선.
 

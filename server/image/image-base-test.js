@@ -16,18 +16,18 @@ describe('images', function () {
   });
 });
 
-describe('FilePath', function () {
+describe('File', function () {
   it('should succeed', function () {
-    var path = new imageb.FilePath(1, 'jpeg');
+    var path = new imageb.Image(1, 'jpeg');
     expect(path.dir).equals(config.uploadDir + '/public/images/0/0/1');
     expect(path.original).equals(config.uploadDir + '/public/images/0/0/1/1-org.jpeg');
-    expect(path.getVersion(640)).equals(config.uploadDir + '/public/images/0/0/1/1-640.jpg');
+    expect(path.getPath(640)).equals(config.uploadDir + '/public/images/0/0/1/1-640.jpg');
   });
 });
 
-describe('getUrlBase', function () {
+describe('getDirUrl', function () {
   it('should succeed', function () {
-    expect(imageb.getUrlBase(1)).equals(config.uploadSite + '/images/0/0/1');
+    expect(imageb.getDirUrl(1)).equals(config.uploadSite + '/images/0/0/1');
   });
 });
 

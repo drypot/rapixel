@@ -38,7 +38,7 @@ exports.checkImageMeta = function (path, done) {
   });
 };
 
-exports.makeVersions = function (dir, meta, done) {
+exports.saveImage = function (dir, meta, done) {
   var cmd = 'convert ' + dir.original;
   cmd += ' -quality 92';
   cmd += ' -gravity center';
@@ -57,9 +57,9 @@ exports.makeVersions = function (dir, meta, done) {
     cmd += ' -crop ' + ver.width + 'x' + ver.height + '+0+0'
     cmd += ' +repage'
     if (i == _vers.length - 1) {
-      cmd += ' ' + dir.getVersion(ver.width);
+      cmd += ' ' + dir.getPath(ver.width);
     } else {
-      cmd += ' -write ' + dir.getVersion(ver.width);
+      cmd += ' -write ' + dir.getPath(ver.width);
     }
   }
   exec(cmd, function (err) {
@@ -67,7 +67,7 @@ exports.makeVersions = function (dir, meta, done) {
   });
 };
 
-exports.fillFields = function (image, form, meta, vers) {
+exports.fillImageDoc = function (image, form, meta, vers) {
   if (meta) {
     image.width = meta.width;
     image.height = meta.height;

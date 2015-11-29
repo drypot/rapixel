@@ -52,7 +52,7 @@ function filter(image, done) {
       name: user.name,
       home: user.home
     };
-    image.dir = imageb.getUrlBase(image._id);
+    image.dir = imageb.getDirUrl(image._id);
     image.cdateStr = util2.dateTimeString(image.cdate);
     done(null, image);
   });

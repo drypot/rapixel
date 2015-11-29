@@ -19,11 +19,11 @@ exports.checkImageMeta = function (path, done) {
   });
 };
 
-exports.makeVersions = function (dir, meta, done) {
+exports.saveImage = function (dir, meta, done) {
   done(null, null);
 };
 
-exports.fillFields = function (image, form, meta, vers) {
+exports.fillImageDoc = function (image, form, meta, vers) {
   if (form) {
     image.comment = form.comment;
   }

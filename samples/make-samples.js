@@ -13,7 +13,7 @@ var _vers = [
   { width:640 , height: 360, postfix: '169' }
 ];
 
-function makeVersions(next) {
+function saveImage(next) {
   var i = 0;
   
   function make() {
@@ -49,6 +49,6 @@ process.on('uncaughtException', function (err) {
   }
 });
 
-makeVersions(function (err) {
+saveImage(function (err) {
   console.log('done');
 });

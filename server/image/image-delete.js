@@ -19,7 +19,7 @@ expb.core.delete('/api/images/:id([0-9]+)', function (req, res, done) {
       if (err) return done(err);
       imageb.images.deleteOne({ _id: id }, function (err, cnt) {
         if (err) return done(err);
-        fs2.removeDir(new imageb.FilePath(id).dir, function (err) {
+        fs2.removeDir(new imageb.Image(id).dir, function (err) {
           if (err) return done(err);
           res.json({});
         });

@@ -42,14 +42,14 @@ expb.core.put('/api/images/:id([0-9]+)', expu.handler(function (req, res, done) 
         var file = form.files[0];
         site.checkImageMeta(file.path, function (err, meta) {
           if (err) return done(err);
-          var path = new imageb.FilePath(id, meta.format);
+          var path = new imageb.Image(id, meta.format);
           fs2.removeDir(path.dir, function (err) {
             if (err) return done(err);
             fs2.makeDir(path.dir, function (err) {
               if (err) return done(err);
               fs.rename(file.path, path.original, function (err) {
                 if (err) return done(err);
-                site.makeVersions(path, meta, function (err, vers) {
+                site.saveImage(path, meta, function (err, vers) {
                   if (err) return done(err);
                   var fields = {
                     fname: file.safeFilename,
@@ -62,7 +62,7 @@ expb.core.put('/api/images/:id([0-9]+)', expu.handler(function (req, res, done) 
           });
         });
       }, function (fields, meta, vers) {
-        site.fillFields(fields, form, meta, vers);
+        site.fillImageDoc(fields, form, meta, vers);
         imageb.images.updateOne({ _id: id }, { $set: fields }, function (err) {
           if (err) return done(err);
           res.json({});

@@ -67,7 +67,7 @@ init.add(function (done) {
   done();
 });
 
-imageb.FilePath = function (id, format) {
+imageb.Image = function (id, format) {
   this.id = id;
   this.dir = uploadDir + '/' + fs2.makeDeepPath(id, 3);
   if (format) {
@@ -75,11 +75,11 @@ imageb.FilePath = function (id, format) {
   }
 }
 
-imageb.FilePath.prototype.getVersion = function (width) {
+imageb.Image.prototype.getPath = function (width) {
   return this.dir + '/' + this.id + '-' + width + '.jpg';
 }
 
-imageb.getUrlBase = function (id) {
+imageb.getDirUrl = function (id) {
   return config.uploadSite + '/images/' + fs2.makeDeepPath(id, 3)
 }
 

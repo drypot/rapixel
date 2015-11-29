@@ -47,12 +47,12 @@ expb.core.post('/api/images', expu.handler(function (req, res, done) {
           site.checkImageMeta(file.path, function (err, meta) {
             if (err) return done(err);
             var id = imageb.getNewId();
-            var path = new imageb.FilePath(id, meta.format);
+            var path = new imageb.Image(id, meta.format);
             fs2.makeDir(path.dir, function (err) {
               if (err) return done(err);
               fs.rename(file.path, path.original, function (err) {
                 if (err) return done(err);
-                site.makeVersions(path, meta, function (err, vers) {
+                site.saveImage(path, meta, function (err, vers) {
                   if (err) return done(err);
                   var image = {
                     _id: id,
@@ -62,7 +62,7 @@ expb.core.post('/api/images', expu.handler(function (req, res, done) {
                     format: meta.format,
                     cdate: form.now
                   };
-                  site.fillFields(image, form, meta, vers);
+                  site.fillImageDoc(image, form, meta, vers);
                   imageb.images.insertOne(image, function (err) {
                     if (err) return done(err);
                     ids.push(id);
